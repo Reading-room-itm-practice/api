@@ -14,5 +14,6 @@ namespace WebAPI.DataAccessLayer
         }
 
         public DbSet<TestModel> TestModels { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }
