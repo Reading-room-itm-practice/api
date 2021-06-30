@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Models;
 using WebAPI.Services;
+using AutoMapper;
+using WebAPI.DTOs;
 
 namespace WebAPI.Controllers
 {
@@ -20,7 +22,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        public async Task<ActionResult> GetCategory(int id)
         {
             try
             {
@@ -34,7 +36,7 @@ namespace WebAPI.Controllers
             }
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult> GetCategories()
         {
             try
             {
@@ -47,7 +49,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Category>> Create(Category category)
+        public async Task<ActionResult> Create(CreateCategoryDTO category)
         {
             try
             {
@@ -62,14 +64,13 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Category>> Edit(Category category)
+        public async Task<ActionResult> Edit(CategoryDTO category)
         {
             try
             {
-                var editedCategory = await categoryService.GetCategory(category.id);
-                if (editedCategory == null) return NotFound();
-                editedCategory = await categoryService.EditCategory(category);
-                return Ok();
+                if (categoryService.GetCategory(category.id).Result == null) return NotFound();
+                var result = await categoryService.EditCategory(category);
+                return Ok(result);
             }
             catch (Exception)
             {
@@ -78,13 +79,13 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult<Category>> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
                 var categoryToDelete = await categoryService.GetCategory(id);
                 if (categoryToDelete == null) return NotFound();
-                return await categoryService.DeleteCategory(id);
+                return Ok(await categoryService.DeleteCategory(id));
             }
             catch (Exception)
             {

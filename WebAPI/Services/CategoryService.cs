@@ -5,56 +5,52 @@ using System.Threading.Tasks;
 using WebAPI.DataAccessLayer;
 using WebAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using WebAPI.DTOs;
+using WebAPI.Repositories;
+using AutoMapper;
 
 namespace WebAPI.Services
 {
     public class CategoryService : ICategoryService
     {
-        private readonly ApiDbContext _context;
-        public CategoryService(ApiDbContext apiDbContext)
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IMapper _mapper;
+        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper)
         {
-            _context = apiDbContext;
+            _categoryRepository = categoryRepository;
+            _mapper = mapper;
         }
 
-        public async Task<Category> CreateCategory(Category category)
+        public async Task<CategoryDTO> CreateCategory(CreateCategoryDTO category)
         {
-            var result = _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
-            return result.Entity;
+            var result = _mapper.Map<Category>(category);
+            await _categoryRepository.CreateCategory(result);
+            return _mapper.Map<CategoryDTO>(result);
         }
 
-        public async Task<Category> DeleteCategory(int id)
+        public async Task<CategoryDTO> DeleteCategory(int id)
         {
-            var result = await _context.Categories.FirstOrDefaultAsync(c => c.id == id);
-            if(result != null)
-            {
-                _context.Categories.Remove(result);
-                await _context.SaveChangesAsync();
-                return result;
-            }
-            return null;
+            var result = await _categoryRepository.DeleteCategory(id);
+            return _mapper.Map<CategoryDTO>(result);
         }
 
-        public async Task<Category> EditCategory(Category category)
+        public async Task<CategoryDTO> EditCategory(CategoryDTO category)
         {
-            var result = await _context.Categories.FirstOrDefaultAsync(c => c.id == category.id);
-            if (result != null)
-            {
-                result.Name = category.Name;
-                await _context.SaveChangesAsync();
-                return result;
-            }
-            return null;
+            var result = _mapper.Map<Category>(category);
+            await _categoryRepository.EditCategory(result);
+            return _mapper.Map<CategoryDTO>(result);
         }
 
-        public async Task<IEnumerable<Category>> GetCategories()
+        public async Task<IEnumerable<CategoryDTO>> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            var result = await _categoryRepository.GetCategories();
+            return _mapper.Map<IEnumerable<CategoryDTO>>(result);
         }
 
-        public async Task<Category> GetCategory(int id)
+        public async Task<CategoryDTO> GetCategory(int id)
         {
-            return await _context.Categories.FirstOrDefaultAsync(c => c.id == id);
+            var result = await _categoryRepository.GetCategory(id);
+            return _mapper.Map<CategoryDTO>(result);
         }
     }
 }

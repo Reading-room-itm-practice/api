@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.DTOs;
 using WebAPI.Models;
 
 namespace WebAPI.Services
 {
     public interface ICategoryService
     {
-        Task<IEnumerable<Category>> GetCategories();
-        Task<Category> CreateCategory(Category category);
-        Task<Category> EditCategory(Category category);
-        Task<Category> GetCategory(int id);
-        Task<Category> DeleteCategory(int id);
+        public Task<IEnumerable<CategoryDTO>> GetCategories();
+        public Task<CategoryDTO> CreateCategory(CreateCategoryDTO category);
+        public Task<CategoryDTO> EditCategory(CategoryDTO category);
+        public Task<CategoryDTO> GetCategory(int id);
+        public Task<CategoryDTO> DeleteCategory(int id);
 
     }
 }
