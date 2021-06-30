@@ -11,28 +11,28 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostController : ControllerBase
+    public class TestController : ControllerBase
     {
         private readonly ApiDbContext _context;
 
-        public PostController(ApiDbContext context)
+        public TestController(ApiDbContext context)
         {
             _context = context;
         }
 
         [HttpPost()]
-        public  ActionResult<TestModel> Create(string value)
+        public  ActionResult<Category> Create(string value)
         {
-            _context.TestModels.Add(new TestModel { TestValue = value });
+            _context.Categories.Add(new Category { Name = value });
             _context.SaveChanges();
 
             return Ok("Resource created");
         }
 
         [HttpGet]
-        public IEnumerable<TestModel> Index()
+        public IEnumerable<Category> Index()
         {
-            return _context.TestModels.ToArray();
+            return _context.Categories.ToArray();
         }
     }
 }

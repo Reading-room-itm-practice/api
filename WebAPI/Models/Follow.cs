@@ -4,16 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Common;
 
 namespace WebAPI.Models
 {
-
-    [Table("test_models")]
-    public class TestModel
+    [Table("follows")]
+    public class Follow : AuditableModel
     {
-        [Key]
-        public int Id { get; set; }
-        [Required]
-        public string TestValue { get; set; }
+        public int FollowableId { get; set; }
+        public string FollowableType { get; set; }
     }
 }
