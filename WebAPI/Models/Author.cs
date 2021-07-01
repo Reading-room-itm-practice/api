@@ -8,12 +8,14 @@ using WebAPI.Common;
 
 namespace WebAPI.Models
 {
-    [Table("categories")]
-    public class Category : AuditableModel
+    [Table("authors")]
+    public class Author : AuditableModel
     {
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Biography { get; set; }
+        public ICollection<Book> Books { get; set; }
         public ICollection<Follow> Follows { get; set; }
     }
 }

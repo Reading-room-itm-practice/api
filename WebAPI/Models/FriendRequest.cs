@@ -4,16 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.Common;
 
 namespace WebAPI.Models
 {
-    [Table("categories")]
-    public class Category : AuditableModel
+    [Table("friend_requests")]
+    public class FriendRequest
     {
-        [Key]
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public ICollection<Follow> Follows { get; set; }
+        public int FromId { get; set; }
+        public int ToId { get; set; }
     }
 }
