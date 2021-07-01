@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Interfaces;
+using WebAPI.Interfaces.Authors;
 using WebAPI.Repositories;
 
 namespace WebAPI.Installers
@@ -13,6 +15,8 @@ namespace WebAPI.Installers
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IBaseRepository, BaseRepository>();
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
         }
     }
 }

@@ -4,9 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Interfaces.Authors;
 using WebAPI.Interfaces.User;
-using WebAPI.Repositories;
 using WebAPI.Services;
+using WebAPI.Services.Authors;
 
 namespace WebAPI.Installers
 {
@@ -16,6 +17,8 @@ namespace WebAPI.Installers
         {
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddSingleton<ILoggedUserProvider, LoggedUserProvider>();
+            services.AddScoped<IAuthorCreator, AuthorCreator>();
+            services.AddScoped<IAuthorGetter, AuthorGetter>();
         }
     }
 }

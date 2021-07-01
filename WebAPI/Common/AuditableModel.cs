@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Common
 {
-    public abstract class AuditableModel
+    public abstract class AuditableModel 
     {
         public DateTime Created { get; set; }
         public int CreatedBy { get; set; }
