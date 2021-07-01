@@ -11,7 +11,7 @@ namespace WebAPI.Services
     {
         public Task<IEnumerable<CategoryDTO>> GetCategories();
         public Task<CategoryDTO> CreateCategory(CreateCategoryDTO category);
-        public Task<CategoryDTO> EditCategory(CategoryDTO category);
+        public Task<CategoryDTO> EditCategory(int id, EditCategoryDTO category);
         public Task<CategoryDTO> GetCategory(int id);
         public Task<CategoryDTO> DeleteCategory(int id);
 

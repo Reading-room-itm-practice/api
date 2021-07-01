@@ -34,9 +34,10 @@ namespace WebAPI.Services
             return _mapper.Map<CategoryDTO>(result);
         }
 
-        public async Task<CategoryDTO> EditCategory(CategoryDTO category)
+        public async Task<CategoryDTO> EditCategory(int id, EditCategoryDTO category)
         {
             var result = _mapper.Map<Category>(category);
+            result.Id = id;
             await _categoryRepository.EditCategory(result);
             return _mapper.Map<CategoryDTO>(result);
         }

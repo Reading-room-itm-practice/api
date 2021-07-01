@@ -13,6 +13,7 @@ namespace WebAPI.DTOs
         {
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<CreateCategoryDTO, Category>().ReverseMap();
+            CreateMap<EditCategoryDTO, Category>().ReverseMap();
         }
     }
 }
