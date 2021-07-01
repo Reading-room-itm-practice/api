@@ -19,7 +19,7 @@ namespace WebAPI.DataAccessLayer
         {
             _loggedUserProvider = loggedUserProvider;
         }
-
+        
         public DbSet<User> Users { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
@@ -46,13 +46,13 @@ namespace WebAPI.DataAccessLayer
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = _loggedUserProvider.UserId;
-                        entry.Entity.Created = DateTime.UtcNow;
+                        entry.Entity.CreatedBy = _loggedUserProvider.GetUserId();
+                        entry.Entity.Created = DateTime.Now;
                         break;
 
                     case EntityState.Modified:
-                        entry.Entity.LastModifiedBy = _loggedUserProvider.UserId;
-                        entry.Entity.LastModified = DateTime.UtcNow;
+                        entry.Entity.LastModifiedBy = _loggedUserProvider.GetUserId();
+                        entry.Entity.LastModified = DateTime.Now;
                         break;
                 }
             }
