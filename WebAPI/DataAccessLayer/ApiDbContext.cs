@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebAPI.Common;
@@ -9,18 +7,20 @@ using WebAPI.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using WebAPI.Interfaces.User;
 using WebAPI.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebAPI.DataAccessLayer
 {
-    public class ApiDbContext : DbContext
+    public class ApiDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
         private readonly ILoggedUserProvider _loggedUserProvider;
-        public ApiDbContext(DbContextOptions options, ILoggedUserProvider loggedUserProvider) : base(options)
+        public ApiDbContext(DbContextOptions<ApiDbContext> options, ILoggedUserProvider loggedUserProvider) : base(options)
         {
             _loggedUserProvider = loggedUserProvider;
         }
 
-        public DbSet<User> Users { get; set; }
+        public override DbSet<User> Users { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Category> Categories { get; set; }
