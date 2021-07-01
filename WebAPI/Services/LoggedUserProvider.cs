@@ -17,6 +17,10 @@ namespace WebAPI.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public int UserId => int.Parse(_httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier));
+        public int GetUserId()
+        {
+            var loggedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            return loggedUserId != null ? int.Parse(loggedUserId) : 0;
+        } 
     }
 }
