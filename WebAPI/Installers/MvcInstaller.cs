@@ -14,6 +14,7 @@ namespace WebAPI.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddHttpContextAccessor();
             services.AddSingleton<ILoggedUserProvider, LoggedUserProvider>();
             services.AddControllers();
