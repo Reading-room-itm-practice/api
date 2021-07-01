@@ -26,7 +26,7 @@ namespace WebAPI.Repositories
 
         public async Task<Category> DeleteCategory(int id)
         {
-            var result = await _context.Categories.FirstOrDefaultAsync(c => c.id == id);
+            var result = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
             if (result != null)
             {
                 _context.Categories.Remove(result);
@@ -38,7 +38,7 @@ namespace WebAPI.Repositories
 
         public async Task<Category> EditCategory(Category category)
         {
-            var result = await _context.Categories.FirstOrDefaultAsync(c => c.id == category.id);
+            var result = await _context.Categories.FirstOrDefaultAsync(c => c.Id == category.Id);
             if (result != null)
             {
                 result.Name = category.Name;
@@ -55,7 +55,7 @@ namespace WebAPI.Repositories
 
         public async Task<Category> GetCategory(int id)
         {
-            return await _context.Categories.FirstOrDefaultAsync(c => c.id == id);
+            return await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
         }
     }
 }
