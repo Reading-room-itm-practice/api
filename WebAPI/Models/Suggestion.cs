@@ -9,7 +9,7 @@ using WebAPI.Common;
 namespace WebAPI.Models
 {
     [Table("suggestions")]
-    public class Suggestion : AuditableModel
+    public class Suggestion : AuditableModel, IDbModel, IDbMasterKey
     {
         [Key]
         public int Id { get; set; }

@@ -7,7 +7,7 @@ using WebAPI.Common;
 
 namespace WebAPI.Models
 {
-    public class Photo : AuditableModel
+    public class Photo : AuditableModel, IDbModel, IDbMasterKey
     {
         [Key]
         public int Id { get; set; }

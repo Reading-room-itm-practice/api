@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.DTOs;
-using WebAPI.Interfaces.Authors;
+using WebAPI.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using WebAPI.Services;
+using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
@@ -14,12 +16,12 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-        private readonly IAuthorCreator _creator;
-        private readonly IAuthorGetter _getter;
-        private readonly IAuthorUpdater _updater;
-        private readonly IAuthorDeleter _deleter;
+        private readonly ICreator<Author> _creator;
+        private readonly IGetter<Author> _getter;
+        private readonly IUpdater<Author> _updater;
+        private readonly IDeleter<Author> _deleter;
 
-        public AuthorsController(IAuthorCreator creator, IAuthorGetter getter, IAuthorUpdater updater, IAuthorDeleter deleter)
+        public AuthorsController(ICreator<Author> creator, IGetter<Author> getter, IUpdater<Author> updater, IDeleter<Author> deleter)
         {
             _creator = creator;
             _getter = getter;
@@ -31,7 +33,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var authors = await _getter.GetAllAuthors();
+            var authors = await _getter.GetAll<AuthorDto>();
             
             return Ok(authors);
         }
@@ -40,7 +42,7 @@ namespace WebAPI.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Show(int id)
         {
-            var author = await _getter.GetAuthorById(id);
+            var author = await _getter.GetById<AuthorDto>(id);
             
             return author == null ? NotFound() : Ok(author);
         }
@@ -48,7 +50,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateAuthorDto model) 
         {
-            var author = await _creator.AddAuthor(model);
+            var author = await _creator.Create<AuthorDto>(model);
 
             return Created($"api/authors/{author.Id}", author);
         }
@@ -65,7 +67,7 @@ namespace WebAPI.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            await _deleter.DeleteAuthor(id);
+            await _deleter.Delete(id);
             return Ok("Resource deleted");
         }
     }

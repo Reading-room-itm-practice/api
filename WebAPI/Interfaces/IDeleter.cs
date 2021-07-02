@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Common;
 using WebAPI.Models;
 
-namespace WebAPI.Interfaces.Authors
+namespace WebAPI.Interfaces
 {
-    public interface IAuthorDeleter
+    public interface IDeleter<T> where T : IDbModel
     {
-        public Task DeleteAuthor(int id);
+        public Task Delete(int id);
     }
 }

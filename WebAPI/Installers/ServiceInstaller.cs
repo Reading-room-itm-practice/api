@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.Interfaces.Authors;
+using WebAPI.Interfaces;
 using WebAPI.Interfaces.User;
+using WebAPI.Models;
 using WebAPI.Services;
-using WebAPI.Services.Authors;
 
 namespace WebAPI.Installers
 {
@@ -19,10 +19,10 @@ namespace WebAPI.Installers
 
             services.AddSingleton<ILoggedUserProvider, LoggedUserProvider>();
 
-            services.AddScoped<IAuthorCreator, AuthorCreator>();
-            services.AddScoped<IAuthorGetter, AuthorGetter>();
-            services.AddScoped<IAuthorUpdater, AuthorUpdater>();
-            services.AddScoped<IAuthorDeleter, AuthorDeleter>();
+            services.AddScoped<ICreator<Author>, Creator<Author>>();
+            services.AddScoped<IGetter<Author>, Getter<Author>>();
+            services.AddScoped<IUpdater<Author>, Updater<Author>>();
+            services.AddScoped<IDeleter<Author>, Deleter<Author>>();
         }
     }
 }

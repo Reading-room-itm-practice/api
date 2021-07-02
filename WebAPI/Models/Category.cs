@@ -9,11 +9,11 @@ using WebAPI.Common;
 namespace WebAPI.Models
 {
     [Table("categories")]
-    public class Category : AuditableModel
+    public class Category : AuditableModel, IDbModel, IDbMasterKey, IFollowable
     {
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Follow> Follows { get; set; }
+        public ICollection<Follow> Followers { get; set; }
     }
 }
