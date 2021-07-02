@@ -8,7 +8,7 @@ using WebAPI.Interfaces;
 
 namespace WebAPI.Repositories
 {
-    public class BaseRepository : IBaseRepository
+    public abstract class BaseRepository : IBaseRepository
     {
         protected readonly ApiDbContext _context;
 

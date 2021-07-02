@@ -14,6 +14,7 @@ namespace WebAPI.Mappings
         {
             CreateMap<Author, AuthorDto>().ReverseMap();
             CreateMap<CreateAuthorDto, Author>().ReverseMap();
+            CreateMap<UpdateAuthorDto, Author>().ReverseMap();
         }
     }
 }

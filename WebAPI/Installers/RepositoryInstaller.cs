@@ -15,7 +15,6 @@ namespace WebAPI.Installers
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<IBaseRepository, BaseRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
         }
     }

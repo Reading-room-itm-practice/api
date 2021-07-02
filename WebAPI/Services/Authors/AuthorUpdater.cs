@@ -6,25 +6,26 @@ using System.Threading.Tasks;
 using WebAPI.DTOs;
 using WebAPI.Interfaces;
 using WebAPI.Interfaces.Authors;
-using WebAPI.Models;
 
 namespace WebAPI.Services.Authors
 {
-    public class AuthorCreator : IAuthorCreator
+    public class AuthorUpdater : IAuthorUpdater
     {
         private readonly IAuthorRepository _repository;
         private readonly IMapper _mapper;
 
-        public AuthorCreator(IAuthorRepository repository, IMapper mapper)
+
+        public AuthorUpdater(IAuthorRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
-        public async Task<AuthorDto> AddAuthor(CreateAuthorDto model)
+
+        public async Task UpdateAuthor(UpdateAuthorDto updateModel, int id)
         {
-            var post = _mapper.Map<Author>(model);
-            await _repository.Create(post);
-            return _mapper.Map<AuthorDto>(post);
+            var author = await _repository.GetById(id);
+            var responseAuthor = _mapper.Map(updateModel, author);
+            await _repository.Edit(responseAuthor);
         }
     }
 }

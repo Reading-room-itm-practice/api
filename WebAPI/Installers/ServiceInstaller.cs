@@ -16,9 +16,13 @@ namespace WebAPI.Installers
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<ICategoryService, CategoryService>();
+
             services.AddSingleton<ILoggedUserProvider, LoggedUserProvider>();
+
             services.AddScoped<IAuthorCreator, AuthorCreator>();
             services.AddScoped<IAuthorGetter, AuthorGetter>();
+            services.AddScoped<IAuthorUpdater, AuthorUpdater>();
+            services.AddScoped<IAuthorDeleter, AuthorDeleter>();
         }
     }
 }
