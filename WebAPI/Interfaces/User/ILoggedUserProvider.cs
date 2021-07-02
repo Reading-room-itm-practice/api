@@ -8,6 +8,6 @@ namespace WebAPI.Interfaces.User
 {
     public interface ILoggedUserProvider
     {
-        int UserId { get; }
+        public int GetUserId();
     }
 }

@@ -11,7 +11,7 @@ using WebAPI.Identity;
 
 namespace WebAPI.Installers
 {
-    public class AuthenticationInstaller : Installer
+    public class UserAuthenticationInstaller : Installer
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
