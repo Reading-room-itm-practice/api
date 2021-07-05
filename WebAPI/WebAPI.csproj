@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTOs\**" />
+    <Compile Remove="Repositories\**" />
+    <Content Remove="DTOs\**" />
+    <Content Remove="Repositories\**" />
+    <EmbeddedResource Remove="DTOs\**" />
+    <EmbeddedResource Remove="Repositories\**" />
+    <None Remove="DTOs\**" />
+    <None Remove="Repositories\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
@@ -25,11 +36,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.14" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DTOs\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>

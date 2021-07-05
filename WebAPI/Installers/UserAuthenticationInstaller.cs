@@ -19,6 +19,17 @@ namespace WebAPI.Installers
                 .AddEntityFrameworkStores<ApiDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder => {
+                        builder.WithOrigins("http://localhost:8080", "https://localhost:8080")
+                               .AllowAnyHeader()
+                               .AllowAnyMethod()
+                               .AllowCredentials();
+                    });
+            });
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

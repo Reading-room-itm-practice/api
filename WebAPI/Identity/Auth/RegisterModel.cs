@@ -14,5 +14,8 @@ namespace WebAPI.Models.Auth
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
 
+        [Required(ErrorMessage = "Confirm password is required")]
+        public string ConfirmPassword { get; set; }
+
     }
 }
