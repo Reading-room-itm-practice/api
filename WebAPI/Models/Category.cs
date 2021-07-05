@@ -8,7 +8,7 @@ using WebAPI.Common;
 
 namespace WebAPI.Models
 {
-    [Table("categories")]
+    [Table("Categories")]
     public class Category : AuditableModel
     {
         [Key]

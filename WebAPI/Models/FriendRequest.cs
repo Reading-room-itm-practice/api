@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models
 {
-    [Table("friend_requests")]
+    [Table("Friend_requests")]
     public class FriendRequest
     {
         public int FromId { get; set; }

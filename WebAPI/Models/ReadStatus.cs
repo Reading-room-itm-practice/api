@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models
 {
-    [Table("read_statuses")]
+    [Table("Read_statuses")]
     public class ReadStatus
     {
         public int BookId { get; set; }
