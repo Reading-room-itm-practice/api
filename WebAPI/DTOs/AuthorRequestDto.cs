@@ -7,7 +7,7 @@ using WebAPI.Common;
 
 namespace WebAPI.DTOs
 {
-    public class CreateAuthorDto : IRequestDto
+    public class AuthorRequestDto : IRequestDto
     {
         [Required]
         public string Name { get; set; }

@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Common;
+using WebAPI.Exceptions;
 using WebAPI.Interfaces;
-using WebAPI.Models;
 
 namespace WebAPI.Services
 {
-    public class Deleter<T> : IDeleter<T> where T : class, IDbModel, IDbMasterKey
+    public class DeleterService<T> : IDeleterService<T> where T : class, IDbModel, IDbMasterKey
     {
         private readonly IBaseRepository<T> _repository;
 
-        public Deleter(IBaseRepository<T> repository)
+        public DeleterService(IBaseRepository<T> repository)
         {
             _repository = repository;
         }
@@ -21,6 +21,12 @@ namespace WebAPI.Services
         public async Task Delete(int id)
         {
             var model = await _repository.FindByConditions(x => x.Id == id);
+            
+            if (model.FirstOrDefault() == null)
+            {
+                throw new NotFoundException("Entity does not exists");
+            }
+          
             await _repository.Delete(model.FirstOrDefault());
         }
     }

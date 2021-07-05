@@ -4,17 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Common;
-using WebAPI.DTOs;
 using WebAPI.Interfaces;
 
 namespace WebAPI.Services
 {
-    public class Getter<T> : IGetter<T> where T : class, IDbModel, IDbMasterKey
+    public class GetterService<T> : IGetterService<T> where T : class, IDbModel, IDbMasterKey
     {
         private readonly IBaseRepository<T> _repository;
         private readonly IMapper _mapper;
 
-        public Getter(IBaseRepository<T> postRepository, IMapper mapper)
+        public GetterService(IBaseRepository<T> postRepository, IMapper mapper)
         {
             _repository = postRepository;
             _mapper = mapper;

@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using WebAPI.DTOs;
 using WebAPI.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Net;
-using WebAPI.Services;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -16,12 +14,12 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-        private readonly ICreator<Author> _creator;
-        private readonly IGetter<Author> _getter;
-        private readonly IUpdater<Author> _updater;
-        private readonly IDeleter<Author> _deleter;
+        private readonly ICreatorService<Author> _creator;
+        private readonly IGetterService<Author> _getter;
+        private readonly IUpdaterService<Author> _updater;
+        private readonly IDeleterService<Author> _deleter;
 
-        public AuthorsController(ICreator<Author> creator, IGetter<Author> getter, IUpdater<Author> updater, IDeleter<Author> deleter)
+        public AuthorsController(ICreatorService<Author> creator, IGetterService<Author> getter, IUpdaterService<Author> updater, IDeleterService<Author> deleter)
         {
             _creator = creator;
             _getter = getter;
@@ -33,7 +31,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var authors = await _getter.GetAll<AuthorDto>();
+            var authors = await _getter.GetAll<AuthorResponseDto>();
             
             return Ok(authors);
         }
@@ -42,24 +40,24 @@ namespace WebAPI.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Show(int id)
         {
-            var author = await _getter.GetById<AuthorDto>(id);
+            var author = await _getter.GetById<AuthorResponseDto>(id);
             
             return author == null ? NotFound() : Ok(author);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateAuthorDto model) 
+        public async Task<IActionResult> Create(AuthorRequestDto requestDto) 
         {
-            var author = await _creator.Create<AuthorDto>(model);
+            var author = await _creator.Create<AuthorResponseDto>(requestDto);
 
             return Created($"api/authors/{author.Id}", author);
         }
 
         [SwaggerOperation(Summary = "Update a book author by unique id")]
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Update(int id, UpdateAuthorDto updateModel)
+        public async Task<ActionResult> Update(int id, AuthorRequestDto requestDto)
         {
-            await _updater.Update(updateModel, id);
+            await _updater.Update(requestDto, id);
         
             return Ok("Resource updated");
         }

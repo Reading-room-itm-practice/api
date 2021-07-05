@@ -7,7 +7,7 @@ using WebAPI.Mappings;
 
 namespace WebAPI.DTOs
 {
-    public class AuthorDto : IResponseDto
+    public class AuthorResponseDto : IResponseDto
     {
         public string Id { get; set; }
         public string Name { get; set; }

@@ -12,9 +12,9 @@ namespace WebAPI.Mappings
     {
         public AuthorMapperProfile()
         {
-            CreateMap<Author, AuthorDto>().ReverseMap();
-            CreateMap<CreateAuthorDto, Author>().ReverseMap();
-            CreateMap<UpdateAuthorDto, Author>().ReverseMap();
+            CreateMap<Author, AuthorResponseDto>().ReverseMap();
+            CreateMap<AuthorRequestDto, Author>().ReverseMap();
+            CreateMap<AuthorRequestDto, Author>().ReverseMap();
         }
     }
 }

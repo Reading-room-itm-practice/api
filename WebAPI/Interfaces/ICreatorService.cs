@@ -7,8 +7,8 @@ using WebAPI.DTOs;
 
 namespace WebAPI.Interfaces
 {
-    public interface IUpdater<T> where T : IDbModel
+    public interface ICreatorService<T> where T : IDbModel
     {
-        public Task Update(IRequestDto updateModel, int id);
+        public Task<IReponseDto> Create<IReponseDto>(IRequestDto model);
     }
 }

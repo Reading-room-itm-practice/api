@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Common;
-using WebAPI.Models;
+using WebAPI.DTOs;
 
 namespace WebAPI.Interfaces
 {
-    public interface IDeleter<T> where T : IDbModel
+    public interface IUpdaterService<T> where T : IDbModel
     {
-        public Task Delete(int id);
+        public Task Update(IRequestDto updateModel, int id);
     }
 }

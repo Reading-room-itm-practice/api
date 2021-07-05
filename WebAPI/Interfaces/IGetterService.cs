@@ -7,7 +7,7 @@ using WebAPI.DTOs;
 
 namespace WebAPI.Interfaces
 {
-    public interface IGetter<T> where T : IDbModel
+    public interface IGetterService<T> where T : IDbModel
     {
         public Task<IEnumerable<IResponseDto>> GetAll<IResponseDto>();
         public Task<IResponseDto> GetById<IResponseDto>(int id);

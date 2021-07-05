@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Common;
+using WebAPI.Exceptions;
 using WebAPI.Interfaces;
 
 namespace WebAPI.Services
 {
-    public class Updater<T> : IUpdater<T> where T : class, IDbModel, IDbMasterKey
+    public class UpdaterService<T> : IUpdaterService<T> where T : class, IDbModel, IDbMasterKey
     {
         private readonly IBaseRepository<T> _repository;
         private readonly IMapper _mapper;
 
-        public Updater(IBaseRepository<T> repository, IMapper mapper)
+        public UpdaterService(IBaseRepository<T> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -21,7 +22,13 @@ namespace WebAPI.Services
 
         public async Task Update(IRequestDto requestDto, int id)
         {
-            var model = await _repository.FindByConditions( x => x.Id == id);
+            var model = await _repository.FindByConditions(x => x.Id == id);
+
+            if (model.FirstOrDefault() == null)
+            {
+                throw new NotFoundException("Entity does not exists");
+            }
+            
             var updatedModel = _mapper.Map(requestDto, model.FirstOrDefault());
             await _repository.Edit(updatedModel);
         }

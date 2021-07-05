@@ -17,10 +17,10 @@ namespace WebAPI.Installers
         {
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddSingleton<ILoggedUserProvider, LoggedUserProvider>();
-            services.AddScoped<ICreator<Author>, Creator<Author>>();
-            services.AddScoped<IGetter<Author>, Getter<Author>>();
-            services.AddScoped<IUpdater<Author>, Updater<Author>>();
-            services.AddScoped<IDeleter<Author>, Deleter<Author>>();
+            services.AddScoped<ICreatorService<Author>, CreatorService<Author>>();
+            services.AddScoped<IGetterService<Author>, GetterService<Author>>();
+            services.AddScoped<IUpdaterService<Author>, UpdaterService<Author>>();
+            services.AddScoped<IDeleterService<Author>, DeleterService<Author>>();
         }
     }
 }

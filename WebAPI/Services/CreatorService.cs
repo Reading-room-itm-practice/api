@@ -8,12 +8,12 @@ using WebAPI.Interfaces;
 
 namespace WebAPI.Services
 {
-    public class Creator<T> : ICreator<T> where T : class, IDbModel
+    public class CreatorService<T> : ICreatorService<T> where T : class, IDbModel
     {
         private readonly IBaseRepository<T> _repository;
         private readonly IMapper _mapper;
 
-        public Creator(IBaseRepository<T> repository, IMapper mapper)
+        public CreatorService(IBaseRepository<T> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
