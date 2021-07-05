@@ -52,7 +52,7 @@ namespace WebAPI.Services
                     );
 
                 var tokenResponse = new JwtSecurityTokenHandler().WriteToken(token);
-                
+
                 return new Response { StatusCode = 200, Message = $"{tokenResponse}" };
             }
 
@@ -66,9 +66,8 @@ namespace WebAPI.Services
 
             if (res == null)
                 return new Response { StatusCode = 201, Message = "User created successfully!" };
-            else
-                return res;
 
+            return res;
         }
         public async Task<Response> RegisterAdmin(RegisterModel model)
         {
@@ -90,7 +89,7 @@ namespace WebAPI.Services
                 return new Response { StatusCode = 201, Message = "User created." };
 
             }
-            else return res;
+            return res;
         }
         private async Task<Response> RegisterUser(RegisterModel model, UserManager<Identity.User> _userManager, Identity.User user)
         {
