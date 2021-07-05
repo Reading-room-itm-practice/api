@@ -11,6 +11,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.DTOs;
 using WebAPI.Exceptions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using WebAPI.Installers;
 
 namespace WebAPI
@@ -53,9 +56,9 @@ namespace WebAPI
             }));
 
             app.UseStatusCodePages();
-
+            app.UseCors();
+            app.UseAuthentication();
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
