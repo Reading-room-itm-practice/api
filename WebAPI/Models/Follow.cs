@@ -8,7 +8,7 @@ using WebAPI.Common;
 
 namespace WebAPI.Models
 {
-    [Table("follows")]
+    [Table("Follows")]
     public class Follow : AuditableModel, IDbModel
     {
         public int FollowableId { get; set; }

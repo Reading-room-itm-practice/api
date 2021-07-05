@@ -8,7 +8,7 @@ using WebAPI.Common;
 
 namespace WebAPI.Models
 {
-    [Table("friend_requests")]
+    [Table("Friend_requests")]
     public class FriendRequest: IDbModel
     {
         public int FromId { get; set; }

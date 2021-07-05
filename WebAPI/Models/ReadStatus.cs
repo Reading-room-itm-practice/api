@@ -8,7 +8,7 @@ using WebAPI.Common;
 
 namespace WebAPI.Models
 {
-    [Table("read_statuses")]
+    [Table("Read_statuses")]
     public class ReadStatus : IDbModel
     {
         public int BookId { get; set; }

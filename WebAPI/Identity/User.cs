@@ -9,7 +9,7 @@ using WebAPI.Models;
 
 namespace WebAPI.Identity
 {
-    [Table("users")]
+    [Table("Users")]
     public class User : IdentityUser<int>, IFollowable
     {
         public ICollection<Follow> Followings { get; set; }

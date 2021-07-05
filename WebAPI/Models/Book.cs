@@ -8,7 +8,7 @@ using WebAPI.Common;
 
 namespace WebAPI.Models
 {
-    [Table("books")]
+    [Table("Books")]
     public class Book : AuditableModel, IDbModel, IDbMasterKey
     {
         [Key]

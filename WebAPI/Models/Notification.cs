@@ -8,7 +8,7 @@ using WebAPI.Common;
 
 namespace WebAPI.Models
 {
-    [Table("notifications")]
+    [Table("Notifications")]
     public class Notification : IDbModel, IDbMasterKey
     {
         [Key]

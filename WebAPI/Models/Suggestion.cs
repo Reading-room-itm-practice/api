@@ -8,7 +8,7 @@ using WebAPI.Common;
 
 namespace WebAPI.Models
 {
-    [Table("suggestions")]
+    [Table("Suggestions")]
     public class Suggestion : AuditableModel, IDbModel, IDbMasterKey
     {
         [Key]

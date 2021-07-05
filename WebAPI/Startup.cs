@@ -46,9 +46,7 @@ namespace WebAPI
                 if(exception is NotFoundException)
                 {
                     context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
-                    await context.Response.WriteAsJsonAsync(
-                        new ErrorDto { Code = StatusCodes.Status404NotFound, Error = exception.Message }
-                        );
+                    await context.Response.WriteAsJsonAsync(new ErrorDto { Code = StatusCodes.Status404NotFound, Error = exception.Message });
                 }
             }));
 
