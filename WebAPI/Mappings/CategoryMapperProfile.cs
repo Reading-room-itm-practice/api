@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.DTOs;
 using WebAPI.Models;
 
-namespace WebAPI.DTOs
+namespace WebAPI.Mappings
 {
-    public class AutoMapperProfile : Profile
+    public class CategoryMapperProfile : Profile
     {
-        public AutoMapperProfile()
+        public CategoryMapperProfile()
         {
             CreateMap<Category, CategoryDTO>().ReverseMap();
             CreateMap<CreateCategoryDTO, Category>().ReverseMap();

@@ -4,11 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Common;
 
 namespace WebAPI.Models
 {
     [Table("Notifications")]
-    public class Notification
+    public class Notification : IDbModel, IDbMasterKey
     {
         [Key]
         public int Id { get; set; }

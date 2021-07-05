@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.Models;
 
 namespace WebAPI.Common
 {
-    public interface IFollowable
+     public interface IDbMasterKey
     {
-        public ICollection<Follow> Followers { get; set; }
+        [Key]
+        public int Id { get; set; }
     }
 }

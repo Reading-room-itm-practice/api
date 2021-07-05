@@ -9,7 +9,7 @@ using WebAPI.Common;
 namespace WebAPI.Models
 {
     [Table("Follows")]
-    public class Follow : AuditableModel
+    public class Follow : AuditableModel, IDbModel
     {
         public int FollowableId { get; set; }
         public string FollowableType { get; set; }

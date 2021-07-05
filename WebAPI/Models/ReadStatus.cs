@@ -4,11 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Common;
 
 namespace WebAPI.Models
 {
     [Table("Read_statuses")]
-    public class ReadStatus
+    public class ReadStatus : IDbModel
     {
         public int BookId { get; set; }
         public int UserId { get; set; }

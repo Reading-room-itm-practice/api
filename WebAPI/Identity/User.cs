@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
+using WebAPI.Common;
 using WebAPI.Models;
 
 namespace WebAPI.Identity
 {
-    [Table("users")]
-    public class User : IdentityUser<int> 
+    [Table("Users")]
+    public class User : IdentityUser<int>, IFollowable
     {
         public ICollection<Follow> Followings { get; set; }
         public ICollection<Follow> Followers { get; set; }
