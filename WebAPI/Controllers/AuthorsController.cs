@@ -59,7 +59,8 @@ namespace WebAPI.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Update(int id, UpdateAuthorDto updateModel)
         {
-            await _updater.UpdateAuthor(updateModel, id);
+            await _updater.Update(updateModel, id);
+        
             return Ok("Resource updated");
         }
 
@@ -68,6 +69,7 @@ namespace WebAPI.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             await _deleter.Delete(id);
+          
             return Ok("Resource deleted");
         }
     }

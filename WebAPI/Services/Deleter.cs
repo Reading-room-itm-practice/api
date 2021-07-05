@@ -20,8 +20,8 @@ namespace WebAPI.Services
 
         public async Task Delete(int id)
         {
-            var entity = await _repository.FindByConditions(x => x.Id == id);
-            await _repository.Delete(entity.FirstOrDefault());
+            var model = await _repository.FindByConditions(x => x.Id == id);
+            await _repository.Delete(model.FirstOrDefault());
         }
     }
 }

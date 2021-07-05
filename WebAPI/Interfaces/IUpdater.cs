@@ -9,6 +9,6 @@ namespace WebAPI.Interfaces
 {
     public interface IUpdater<T> where T : IDbModel
     {
-        public Task UpdateAuthor(IRequestDto updateModel, int id);
+        public Task Update(IRequestDto updateModel, int id);
     }
 }

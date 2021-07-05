@@ -22,16 +22,16 @@ namespace WebAPI.Services
 
         public async Task<IEnumerable<IResponseDto>> GetAll<IResponseDto>()
         {
-            var responseModels = await _repository.FindAll();
+            var models = await _repository.FindAll();
 
-            return _mapper.Map<IEnumerable<IResponseDto>>(responseModels);
+            return _mapper.Map<IEnumerable<IResponseDto>>(models);
         }
 
         public async Task<IResponseDto> GetById<IResponseDto>(int id)
         {
-            var entity = await _repository.FindByConditions(x => x.Id == id);
+            var model = await _repository.FindByConditions(x => x.Id == id);
 
-            return _mapper.Map<IResponseDto>(entity.FirstOrDefault());
+            return _mapper.Map<IResponseDto>(model.FirstOrDefault());
         }
     }
 }

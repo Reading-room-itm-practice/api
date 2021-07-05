@@ -19,12 +19,12 @@ namespace WebAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<IResponseDto> Create<IResponseDto>(IRequestDto requestModel)
+        public async Task<IResponseDto> Create<IResponseDto>(IRequestDto requestDto)
         {
-            var entityToAdd = _mapper.Map<T>(requestModel);
-            await _repository.Create(entityToAdd);
+            var model = _mapper.Map<T>(requestDto);
+            await _repository.Create(model);
            
-            return _mapper.Map<IResponseDto>(entityToAdd);
+            return _mapper.Map<IResponseDto>(model);
         }
     }
 }

@@ -19,11 +19,11 @@ namespace WebAPI.Services
             _mapper = mapper;
         }
 
-        public async Task UpdateAuthor(IRequestDto updateModel, int id)
+        public async Task Update(IRequestDto requestDto, int id)
         {
-            var entity = await _repository.FindByConditions( x => x.Id == id);
-            var responseModel = _mapper.Map(updateModel, entity.FirstOrDefault());
-            await _repository.Edit(responseModel);
+            var model = await _repository.FindByConditions( x => x.Id == id);
+            var updatedModel = _mapper.Map(requestDto, model.FirstOrDefault());
+            await _repository.Edit(updatedModel);
         }
     }
 }
