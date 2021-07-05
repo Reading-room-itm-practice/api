@@ -21,6 +21,10 @@ namespace WebAPI.Installers
             services.AddScoped<IGetterService<Author>, GetterService<Author>>();
             services.AddScoped<IUpdaterService<Author>, UpdaterService<Author>>();
             services.AddScoped<IDeleterService<Author>, DeleterService<Author>>();
+            services.AddScoped<ICreatorService<Book>, CreatorService<Book>>();
+            services.AddScoped<IGetterService<Book>, GetterService<Book>>();
+            services.AddScoped<IUpdaterService<Book>, UpdaterService<Book>>();
+            services.AddScoped<IDeleterService<Book>, DeleterService<Book>>();
         }
     }
 }
