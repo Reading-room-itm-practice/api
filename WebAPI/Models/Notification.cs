@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models
 {
-    [Table("notifications")]
+    [Table("Notifications")]
     public class Notification
     {
         [Key]

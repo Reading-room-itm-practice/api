@@ -8,7 +8,7 @@ using WebAPI.Common;
 
 namespace WebAPI.Models
 {
-    [Table("likes")]
+    [Table("Likes")]
     public class Like : AuditableModel
     {
         public int LikeableId { get; set; }

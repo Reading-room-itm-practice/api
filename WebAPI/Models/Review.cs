@@ -8,7 +8,7 @@ using WebAPI.Common;
 
 namespace WebAPI.Models
 {
-    [Table("reviews")]
+    [Table("Reviews")]
     public class Review : AuditableModel, ILikeable
     {
         [Key]
