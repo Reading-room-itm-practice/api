@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using WebAPI.Common;
 using WebAPI.Models;
@@ -17,7 +14,7 @@ namespace WebAPI.Identity
         public ICollection<User> Friends { get; set; }
         public ICollection<Review> Reviews { get; set; }
         public ICollection<ReviewComment> ReviewComments { get; set; }
-        public ICollection<ReadStatus> ReadStatuses { get; set; }
+        public ICollection<ReadStatus> ReadStatuses { get; set; }   
         public ICollection<Like> Likes { get; set; }
     }
 }
