@@ -1,6 +1,4 @@
 ﻿
-using System.Net;
-
 namespace WebAPI.Models.Auth
 {
     public enum Replay { Yes, No }
