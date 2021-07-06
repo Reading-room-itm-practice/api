@@ -58,7 +58,6 @@ namespace WebAPI.Services
 
             return new Response { StatusCode = 422, Message = "Username or password is not correct!" };
         }
-
         public async Task<Response> Register(RegisterModel model)
         {
             Identity.User user = new();
@@ -87,7 +86,6 @@ namespace WebAPI.Services
                 }
 
                 return new Response { StatusCode = 201, Message = "User created." };
-
             }
             return res;
         }
@@ -103,7 +101,7 @@ namespace WebAPI.Services
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return new Response { StatusCode = 422, Message = "User creation failed! Please check user details and try again." };
+                return new Response { StatusCode = 422, Message = "User creation failed! Please check password details and try again." };
 
             return null;
         }
