@@ -8,6 +8,7 @@ using WebAPI.Models;
 using WebAPI.Services;
 using AutoMapper;
 using WebAPI.DTOs;
+using WebAPI.Interfaces;
 
 namespace WebAPI.Controllers
 {
@@ -15,47 +16,56 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService categoryService;
-        public CategoryController(ICategoryService categoryService)
+        private readonly ICreatorService<Category> _creator;
+        private readonly IGetterService<Category> _getter;
+        private readonly IUpdaterService<Category> _updater;
+        private readonly IDeleterService<Category> _deleter;
+
+        public CategoryController(ICreatorService<Category> creator, IGetterService<Category> getter, IUpdaterService<Category> updater, IDeleterService<Category> deleter)
         {
-            this.categoryService = categoryService;
+            _creator = creator;
+            _getter = getter;
+            _updater = updater;
+            _deleter = deleter;
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult> GetCategory(int id)
         {
-            var result = await categoryService.GetCategory(id);
+            var result = await _getter.GetById<CategoryResponseDto>(id);
             if (result == null) return NotFound();
             return Ok(result);
         }
         [HttpGet]
         public async Task<ActionResult> GetCategories()
         {
-            return Ok(await categoryService.GetCategories());
+            var result = await _getter.GetAll<CategoryResponseDto>();
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CreateCategoryDTO category)
+        public async Task<ActionResult> Create(CategoryRequestDto category)
         {
             if (category == null) return BadRequest();
-            var newCategory = await categoryService.CreateCategory(category);
-            return CreatedAtAction(nameof(GetCategory), new { id = newCategory.id }, newCategory);
+            var newCategory = await _creator.Create<CategoryResponseDto>(category);
+            return Created($"api/category/{newCategory.Id}", newCategory);
         }
 
+
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Edit(int id, EditCategoryDTO category)
+        public async Task<ActionResult> Edit(int id, CategoryRequestDto category)
         {
-            if (categoryService.GetCategory(id).Result == null) return NotFound();
-            var result = await categoryService.EditCategory(id, category);
-            return Ok(result);
+            if (_getter.GetById<CategoryResponseDto>(id).Result == null) return NotFound();
+            await _updater.Update(category, id);
+            return Ok();
         }
 
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var categoryToDelete = await categoryService.GetCategory(id);
-            if (categoryToDelete == null) return NotFound();
-            return Ok(await categoryService.DeleteCategory(id));
+            if (_getter.GetById<CategoryResponseDto>(id) == null) return NotFound();
+            await _deleter.Delete(id);
+            return Ok();
         }
     }
 }

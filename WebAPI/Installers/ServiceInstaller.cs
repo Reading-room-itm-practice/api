@@ -15,12 +15,16 @@ namespace WebAPI.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<ICategoryService, CategoryService>();
             services.AddSingleton<ILoggedUserProvider, LoggedUserProvider>();
             services.AddScoped<ICreatorService<Author>, CreatorService<Author>>();
             services.AddScoped<IGetterService<Author>, GetterService<Author>>();
             services.AddScoped<IUpdaterService<Author>, UpdaterService<Author>>();
             services.AddScoped<IDeleterService<Author>, DeleterService<Author>>();
+
+            services.AddScoped<ICreatorService<Category>, CreatorService<Category>>();
+            services.AddScoped<IGetterService<Category>, GetterService<Category>>();
+            services.AddScoped<IUpdaterService<Category>, UpdaterService<Category>>();
+            services.AddScoped<IDeleterService<Category>, DeleterService<Category>>();
         }
     }
 }
