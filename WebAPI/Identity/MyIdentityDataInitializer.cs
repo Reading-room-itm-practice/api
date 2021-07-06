@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WebAPI.Models.Auth;
 
 namespace WebAPI.Identity
@@ -18,8 +16,8 @@ namespace WebAPI.Identity
 
         public static void SeedUsers(UserManager<User> userManager)
         {
-            var userExists = userManager.FindByNameAsync("Admin");
-            if (userExists != null)
+            var userExists = userManager.FindByNameAsync("Admin").Result;
+            if (userExists == null)
             {
                 User user = new()
                 {
@@ -37,10 +35,15 @@ namespace WebAPI.Identity
         }
         public static void SeedRoles(RoleManager<IdentityRole<int>> roleMenager)
         {
-            if (!roleMenager.RoleExistsAsync(UserRoles.Admin).Result)
-                     roleMenager.CreateAsync(new IdentityRole<int>(UserRoles.Admin));
-            if (!roleMenager.RoleExistsAsync(UserRoles.User).Result)
-                roleMenager.CreateAsync(new IdentityRole<int>(UserRoles.User));
+            var t = typeof(UserRoles);
+            var fields = t.GetFields();
+            List<string> fieldNames = new List<string>(t.GetFields().Select(x => x.Name));
+
+            for (int i = 0; i < fields.Length; i++)
+            {
+                if (!roleMenager.RoleExistsAsync(fields[i].GetValue(typeof(UserRoles)).ToString()).Result)
+                    roleMenager.CreateAsync(new IdentityRole<int>(fields[i].GetValue(typeof(UserRoles)).ToString())).Wait();
+            }
         }
     }
 }

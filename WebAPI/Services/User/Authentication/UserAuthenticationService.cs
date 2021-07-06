@@ -75,15 +75,7 @@ namespace WebAPI.Services
 
             if (res == null)
             {
-                if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
-                    await _roleManager.CreateAsync(new IdentityRole<int>(UserRoles.Admin));
-                if (!await _roleManager.RoleExistsAsync(UserRoles.User))
-                    await _roleManager.CreateAsync(new IdentityRole<int>(UserRoles.User));
-
-                if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
-                {
-                    await _userManager.AddToRoleAsync(user, UserRoles.Admin);
-                }
+                await _userManager.AddToRoleAsync(user, UserRoles.Admin);
 
                 return new Response { StatusCode = 201, Message = "User created." };
             }
@@ -103,6 +95,7 @@ namespace WebAPI.Services
             if (!result.Succeeded)
                 return new Response { StatusCode = 422, Message = "User creation failed! Please check password details and try again." };
 
+            await _userManager.AddToRoleAsync(user, UserRoles.User);
             return null;
         }
     }
