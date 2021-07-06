@@ -9,10 +9,11 @@ using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using WebAPI.Services;
 using WebAPI.Models;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class BooksController : ControllerBase
