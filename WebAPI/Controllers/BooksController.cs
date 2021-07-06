@@ -13,29 +13,23 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly IGetterService<Book> _getter;
-        private readonly ICreatorService<Book> _creator;
-        private readonly IUpdaterService<Book> _updater;
-        private readonly IDeleterService<Book> _deleter;
+        private readonly ICrudService<Book> _crud;
 
-        public BooksController(ICreatorService<Book> creator, IGetterService<Book> getter, IUpdaterService<Book> updater, IDeleterService<Book> deleter)
+        public BooksController(ICrudService<Book> crud)
         {
-            _creator = creator;
-            _getter = getter;
-            _updater = updater;
-            _deleter = deleter;
+            _crud = crud;
         }
 
         [SwaggerOperation(Summary = "Retrieves all books")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var books = await _getter.GetAll<BookResponseDto>();
+            var books = await _crud.GetAll<BookResponseDto>();
             return Ok(books);
         }
 
@@ -43,7 +37,7 @@ namespace WebAPI.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Show(int id)
         {
-            var book = await _getter.GetById<BookResponseDto>(id);
+            var book = await _crud.GetById<BookResponseDto>(id);
 
             return book == null ? NotFound() : Ok(book);
         }
@@ -52,7 +46,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(BookRequestDto model)
         {
-            var book = await _creator.Create<BookResponseDto>(model);
+            var book = await _crud.Create<BookResponseDto>(model);
 
             return Created($"api/books/{book.Id}", book);
         }
@@ -61,7 +55,7 @@ namespace WebAPI.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Update(int id, BookRequestDto updateModel)
         {
-            await _updater.Update(updateModel, id);
+            await _crud.Update(updateModel, id);
             return Ok("Resource updated");
         }
 
@@ -69,7 +63,7 @@ namespace WebAPI.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            await _deleter.Delete(id);
+            await _crud.Delete(id);
             return Ok("Resource deleted");
         }
     }
