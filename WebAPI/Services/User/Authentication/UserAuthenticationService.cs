@@ -52,17 +52,17 @@ namespace WebAPI.Services
                     );
 
                 var tokenResponse = new JwtSecurityTokenHandler().WriteToken(token);
+                bool _isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
 
-                return new Response { StatusCode = 200, Message = $"{tokenResponse}" };
+                return new Response { StatusCode = 200, Message = $"{tokenResponse}", isAdmin = _isAdmin };
             }
 
             return new Response { StatusCode = 422, Message = "Username or password is not correct!" };
         }
-
         public async Task<Response> Register(RegisterModel model)
         {
             Identity.User user = new();
-            Response res = await RegisterUser(model, _userManager, user);
+            Response res = await RegisterUser(model, user);
 
             if (res == null)
                 return new Response { StatusCode = 201, Message = "User created successfully!" };
@@ -72,7 +72,7 @@ namespace WebAPI.Services
         public async Task<Response> RegisterAdmin(RegisterModel model)
         {
             Identity.User user = new();
-            Response res = await RegisterUser(model, _userManager, user);
+            Response res = await RegisterUser(model, user);
 
             if (res == null)
             {
@@ -91,7 +91,7 @@ namespace WebAPI.Services
             }
             return res;
         }
-        private async Task<Response> RegisterUser(RegisterModel model, UserManager<Identity.User> _userManager, Identity.User user)
+        private async Task<Response> RegisterUser(RegisterModel model, Identity.User user)
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
