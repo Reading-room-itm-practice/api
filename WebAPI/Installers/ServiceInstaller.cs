@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Core.Interfaces;
 using Core.Models;
 using Core.Services;
+using WebAPI.Services;
 
 namespace WebAPI.Installers
 {
