@@ -19,6 +19,7 @@ namespace WebAPI.Installers
             services.AddSingleton<ILoggedUserProvider, LoggedUserProvider>();
             services.AddScoped<ICrudService<Author>, CrudService<Author>>();
             services.AddScoped<ICrudService<Book>, CrudService<Book>>();
+            services.AddScoped<ICrudService<Photo>, CrudService<Photo>>();
         }
     }
 }
