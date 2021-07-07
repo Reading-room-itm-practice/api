@@ -7,8 +7,9 @@ using Storage.DataAccessLayer;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Storage.Iterfaces;
 
-namespace Storage.Repositories
+namespace Core.Repositories
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class, IDbModel
     {

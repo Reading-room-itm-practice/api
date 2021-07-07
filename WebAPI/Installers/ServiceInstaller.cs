@@ -5,9 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Interfaces;
-using Core.Models;
 using Core.Services;
 using WebAPI.Services;
+using Storage.Interfaces;
+using Storage.Models;
 
 namespace WebAPI.Installers
 {

@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Common;
+using Storage.Iterfaces;
 
-namespace Core.Models
+namespace Storage.Models
 {
-    [Table("Friend_requests")]
-    public class FriendRequest: IDbModel
+    [Table("Likes")]
+    public class Like : AuditableModel, IDbModel
     {
-        public int FromId { get; set; }
-        public int ToId { get; set; }
+        public int LikeableId { get; set; }
+        public string LikeableType { get; set; }
     }
 }

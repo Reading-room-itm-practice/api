@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Core.Common
+namespace Storage.Interfaces
 {
-    public interface ILikeable
+    public interface ILoggedUserProvider
     {
+        public int GetUserId();
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Models;
+using Storage.Models;
 using Core.DTOs;
 using AutoMapper;
 using Core.Interfaces;

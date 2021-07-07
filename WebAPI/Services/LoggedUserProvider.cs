@@ -1,5 +1,6 @@
 ﻿using Core.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Storage.Interfaces;
 using System.Security.Claims;
 
 namespace WebAPI.Services

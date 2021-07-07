@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Storage.DataAccessLayer;
-using Core.Models;
+using Storage.Models;
 using Core.Interfaces;
 
-namespace Storage.Repositories
+namespace Core.Repositories
 {
     public class CategoryRepository : ICategoryRepository
     {

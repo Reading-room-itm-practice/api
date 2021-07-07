@@ -2,7 +2,7 @@
 
 namespace Core.DTOs
 {
-    public class LoginModel
+    public class LoginDto
     {
         [Required(ErrorMessage = "User Name is required")]
         public string Username { get; set; }

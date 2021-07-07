@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Core.DTOs;
 using Core.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
-using Core.Models;
+using Storage.Models;
 
 namespace WebAPI.Controllers
 {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
-using Core.Common;
-using Core.Models;
+using Storage.Iterfaces;
+using Storage.Models;
 
 namespace Storage.Identity
 {

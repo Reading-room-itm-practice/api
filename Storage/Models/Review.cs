@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Storage.Iterfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Common;
 
-namespace Core.Models
+namespace Storage.Models
 {
     [Table("Reviews")]
     public class Review : AuditableModel, IDbModel, IDbMasterKey, ILikeable

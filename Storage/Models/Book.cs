@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Common;
+using Storage.Iterfaces;
 
-namespace Core.Models
+namespace Storage.Models
 {
     [Table("Books")]
     public class Book : AuditableModel, IDbModel, IDbMasterKey

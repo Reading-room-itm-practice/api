@@ -3,6 +3,7 @@ using Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Storage.Identity;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,22 +11,22 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Storage.Identity
+namespace Core.Services
 {
     public class UserAuthenticationService : IUserAuthenticationService
     {
 
-        private readonly UserManager<Identity.User> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly IConfiguration _configuration;
-        public UserAuthenticationService(UserManager<Identity.User> userManager, RoleManager<IdentityRole<int>> roleManager, IConfiguration configuration)
+        public UserAuthenticationService(UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
         }
 
-        public async Task<Response> Login(LoginModel model)
+        public async Task<ResponseDto> Login(LoginDto model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
@@ -54,26 +55,26 @@ namespace Storage.Identity
 
                 var tokenResponse = new JwtSecurityTokenHandler().WriteToken(token);
 
-                return new Response { StatusCode = 200, Message = $"{tokenResponse}" };
+                return new ResponseDto { StatusCode = 200, Message = $"{tokenResponse}" };
             }
 
-            return new Response { StatusCode = 422, Message = "Username or password is not correct!" };
+            return new ResponseDto { StatusCode = 422, Message = "Username or password is not correct!" };
         }
 
-        public async Task<Response> Register(RegisterModel model)
+        public async Task<ResponseDto> Register(RegisterDto model)
         {
-            Identity.User user = new();
-            Response res = await RegisterUser(model, _userManager, user);
+            User user = new();
+            ResponseDto res = await RegisterUser(model, _userManager, user);
 
             if (res == null)
-                return new Response { StatusCode = 201, Message = "User created successfully!" };
+                return new ResponseDto { StatusCode = 201, Message = "User created successfully!" };
 
             return res;
         }
-        public async Task<Response> RegisterAdmin(RegisterModel model)
+        public async Task<ResponseDto> RegisterAdmin(RegisterDto model)
         {
-            Identity.User user = new();
-            Response res = await RegisterUser(model, _userManager, user);
+            User user = new();
+            ResponseDto res = await RegisterUser(model, _userManager, user);
 
             if (res == null)
             {
@@ -87,16 +88,16 @@ namespace Storage.Identity
                     await _userManager.AddToRoleAsync(user, UserRoles.Admin);
                 }
 
-                return new Response { StatusCode = 201, Message = "User created." };
+                return new ResponseDto { StatusCode = 201, Message = "User created." };
 
             }
             return res;
         }
-        private async Task<Response> RegisterUser(RegisterModel model, UserManager<Identity.User> _userManager, Identity.User user)
+        private async Task<ResponseDto> RegisterUser(RegisterDto model, UserManager<User> _userManager, User user)
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return new Response { StatusCode = 422, Message = "User already exists!" };
+                return new ResponseDto { StatusCode = 422, Message = "User already exists!" };
 
             user.Email = model.Email;
             user.SecurityStamp = Guid.NewGuid().ToString();
@@ -104,7 +105,7 @@ namespace Storage.Identity
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return new Response { StatusCode = 422, Message = "User creation failed! Please check user details and try again." };
+                return new ResponseDto { StatusCode = 422, Message = "User creation failed! Please check user details and try again." };
 
             return null;
         }

@@ -2,13 +2,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Common;
-using Core.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Core.Interfaces;
 using Storage.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Storage.Models;
+using Storage.Interfaces;
 
 namespace Storage.DataAccessLayer
 {

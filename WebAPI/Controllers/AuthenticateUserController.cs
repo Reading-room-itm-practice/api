@@ -19,21 +19,21 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<Response> Login([FromBody] LoginModel model)
+        public async Task<ResponseDto> Login([FromBody] LoginDto model)
         {
             return await _authenticationUserService.Login(model);
         }
 
         [HttpPost]
         [Route("register")]
-        public async Task<Response> Register([FromBody] RegisterModel model)
+        public async Task<ResponseDto> Register([FromBody] RegisterDto model)
         {
             return await _authenticationUserService.Register(model);
         }
 
         [HttpPost]
         [Route("register-admin")]
-        public async Task<Response> RegisterAdmin([FromBody] RegisterModel model)
+        public async Task<ResponseDto> RegisterAdmin([FromBody] RegisterDto model)
         {
             return await _authenticationUserService.RegisterAdmin(model);
         }

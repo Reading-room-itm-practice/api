@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Core.Interfaces;
-using Storage.Identity;
+using Core.Services;
 
 namespace WebAPI.Installers
 {

@@ -1,21 +1,20 @@
-﻿using System;
+﻿using Storage.Iterfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Common;
 
-namespace Core.Models
+namespace Storage.Models
 {
-    [Table("Review_comments")]
-    public class ReviewComment : AuditableModel, ILikeable
+    [Table("Notifications")]
+    public class Notification : IDbModel, IDbMasterKey
     {
         [Key]
         public int Id { get; set; }
-        public int ReviewId { get; set; }
-        public Review Review { get; set; }
+        public int UserId { get; set; }
         public string Content { get; set; }
-        public ICollection<Like> Likes { get; set; }
+
     }
 }

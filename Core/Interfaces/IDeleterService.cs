@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Common;
-using Core.Models;
+using Storage.Iterfaces;
 
 namespace Core.Interfaces
 {
