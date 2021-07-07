@@ -9,6 +9,7 @@ using WebAPI.Services;
 using AutoMapper;
 using WebAPI.DTOs;
 using WebAPI.Interfaces;
+using WebAPI.Exceptions;
 
 namespace WebAPI.Controllers
 {
@@ -46,26 +47,44 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(CategoryRequestDto category)
         {
-            if (category == null) return BadRequest();
-            var newCategory = await _creator.Create<CategoryResponseDto>(category);
-            return Created($"api/category/{newCategory.Id}", newCategory);
+            try
+            {
+                var newCategory = await _creator.Create<CategoryResponseDto>(category);
+                return Created($"api/category/{newCategory.Id}", newCategory);
+            }
+            catch (ArgumentNullException e)
+            {
+                return BadRequest(e.Message);
+                throw;
+            }
         }
-
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Edit(int id, CategoryRequestDto category)
         {
-            if (_getter.GetById<CategoryResponseDto>(id).Result == null) return NotFound();
-            await _updater.Update(category, id);
-            return Ok();
+            try
+            {
+                await _updater.Update(category, id);
+                return Ok();
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            if (_getter.GetById<CategoryResponseDto>(id) == null) return NotFound();
-            await _deleter.Delete(id);
-            return Ok();
+            try
+            {
+                await _deleter.Delete(id);
+                return Ok();
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }
