@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.Interfaces;
-using WebAPI.Models;
-using WebAPI.Repositories;
+using Core.Interfaces;
+using Core.Models;
+using Storage.Repositories;
 
 namespace WebAPI.Installers
 {

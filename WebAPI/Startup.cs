@@ -9,8 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.DTOs;
-using WebAPI.Exceptions;
+using Core.DTOs;
+using Core.Exceptions;
 using WebAPI.Installers;
 
 namespace WebAPI

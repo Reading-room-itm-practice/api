@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.DTOs;
-using WebAPI.Interfaces;
+using Core.DTOs;
+using Core.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
-using WebAPI.Models;
+using Core.Models;
 
 namespace WebAPI.Controllers
 {

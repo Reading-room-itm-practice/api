@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using WebAPI.Models.Auth;
-using WebAPI.Services;
+using Core.Interfaces;
+using Core.DTOs;
 
 namespace WebAPI.Controllers
 {

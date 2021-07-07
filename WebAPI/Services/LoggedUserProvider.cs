@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core.Interfaces;
+using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using WebAPI.Interfaces.User;
 
 namespace WebAPI.Services
 {
@@ -16,6 +16,7 @@ namespace WebAPI.Services
         public int GetUserId()
         {
             var loggedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+          
             return loggedUserId != null ? int.Parse(loggedUserId) : 0;
         }
     }
