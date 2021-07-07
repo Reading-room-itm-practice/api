@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Core.DataAccessLayer;
+using Storage.DataAccessLayer;
 
-namespace Core.Migrations
+namespace Storage.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
     [Migration("20210629075241_test_migration")]

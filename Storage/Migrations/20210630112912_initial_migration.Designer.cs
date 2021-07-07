@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Core.DataAccessLayer;
+using Storage.DataAccessLayer;
 
-namespace Core.Migrations
+namespace Storage.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
     [Migration("20210630112912_initial_migration")]
