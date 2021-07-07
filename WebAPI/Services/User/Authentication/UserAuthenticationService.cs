@@ -87,6 +87,10 @@ namespace WebAPI.Services
             if (userExists != null)
                 return new Response { StatusCode = 422, Message = "User already exists!" };
 
+            var emailExists = await _userManager.FindByEmailAsync(model.Email);
+            if (emailExists != null)
+                return new Response { StatusCode = 422, Message = "Email already used!" };
+
             user.Email = model.Email;
             user.SecurityStamp = Guid.NewGuid().ToString();
             user.UserName = model.Username;
