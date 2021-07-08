@@ -19,10 +19,8 @@ namespace Core
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IBaseRepository<Author>, BaseRepository<Author>>();
 
-            services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICreatorService<Author>, CreatorService<Author>>();
             services.AddScoped<IGetterService<Author>, GetterService<Author>>();
             services.AddScoped<IUpdaterService<Author>, UpdaterService<Author>>();
