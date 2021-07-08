@@ -15,10 +15,10 @@ namespace WebAPI.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<ICategoryService, CategoryService>();
             services.AddSingleton<ILoggedUserProvider, LoggedUserProvider>();
             services.AddScoped<ICrudService<Author>, CrudService<Author>>();
             services.AddScoped<ICrudService<Book>, CrudService<Book>>();
+            services.AddScoped<ICrudService<Category>, CrudService<Category>>();
         }
     }
 }
