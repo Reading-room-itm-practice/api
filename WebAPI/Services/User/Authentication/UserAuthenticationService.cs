@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,12 +16,10 @@ namespace WebAPI.Services
     {
 
         private readonly UserManager<Identity.User> _userManager;
-        private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly IConfiguration _configuration;
-        public UserAuthenticationService(UserManager<Identity.User> userManager, RoleManager<IdentityRole<int>> roleManager, IConfiguration configuration)
+        public UserAuthenticationService(UserManager<Identity.User> userManager, IConfiguration configuration)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
             _configuration = configuration;
         }
 
@@ -54,10 +53,10 @@ namespace WebAPI.Services
                 var tokenResponse = new JwtSecurityTokenHandler().WriteToken(token);
                 bool _isAdmin = await _userManager.IsInRoleAsync(user, UserRoles.Admin);
 
-                return new Response { StatusCode = 200, Message = $"{tokenResponse}", isAdmin = _isAdmin};
+                return new Response { StatusCode = HttpStatusCode.OK, Message = $"{tokenResponse}" };
             }
 
-            return new Response { StatusCode = 422, Message = "Username or password is not correct!" };
+            return new Response { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Username or password is not correct!" };
         }
         public async Task<Response> Register(RegisterModel model)
         {
@@ -65,7 +64,7 @@ namespace WebAPI.Services
             Response res = await RegisterUser(model, user);
 
             if (res == null)
-                return new Response { StatusCode = 201, Message = "User created successfully!" };
+                return new Response { StatusCode = HttpStatusCode.Created, Message = "User created successfully!" };
 
             return res;
         }
@@ -76,18 +75,9 @@ namespace WebAPI.Services
 
             if (res == null)
             {
-                if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
-                    await _roleManager.CreateAsync(new IdentityRole<int>(UserRoles.Admin));
-                if (!await _roleManager.RoleExistsAsync(UserRoles.User))
-                    await _roleManager.CreateAsync(new IdentityRole<int>(UserRoles.User));
+                await _userManager.AddToRoleAsync(user, UserRoles.Admin);
 
-                if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
-                {
-                    await _userManager.AddToRoleAsync(user, UserRoles.Admin);
-                }
-
-                return new Response { StatusCode = 201, Message = "User created." };
-
+                return new Response { StatusCode = HttpStatusCode.Created, Message = "User created." };
             }
             return res;
         }
@@ -95,7 +85,11 @@ namespace WebAPI.Services
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return new Response { StatusCode = 422, Message = "User already exists!" };
+                return new Response { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "User already exists!" };
+
+            var emailExists = await _userManager.FindByEmailAsync(model.Email);
+            if (emailExists != null)
+                return new Response { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Email already used!" };
 
             user.Email = model.Email;
             user.SecurityStamp = Guid.NewGuid().ToString();
@@ -103,8 +97,9 @@ namespace WebAPI.Services
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return new Response { StatusCode = 422, Message = "User creation failed! Please check user details and try again." };
+                return new Response { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "User creation failed! Please check password details and try again." };
 
+            await _userManager.AddToRoleAsync(user, UserRoles.User);
             return null;
         }
     }
