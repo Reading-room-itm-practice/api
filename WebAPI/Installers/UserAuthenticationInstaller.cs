@@ -15,7 +15,10 @@ namespace WebAPI.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddIdentity<User, IdentityRole<int>>()
+            services.AddIdentity<User, IdentityRole<int>>(opttion =>
+            {
+                opttion.SignIn.RequireConfirmedEmail = true;
+            })
                 .AddEntityFrameworkStores<ApiDbContext>()
                 .AddDefaultTokenProviders();
 

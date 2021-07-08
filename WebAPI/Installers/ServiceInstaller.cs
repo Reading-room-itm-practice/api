@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -8,6 +11,7 @@ using WebAPI.Interfaces;
 using WebAPI.Interfaces.User;
 using WebAPI.Models;
 using WebAPI.Services;
+using WebAPI.Services.Email;
 
 namespace WebAPI.Installers
 {
@@ -21,6 +25,7 @@ namespace WebAPI.Installers
             services.AddScoped<IGetterService<Author>, GetterService<Author>>();
             services.AddScoped<IUpdaterService<Author>, UpdaterService<Author>>();
             services.AddScoped<IDeleterService<Author>, DeleterService<Author>>();
+            services.AddSingleton<IEmailService,EmailService>();
         }
     }
 }

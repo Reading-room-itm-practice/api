@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -7,7 +8,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using WebAPI.Identity.Auth;
 using WebAPI.Models.Auth;
+using WebAPI.Services.Email;
 
 namespace WebAPI.Services
 {
@@ -16,12 +20,15 @@ namespace WebAPI.Services
 
         private readonly UserManager<Identity.User> _userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
-        private readonly IConfiguration _configuration;
-        public UserAuthenticationService(UserManager<Identity.User> userManager, RoleManager<IdentityRole<int>> roleManager, IConfiguration configuration)
+        private readonly IConfiguration _config;
+        private readonly IEmailService _emailService;
+        public UserAuthenticationService(UserManager<Identity.User> userManager, 
+            RoleManager<IdentityRole<int>> roleManager, IConfiguration config, IEmailService emailService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _configuration = configuration;
+            _config = config;
+            _emailService = emailService;
         }
 
         public async Task<Response> Login(LoginModel model)
@@ -29,6 +36,9 @@ namespace WebAPI.Services
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
+                if(!await _userManager.IsEmailConfirmedAsync(user))
+                    return new Response { StatusCode = 422, Message = "Invalid username or password!" };
+
                 var userRoles = await _userManager.GetRolesAsync(user);
 
                 var authClaims = new List<Claim>
@@ -42,10 +52,10 @@ namespace WebAPI.Services
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
 
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Secret"]));
 
                 var token = new JwtSecurityToken(
-                    audience: _configuration["JWT:ValidAudience"],
+                    audience: _config["JWT:ValidAudience"],
                     expires: DateTime.Now.AddHours(4),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
@@ -58,14 +68,13 @@ namespace WebAPI.Services
 
             return new Response { StatusCode = 422, Message = "Username or password is not correct!" };
         }
-
         public async Task<Response> Register(RegisterModel model)
         {
             Identity.User user = new();
             Response res = await RegisterUser(model, _userManager, user);
 
             if (res == null)
-                return new Response { StatusCode = 201, Message = "User created successfully!" };
+                return new Response { StatusCode = 201, Message = "User created successfully! Now confirm your email." };
 
             return res;
         }
@@ -86,7 +95,7 @@ namespace WebAPI.Services
                     await _userManager.AddToRoleAsync(user, UserRoles.Admin);
                 }
 
-                return new Response { StatusCode = 201, Message = "User created." };
+                return new Response { StatusCode = 201, Message = "Admin user created. Now confirm your email." };
 
             }
             return res;
@@ -105,7 +114,30 @@ namespace WebAPI.Services
             if (!result.Succeeded)
                 return new Response { StatusCode = 422, Message = "User creation failed! Please check user details and try again." };
 
+            var userFromDb = await _userManager.FindByNameAsync(user.UserName);
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(userFromDb);
+
+            var uriBuilder = new UriBuilder(_config["ReturnPaths:ConfirmEmail"]);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["token"] = token;
+            query["username"] = userFromDb.UserName;
+            uriBuilder.Query = query.ToString();
+            var urlString = uriBuilder.ToString();
+
+            var senderEmail = _config["ReturnPaths:SenderEmail"];
+            await _emailService.SendEmailAsync(senderEmail, userFromDb.Email, "Confirm your email address", urlString);
+
             return null;
+        }
+        public async Task<Response> ConfirmEmail(ConfirmEmailModel model)
+        {
+            var user = await _userManager.FindByNameAsync(model.UserName);
+
+            var result = await _userManager.ConfirmEmailAsync(user, model.Token);
+
+            if (result.Succeeded)
+                return new Response { StatusCode = 200, Message = "Email confirmed succesfully" };
+            return new Response { StatusCode = 400, Message = "Email was'nt able to confirm via this link" };
         }
     }
 }

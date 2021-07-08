@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using WebAPI.Identity.Auth;
 using WebAPI.Models.Auth;
 using WebAPI.Services;
 
@@ -36,6 +37,18 @@ namespace WebAPI.Controllers
         public async Task<Response> RegisterAdmin([FromBody] RegisterModel model)
         {
             return await _authenticationUserService.RegisterAdmin(model);
+        }
+
+        [HttpPost]
+        [Route("confirmemail")]
+        public async Task<Response> ConfirmEmail(string token, string username)
+        {
+            ConfirmEmailModel model = new()
+            {
+                Token = token,
+                UserName = username
+            };
+            return await _authenticationUserService.ConfirmEmail(model);
         }
     }
 }
