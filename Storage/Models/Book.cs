@@ -21,6 +21,7 @@ namespace Storage.Models
         public Photo MainPhoto { get; set; }
         public ICollection<Photo> Photos { get; set; }
         public string Title { get; set; }
+        public int ReleaseYear { get; set; }
         public string Description { get; set; }
         public ICollection<ReadStatus> ReadStatuses { get; set; }
         public ICollection<Review> Reviews { get; set; }

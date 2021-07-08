@@ -19,6 +19,9 @@ namespace Storage.DataAccessLayer.Configurations
             builder.Property(d => d.Description)
                 .HasMaxLength(int.MaxValue)
                 .IsRequired();
+
+            builder.Property(r => r.ReleaseYear)
+                .HasPrecision(4, 0);
         }
     }
 }
