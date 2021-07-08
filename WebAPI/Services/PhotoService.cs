@@ -48,7 +48,6 @@ namespace WebAPI.Services
 
             var newPhoto = await _crud.Create<PhotoResponseDto>(new PhotoRequestDto(filePath, bookId));
             return new KeyValuePair<int, string>(StatusCodes.Status201Created, "Image added.");
-            //Created($"api/authors/{newPhoto.Id}", newPhoto);
         }
         public async Task<KeyValuePair<int, string>> DeletePhoto(int id)
         {

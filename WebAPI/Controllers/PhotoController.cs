@@ -23,21 +23,10 @@ namespace WebAPI.Controllers
         private readonly ICrudService<Photo> _crud;
         private readonly IPhotoService _photoService;
 
-        private readonly IWebHostEnvironment hostingEnvironment;
-        private readonly IConfiguration configuration;
-
-        public readonly List<string> AllowedFileExtensions;
-        public readonly long PhotoSizeLimit;
-
-        public PhotoController(IWebHostEnvironment hostingEnvironment, IConfiguration configuration, ICrudService<Photo> crud, IPhotoService photoService)
+        public PhotoController(ICrudService<Photo> crud, IPhotoService photoService)
         {
             _crud = crud;
             _photoService = photoService;
-            this.hostingEnvironment = hostingEnvironment;
-            this.configuration = configuration;
-
-            AllowedFileExtensions = new string(configuration.GetValue<string>("AllowedPhotoExtensions")).Split(", ").ToList();
-            PhotoSizeLimit = configuration.GetValue<long>("FileSizeLimit");
         }
 
         [HttpGet("All")]
@@ -66,22 +55,6 @@ namespace WebAPI.Controllers
             {
                 var result = await _photoService.UploadPhoto(image, bookId);
                 return StatusCode(result.Key, result.Value);
-
-                //if (image == null) return BadRequest("No image.");
-                //if (image.Length > PhotoSizeLimit) return BadRequest("File is too large");
-                //var extension = "." + image.FileName.Split('.')[image.FileName.Split('.').Length - 1];
-                //if (AllowedFileExtensions.All(ex => extension != ex)) return BadRequest("Invalid file extension");
-
-                //string uniqueFileName = Guid.NewGuid().ToString() + ".jpeg";
-                //string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Photos");
-                //string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                //using (var stream = System.IO.File.Create(filePath))
-                //{
-                //    await image.CopyToAsync(stream);
-                //}
-
-                //var newPhoto = await _crud.Create<PhotoResponseDto>(new PhotoRequestDto(filePath, bookId));
-                //return Created($"api/authors/{newPhoto.Id}", newPhoto);
             }
             catch (DbUpdateException e)
             {
@@ -108,8 +81,8 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var result = _photoService.DeletePhoto(id);
-                return StatusCode(result.Result.Key, result.Result.Value);
+                var result = await _photoService.DeletePhoto(id);
+                return StatusCode(result.Key, result.Value);
             }
             catch (NotFoundException e)
             {
