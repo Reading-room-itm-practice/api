@@ -6,7 +6,7 @@ using WebAPI.Models.Auth;
 
 namespace WebAPI.Identity
 {
-    public static class MyIdentityDataInitializer
+    public static class IdentityDataInitializer
     {
         public static void SeedData
         (UserManager<User> userMenager, RoleManager<IdentityRole<int>> roleMenager, IConfiguration configuration)
@@ -17,17 +17,17 @@ namespace WebAPI.Identity
 
         public static void SeedUsers(UserManager<User> userManager, IConfiguration configuration)
         {
-            var userExists = userManager.FindByNameAsync("Admin").Result;
-            if (userExists == null)
+            var userExists = userManager.FindByNameAsync(configuration["Admin:Username"]).Result != null;
+            if (!userExists)
             {
                 User user = new()
                 {
-                    UserName = "Admin",
-                    Email = "example@gmail.com",
+                    UserName = configuration["Admin:Username"],
+                    Email = configuration["Admin:Email"],
                     EmailConfirmed = true,
                     PhoneNumberConfirmed = true
                 };
-                IdentityResult result = userManager.CreateAsync(user, configuration["Admin:Secret"]).Result;
+                IdentityResult result = userManager.CreateAsync(user, configuration["Admin:Password"]).Result;
                 if (result.Succeeded)
                 {
                     userManager.AddToRoleAsync(user, UserRoles.Admin).Wait();
@@ -39,7 +39,7 @@ namespace WebAPI.Identity
         {
             var type = typeof(UserRoles);
             var fields = type.GetFields();
-            List<string> fieldNames = new List<string>(type.GetFields().Select(x => x.Name));
+            List<string> fieldNames = new(type.GetFields().Select(x => x.Name));
 
             for (int i = 0; i < fields.Length; i++)
             {

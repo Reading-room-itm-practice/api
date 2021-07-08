@@ -55,7 +55,7 @@ namespace WebAPI
             app.UseStatusCodePages();
             app.UseCors();
             app.UseAuthentication();
-            MyIdentityDataInitializer.SeedData(userManager, roleManager, conf);
+            IdentityDataInitializer.SeedData(userManager, roleManager, conf);
             app.UseRouting();
             app.UseAuthorization();
 
