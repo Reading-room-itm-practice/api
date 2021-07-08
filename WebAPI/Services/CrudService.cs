@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.Common;
-using WebAPI.Exceptions;
+using Core.Common;
+using Core.Exceptions;
 using WebAPI.Interfaces;
+using Storage.Iterfaces;
+using Core.Interfaces;
 
 namespace WebAPI.Services
 {

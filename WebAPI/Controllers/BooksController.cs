@@ -8,8 +8,8 @@ using WebAPI.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using WebAPI.Services;
-using WebAPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using Storage.Models;
 
 namespace WebAPI.Controllers
 {

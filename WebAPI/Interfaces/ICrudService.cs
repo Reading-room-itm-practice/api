@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.Common;
+using Core.Common;
+using Storage.Iterfaces;
 
 namespace WebAPI.Interfaces
 {

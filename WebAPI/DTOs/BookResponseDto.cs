@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using WebAPI.Common;
+using Core.Common;
 
 namespace WebAPI.DTOs
 {

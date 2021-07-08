@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.DTOs;
-using WebAPI.Models;
+using Storage.Models;
 
 namespace WebAPI.Mappings
 {
