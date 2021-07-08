@@ -54,7 +54,7 @@ namespace WebAPI.Services
                 var tokenResponse = new JwtSecurityTokenHandler().WriteToken(token);
                 bool _isAdmin = await _userManager.IsInRoleAsync(user, UserRoles.Admin);
 
-                return new Response { StatusCode = 200, Message = $"{tokenResponse}", isAdmin = _isAdmin ? Replay.Yes : Replay.No};
+                return new Response { StatusCode = 200, Message = $"{tokenResponse}", isAdmin = _isAdmin};
             }
 
             return new Response { StatusCode = 422, Message = "Username or password is not correct!" };
