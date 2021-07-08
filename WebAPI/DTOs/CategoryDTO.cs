@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Core.DTOs
+namespace WebAPI.DTOs
 {
-    public class CreateCategoryDTO
+    public class CategoryDTO
     {
+        public int id { get; set; }
         public string Name { get; set; }
     }
 }
