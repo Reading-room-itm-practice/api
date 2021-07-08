@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Common;
 using WebAPI.DTOs;
 using WebAPI.Exceptions;
 using WebAPI.Interfaces;
@@ -20,6 +21,7 @@ namespace WebAPI.Controllers
     public class PhotoController : ControllerBase
     {
         private readonly ICrudService<Photo> _crud;
+        private readonly IPhotoService _photoService;
 
         private readonly IWebHostEnvironment hostingEnvironment;
         private readonly IConfiguration configuration;
@@ -27,9 +29,10 @@ namespace WebAPI.Controllers
         public readonly List<string> AllowedFileExtensions;
         public readonly long PhotoSizeLimit;
 
-        public PhotoController(IWebHostEnvironment hostingEnvironment, IConfiguration configuration, ICrudService<Photo> crud)
+        public PhotoController(IWebHostEnvironment hostingEnvironment, IConfiguration configuration, ICrudService<Photo> crud, IPhotoService photoService)
         {
             _crud = crud;
+            _photoService = photoService;
             this.hostingEnvironment = hostingEnvironment;
             this.configuration = configuration;
 
@@ -61,21 +64,24 @@ namespace WebAPI.Controllers
         {
             try
             {
-                if (image == null) return BadRequest("No image.");
-                if (image.Length > PhotoSizeLimit) return BadRequest("File is too large");
-                var extension = "." + image.FileName.Split('.')[image.FileName.Split('.').Length - 1];
-                if (AllowedFileExtensions.All(ex => extension != ex)) return BadRequest("Invalid file extension");
+                var result = await _photoService.UploadPhoto(image, bookId);
+                return StatusCode(result.Key, result.Value);
 
-                string uniqueFileName = Guid.NewGuid().ToString() + ".jpeg";
-                string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Photos");
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var stream = System.IO.File.Create(filePath))
-                {
-                    await image.CopyToAsync(stream);
-                }
+                //if (image == null) return BadRequest("No image.");
+                //if (image.Length > PhotoSizeLimit) return BadRequest("File is too large");
+                //var extension = "." + image.FileName.Split('.')[image.FileName.Split('.').Length - 1];
+                //if (AllowedFileExtensions.All(ex => extension != ex)) return BadRequest("Invalid file extension");
 
-                var newPhoto = await _crud.Create<PhotoResponseDto>(new PhotoRequestDto(filePath, bookId));
-                return Created($"api/authors/{newPhoto.Id}", newPhoto);
+                //string uniqueFileName = Guid.NewGuid().ToString() + ".jpeg";
+                //string uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath, "Photos");
+                //string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                //using (var stream = System.IO.File.Create(filePath))
+                //{
+                //    await image.CopyToAsync(stream);
+                //}
+
+                //var newPhoto = await _crud.Create<PhotoResponseDto>(new PhotoRequestDto(filePath, bookId));
+                //return Created($"api/authors/{newPhoto.Id}", newPhoto);
             }
             catch (DbUpdateException e)
             {
@@ -102,10 +108,8 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var photoToDelete = await _crud.GetById<PhotoResponseDto>(id);
-                await _crud.Delete(id);
-                System.IO.File.Delete(photoToDelete.Path);
-                return Ok();
+                var result = _photoService.DeletePhoto(id);
+                return StatusCode(result.Result.Key, result.Result.Value);
             }
             catch (NotFoundException e)
             {
@@ -115,6 +119,11 @@ namespace WebAPI.Controllers
             catch(DbUpdateException e)
             {
                 return BadRequest(e.InnerException.Message);
+            }
+            catch(Exception e)
+            {
+                if (e.InnerException.GetType() == typeof(NotFoundException)) return NotFound("Image not found");
+                return BadRequest(e.Message);
             }
         }
     }

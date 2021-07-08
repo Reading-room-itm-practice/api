@@ -20,6 +20,7 @@ namespace WebAPI.Installers
             services.AddScoped<ICrudService<Author>, CrudService<Author>>();
             services.AddScoped<ICrudService<Book>, CrudService<Book>>();
             services.AddScoped<ICrudService<Photo>, CrudService<Photo>>();
+            services.AddScoped<IPhotoService, PhotoService>();
         }
     }
 }

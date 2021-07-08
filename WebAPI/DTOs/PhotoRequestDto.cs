@@ -15,7 +15,7 @@ namespace WebAPI.DTOs
         public PhotoRequestDto(string path, int? bookId) 
         { 
             Path = path;
-            BookId = (bookId == null) ? null : bookId;
+            BookId = bookId;
         }
     }
 }
