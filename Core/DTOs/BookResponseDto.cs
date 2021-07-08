@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Core.Common;
 
-namespace WebAPI.DTOs
+namespace Core.DTOs
 {
     public class BookResponseDto : IResponseDto
     {

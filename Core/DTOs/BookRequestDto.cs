@@ -2,7 +2,7 @@
 using Core.Common;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebAPI.DTOs
+namespace Core.DTOs
 {
     public class BookRequestDto : IRequestDto
     {

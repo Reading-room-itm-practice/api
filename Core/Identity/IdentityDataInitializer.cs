@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Storage.Identity;
 using System.Collections.Generic;
 using System.Linq;
-using WebAPI.Models.Auth;
 
 namespace WebAPI.Identity
 {

@@ -6,10 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPI.Identity;
 
-namespace WebAPI
+namespace WebAPI.HosBuilderExtensions
 {
-    public static class HostBuilderExtension
+    public static class HostBuilderMigrator
     {
         public static IHost MigrateDatabase<T>(this IHost webHost) where T : DbContext
         {
