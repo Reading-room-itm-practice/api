@@ -1,7 +1,6 @@
 ﻿
 namespace WebAPI.Models.Auth
 {
-    public enum Replay { Yes, No }
     public class Response
     {
         public int StatusCode { get; set; }
