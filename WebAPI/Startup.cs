@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.DTOs;
 using WebAPI.Exceptions;
+using WebAPI.Identity;
 using WebAPI.Installers;
 
 namespace WebAPI
@@ -29,7 +31,7 @@ namespace WebAPI
             services.InstallServicesInAssembly(Configuration);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, IConfiguration conf)
         {
             if (env.IsDevelopment())
             {
@@ -46,13 +48,24 @@ namespace WebAPI
                 if(exception is NotFoundException)
                 {
                     context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
-                    await context.Response.WriteAsJsonAsync(new ErrorDto { Code = StatusCodes.Status404NotFound, Error = exception.Message });
+                    await context.Response.WriteAsJsonAsync(new ErrorDto { Code = NotFoundException.ResponseCode, Error = exception.Message });
+                }
+                else if(exception is ApiException)
+                {
+                    context.Response.StatusCode = ApiException.ResponseCode;
+                    await context.Response.WriteAsJsonAsync(new ErrorDto { Code = ApiException.ResponseCode, Error = exception.Message });
+                }
+                else 
+                {
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    await context.Response.WriteAsJsonAsync(new ErrorDto { Code = StatusCodes.Status500InternalServerError, Error = exception.Message });
                 }
             }));
 
             app.UseStatusCodePages();
             app.UseCors();
             app.UseAuthentication();
+            IdentityDataInitializer.SeedData(userManager, roleManager, conf);
             app.UseRouting();
             app.UseAuthorization();
 

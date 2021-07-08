@@ -26,6 +26,8 @@ namespace WebAPI.Installers
             services.AddScoped<IUpdaterService<Author>, UpdaterService<Author>>();
             services.AddScoped<IDeleterService<Author>, DeleterService<Author>>();
             services.AddSingleton<IEmailService,EmailService>();
+            services.AddScoped<ICrudService<Author>, CrudService<Author>>();
+            services.AddScoped<ICrudService<Book>, CrudService<Book>>();
         }
     }
 }
