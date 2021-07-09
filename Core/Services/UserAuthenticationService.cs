@@ -1,5 +1,6 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
+using Core.ServiceResponses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +18,6 @@ namespace Core.Services
 {
     public class UserAuthenticationService : IUserAuthenticationService
     {
-
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
         public UserAuthenticationService(UserManager<User> userManager, IConfiguration configuration)
@@ -26,7 +26,7 @@ namespace Core.Services
             _configuration = configuration;
         }
 
-        public async Task<ResponseDto> Login(LoginDto model)
+        public async Task<SuccessResponse<string>> Login(LoginDto model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
@@ -55,46 +55,46 @@ namespace Core.Services
 
                 var tokenResponse = new JwtSecurityTokenHandler().WriteToken(token);
 
-                return new ResponseDto { StatusCode = StatusCodes.Status200OK, Message = $"{tokenResponse}" };
+                return new SuccessResponse<string> { StatusCode = HttpStatusCode.OK, Message = $"{tokenResponse}" };
             }
 
-            return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = "Username or password is not correct!" };
+            return new SuccessResponse<string> { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Username or password is not correct!" };
         }
 
-        public async Task<ResponseDto> Register(RegisterDto model)
+        public async Task<SuccessResponse<string>> Register(RegisterDto model)
         {
             User user = new();
-            ResponseDto response = await RegisterUser(model, _userManager, user);
+            SuccessResponse<string> response = await RegisterUser(model, _userManager, user);
 
             if (response == null)
-                return new ResponseDto { StatusCode = StatusCodes.Status201Created, Message = "User created successfully!" };
+                return new SuccessResponse<string> { StatusCode = HttpStatusCode.Created, Message = "User created successfully!" };
 
             return response;
         }
 
-        public async Task<ResponseDto> RegisterAdmin(RegisterDto model)
+        public async Task<SuccessResponse<string>> RegisterAdmin(RegisterDto model)
         {
             User user = new();
-            ResponseDto response = await RegisterUser(model, _userManager, user);
+            SuccessResponse<string> response = await RegisterUser(model, _userManager, user);
 
             if (response == null)
             {
                 await _userManager.AddToRoleAsync(user, UserRoles.Admin);
 
-                return new ResponseDto { StatusCode = StatusCodes.Status201Created, Message = "User created." };
+                return new SuccessResponse<string> { StatusCode = HttpStatusCode.Created, Message = "User created." };
             }
             return response;
         }
 
-        private async Task<ResponseDto> RegisterUser(RegisterDto model, UserManager<User> _userManager, User user)
+        private async Task<SuccessResponse<string>> RegisterUser(RegisterDto model, UserManager<User> _userManager, User user)
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = "User already exists!" };
+                return new SuccessResponse<string> { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "User already exists!" };
 
             var emailExists = await _userManager.FindByEmailAsync(model.Email);
             if (emailExists != null)
-                return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = "Email already used!" };
+                return new SuccessResponse<string> { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Email already used!" };
 
             user.Email = model.Email;
             user.SecurityStamp = Guid.NewGuid().ToString();
@@ -102,7 +102,7 @@ namespace Core.Services
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = result.Errors.ToString() };
+                return new SuccessResponse<string> { StatusCode = HttpStatusCode.UnprocessableEntity, Message = result.Errors.ToString() };
 
             await _userManager.AddToRoleAsync(user, UserRoles.User);
             return null;

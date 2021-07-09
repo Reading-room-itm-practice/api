@@ -1,5 +1,6 @@
 using Core.DTOs;
 using Core.Exceptions;
+using Core.ServiceResponses;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -9,12 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Storage.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebAPI.Identity;
+using System.Net;
 using WebAPI.Installers;
+using WebAPI.Middleware;
 
 namespace WebAPI
 {
@@ -42,24 +40,26 @@ namespace WebAPI
             }
 
             app.UseHttpsRedirection();
+            app.UseMiddleware<ResponseMiddleware>();
 
             app.UseExceptionHandler(c => c.Run(async context =>
             {
                 var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
                 if(exception is NotFoundException)
                 {
-                    context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
-                    await context.Response.WriteAsJsonAsync(new ErrorDto { Code = NotFoundException.ResponseCode, Error = exception.Message });
+                    var type = context.Response.ContentType;
+                    context.Response.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
+                    await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = ApiException.ResponseCode, Message = exception.Message });
                 }
                 else if(exception is ApiException)
                 {
-                    context.Response.StatusCode = ApiException.ResponseCode;
-                    await context.Response.WriteAsJsonAsync(new ErrorDto { Code = ApiException.ResponseCode, Error = exception.Message });
+                    context.Response.StatusCode = (int) ApiException.ResponseCode;
+                    await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = ApiException.ResponseCode, Message = exception.Message });
                 }
                 else 
                 {
-                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                    await context.Response.WriteAsJsonAsync(new ErrorDto { Code = StatusCodes.Status500InternalServerError, Error = exception.Message });
+                    context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                    await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = HttpStatusCode.InternalServerError, Message = exception.Message });
                 }
             }));
 

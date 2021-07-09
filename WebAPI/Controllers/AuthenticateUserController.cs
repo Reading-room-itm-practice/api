@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Core.Interfaces;
 using Core.DTOs;
+using Core.ServiceResponses;
 
 namespace WebAPI.Controllers
 {
@@ -19,21 +20,21 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<ResponseDto> Login([FromBody] LoginDto model)
+        public async Task<SuccessResponse<string>> Login([FromBody] LoginDto model)
         {
             return await _authenticationUserService.Login(model);
         }
 
         [HttpPost]
         [Route("register")]
-        public async Task<ResponseDto> Register([FromBody] RegisterDto model)
+        public async Task<SuccessResponse<string>> Register([FromBody] RegisterDto model)
         {
             return await _authenticationUserService.Register(model);
         }
 
         [HttpPost]
         [Route("register-admin")]
-        public async Task<ResponseDto> RegisterAdmin([FromBody] RegisterDto model)
+        public async Task<SuccessResponse<string>> RegisterAdmin([FromBody] RegisterDto model)
         {
             return await _authenticationUserService.RegisterAdmin(model);
         }
