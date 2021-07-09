@@ -16,6 +16,7 @@ namespace WebAPI.Controllers
     public class AuthorsController : ControllerBase
     {
         private readonly ICrudService<Author> _crud;
+
         public AuthorsController(ICrudService<Author> crud)
         {
             _crud = crud;
