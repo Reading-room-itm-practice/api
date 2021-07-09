@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.DTOs
 {
-    public class RegisterDto
+    public class RegisterRequest
     {
         [Required(ErrorMessage = "User Name is required")]
         public string Username { get; set; }

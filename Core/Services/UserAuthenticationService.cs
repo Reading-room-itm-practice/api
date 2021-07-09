@@ -1,5 +1,6 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
+using Core.Requests;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -26,7 +27,7 @@ namespace Core.Services
             _configuration = configuration;
         }
 
-        public async Task<SuccessResponse<string>> Login(LoginDto model)
+        public async Task<SuccessResponse<string>> Login(LoginRequest model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
@@ -61,7 +62,7 @@ namespace Core.Services
             return new SuccessResponse<string> { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Username or password is not correct!" };
         }
 
-        public async Task<SuccessResponse<string>> Register(RegisterDto model)
+        public async Task<SuccessResponse<string>> Register(RegisterRequest model)
         {
             User user = new();
             SuccessResponse<string> response = await RegisterUser(model, _userManager, user);
@@ -72,21 +73,21 @@ namespace Core.Services
             return response;
         }
 
-        public async Task<SuccessResponse<string>> RegisterAdmin(RegisterDto model)
+        public async Task<ServiceResponse> RegisterAdmin(RegisterRequest model)
         {
             User user = new();
-            SuccessResponse<string> response = await RegisterUser(model, _userManager, user);
+            ServiceResponse response = await RegisterUser(model, _userManager, user);
 
             if (response == null)
             {
                 await _userManager.AddToRoleAsync(user, UserRoles.Admin);
 
-                return new SuccessResponse<string> { StatusCode = HttpStatusCode.Created, Message = "User created." };
+                return new SuccessResponse { StatusCode = HttpStatusCode.Created, Message = "User created." };
             }
             return response;
         }
 
-        private async Task<SuccessResponse<string>> RegisterUser(RegisterDto model, UserManager<User> _userManager, User user)
+        private async Task<ServiceResponse> RegisterUser(RegisterRequest model, UserManager<User> _userManager, User user)
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
@@ -102,10 +103,10 @@ namespace Core.Services
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return new SuccessResponse<string> { StatusCode = HttpStatusCode.UnprocessableEntity, Message = result.Errors.ToString() };
+                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = result.Errors.ToString() };
 
             await _userManager.AddToRoleAsync(user, UserRoles.User);
-            return null;
+            return Succ();
         }
     }
 }

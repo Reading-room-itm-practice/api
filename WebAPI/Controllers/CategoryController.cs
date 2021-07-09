@@ -1,15 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.Services;
-using AutoMapper;
 using WebAPI.DTOs;
 using WebAPI.Interfaces;
 using Storage.Models;
 using Core.Exceptions;
+using Core.Requests;
 
 namespace WebAPI.Controllers
 {
@@ -27,23 +23,24 @@ namespace WebAPI.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult> GetCategory(int id)
         {
-            var result = await _crud.GetById<CategoryResponseDto>(id);
+            var result = await _crud.GetById<CategoryDto>(id);
             if (result == null) return NotFound();
             return Ok(result);
         }
+
         [HttpGet]
         public async Task<ActionResult> GetCategories()
         {
-            var result = await _crud.GetAll<CategoryResponseDto>();
+            var result = await _crud.GetAll<CategoryDto>();
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CategoryRequestDto category)
+        public async Task<ActionResult> Create(CategoryRequest category)
         {
             try
             {
-                var newCategory = await _crud.Create<CategoryResponseDto>(category);
+                var newCategory = await _crud.Create<CategoryDto>(category);
                 return Created($"api/category/{newCategory.Id}", newCategory);
             }
             catch (ArgumentNullException e)
@@ -54,7 +51,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Edit(int id, CategoryRequestDto category)
+        public async Task<ActionResult> Edit(int id, CategoryRequest category)
         {
             try
             {

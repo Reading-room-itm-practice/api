@@ -12,8 +12,8 @@ namespace WebAPI.Mappings
     {
         public BookMapperProfile()
         {
-            CreateMap<Book, BookResponseDto>().ReverseMap();
-            CreateMap<BookRequestDto, Book>().ReverseMap();
+            CreateMap<Book, BookDto>().ReverseMap();
+            CreateMap<BookRequest, Book>().ReverseMap();
         }
     }
 }

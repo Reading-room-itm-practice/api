@@ -3,20 +3,15 @@ using Core.ServiceResponses;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace WebAPI.Middleware
 {
-    public class ResponseMiddleware
+    public class ResponseMiddleware 
     {
         private readonly RequestDelegate _next;
-
+        private const string StatusCodeName = "statusCode";
         public ResponseMiddleware(RequestDelegate next)
         {
             _next = next;
@@ -25,32 +20,35 @@ namespace WebAPI.Middleware
         public async Task Invoke(HttpContext context)
         {
             var originalBody = context.Response.Body;
-
-            using (var ms = new MemoryStream())
+            try
             {
-                context.Response.Body = ms;
-                await _next(context);
-
-                context.Response.Body.Position = 0;
-
-                var responseReader = new StreamReader(context.Response.Body);
-
-                var responseContent = responseReader.ReadToEnd();
-
-                if(responseContent.Contains("statusCode"))
+                using (var memoryStream = new MemoryStream())
                 {
-                    context.Response.StatusCode = GetStatusCode(responseContent);
+                    context.Response.Body = memoryStream;
+                    await _next(context);
+                    context.Response.Body.Position = 0;
+                    var responseReader = new StreamReader(context.Response.Body);
+                    var responseContent = responseReader.ReadToEnd();
+
+                    if (responseContent.Contains(StatusCodeName))
+                    {
+                        context.Response.StatusCode = GetStatusCode(responseContent);
+                    }
+
+                    memoryStream.Position = 0;
+                    await memoryStream.CopyToAsync(originalBody);
                 }
             }
-
-            context.Response.Body = originalBody;
+            finally
+            {
+                context.Response.Body = originalBody;
+            }
         }
-
 
         private int GetStatusCode(string responseContent)
         {
             var data = (JObject)JsonConvert.DeserializeObject(responseContent);
-            string statusCode = data["statusCode"].Value<string>();
+            string statusCode = data[StatusCodeName].Value<string>();
 
             return int.Parse(statusCode);
         }

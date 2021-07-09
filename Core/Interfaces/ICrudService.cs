@@ -9,10 +9,10 @@ namespace WebAPI.Interfaces
 {
     public interface ICrudService<T> where T : IDbModel
     {
-        public Task<IReponseDto> Create<IReponseDto>(IRequestDto model);
+        public Task<IReponseDto> Create<IReponseDto>(IRequest model);
         public Task<IEnumerable<IResponseDto>> GetAll<IResponseDto>();
         public Task<IResponseDto> GetById<IResponseDto>(int id);
-        public Task Update(IRequestDto updateModel, int id);
+        public Task Update(IRequest updateModel, int id);
         public Task Delete(int id);
     }
 }

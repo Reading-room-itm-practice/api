@@ -22,7 +22,7 @@ namespace WebAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<IResponseDto> Create<IResponseDto>(IRequestDto requestDto)
+        public async Task<IResponseDto> Create<IResponseDto>(IRequest requestDto)
         {
             var model = _mapper.Map<T>(requestDto);
             await _repository.Create(model);
@@ -44,7 +44,7 @@ namespace WebAPI.Services
             return _mapper.Map<IResponseDto>(model.FirstOrDefault());
         }
 
-        public async Task Update(IRequestDto requestDto, int id)
+        public async Task Update(IRequest requestDto, int id)
         {
             var model = await _repository.FindByConditions(x => x.Id == id);
 

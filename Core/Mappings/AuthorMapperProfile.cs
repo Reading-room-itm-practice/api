@@ -12,8 +12,8 @@ namespace Core.Mappings
     {
         public AuthorMapperProfile()
         {
-            CreateMap<Author, AuthorResponseDto>().ReverseMap();
-            CreateMap<AuthorRequestDto, Author>().ReverseMap();
+            CreateMap<Author, AuthorDto>().ReverseMap();
+            CreateMap<AuthorRequest, Author>().ReverseMap();
         }
     }
 }

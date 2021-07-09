@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Core.Common
 {
-    public interface IResponseDto
+    public interface IRequest
     {
     }
 }

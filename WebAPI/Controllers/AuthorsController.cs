@@ -31,7 +31,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var authors = await _getter.GetAll<AuthorResponseDto>();
+            var authors = await _getter.GetAll<AuthorDto>();
             
             return Ok(authors);
         }
@@ -40,22 +40,22 @@ namespace WebAPI.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Show(int id)
         {
-            var author = await _getter.GetById<AuthorResponseDto>(id);
+            var author = await _getter.GetById<AuthorDto>(id);
             
             return author == null ? NotFound() : Ok(author);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AuthorRequestDto requestDto) 
+        public async Task<IActionResult> Create(AuthorRequest requestDto) 
         {
-            var author = await _creator.Create<AuthorResponseDto>(requestDto);
+            var author = await _creator.Create<AuthorDto>(requestDto);
 
             return Created($"api/authors/{author.Id}", author);
         }
 
         [SwaggerOperation(Summary = "Update a book author by unique id")]
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Update(int id, AuthorRequestDto requestDto)
+        public async Task<ActionResult> Update(int id, AuthorRequest requestDto)
         {
             await _updater.Update(requestDto, id);
         

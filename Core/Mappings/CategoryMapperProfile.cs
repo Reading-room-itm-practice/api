@@ -13,8 +13,8 @@ namespace Core.Mappings
     {
         public CategoryMapperProfile()
         {
-            CreateMap<Category, CategoryResponseDto>().ReverseMap();
-            CreateMap<CategoryRequestDto, Category>().ReverseMap();
+            CreateMap<Category, CategoryDto>().ReverseMap();
+            CreateMap<CategoryRequest, Category>().ReverseMap();
         }
     }
 }

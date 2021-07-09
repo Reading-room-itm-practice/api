@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Common;
 
-namespace Core.DTOs
+namespace Core.Requests
 {
-    public class AuthorRequestDto : IRequestDto
+    public class AuthorRequest : IRequest
     {
         [Required]
         public string Name { get; set; }
