@@ -4,12 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.Models;
 using WebAPI.Services;
 using AutoMapper;
 using WebAPI.DTOs;
 using WebAPI.Interfaces;
-using WebAPI.Exceptions;
+using Storage.Models;
+using Core.Exceptions;
 
 namespace WebAPI.Controllers
 {

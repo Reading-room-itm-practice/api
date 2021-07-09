@@ -8,11 +8,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.Common;
+using Core.Common;
 using WebAPI.DTOs;
-using WebAPI.Exceptions;
+using Core.Exceptions;
 using WebAPI.Interfaces;
-using WebAPI.Models;
+using Storage.Models;
+using Core.Interfaces;
 
 namespace WebAPI.Controllers
 {
@@ -34,8 +35,8 @@ namespace WebAPI.Controllers
         {
             if (book_id != null)
             {
-                var result = await _crud.GetAll<PhotoResponseDto>();
-                return Ok(result.Where(p => p.BookId == book_id));
+                var result = _crud.GetAll<PhotoResponseDto>().Result.Where(p => p.BookId == book_id);
+                return Ok(result);
             }
             return Ok(await _crud.GetAll<PhotoResponseDto>());
         }
@@ -49,7 +50,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost()]
-        public async Task<ActionResult> Upload(IFormFile image, int? bookId)
+        public async Task<ActionResult> Upload(IFormFile image, int bookId)
         {
             try
             {
