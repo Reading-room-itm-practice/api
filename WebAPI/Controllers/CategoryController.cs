@@ -4,10 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.Models;
 using WebAPI.Services;
 using AutoMapper;
 using WebAPI.DTOs;
+using Core.Interfaces;
+using Storage.Models;
+using Core.Exceptions;
 
 namespace WebAPI.Controllers
 {
@@ -15,47 +17,68 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService categoryService;
-        public CategoryController(ICategoryService categoryService)
+        private readonly ICrudService<Category> _crud;
+
+        public CategoryController(ICrudService<Category> crud)
         {
-            this.categoryService = categoryService;
+            _crud = crud;
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult> GetCategory(int id)
         {
-            var result = await categoryService.GetCategory(id);
+            var result = await _crud.GetById<CategoryResponseDto>(id);
             if (result == null) return NotFound();
             return Ok(result);
         }
         [HttpGet]
         public async Task<ActionResult> GetCategories()
         {
-            return Ok(await categoryService.GetCategories());
+            var result = await _crud.GetAll<CategoryResponseDto>();
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CreateCategoryDTO category)
+        public async Task<ActionResult> Create(CategoryRequestDto category)
         {
-            if (category == null) return BadRequest();
-            var newCategory = await categoryService.CreateCategory(category);
-            return CreatedAtAction(nameof(GetCategory), new { id = newCategory.id }, newCategory);
+            try
+            {
+                var newCategory = await _crud.Create<CategoryResponseDto>(category);
+                return Created($"api/category/{newCategory.Id}", newCategory);
+            }
+            catch (ArgumentNullException e)
+            {
+                return BadRequest(e.Message);
+                throw;
+            }
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Edit(int id, EditCategoryDTO category)
+        public async Task<ActionResult> Edit(int id, CategoryRequestDto category)
         {
-            if (categoryService.GetCategory(id).Result == null) return NotFound();
-            var result = await categoryService.EditCategory(id, category);
-            return Ok(result);
+            try
+            {
+                await _crud.Update(category, id);
+                return Ok();
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var categoryToDelete = await categoryService.GetCategory(id);
-            if (categoryToDelete == null) return NotFound();
-            return Ok(await categoryService.DeleteCategory(id));
+            try
+            {
+                await _crud.Delete(id);
+                return Ok();
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
         }
     }
 }

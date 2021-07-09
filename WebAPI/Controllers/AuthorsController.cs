@@ -3,11 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.DTOs;
-using WebAPI.Interfaces;
+using Core.DTOs;
+using Core.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
-using WebAPI.Models;
-using Microsoft.AspNetCore.Authorization;
+using Storage.Models;
 
 namespace WebAPI.Controllers
 {
@@ -28,7 +27,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Index()
         {
             var authors = await _crud.GetAll<AuthorResponseDto>();
-            
+
             return Ok(authors);
         }
 
@@ -37,12 +36,12 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Show(int id)
         {
             var author = await _crud.GetById<AuthorResponseDto>(id);
-            
+
             return author == null ? NotFound() : Ok(author);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AuthorRequestDto requestDto) 
+        public async Task<IActionResult> Create(AuthorRequestDto requestDto)
         {
             var author = await _crud.Create<AuthorResponseDto>(requestDto);
 
@@ -54,7 +53,7 @@ namespace WebAPI.Controllers
         public async Task<ActionResult> Update(int id, AuthorRequestDto requestDto)
         {
             await _crud.Update(requestDto, id);
-        
+
             return Ok("Resource updated");
         }
 
@@ -63,7 +62,7 @@ namespace WebAPI.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             await _crud.Delete(id);
-          
+
             return Ok("Resource deleted");
         }
     }

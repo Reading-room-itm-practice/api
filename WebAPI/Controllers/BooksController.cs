@@ -3,13 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.DTOs;
-using WebAPI.Interfaces;
+using Core.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Net;
-using WebAPI.Services;
-using WebAPI.Models;
-using Microsoft.AspNetCore.Authorization;
+using Storage.Models;
+using Core.DTOs;
 
 namespace WebAPI.Controllers
 {
@@ -47,7 +44,6 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Create(BookRequestDto model)
         {
             var book = await _crud.Create<BookResponseDto>(model);
-
             return Created($"api/books/{book.Id}", book);
         }
 

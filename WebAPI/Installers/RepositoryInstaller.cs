@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.Interfaces;
-using WebAPI.Models;
-using WebAPI.Repositories;
+using Core.Interfaces;
+using Storage.Models;
+using Core.Repositories;
 
 namespace WebAPI.Installers
 {
@@ -14,9 +14,9 @@ namespace WebAPI.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IBaseRepository<Author>, BaseRepository<Author>>();
             services.AddScoped<IBaseRepository<Book>, BaseRepository<Book>>();
+            services.AddScoped<IBaseRepository<Category>, BaseRepository<Category>>();
         }
     }
 }
