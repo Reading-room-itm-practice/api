@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using WebAPI.Services;
 using AutoMapper;
 using WebAPI.DTOs;
-using WebAPI.Interfaces;
+using Core.Interfaces;
 using Storage.Models;
 using Core.Exceptions;
 
