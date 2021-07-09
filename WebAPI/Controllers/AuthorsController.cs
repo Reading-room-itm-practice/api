@@ -3,31 +3,35 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebAPI.DTOs;
-using WebAPI.Interfaces;
+using Core.DTOs;
+using Core.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
-using WebAPI.Models;
-using Microsoft.AspNetCore.Authorization;
+using Storage.Models;
 
 namespace WebAPI.Controllers
 {
-    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-        private readonly ICrudService<Author> _crud;
+        private readonly ICreatorService<Author> _creator;
+        private readonly IGetterService<Author> _getter;
+        private readonly IUpdaterService<Author> _updater;
+        private readonly IDeleterService<Author> _deleter;
 
-        public AuthorsController(ICrudService<Author> crud)
+        public AuthorsController(ICreatorService<Author> creator, IGetterService<Author> getter, IUpdaterService<Author> updater, IDeleterService<Author> deleter)
         {
-            _crud = crud;
+            _creator = creator;
+            _getter = getter;
+            _updater = updater;
+            _deleter = deleter;
         }
 
         [SwaggerOperation(Summary = "Retrieves all book authors")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var authors = await _crud.GetAll<AuthorResponseDto>();
+            var authors = await _getter.GetAll<AuthorResponseDto>();
             
             return Ok(authors);
         }
@@ -36,7 +40,7 @@ namespace WebAPI.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Show(int id)
         {
-            var author = await _crud.GetById<AuthorResponseDto>(id);
+            var author = await _getter.GetById<AuthorResponseDto>(id);
             
             return author == null ? NotFound() : Ok(author);
         }
@@ -44,7 +48,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(AuthorRequestDto requestDto) 
         {
-            var author = await _crud.Create<AuthorResponseDto>(requestDto);
+            var author = await _creator.Create<AuthorResponseDto>(requestDto);
 
             return Created($"api/authors/{author.Id}", author);
         }
@@ -53,7 +57,7 @@ namespace WebAPI.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Update(int id, AuthorRequestDto requestDto)
         {
-            await _crud.Update(requestDto, id);
+            await _updater.Update(requestDto, id);
         
             return Ok("Resource updated");
         }
@@ -62,7 +66,7 @@ namespace WebAPI.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            await _crud.Delete(id);
+            await _deleter.Delete(id);
           
             return Ok("Resource deleted");
         }
