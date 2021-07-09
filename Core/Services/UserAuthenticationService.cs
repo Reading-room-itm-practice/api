@@ -70,41 +70,15 @@ namespace Core.Services
 
         public async Task<ResponseDto> Register(RegisterDto model)
         {
-            User user = new();
-            ResponseDto response = await RegisterUser(model, _userManager, user);
+            if (await _userManager.FindByNameAsync(model.Username) != null || await _userManager.FindByEmailAsync(model.Email) != null)
+                return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = "Account already exists!" };
 
-            if (response == null)
-                return new ResponseDto { StatusCode = StatusCodes.Status201Created, Message = "User created successfully!" };
-
-            return response;
-        }
-
-        public async Task<ResponseDto> RegisterAdmin(RegisterDto model)
-        {
-            User user = new();
-            ResponseDto response = await RegisterUser(model, _userManager, user);
-
-            if (response == null)
+            User user = new()
             {
-                await _userManager.AddToRoleAsync(user, UserRoles.Admin);
-
-                return new ResponseDto { StatusCode = StatusCodes.Status201Created, Message = "User created." };
-            }
-            return response;
-        }
-        private async Task<ResponseDto> RegisterUser(RegisterDto model, UserManager<User> _userManager, User user)
-        {
-            var userExists = await _userManager.FindByNameAsync(model.Username);
-            if (userExists != null)
-                return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = "User already exists!" };
-
-            var emailExists = await _userManager.FindByEmailAsync(model.Email);
-            if (emailExists != null)
-                return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = "Email already used!" };
-
-            user.Email = model.Email;
-            user.SecurityStamp = Guid.NewGuid().ToString();
-            user.UserName = model.Username;
+            Email = model.Email,
+            SecurityStamp = Guid.NewGuid().ToString(),
+            UserName = model.Username
+            };
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
@@ -112,7 +86,7 @@ namespace Core.Services
 
             await _userManager.AddToRoleAsync(user, UserRoles.User);
             var userFromDb = await _userManager.FindByNameAsync(user.UserName);
-            
+
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(userFromDb);
 
             var uriBuilder = new UriBuilder(_config["ReturnPaths:ConfirmEmail"]);
@@ -125,8 +99,7 @@ namespace Core.Services
             var senderEmail = _config["ReturnPaths:SenderEmail"];
             await _emailService.SendEmailAsync(senderEmail, userFromDb.Email, "Confirm your email address", urlString);
 
-
-            return null;
+            return new ResponseDto { StatusCode = StatusCodes.Status201Created, Message = "User created successfully! Confirm your email." };
         }
         public async Task<ResponseDto> ConfirmEmail(ConfirmEmailModel model)
         {

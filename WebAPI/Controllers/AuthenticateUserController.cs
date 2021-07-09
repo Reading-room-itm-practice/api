@@ -31,13 +31,6 @@ namespace WebAPI.Controllers
             return await _authenticationUserService.Register(model);
         }
 
-        [HttpPost]
-        [Route("Register-admin")]
-        public async Task<ResponseDto> RegisterAdmin([FromBody] RegisterDto model)
-        {
-            return await _authenticationUserService.RegisterAdmin(model);
-        }
-
         [HttpGet]
         [Route("Confirm-email")]
         public async Task<ResponseDto> ConfirmEmail(string token, string username)
