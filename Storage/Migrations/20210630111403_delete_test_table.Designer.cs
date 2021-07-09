@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebAPI.DataAccessLayer;
+using Storage.DataAccessLayer;
 
-namespace WebAPI.Migrations
+namespace Storage.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
     [Migration("20210630111403_delete_test_table")]

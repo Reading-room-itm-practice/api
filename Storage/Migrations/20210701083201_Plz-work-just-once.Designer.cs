@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebAPI.DataAccessLayer;
+using Storage.DataAccessLayer;
 
-namespace WebAPI.Migrations
+namespace Storage.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210701083201_Plz-work-just-once")]
+    partial class Plzworkjustonce
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -252,7 +254,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors");
+                    b.ToTable("authors");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Book", b =>
@@ -291,10 +293,6 @@ namespace WebAPI.Migrations
                     b.Property<int?>("MainPhotoId1")
                         .HasColumnType("int");
 
-                    b.Property<int>("ReleaseYear")
-                        .HasPrecision(4)
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -308,7 +306,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("MainPhotoId1");
 
-                    b.ToTable("Books");
+                    b.ToTable("books");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Category", b =>
@@ -337,7 +335,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("categories");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Follow", b =>
@@ -382,7 +380,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("Follows");
+                    b.ToTable("follows");
                 });
 
             modelBuilder.Entity("WebAPI.Models.FriendRequest", b =>
@@ -395,7 +393,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("FromId", "ToId");
 
-                    b.ToTable("Friend_requests");
+                    b.ToTable("friend_requests");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Like", b =>
@@ -435,7 +433,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Likes");
+                    b.ToTable("likes");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Notification", b =>
@@ -455,7 +453,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("notifications");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Photo", b =>
@@ -465,7 +463,7 @@ namespace WebAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BookId")
+                    b.Property<int>("BookId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
@@ -488,7 +486,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("Photos");
+                    b.ToTable("Photo");
                 });
 
             modelBuilder.Entity("WebAPI.Models.ReadStatus", b =>
@@ -512,7 +510,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Read_statuses");
+                    b.ToTable("read_statuses");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Review", b =>
@@ -554,7 +552,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("reviews");
                 });
 
             modelBuilder.Entity("WebAPI.Models.ReviewComment", b =>
@@ -593,7 +591,7 @@ namespace WebAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Review_comments");
+                    b.ToTable("review_comments");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Suggestion", b =>
@@ -631,7 +629,7 @@ namespace WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Suggestions");
+                    b.ToTable("suggestions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -720,11 +718,11 @@ namespace WebAPI.Migrations
             modelBuilder.Entity("WebAPI.Models.Follow", b =>
                 {
                     b.HasOne("WebAPI.Models.Author", null)
-                        .WithMany("Followers")
+                        .WithMany("Follows")
                         .HasForeignKey("AuthorId");
 
                     b.HasOne("WebAPI.Models.Category", null)
-                        .WithMany("Followers")
+                        .WithMany("Follows")
                         .HasForeignKey("CategoryId");
 
                     b.HasOne("WebAPI.Identity.User", null)
@@ -755,7 +753,9 @@ namespace WebAPI.Migrations
                 {
                     b.HasOne("WebAPI.Models.Book", null)
                         .WithMany("Photos")
-                        .HasForeignKey("BookId");
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WebAPI.Models.ReadStatus", b =>
@@ -822,7 +822,7 @@ namespace WebAPI.Migrations
                 {
                     b.Navigation("Books");
 
-                    b.Navigation("Followers");
+                    b.Navigation("Follows");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Book", b =>
@@ -836,7 +836,7 @@ namespace WebAPI.Migrations
 
             modelBuilder.Entity("WebAPI.Models.Category", b =>
                 {
-                    b.Navigation("Followers");
+                    b.Navigation("Follows");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Review", b =>
