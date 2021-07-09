@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebAPI.Identity.Auth
+namespace Core.DTOs
 {
     public class ConfirmEmailModel
     {

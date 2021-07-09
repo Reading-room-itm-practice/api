@@ -1,15 +1,10 @@
 ﻿using Core.Interfaces;
 using Core.Repositories;
 using Core.Services;
+using Core.Services.Email;
 using Microsoft.Extensions.DependencyInjection;
-using Storage.Interfaces;
 using Storage.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core
 {
@@ -20,11 +15,13 @@ namespace Core
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped<IBaseRepository<Author>, BaseRepository<Author>>();
-
+            
             services.AddScoped<ICreatorService<Author>, CreatorService<Author>>();
             services.AddScoped<IGetterService<Author>, GetterService<Author>>();
             services.AddScoped<IUpdaterService<Author>, UpdaterService<Author>>();
             services.AddScoped<IDeleterService<Author>, DeleterService<Author>>();
+
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }
