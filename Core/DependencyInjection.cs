@@ -5,6 +5,7 @@ using Core.Services.Email;
 using Microsoft.Extensions.DependencyInjection;
 using Storage.Models;
 using System;
+using System.Net;
 
 namespace Core
 {

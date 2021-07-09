@@ -18,28 +18,28 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
+        [Route("Login")]
         public async Task<ResponseDto> Login([FromBody] LoginDto model)
         {
             return await _authenticationUserService.Login(model);
         }
 
         [HttpPost]
-        [Route("register")]
+        [Route("Register")]
         public async Task<ResponseDto> Register([FromBody] RegisterDto model)
         {
             return await _authenticationUserService.Register(model);
         }
 
         [HttpPost]
-        [Route("register-admin")]
+        [Route("Register-admin")]
         public async Task<ResponseDto> RegisterAdmin([FromBody] RegisterDto model)
         {
             return await _authenticationUserService.RegisterAdmin(model);
         }
 
-        [HttpPost]
-        [Route("confirmemail")]
+        [HttpGet]
+        [Route("Confirm-email")]
         public async Task<ResponseDto> ConfirmEmail(string token, string username)
         {
             ConfirmEmailModel model = new(){Token = token, UserName = username};

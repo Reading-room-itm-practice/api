@@ -9,7 +9,6 @@ using Storage.Identity;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -93,7 +92,6 @@ namespace Core.Services
             }
             return response;
         }
-
         private async Task<ResponseDto> RegisterUser(RegisterDto model, UserManager<User> _userManager, User user)
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
@@ -132,16 +130,13 @@ namespace Core.Services
         }
         public async Task<ResponseDto> ConfirmEmail(ConfirmEmailModel model)
         {
-            if (model.UserName == null)
-                return new ResponseDto { StatusCode = StatusCodes.Status400BadRequest, Message = "Link is invalid" };
             var user = await _userManager.FindByNameAsync(model.UserName);
-            if(user == null)
-                return new ResponseDto { StatusCode = StatusCodes.Status400BadRequest, Message = "Link is invalid" };
             var result = await _userManager.ConfirmEmailAsync(user, model.Token);
 
-            if (result.Succeeded)
-                return new ResponseDto { StatusCode = StatusCodes.Status200OK, Message = "Email confirmed succesfully" };
-            return new ResponseDto { StatusCode = StatusCodes.Status400BadRequest, Message = "Link is invalid" };
+            if (model.UserName == null || user  == null || user.EmailConfirmed || !result.Succeeded)
+                return new ResponseDto { StatusCode = StatusCodes.Status400BadRequest, Message = "Link is invalid" };
+
+            return new ResponseDto { StatusCode = StatusCodes.Status200OK, Message = "Email confirmed succesfully" };
         }
     }
 }

@@ -9,11 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Storage.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebAPI.Identity;
+using Core.Identity;
 using WebAPI.Installers;
 
 namespace WebAPI
@@ -66,7 +62,7 @@ namespace WebAPI
             app.UseStatusCodePages();
             app.UseCors();
             app.UseAuthentication();
-            //IdentityDataInitializer.SeedData(userManager, roleManager, conf);
+            IdentityDataInitializer.SeedData(userManager, roleManager, conf);
             app.UseRouting();
             app.UseAuthorization();
 

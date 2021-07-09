@@ -24,8 +24,4 @@
     <ProjectReference Include="..\Storage\Storage.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\User\Authentication\" />
-  </ItemGroup>
-
 </Project>
