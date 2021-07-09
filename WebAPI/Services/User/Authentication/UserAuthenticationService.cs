@@ -20,15 +20,12 @@ namespace WebAPI.Services
     {
 
         private readonly UserManager<Identity.User> _userManager;
-        private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly IConfiguration _config;
         private readonly IEmailService _emailService;
         
-        public UserAuthenticationService(UserManager<Identity.User> userManager, 
-            RoleManager<IdentityRole<int>> roleManager, IConfiguration config, IEmailService emailService)
+        public UserAuthenticationService(UserManager<Identity.User> userManager, IConfiguration config, IEmailService emailService)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
             _config = config;
             _emailService = emailService;
         }
@@ -39,7 +36,7 @@ namespace WebAPI.Services
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 if(!await _userManager.IsEmailConfirmedAsync(user))
-                    return new Response { StatusCode = 422, Message = "Invalid username or password!" };
+                    return new Response { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Invalid username or password!" };
 
                 var userRoles = await _userManager.GetRolesAsync(user);
 
@@ -131,13 +128,16 @@ namespace WebAPI.Services
         }
         public async Task<Response> ConfirmEmail(ConfirmEmailModel model)
         {
+            if (model.UserName == null)
+                return new Response { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
             var user = await _userManager.FindByNameAsync(model.UserName);
-
+            if(user == null)
+                return new Response { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
             var result = await _userManager.ConfirmEmailAsync(user, model.Token);
 
             if (result.Succeeded)
                 return new Response { StatusCode = HttpStatusCode.OK, Message = "Email confirmed succesfully" };
-            return new Response { StatusCode = HttpStatusCode.BadRequest , Message = "Email was'nt able to confirm via this link" };
+            return new Response { StatusCode = HttpStatusCode.BadRequest , Message = "Link is invalid" };
         }
     }
 }

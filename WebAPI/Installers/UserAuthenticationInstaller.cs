@@ -2,11 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebAPI.DataAccessLayer;
-using WebAPI.Models.Auth;
 using WebAPI.Identity;
 
 namespace WebAPI.Installers
@@ -18,6 +16,7 @@ namespace WebAPI.Installers
             services.AddIdentity<User, IdentityRole<int>>(opttion =>
             {
                 opttion.SignIn.RequireConfirmedEmail = true;
+                opttion.User.RequireUniqueEmail = true;
             })
                 .AddEntityFrameworkStores<ApiDbContext>()
                 .AddDefaultTokenProviders();
