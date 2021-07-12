@@ -1,15 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Core.Interfaces;
-using Core.Services;
+using WebAPI.Helpers;
 
 namespace WebAPI.Installers
 {
-    public class UserServiceInstaller : Installer
+    public class HelpersInstaller : Installer
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
+            services.AddTransient<IJsonKeyValueGetter, JsonKeyValueGetter>();
         }
     }
 }

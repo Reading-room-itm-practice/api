@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Net;
 
 namespace Core.Exceptions
 {
@@ -10,7 +6,7 @@ namespace Core.Exceptions
     {
         public NotFoundException(string message) : base(message)
         {
-            ResponseCode = StatusCodes.Status404NotFound;
+            ResponseCode = HttpStatusCode.NotFound;
         }
     }
 }

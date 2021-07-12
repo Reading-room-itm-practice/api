@@ -5,17 +5,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPI.DTOs
+namespace Core.Requests
 {
-    public class PhotoRequestDto : IRequestDto
+    public class PhotoUploadRequest : IRequest
     {
+        [Required]
         public int BookId { get; set; }
         [Required]
         public string Path { get; set;}
-        public PhotoRequestDto(string path, int bookId) 
-        { 
-            Path = path;
-            BookId = bookId;
-        }
     }
 }

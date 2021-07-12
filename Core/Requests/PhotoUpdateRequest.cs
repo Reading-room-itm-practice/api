@@ -5,13 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Common;
 
-namespace Core.DTOs
+namespace Core.Requests
 {
-    public class AuthorRequestDto : IRequestDto
+    public class PhotoUpdateRequest : IRequest
     {
         [Required]
-        public string Name { get; set; }
-        [Required]
-        public string Biography { get; set; }
+        public int BookId { get; set; }
     }
 }

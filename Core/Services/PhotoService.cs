@@ -11,14 +11,12 @@ using Microsoft.AspNetCore.Hosting;
 using Core.Interfaces;
 using Core.DTOs;
 using AutoMapper;
+using Core.Requests;
 
 namespace Core.Services
 {
     public class PhotoService : IPhotoService
     {
-        
-        private readonly IConfiguration configuration;
-
         public readonly List<string> AllowedFileExtensions;
         public readonly long PhotoSizeLimit;
         public readonly string uploadsFolder;
@@ -26,6 +24,8 @@ namespace Core.Services
         private readonly ICrudService<Photo> _crud;
         private readonly ICrudService<Book> _bookCrud;
         private readonly IMapper _mapper;
+        private readonly IConfiguration configuration;
+
         public PhotoService(IConfiguration configuration, ICrudService<Photo> crud, ICrudService<Book> bookCrud, IMapper mapper)
         {
             this.configuration = configuration;
@@ -47,7 +47,7 @@ namespace Core.Services
 
             string uniqueFileName = Guid.NewGuid().ToString() + ".jpeg";
             string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-            var newPhoto = await _crud.Create<PhotoResponseDto>(new PhotoRequestDto(filePath, bookId));
+            var newPhoto = await _crud.Create<PhotoDto>(new PhotoUploadRequest { Path = filePath, BookId = bookId });
             using (var stream = System.IO.File.Create(filePath))
             {
                 await image.CopyToAsync(stream);
@@ -57,7 +57,7 @@ namespace Core.Services
         }
         public async Task<KeyValuePair<int, string>> DeletePhoto(int id)
         {
-            var photoToDelete = await _crud.GetById<PhotoResponseDto>(id);
+            var photoToDelete = await _crud.GetById<PhotoDto>(id);
             await _crud.Delete(id);
             System.IO.File.Delete(photoToDelete.Path);
             return new KeyValuePair<int, string>(StatusCodes.Status200OK, "Photo deleted.");

@@ -3,6 +3,7 @@ using Core.Repositories;
 using Core.Services;
 using Core.Services.Email;
 using Microsoft.Extensions.DependencyInjection;
+using Storage.Interfaces;
 using Storage.Models;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net;
 
 namespace Core
 {
@@ -24,17 +24,16 @@ namespace Core
             services.AddScoped<IBaseRepository<Book>, BaseRepository<Book>>();
             services.AddScoped<IBaseRepository<Category>, BaseRepository<Category>>();
             services.AddScoped<IBaseRepository<Photo>, BaseRepository<Photo>>();
-          
+
             services.AddScoped<ICrudService<Author>, CrudService<Author>>();
             services.AddScoped<ICrudService<Book>, CrudService<Book>>();
             services.AddScoped<ICrudService<Category>, CrudService<Category>>();
             services.AddScoped<ICrudService<Photo>, CrudService<Photo>>();
-          
+
             services.AddScoped<ICreatorService<Author>, CreatorService<Author>>();
             services.AddScoped<IGetterService<Author>, GetterService<Author>>();
             services.AddScoped<IUpdaterService<Author>, UpdaterService<Author>>();
             services.AddScoped<IDeleterService<Author>, DeleterService<Author>>();
-            services.AddScoped<IEmailService, EmailService>();
 
             services.AddScoped<ICreatorService<Book>, CreatorService<Book>>();
             services.AddScoped<IGetterService<Book>, GetterService<Book>>();
@@ -45,12 +44,17 @@ namespace Core
             services.AddScoped<IGetterService<Category>, GetterService<Category>>();
             services.AddScoped<IUpdaterService<Category>, UpdaterService<Category>>();
             services.AddScoped<IDeleterService<Category>, DeleterService<Category>>();
-            services.AddScoped<IPhotoService, PhotoService>();
 
             services.AddScoped<ICreatorService<Photo>, CreatorService<Photo>>();
             services.AddScoped<IGetterService<Photo>, GetterService<Photo>>();
             services.AddScoped<IUpdaterService<Photo>, UpdaterService<Photo>>();
             services.AddScoped<IDeleterService<Photo>, DeleterService<Photo>>();
+
+            services.AddScoped<IPhotoService, PhotoService>();
+
+            services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
+
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }

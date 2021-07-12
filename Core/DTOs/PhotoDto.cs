@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Core.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using Core.Common;
 
-namespace WebAPI.DTOs
+namespace Core.DTOs
 {
-    public class PhotoResponseDto : IResponseDto
+    public class PhotoDto : IDto
     {
         public int Id { get; set; }
         public int BookId { get; set; }

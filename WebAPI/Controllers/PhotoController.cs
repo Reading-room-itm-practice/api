@@ -13,6 +13,8 @@ using WebAPI.DTOs;
 using Core.Exceptions;
 using Storage.Models;
 using Core.Interfaces;
+using Core.DTOs;
+using Core.Requests;
 
 namespace WebAPI.Controllers
 {
@@ -34,16 +36,16 @@ namespace WebAPI.Controllers
         {
             if (book_id != null)
             {
-                var result = _crud.GetAll<PhotoResponseDto>().Result.Where(p => p.BookId == book_id);
+                var result = _crud.GetAll<PhotoDto>().Result.Where(p => p.BookId == book_id);
                 return Ok(result);
             }
-            return Ok(await _crud.GetAll<PhotoResponseDto>());
+            return Ok(await _crud.GetAll<PhotoDto>());
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult> GetPhoto(int id)
         {
-            var result = await _crud.GetById<PhotoResponseDto>(id);
+            var result = await _crud.GetById<PhotoDto>(id);
             if (result == null) return NotFound();
             return Ok(result);
         }
@@ -63,7 +65,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Edit(int id, PhotoUpdateDto photo_bookId)
+        public async Task<ActionResult> Edit(int id, PhotoUpdateRequest photo_bookId)
         {
             try
             {
