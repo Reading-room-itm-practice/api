@@ -9,7 +9,7 @@ namespace WebAPI.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
+            services.AddScoped<IUserAuthenticationService, AuthenticationService>();
         }
     }
 }

@@ -16,20 +16,19 @@ using System.Web;
 
 namespace Core.Services
 {
-    public class UserAuthenticationService : IUserAuthenticationService
+    public class AuthenticationService : IUserAuthenticationService
     {
 
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;
         private readonly IEmailService _emailService;
         
-        public UserAuthenticationService(UserManager<User> userManager, IConfiguration config, IEmailService emailService)
+        public AuthenticationService(UserManager<User> userManager, IConfiguration config, IEmailService emailService)
         {
             _userManager = userManager;
             _config = config;
             _emailService = emailService;
         }
-
         public async Task<ResponseDto> Login(LoginDto model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
@@ -67,7 +66,6 @@ namespace Core.Services
 
             return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = "Username or password is not correct!" };
         }
-
         public async Task<ResponseDto> Register(RegisterDto model)
         {
             if (await _userManager.FindByNameAsync(model.Username) != null || await _userManager.FindByEmailAsync(model.Email) != null)
@@ -88,28 +86,55 @@ namespace Core.Services
             var userFromDb = await _userManager.FindByNameAsync(user.UserName);
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(userFromDb);
+            var urlString = BuildUrl(token, userFromDb.UserName, _config["ReturnPaths:ConfirmEmail"]);
 
-            var uriBuilder = new UriBuilder(_config["ReturnPaths:ConfirmEmail"]);
-            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query["token"] = token;
-            query["username"] = userFromDb.UserName;
-            uriBuilder.Query = query.ToString();
-            var urlString = uriBuilder.ToString();
-
-            var senderEmail = _config["ReturnPaths:SenderEmail"];
-            await _emailService.SendEmailAsync(senderEmail, userFromDb.Email, "Confirm your email address", urlString);
+            await _emailService.SendEmailAsync(_config["ReturnPaths:SenderEmail"], userFromDb.Email, "Confirm your email address", urlString);
 
             return new ResponseDto { StatusCode = StatusCodes.Status201Created, Message = "User created successfully! Confirm your email." };
         }
-        public async Task<ResponseDto> ConfirmEmail(ConfirmEmailModel model)
+        public async Task<ResponseDto> ConfirmEmail(EmailDto model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
             var result = await _userManager.ConfirmEmailAsync(user, model.Token);
 
-            if (model.UserName == null || user  == null || user.EmailConfirmed || !result.Succeeded)
+            if (model.UserName == null || user  == null || !result.Succeeded || user.EmailConfirmed)
                 return new ResponseDto { StatusCode = StatusCodes.Status400BadRequest, Message = "Link is invalid" };
 
             return new ResponseDto { StatusCode = StatusCodes.Status200OK, Message = "Email confirmed succesfully" };
+        }
+        public async Task<ResponseDto> SendResetPasswordEmail(string email)
+        {
+            var userFromDb = await _userManager.FindByEmailAsync(email);
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(userFromDb);
+            
+            var urlString = BuildUrl(token, userFromDb.UserName, _config["ReturnPaths:ResetPassword"]);
+
+            await _emailService.SendEmailAsync(_config["ReturnPaths:SenderEmail"], userFromDb.Email, "Reset your password", urlString);
+
+            return new ResponseDto { StatusCode = StatusCodes.Status201Created, Message = "Email to reset your password's waiting for you in mailbox" };
+        }
+        public async Task<ResponseDto> ResetPassword(ResetPasswordDto model)
+        {
+            var user = await _userManager.FindByNameAsync(model.UserName);
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.newPassword);
+
+            if (model.UserName == null || user == null || !result.Succeeded)
+                return new ResponseDto { StatusCode = StatusCodes.Status400BadRequest, Message = "Link is invalid" };
+
+            return new ResponseDto { StatusCode = StatusCodes.Status200OK, Message = "Password changed succesfully" };
+        }
+        private string BuildUrl(string token, string username, string path)
+        {
+            var uriBuilder = new UriBuilder(path);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["token"] = token;
+            query["username"] = username;
+            uriBuilder.Query = query.ToString();
+            var urlString = uriBuilder.ToString();
+
+            return urlString;
         }
     }
 }

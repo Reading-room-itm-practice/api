@@ -7,6 +7,8 @@ namespace Core.Interfaces
     {
         public Task<ResponseDto> Login(LoginDto model);
         public Task<ResponseDto> Register(RegisterDto model);
-        public Task<ResponseDto> ConfirmEmail(ConfirmEmailModel model);
+        public Task<ResponseDto> ConfirmEmail(EmailDto model);
+        public Task<ResponseDto> ResetPassword(ResetPasswordDto model);
+        public Task<ResponseDto> SendResetPasswordEmail(string userName);
     }
 }
