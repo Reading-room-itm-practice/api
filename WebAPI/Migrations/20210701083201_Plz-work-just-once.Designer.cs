@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Storage.DataAccessLayer;
+using WebAPI.DataAccessLayer;
 
-namespace Storage.Migrations
+namespace WebAPI.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
     [Migration("20210701083201_Plz-work-just-once")]

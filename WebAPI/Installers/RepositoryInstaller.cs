@@ -16,6 +16,7 @@ namespace WebAPI.Installers
         {
             services.AddScoped<IBaseRepository<Author>, BaseRepository<Author>>();
             services.AddScoped<IBaseRepository<Book>, BaseRepository<Book>>();
+            services.AddScoped<IBaseRepository<Photo>, BaseRepository<Photo>>();
             services.AddScoped<IBaseRepository<Category>, BaseRepository<Category>>();
         }
     }

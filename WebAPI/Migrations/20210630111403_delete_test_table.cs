@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Storage.Migrations
+namespace WebAPI.Migrations
 {
     public partial class delete_test_table : Migration
     {
