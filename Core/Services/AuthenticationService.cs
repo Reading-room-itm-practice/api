@@ -86,46 +86,42 @@ namespace Core.Services
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
                 return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = result.Errors.ToString() };
-
             await _userManager.AddToRoleAsync(user, UserRoles.User);
-            var userFromDb = await _userManager.FindByNameAsync(user.UserName);
 
+            var userFromDb = await _userManager.FindByNameAsync(user.UserName);
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(userFromDb);
             var urlString = BuildUrl(token, userFromDb.UserName, _config["ReturnPaths:ConfirmEmail"]);
 
             await _emailService.SendEmailAsync(_config["ReturnPaths:SenderEmail"], userFromDb.Email, "Confirm your email address", urlString);
 
-            var senderEmail = _config["ReturnPaths:SenderEmail"];
-            await _emailService.SendEmailAsync(senderEmail, userFromDb.Email, "Confirm your email address", urlString);
-
             return new SuccessResponse { StatusCode = HttpStatusCode.Created, Message = "User created successfully! Confirm your email." };
         }
+
         public async Task<ServiceResponse> ConfirmEmail(EmailDto model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
             var result = await _userManager.ConfirmEmailAsync(user, model.Token);
 
-            if (model.UserName == null || user  == null || user.EmailConfirmed || !result.Succeeded)
+            if (model.UserName == null || user  == null || !result.Succeeded)
                 return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
 
             return new SuccessResponse { Message = "Email confirmed succesfully" };
         }
+
         public async Task<ServiceResponse> SendResetPasswordEmail(string email)
         {
             var userFromDb = await _userManager.FindByEmailAsync(email);
-
             var token = await _userManager.GeneratePasswordResetTokenAsync(userFromDb);
-            
             var urlString = BuildUrl(token, userFromDb.UserName, _config["ReturnPaths:ResetPassword"]);
 
             await _emailService.SendEmailAsync(_config["ReturnPaths:SenderEmail"], userFromDb.Email, "Reset your password", urlString);
 
             return new SuccessResponse { Message = "Email to reset your password's waiting for you in mailbox" };
         }
+
         public async Task<ServiceResponse> ResetPassword(ResetPasswordDto model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
-
             var result = await _userManager.ResetPasswordAsync(user, model.Token, model.newPassword);
 
             if (model.UserName == null || user == null || !result.Succeeded)
@@ -133,6 +129,7 @@ namespace Core.Services
 
             return new SuccessResponse { Message = "Password changed succesfully" };
         }
+
         private string BuildUrl(string token, string username, string path)
         {
             var uriBuilder = new UriBuilder(path);
