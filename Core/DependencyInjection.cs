@@ -5,12 +5,6 @@ using Core.Services.Email;
 using Microsoft.Extensions.DependencyInjection;
 using Storage.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using WebAPI.Interfaces;
 using System.Net;
 
 namespace Core
@@ -24,19 +18,17 @@ namespace Core
             services.AddScoped<IBaseRepository<Author>, BaseRepository<Author>>();
             services.AddScoped<IBaseRepository<Book>, BaseRepository<Book>>();
             services.AddScoped<IBaseRepository<Category>, BaseRepository<Category>>();
-            services.AddScoped<IBaseRepository<Photo>, BaseRepository<Photo>>();
-          
+
             services.AddScoped<ICrudService<Author>, CrudService<Author>>();
             services.AddScoped<ICrudService<Book>, CrudService<Book>>();
             services.AddScoped<ICrudService<Category>, CrudService<Category>>();
-            services.AddScoped<ICrudService<Photo>, CrudService<Photo>>();
-          
+
             services.AddScoped<ICreatorService<Author>, CreatorService<Author>>();
             services.AddScoped<IGetterService<Author>, GetterService<Author>>();
             services.AddScoped<IUpdaterService<Author>, UpdaterService<Author>>();
             services.AddScoped<IDeleterService<Author>, DeleterService<Author>>();
-            services.AddScoped<IEmailService, EmailService>();
 
+            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICreatorService<Book>, CreatorService<Book>>();
             services.AddScoped<IGetterService<Book>, GetterService<Book>>();
             services.AddScoped<IUpdaterService<Book>, UpdaterService<Book>>();
@@ -46,7 +38,7 @@ namespace Core
             services.AddScoped<IGetterService<Category>, GetterService<Category>>();
             services.AddScoped<IUpdaterService<Category>, UpdaterService<Category>>();
             services.AddScoped<IDeleterService<Category>, DeleterService<Category>>();
-            services.AddScoped<IPhotoService, PhotoService>();
+
 
             return services;
         }
