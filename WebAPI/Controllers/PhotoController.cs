@@ -15,6 +15,7 @@ using Storage.Models;
 using Core.Interfaces;
 using Core.DTOs;
 using Core.Requests;
+using Core.ServiceResponses;
 
 namespace WebAPI.Controllers
 {
@@ -32,73 +33,74 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<ActionResult> GetPhotos(int? book_id)
+        public async Task<ServiceResponse> GetPhotos(int? book_id)
         {
             if (book_id != null)
             {
-                var result = _crud.GetAll<PhotoDto>().Result.Where(p => p.BookId == book_id);
-                return Ok(result);
+                return new SuccessResponse<IEnumerable<PhotoDto>>() { Content = _crud.GetAll<PhotoDto>().Result.Where(p => p.BookId == book_id) };
             }
-            return Ok(await _crud.GetAll<PhotoDto>());
+            return new SuccessResponse<IEnumerable<PhotoDto>>(){ Content = await _crud.GetAll<PhotoDto>() };
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult> GetPhoto(int id)
+        public async Task<ServiceResponse> GetPhoto(int id)
         {
             var result = await _crud.GetById<PhotoDto>(id);
-            if (result == null) return NotFound();
-            return Ok(result);
+            if (result == null) return new ErrorResponse() { Message = "Photo not found.", StatusCode = System.Net.HttpStatusCode.NotFound };
+            return new SuccessResponse<PhotoDto>() { Content = result };
         }
 
         [HttpPost()]
-        public async Task<ActionResult> Upload(IFormFile image, int bookId)
+        public async Task<ServiceResponse> Upload(IFormFile image, int bookId)
         {
             try
             {
                 var result = await _photoService.UploadPhoto(image, bookId);
-                return StatusCode(((int)result.StatusCode), result.Message);
+                return result;
             }
             catch (DbUpdateException e)
             {
-                return BadRequest(e.InnerException.Message);
+                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
             }
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Edit(int id, PhotoUpdateRequest photo_bookId)
+        public async Task<ServiceResponse> Edit(int id, PhotoUpdateRequest photo_bookId)
         {
             try
             {
                 await _crud.Update(photo_bookId, id);
-                return Ok();
+                return new SuccessResponse() { Message = "Image updated" };
             }
             catch (DbUpdateException e)
             {
-                return BadRequest(e.InnerException.Message);
+                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
             }
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ServiceResponse> Delete(int id)
         {
             try
             {
                 var result = await _photoService.DeletePhoto(id);
-                return StatusCode((int)result.StatusCode, result.Message);
+                return new SuccessResponse() { Message = "Image deleted." };
             }
             catch (NotFoundException e)
             {
-                return NotFound(e.Message);
-                throw;
+                return new ErrorResponse() { Message = e.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
+
             }
-            catch(DbUpdateException e)
+            catch (DbUpdateException e)
             {
-                return BadRequest(e.InnerException.Message);
+                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                if (e.InnerException.GetType() == typeof(NotFoundException)) return NotFound("Image not found");
-                return BadRequest(e.Message);
+                if (e.InnerException.GetType() == typeof(NotFoundException)) return new ErrorResponse()
+                { Message = "Image not found", StatusCode = System.Net.HttpStatusCode.NotFound };// NotFound("Image not found");
+
+                return new ErrorResponse() { Message = e.Message };
             }
         }
     }
