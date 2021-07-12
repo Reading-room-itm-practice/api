@@ -21,7 +21,7 @@ namespace Core.Services
             _mapper = mapper;
         }
 
-        public async Task Update(IRequestDto requestDto, int id)
+        public async Task Update(IRequest requestDto, int id)
         {
             var model = await _repository.FindByConditions(x => x.Id == id);
 

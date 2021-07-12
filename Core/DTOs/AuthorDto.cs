@@ -7,7 +7,7 @@ using Core.Mappings;
 
 namespace Core.DTOs
 {
-    public class AuthorResponseDto : IResponseDto
+    public class AuthorDto : IDto
     {
         public string Id { get; set; }
         public string Name { get; set; }
