@@ -16,7 +16,7 @@ namespace Core.Requests
         public string Password { get; set; }
 
         [NotMapped]
-        [Compare("Password", ErrorMessage = "Password doesn't match.")]
+        [Compare(nameof(Password), ErrorMessage = "Password doesn't match.")]
         [Required(ErrorMessage = "Confirm password is required")]
         public string ConfirmPassword { get; set; }
 
