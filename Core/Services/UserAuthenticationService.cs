@@ -65,7 +65,7 @@ namespace Core.Services
 
                 var tokenResponse = new JwtSecurityTokenHandler().WriteToken(token);
 
-                return new ErrorResponse { StatusCode = HttpStatusCode.OK, Message = $"{tokenResponse}" };
+                return new SuccessResponse<string> { Message = "Successful login", Content = $"{tokenResponse}" };
             }
 
             return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Username or password is not correct!" };
