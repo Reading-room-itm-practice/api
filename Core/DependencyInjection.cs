@@ -43,7 +43,7 @@ namespace Core
             services.AddScoped<IUpdaterService<Category>, UpdaterService<Category>>();
             services.AddScoped<IDeleterService<Category>, DeleterService<Category>>();
 
-            services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddScoped<IEmailService, EmailService>();
 

@@ -19,7 +19,7 @@ using System.Web;
 
 namespace Core.Services
 {
-    public class AuthenticationService : IUserAuthenticationService
+    public class AuthenticationService : IAuthenticationService
     {
 
         private readonly UserManager<User> _userManager;
@@ -100,7 +100,7 @@ namespace Core.Services
 
             return new SuccessResponse { StatusCode = HttpStatusCode.Created, Message = "User created successfully! Confirm your email." };
         }
-        public async Task<ServiceResponse> ConfirmEmail(ConfirmEmailModel model)
+        public async Task<ServiceResponse> ConfirmEmail(EmailDto model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
             var result = await _userManager.ConfirmEmailAsync(user, model.Token);
@@ -110,7 +110,7 @@ namespace Core.Services
 
             return new SuccessResponse { Message = "Email confirmed succesfully" };
         }
-        public async Task<ResponseDto> SendResetPasswordEmail(string email)
+        public async Task<ServiceResponse> SendResetPasswordEmail(string email)
         {
             var userFromDb = await _userManager.FindByEmailAsync(email);
 
@@ -120,18 +120,18 @@ namespace Core.Services
 
             await _emailService.SendEmailAsync(_config["ReturnPaths:SenderEmail"], userFromDb.Email, "Reset your password", urlString);
 
-            return new ResponseDto { StatusCode = StatusCodes.Status201Created, Message = "Email to reset your password's waiting for you in mailbox" };
+            return new SuccessResponse { Message = "Email to reset your password's waiting for you in mailbox" };
         }
-        public async Task<ResponseDto> ResetPassword(ResetPasswordDto model)
+        public async Task<ServiceResponse> ResetPassword(ResetPasswordDto model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
 
             var result = await _userManager.ResetPasswordAsync(user, model.Token, model.newPassword);
 
             if (model.UserName == null || user == null || !result.Succeeded)
-                return new ResponseDto { StatusCode = StatusCodes.Status400BadRequest, Message = "Link is invalid" };
+                return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
 
-            return new ResponseDto { StatusCode = StatusCodes.Status200OK, Message = "Password changed succesfully" };
+            return new SuccessResponse { Message = "Password changed succesfully" };
         }
         private string BuildUrl(string token, string username, string path)
         {

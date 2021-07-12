@@ -12,9 +12,9 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthenticateUserController : ControllerBase
     {
-        private readonly IUserAuthenticationService _authenticationUserService;
+        private readonly IAuthenticationService _authenticationUserService;
 
-        public AuthenticateUserController(IUserAuthenticationService authenticationService)
+        public AuthenticateUserController(IAuthenticationService authenticationService)
         {
             _authenticationUserService = authenticationService;
         }
@@ -44,7 +44,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("Reset-password-page")]
-        public async Task<ResponseDto> ResetPasswordPage(string email)
+        public async Task<ServiceResponse> ResetPasswordPage(string email)
         {
            return await _authenticationUserService.SendResetPasswordEmail(email);
         }
@@ -58,7 +58,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("Reset-password-done")]
-        public async Task<ResponseDto> ResetPassword([FromBody] ResetPasswordDto model)
+        public async Task<ServiceResponse> ResetPassword([FromBody] ResetPasswordDto model)
         {
             return await _authenticationUserService.ResetPassword(model);
         }
