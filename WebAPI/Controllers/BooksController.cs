@@ -7,6 +7,7 @@ using Core.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 using Storage.Models;
 using Core.DTOs;
+using Core.Requests;
 
 namespace WebAPI.Controllers
 {
@@ -26,7 +27,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var books = await _crud.GetAll<BookResponseDto>();
+            var books = await _crud.GetAll<BookDto>();
             return Ok(books);
         }
 
@@ -34,22 +35,22 @@ namespace WebAPI.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Show(int id)
         {
-            var book = await _crud.GetById<BookResponseDto>(id);
+            var book = await _crud.GetById<BookDto>(id);
 
             return book == null ? NotFound() : Ok(book);
         }
 
         [SwaggerOperation(Summary = "Creates a new entry of a book")]
         [HttpPost]
-        public async Task<IActionResult> Create(BookRequestDto model)
+        public async Task<IActionResult> Create(BookRequest model)
         {
-            var book = await _crud.Create<BookResponseDto>(model);
+            var book = await _crud.Create<BookDto>(model);
             return Created($"api/books/{book.Id}", book);
         }
 
         [SwaggerOperation(Summary = "Updates a book by unique id")]
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Update(int id, BookRequestDto updateModel)
+        public async Task<ActionResult> Update(int id, BookRequest updateModel)
         {
             await _crud.Update(updateModel, id);
             return Ok("Resource updated");

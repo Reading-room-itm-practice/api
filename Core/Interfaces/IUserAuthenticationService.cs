@@ -1,5 +1,7 @@
-﻿using Core.DTOs;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Core.DTOs;
+using Core.Requests;
+using Core.ServiceResponses;
 
 namespace Core.Interfaces
 {

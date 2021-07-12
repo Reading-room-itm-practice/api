@@ -9,6 +9,6 @@ namespace Core.Interfaces
 {
     public interface IUpdaterService<T> where T : IDbModel
     {
-        public Task Update(IRequestDto updateModel, int id);
+        public Task Update(IRequest updateModel, int id);
     }
 }

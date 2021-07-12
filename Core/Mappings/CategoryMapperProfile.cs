@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Core.DTOs;
 using Storage.Models;
 using WebAPI.DTOs;
+using Core.Requests;
 
 namespace Core.Mappings
 {
@@ -13,8 +14,8 @@ namespace Core.Mappings
     {
         public CategoryMapperProfile()
         {
-            CreateMap<Category, CategoryResponseDto>().ReverseMap();
-            CreateMap<CategoryRequestDto, Category>().ReverseMap();
+            CreateMap<Category, CategoryDto>().ReverseMap();
+            CreateMap<CategoryRequest, Category>().ReverseMap();
         }
     }
 }

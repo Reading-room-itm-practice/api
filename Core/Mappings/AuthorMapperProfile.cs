@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.DTOs;
 using Storage.Models;
+using Core.Requests;
 
 namespace Core.Mappings
 {
@@ -12,8 +13,8 @@ namespace Core.Mappings
     {
         public AuthorMapperProfile()
         {
-            CreateMap<Author, AuthorResponseDto>().ReverseMap();
-            CreateMap<AuthorRequestDto, Author>().ReverseMap();
+            CreateMap<Author, AuthorDto>().ReverseMap();
+            CreateMap<AuthorRequest, Author>().ReverseMap();
         }
     }
 }

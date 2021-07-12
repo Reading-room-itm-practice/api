@@ -9,6 +9,6 @@ namespace Core.Interfaces
 {
     public interface ICreatorService<T> where T : IDbModel
     {
-        public Task<IReponseDto> Create<IReponseDto>(IRequestDto model);
+        public Task<IReponseDto> Create<IReponseDto>(IRequest model);
     }
 }

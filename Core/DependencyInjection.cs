@@ -3,9 +3,14 @@ using Core.Repositories;
 using Core.Services;
 using Core.Services.Email;
 using Microsoft.Extensions.DependencyInjection;
+using Storage.Interfaces;
 using Storage.Models;
 using System;
-using System.Net;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Core
 {
@@ -28,7 +33,6 @@ namespace Core
             services.AddScoped<IUpdaterService<Author>, UpdaterService<Author>>();
             services.AddScoped<IDeleterService<Author>, DeleterService<Author>>();
 
-            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ICreatorService<Book>, CreatorService<Book>>();
             services.AddScoped<IGetterService<Book>, GetterService<Book>>();
             services.AddScoped<IUpdaterService<Book>, UpdaterService<Book>>();
@@ -39,6 +43,9 @@ namespace Core
             services.AddScoped<IUpdaterService<Category>, UpdaterService<Category>>();
             services.AddScoped<IDeleterService<Category>, DeleterService<Category>>();
 
+            services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
+
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }
