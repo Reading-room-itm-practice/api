@@ -12,6 +12,7 @@ using Core.Interfaces;
 using Core.DTOs;
 using AutoMapper;
 using Core.Requests;
+using Core.ServiceResponses;
 
 namespace Core.Services
 {
@@ -38,13 +39,12 @@ namespace Core.Services
             uploadsFolder = configuration["PhotoUploadsFolder"];
         }
 
-        public async Task<KeyValuePair<int,string>> UploadPhoto(IFormFile image, int bookId)
+        public async Task<ServiceResponse> UploadPhoto(IFormFile image, int bookId)
         {
-            if (image == null) return new KeyValuePair<int, string>(StatusCodes.Status400BadRequest, "No image.");
-            if (image.Length > PhotoSizeLimit) return new KeyValuePair<int, string>(StatusCodes.Status400BadRequest, "File is too large.");
+            if (image == null) return new ErrorResponse() { Message = "No image.", StatusCode = System.Net.HttpStatusCode.BadRequest };
+            if (image.Length > PhotoSizeLimit) return new ErrorResponse() { Message = "File is too large.", StatusCode = System.Net.HttpStatusCode.BadRequest };
             var extension = "." + image.FileName.Split('.')[image.FileName.Split('.').Length - 1];
-            if (AllowedFileExtensions.All(ex => extension != ex)) return new KeyValuePair<int, string>(StatusCodes.Status400BadRequest, "Invalid file extension");
-
+            if (AllowedFileExtensions.All(ex => extension != ex)) return new ErrorResponse() { Message = "Invalid file extension", StatusCode = System.Net.HttpStatusCode.BadRequest };
             string uniqueFileName = Guid.NewGuid().ToString() + ".jpeg";
             string filePath = Path.Combine(uploadsFolder, uniqueFileName);
             var newPhoto = await _crud.Create<PhotoDto>(new PhotoUploadRequest { Path = filePath, BookId = bookId });
@@ -53,14 +53,15 @@ namespace Core.Services
                 await image.CopyToAsync(stream);
             }
 
-            return new KeyValuePair<int, string>(StatusCodes.Status201Created, "Image added.");
+            return new SuccessResponse<PhotoDto>() { Content = newPhoto };
         }
-        public async Task<KeyValuePair<int, string>> DeletePhoto(int id)
+
+        public async Task<ServiceResponse> DeletePhoto(int id)
         {
             var photoToDelete = await _crud.GetById<PhotoDto>(id);
             await _crud.Delete(id);
             System.IO.File.Delete(photoToDelete.Path);
-            return new KeyValuePair<int, string>(StatusCodes.Status200OK, "Photo deleted.");
+            return new SuccessResponse();
         }
     }
 }

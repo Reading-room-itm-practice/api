@@ -56,7 +56,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _photoService.UploadPhoto(image, bookId);
-                return StatusCode(result.Key, result.Value);
+                return StatusCode(((int)result.StatusCode), result.Message);
             }
             catch (DbUpdateException e)
             {
@@ -84,7 +84,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _photoService.DeletePhoto(id);
-                return StatusCode(result.Key, result.Value);
+                return StatusCode((int)result.StatusCode, result.Message);
             }
             catch (NotFoundException e)
             {
