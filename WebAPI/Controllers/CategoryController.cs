@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using WebAPI.DTOs;
-using WebAPI.Interfaces;
+using Core.Interfaces;
 using Storage.Models;
 using Core.Exceptions;
 using Core.Requests;

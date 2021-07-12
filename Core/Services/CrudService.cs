@@ -5,68 +5,49 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Common;
 using Core.Exceptions;
-using WebAPI.Interfaces;
 using Storage.Iterfaces;
 using Core.Interfaces;
 
-namespace WebAPI.Services
+namespace Core.Services
 {
     public class CrudService<T> : ICrudService<T> where T : class, IDbModel, IDbMasterKey
     {
-        private readonly IBaseRepository<T> _repository;
-        private readonly IMapper _mapper;
+        private readonly ICreatorService<T> Creator;
+        private readonly IGetterService<T> Getter;
+        private readonly IUpdaterService<T> Updater;
+        private readonly IDeleterService<T> Deleter;
 
-        public CrudService(IBaseRepository<T> repository, IMapper mapper)
+        public CrudService(ICreatorService<T> creator, IGetterService<T> getter, IUpdaterService<T> updater, IDeleterService<T> deleter)
         {
-            _repository = repository;
-            _mapper = mapper;
+            Creator = creator;
+            Getter = getter;
+            Updater = updater;
+            Deleter = deleter;
         }
 
-        public async Task<IResponseDto> Create<IResponseDto>(IRequest requestDto)
+        public async Task<IResponseDto> Create<IResponseDto>(IRequestDto model)
         {
-            var model = _mapper.Map<T>(requestDto);
-            await _repository.Create(model);
-
-            return _mapper.Map<IResponseDto>(model);
+            return await Creator.Create<IResponseDto>(model);
         }
 
         public async Task<IEnumerable<IResponseDto>> GetAll<IResponseDto>()
         {
-            var models = await _repository.FindAll();
-
-            return _mapper.Map<IEnumerable<IResponseDto>>(models);
+            return await Getter.GetAll<IResponseDto>();
         }
 
         public async Task<IResponseDto> GetById<IResponseDto>(int id)
         {
-            var model = await _repository.FindByConditions(x => x.Id == id);
-
-            return _mapper.Map<IResponseDto>(model.FirstOrDefault());
+            return await Getter.GetById<IResponseDto>(id);
         }
 
-        public async Task Update(IRequest requestDto, int id)
+        public async Task Update(IRequestDto updateModel, int id)
         {
-            var model = await _repository.FindByConditions(x => x.Id == id);
-
-            if (model.FirstOrDefault() == null)
-            {
-                throw new NotFoundException("Entity does not exists");
-            }
-
-            var updatedModel = _mapper.Map(requestDto, model.FirstOrDefault());
-            await _repository.Edit(updatedModel);
+            await Updater.Update(updateModel, id);
         }
 
         public async Task Delete(int id)
         {
-            var model = await _repository.FindByConditions(x => x.Id == id);
-
-            if (model.FirstOrDefault() == null)
-            {
-                throw new NotFoundException("Entity does not exists");
-            }
-
-            await _repository.Delete(model.FirstOrDefault());
+            await Deleter.Delete(id);
         }
     }
 }

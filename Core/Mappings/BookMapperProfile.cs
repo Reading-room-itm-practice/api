@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Storage.Models;
 using Core.DTOs;
 
-namespace WebAPI.Mappings
+namespace Core.Mappings
 {
     public class BookMapperProfile : Profile
     {

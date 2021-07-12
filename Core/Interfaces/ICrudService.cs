@@ -5,14 +5,9 @@ using System.Threading.Tasks;
 using Core.Common;
 using Storage.Iterfaces;
 
-namespace WebAPI.Interfaces
+namespace Core.Interfaces
 {
-    public interface ICrudService<T> where T : IDbModel
+    public interface ICrudService<T> : ICreatorService<T>, IGetterService<T>, IUpdaterService<T>, IDeleterService<T> where T : IDbModel
     {
-        public Task<IReponseDto> Create<IReponseDto>(IRequest model);
-        public Task<IEnumerable<IResponseDto>> GetAll<IResponseDto>();
-        public Task<IResponseDto> GetById<IResponseDto>(int id);
-        public Task Update(IRequest updateModel, int id);
-        public Task Delete(int id);
     }
 }
