@@ -27,7 +27,7 @@ namespace Core.Services
             _configuration = configuration;
         }
 
-        public async Task<SuccessResponse<string>> Login(LoginRequest model)
+        public async Task<ServiceResponse> Login(LoginRequest model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
@@ -56,19 +56,19 @@ namespace Core.Services
 
                 var tokenResponse = new JwtSecurityTokenHandler().WriteToken(token);
 
-                return new SuccessResponse<string> { StatusCode = HttpStatusCode.OK, Message = $"{tokenResponse}" };
+                return new SuccessResponse<string> { StatusCode = HttpStatusCode.OK, Message = "Successfull login", Content = $"{tokenResponse}" };
             }
 
-            return new SuccessResponse<string> { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Username or password is not correct!" };
+            return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Username or password is not correct!" };
         }
 
-        public async Task<SuccessResponse<string>> Register(RegisterRequest model)
+        public async Task<ServiceResponse> Register(RegisterRequest model)
         {
             User user = new();
-            SuccessResponse<string> response = await RegisterUser(model, _userManager, user);
+            var response = await RegisterUser(model, _userManager, user);
 
             if (response == null)
-                return new SuccessResponse<string> { StatusCode = HttpStatusCode.Created, Message = "User created successfully!" };
+                return new SuccessResponse { StatusCode = HttpStatusCode.Created, Message = "User created successfully!" };
 
             return response;
         }
@@ -91,11 +91,11 @@ namespace Core.Services
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return new SuccessResponse<string> { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "User already exists!" };
+                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "User already exists!" };
 
             var emailExists = await _userManager.FindByEmailAsync(model.Email);
             if (emailExists != null)
-                return new SuccessResponse<string> { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Email already used!" };
+                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Email already used!" };
 
             user.Email = model.Email;
             user.SecurityStamp = Guid.NewGuid().ToString();
@@ -106,7 +106,8 @@ namespace Core.Services
                 return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = result.Errors.ToString() };
 
             await _userManager.AddToRoleAsync(user, UserRoles.User);
-            return Succ();
+
+            return new SuccessResponse();
         }
     }
 }

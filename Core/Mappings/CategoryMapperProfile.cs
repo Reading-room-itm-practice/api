@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Core.DTOs;
 using Storage.Models;
 using WebAPI.DTOs;
+using Core.Requests;
 
 namespace Core.Mappings
 {

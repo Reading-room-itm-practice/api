@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.DTOs;
 using Storage.Models;
+using Core.Requests;
 
 namespace Core.Mappings
 {

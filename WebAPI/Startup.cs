@@ -40,7 +40,7 @@ namespace WebAPI
             }
 
             app.UseHttpsRedirection();
-            app.UseMiddleware<ResponseMiddleware>();
+            app.UseMiddleware<ResponseStatusCodeMiddleware>();
 
             app.UseExceptionHandler(c => c.Run(async context =>
             {

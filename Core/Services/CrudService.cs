@@ -12,42 +12,42 @@ namespace Core.Services
 {
     public class CrudService<T> : ICrudService<T> where T : class, IDbModel, IDbMasterKey
     {
-        private readonly ICreatorService<T> Creator;
-        private readonly IGetterService<T> Getter;
-        private readonly IUpdaterService<T> Updater;
-        private readonly IDeleterService<T> Deleter;
+        private readonly ICreatorService<T> _creator;
+        private readonly IGetterService<T> _getter;
+        private readonly IUpdaterService<T> _updater;
+        private readonly IDeleterService<T> _deleter;
 
         public CrudService(ICreatorService<T> creator, IGetterService<T> getter, IUpdaterService<T> updater, IDeleterService<T> deleter)
         {
-            Creator = creator;
-            Getter = getter;
-            Updater = updater;
-            Deleter = deleter;
+            _creator = creator;
+            _getter = getter;
+            _updater = updater;
+            _deleter = deleter;
         }
 
-        public async Task<IResponseDto> Create<IResponseDto>(IRequestDto model)
+        public async Task<IResponseDto> Create<IResponseDto>(IRequest requestDto)
         {
-            return await Creator.Create<IResponseDto>(model);
+            return await _creator.Create<IResponseDto>(requestDto);
         }
 
         public async Task<IEnumerable<IResponseDto>> GetAll<IResponseDto>()
         {
-            return await Getter.GetAll<IResponseDto>();
+            return await _getter.GetAll<IResponseDto>();
         }
 
         public async Task<IResponseDto> GetById<IResponseDto>(int id)
         {
-            return await Getter.GetById<IResponseDto>(id);
+            return await _getter.GetById<IResponseDto>(id);
         }
 
-        public async Task Update(IRequestDto updateModel, int id)
+        public async Task Update(IRequest requestDto, int id)
         {
-            await Updater.Update(updateModel, id);
+            await _updater.Update(requestDto, id);
         }
 
         public async Task Delete(int id)
         {
-            await Deleter.Delete(id);
+            await _deleter.Delete(id);
         }
     }
 }

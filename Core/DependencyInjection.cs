@@ -42,6 +42,8 @@ namespace Core
             services.AddScoped<IUpdaterService<Category>, UpdaterService<Category>>();
             services.AddScoped<IDeleterService<Category>, DeleterService<Category>>();
 
+            services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
+
             return services;
         }
     }

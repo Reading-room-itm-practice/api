@@ -7,8 +7,8 @@ namespace Core.Interfaces
 {
     public interface IUserAuthenticationService
     {
-        public Task<SuccessResponse<string>> Login(LoginRequest model);
-        public Task<SuccessResponse<string>> Register(RegisterRequest model);
-        public Task<SuccessResponse<string>> RegisterAdmin(RegisterRequest model);
+        public Task<ServiceResponse> Login(LoginRequest model);
+        public Task<ServiceResponse> Register(RegisterRequest model);
+        public Task<ServiceResponse> RegisterAdmin(RegisterRequest model);
     }
 }
