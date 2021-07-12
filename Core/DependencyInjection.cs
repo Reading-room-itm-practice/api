@@ -1,6 +1,7 @@
 ﻿using Core.Interfaces;
 using Core.Repositories;
 using Core.Services;
+using Core.Services.Email;
 using Microsoft.Extensions.DependencyInjection;
 using Storage.Interfaces;
 using Storage.Models;
@@ -43,6 +44,8 @@ namespace Core
             services.AddScoped<IDeleterService<Category>, DeleterService<Category>>();
 
             services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
+
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }

@@ -1,5 +1,7 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
+using Core.Requests;
+using Core.ServiceResponses;
 using Core.Services.Email;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +11,7 @@ using Storage.Identity;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,13 +33,13 @@ namespace Core.Services
             _emailService = emailService;
         }
 
-        public async Task<ResponseDto> Login(LoginDto model)
+        public async Task<ServiceResponse> Login(LoginRequest model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 if(!await _userManager.IsEmailConfirmedAsync(user))
-                    return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = "Invalid username or password!" };
+                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Invalid username or password!" };
 
                 var userRoles = await _userManager.GetRolesAsync(user);
 
@@ -62,16 +65,16 @@ namespace Core.Services
 
                 var tokenResponse = new JwtSecurityTokenHandler().WriteToken(token);
 
-                return new ResponseDto { StatusCode = StatusCodes.Status200OK, Message = $"{tokenResponse}" };
+                return new ErrorResponse { StatusCode = HttpStatusCode.OK, Message = $"{tokenResponse}" };
             }
 
-            return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = "Username or password is not correct!" };
+            return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Username or password is not correct!" };
         }
 
-        public async Task<ResponseDto> Register(RegisterDto model)
+        public async Task<ServiceResponse> Register(RegisterRequest model)
         {
             if (await _userManager.FindByNameAsync(model.Username) != null || await _userManager.FindByEmailAsync(model.Email) != null)
-                return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = "Account already exists!" };
+                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Account already exists!" };
 
             User user = new()
             {
@@ -82,7 +85,7 @@ namespace Core.Services
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = result.Errors.ToString() };
+                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = result.Errors.ToString() };
 
             await _userManager.AddToRoleAsync(user, UserRoles.User);
             var userFromDb = await _userManager.FindByNameAsync(user.UserName);
@@ -99,17 +102,17 @@ namespace Core.Services
             var senderEmail = _config["ReturnPaths:SenderEmail"];
             await _emailService.SendEmailAsync(senderEmail, userFromDb.Email, "Confirm your email address", urlString);
 
-            return new ResponseDto { StatusCode = StatusCodes.Status201Created, Message = "User created successfully! Confirm your email." };
+            return new SuccessResponse { StatusCode = HttpStatusCode.Created, Message = "User created successfully! Confirm your email." };
         }
-        public async Task<ResponseDto> ConfirmEmail(ConfirmEmailModel model)
+        public async Task<ServiceResponse> ConfirmEmail(ConfirmEmailModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
             var result = await _userManager.ConfirmEmailAsync(user, model.Token);
 
             if (model.UserName == null || user  == null || user.EmailConfirmed || !result.Succeeded)
-                return new ResponseDto { StatusCode = StatusCodes.Status400BadRequest, Message = "Link is invalid" };
+                return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
 
-            return new ResponseDto { StatusCode = StatusCodes.Status200OK, Message = "Email confirmed succesfully" };
+            return new SuccessResponse { Message = "Email confirmed succesfully" };
         }
     }
 }

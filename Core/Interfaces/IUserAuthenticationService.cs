@@ -9,6 +9,6 @@ namespace Core.Interfaces
     {
         public Task<ServiceResponse> Login(LoginRequest model);
         public Task<ServiceResponse> Register(RegisterRequest model);
-        public Task<ServiceResponse> RegisterAdmin(RegisterRequest model);
+        public Task<ServiceResponse> ConfirmEmail(ConfirmEmailModel model);
     }
 }

@@ -33,11 +33,13 @@ namespace WebAPI.Controllers
             return await _authenticationUserService.Register(model);
         }
 
-        [HttpPost]
-        [Route("register-admin")]
-        public async Task<ServiceResponse> RegisterAdmin([FromBody] RegisterRequest model)
+        [HttpGet]
+        [Route("Confirm-email")]
+        public async Task<ServiceResponse> ConfirmEmail(string token, string username)
         {
-            return await _authenticationUserService.RegisterAdmin(model);
+            ConfirmEmailModel model = new() { Token = token, UserName = username };
+
+            return await _authenticationUserService.ConfirmEmail(model);
         }
     }
 }
