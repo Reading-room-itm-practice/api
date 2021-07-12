@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Core.DTOs;
+﻿using Core.DTOs;
+using System.Threading.Tasks;
 
 namespace Core.Interfaces
 {
@@ -7,6 +7,6 @@ namespace Core.Interfaces
     {
         public Task<ResponseDto> Login(LoginDto model);
         public Task<ResponseDto> Register(RegisterDto model);
-        public Task<ResponseDto> RegisterAdmin(RegisterDto model);
+        public Task<ResponseDto> ConfirmEmail(ConfirmEmailModel model);
     }
 }
