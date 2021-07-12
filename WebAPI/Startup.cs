@@ -1,4 +1,3 @@
-using Core.DTOs;
 using Core.Exceptions;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Builder;
@@ -47,7 +46,6 @@ namespace WebAPI
                 var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
                 if(exception is NotFoundException)
                 {
-                    var type = context.Response.ContentType;
                     context.Response.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
                     await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = ApiException.ResponseCode, Message = exception.Message });
                 }

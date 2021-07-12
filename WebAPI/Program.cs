@@ -2,10 +2,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Storage.DataAccessLayer;
 using WebAPI.HosBuilderExtensions;
 
@@ -20,6 +16,13 @@ namespace WebAPI
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                 .ConfigureLogging((context, logging) =>
+                 {
+                     logging.ClearProviders();
+                     logging.AddConfiguration(context.Configuration.GetSection("Logging"));
+                     logging.AddDebug();
+                     logging.AddConsole();
+                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
