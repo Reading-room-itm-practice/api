@@ -85,7 +85,7 @@ namespace Core.Services
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = result.Errors.ToString() };
+                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = CrateErrorMessage(result) };
 
             await _userManager.AddToRoleAsync(user, UserRoles.User);
             var userFromDb = await _userManager.FindByNameAsync(user.UserName);
@@ -113,6 +113,17 @@ namespace Core.Services
                 return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
 
             return new SuccessResponse { Message = "Email confirmed succesfully" };
+        }
+
+        private string CrateErrorMessage(IdentityResult result)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var error in result.Errors)
+            {
+                builder.Append(error.Description + " ");
+            }
+         
+            return builder.ToString();
         }
     }
 }
