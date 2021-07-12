@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using Core.Common;
 using WebAPI.DTOs;
 using Core.Exceptions;
-using WebAPI.Interfaces;
 using Storage.Models;
 using Core.Interfaces;
 
@@ -64,11 +63,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Edit(int id, PhotoUpdateDto photo)
+        public async Task<ActionResult> Edit(int id, PhotoUpdateDto photo_bookId)
         {
             try
             {
-                await _crud.Update(photo, id);
+                await _crud.Update(photo_bookId, id);
                 return Ok();
             }
             catch (DbUpdateException e)

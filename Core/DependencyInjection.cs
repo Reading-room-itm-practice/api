@@ -10,7 +10,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using WebAPI.Interfaces;
 using System.Net;
 
 namespace Core
@@ -47,6 +46,11 @@ namespace Core
             services.AddScoped<IUpdaterService<Category>, UpdaterService<Category>>();
             services.AddScoped<IDeleterService<Category>, DeleterService<Category>>();
             services.AddScoped<IPhotoService, PhotoService>();
+
+            services.AddScoped<ICreatorService<Photo>, CreatorService<Photo>>();
+            services.AddScoped<IGetterService<Photo>, GetterService<Photo>>();
+            services.AddScoped<IUpdaterService<Photo>, UpdaterService<Photo>>();
+            services.AddScoped<IDeleterService<Photo>, DeleterService<Photo>>();
 
             return services;
         }

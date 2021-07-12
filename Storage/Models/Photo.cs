@@ -13,7 +13,7 @@ namespace Storage.Models
     {
         [Key]
         public int Id { get; set; }
-        public int? BookId { get; set; }
+        public int BookId { get; set; }
         public string Path { get; set; }
     }
 }

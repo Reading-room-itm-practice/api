@@ -9,10 +9,10 @@ namespace WebAPI.DTOs
 {
     public class PhotoRequestDto : IRequestDto
     {
-        public int? BookId { get; set; }
+        public int BookId { get; set; }
         [Required]
         public string Path { get; set;}
-        public PhotoRequestDto(string path, int? bookId) 
+        public PhotoRequestDto(string path, int bookId) 
         { 
             Path = path;
             BookId = bookId;
