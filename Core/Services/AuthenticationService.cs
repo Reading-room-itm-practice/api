@@ -85,7 +85,8 @@ namespace Core.Services
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = result.Errors.ToString() };
+                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = CreateValidationErrorMessage(result) };
+
             await _userManager.AddToRoleAsync(user, UserRoles.User);
 
             var userFromDb = await _userManager.FindByNameAsync(user.UserName);
