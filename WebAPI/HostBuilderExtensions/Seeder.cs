@@ -9,7 +9,7 @@ using System;
 
 namespace WebAPI.HosBuilderExtensions
 {
-    public static class Seed
+    public static class Seeder
     {
         public static IHost SeedData(this IHost webHost)
         {
