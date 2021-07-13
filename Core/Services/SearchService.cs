@@ -46,6 +46,7 @@ namespace Core.Services
         private string[] ProcessSearchString(string searchString)
         {
             searchString = searchString ?? "@@@@";
+            while (searchString.StartsWith(' ')) searchString = searchString.Substring(1);
             searchString = Regex.Replace(searchString, @"\s+", " "); 
             return searchString.Split(" "); 
         }

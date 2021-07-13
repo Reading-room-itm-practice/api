@@ -40,6 +40,7 @@ namespace WebAPI.Controllers
         [HttpGet("Books/{searchString}/")]
         public ServiceResponse Books([Required] string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId)
         {
+            if (minYear == null && maxYear == null && categoryId == null) return searchService.SearchBook(searchString, sort);
             return searchService.SearchBook(searchString, sort, minYear, maxYear, categoryId);
         }
 
