@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Core.DTOs
+namespace Core.Requests
 {
-    public class RegisterDto
+    public class RegisterRequest
     {
         [Required(ErrorMessage = "User Name is required")]
         public string Username { get; set; }
@@ -16,7 +16,7 @@ namespace Core.DTOs
         public string Password { get; set; }
 
         [NotMapped]
-        [Compare("Password", ErrorMessage = "Password doesn't match.")]
+        [Compare(nameof(Password), ErrorMessage = "Password doesn't match.")]
         [Required(ErrorMessage = "Confirm password is required")]
         public string ConfirmPassword { get; set; }
 

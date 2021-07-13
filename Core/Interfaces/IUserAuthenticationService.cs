@@ -1,12 +1,14 @@
 ﻿using System.Threading.Tasks;
 using Core.DTOs;
+using Core.Requests;
+using Core.ServiceResponses;
 
 namespace Core.Interfaces
 {
     public interface IUserAuthenticationService
     {
-        public Task<ResponseDto> Login(LoginDto model);
-        public Task<ResponseDto> Register(RegisterDto model);
-        public Task<ResponseDto> RegisterAdmin(RegisterDto model);
+        public Task<ServiceResponse> Login(LoginRequest model);
+        public Task<ServiceResponse> Register(RegisterRequest model);
+        public Task<ServiceResponse> ConfirmEmail(ConfirmEmailModel model);
     }
 }

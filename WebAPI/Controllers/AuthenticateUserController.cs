@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Core.Interfaces;
 using Core.DTOs;
+using Core.ServiceResponses;
+using Core.Requests;
 
 namespace WebAPI.Controllers
 {
@@ -19,23 +21,25 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<ResponseDto> Login([FromBody] LoginDto model)
+        public async Task<ServiceResponse> Login([FromBody] LoginRequest model)
         {
             return await _authenticationUserService.Login(model);
         }
 
         [HttpPost]
         [Route("register")]
-        public async Task<ResponseDto> Register([FromBody] RegisterDto model)
+        public async Task<ServiceResponse> Register([FromBody] RegisterRequest model)
         {
             return await _authenticationUserService.Register(model);
         }
 
-        [HttpPost]
-        [Route("register-admin")]
-        public async Task<ResponseDto> RegisterAdmin([FromBody] RegisterDto model)
+        [HttpGet]
+        [Route("Confirm-email")]
+        public async Task<ServiceResponse> ConfirmEmail(string token, string username)
         {
-            return await _authenticationUserService.RegisterAdmin(model);
+            ConfirmEmailModel model = new() { Token = token, UserName = username };
+
+            return await _authenticationUserService.ConfirmEmail(model);
         }
     }
 }

@@ -2,9 +2,9 @@
 using Core.Common;
 using System.ComponentModel.DataAnnotations;
 
-namespace Core.DTOs
+namespace Core.Requests
 {
-    public class BookRequestDto : IRequestDto
+    public class BookRequest : IRequest
     {
         [Required]
         public int AuthorId { get; set; }

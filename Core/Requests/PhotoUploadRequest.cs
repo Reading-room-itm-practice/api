@@ -5,11 +5,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPI.DTOs
+namespace Core.Requests
 {
-    public class CategoryRequestDto : IRequestDto
+    public class PhotoUploadRequest : IRequest
     {
         [Required]
-        public string Name { get; set; }
+        public int BookId { get; set; }
+        [Required]
+        public string Path { get; set;}
     }
 }

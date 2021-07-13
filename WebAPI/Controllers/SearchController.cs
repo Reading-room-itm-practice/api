@@ -7,6 +7,8 @@ using System.Runtime.InteropServices;
 using System.ComponentModel.DataAnnotations;
 using Core.Interfaces;
 using Core.Services;
+using Core.ServiceResponses;
+using System.Net;
 
 namespace WebAPI.Controllers
 {
@@ -22,38 +24,35 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{searchString}/")]
-        public ActionResult All(string searchString, SortType? sort)
+        public ServiceResponse All(string searchString, SortType? sort)
         {
-            var searchResults = searchService.SearchAll(searchString, sort);
-            return Ok(searchResults);
-        }
-
-        [HttpGet("Categories/{searchString}/")]
-        public ActionResult Categories([Required]string searchString, SortType? sort)
-        {
-            var categories = searchService.SearchCategory(searchString, sort);
-            return Ok(categories);
-        }
-
-        [HttpGet("Books/{searchString}/")]
-        public ActionResult Books([Required] string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId)
-        {
-            var books = searchService.SearchBook(searchString, sort, minYear, maxYear, categoryId);
-            return Ok(books);
+            //return searchService.SearchAll(searchString, sort);
+            var result = searchService.SearchAll(searchString, sort);
+            return result;
         }
 
         [HttpGet("Author/{searchString}/")]
-        public ActionResult Authors([Required] string searchString, SortType? sort)
+        public ServiceResponse Authors([Required] string searchString, SortType? sort)
         {
-            var authors = searchService.SearchAuthor(searchString, sort);
-            return Ok(authors);
+            return searchService.SearchAuthor(searchString, sort);
+        }
+
+        [HttpGet("Books/{searchString}/")]
+        public ServiceResponse Books([Required] string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId)
+        {
+            return searchService.SearchBook(searchString, sort, minYear, maxYear, categoryId);
+        }
+
+        [HttpGet("Categories/{searchString}/")]
+        public ServiceResponse Categories([Required] string searchString, SortType? sort)
+        {
+            return searchService.SearchCategory(searchString, sort);
         }
 
         [HttpGet("User/{searchString}/")]
-        public ActionResult Users([Required] string searchString, SortType? sort)
+        public ServiceResponse Users([Required] string searchString, SortType? sort)
         {
-            var users = searchService.SearchUser(searchString, sort);
-            return Ok(users);
+            return searchService.SearchUser(searchString, sort);
         }
     }
 }

@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using WebAPI.DTOs;
 using System.Data.Entity;
 using AutoMapper;
+using Core.ServiceResponses;
+using System.Net;
 
 namespace Core.Services
 {
@@ -43,6 +45,7 @@ namespace Core.Services
 
         private string[] ProcessSearchString(string searchString)
         {
+            searchString = searchString ?? "@@@@";
             searchString = Regex.Replace(searchString, @"\s+", " "); 
             return searchString.Split(" "); 
         }
@@ -54,7 +57,7 @@ namespace Core.Services
         }
         #endregion
         #region SortMethods
-        public IEnumerable<AuthorResponseDto> SortAuthors(IEnumerable<AuthorResponseDto> authors, SortType? sort)
+        public IEnumerable<AuthorDto> SortAuthors(IEnumerable<AuthorDto> authors, SortType? sort)
         {
             switch (sort)
             {
@@ -68,7 +71,7 @@ namespace Core.Services
             }
             return authors;
         }
-        public IEnumerable<CategoryResponseDto> SortCategories(IEnumerable<CategoryResponseDto> categories, SortType? sort)
+        public IEnumerable<CategoryDto> SortCategories(IEnumerable<CategoryDto> categories, SortType? sort)
         {
             switch (sort)
             {
@@ -82,7 +85,7 @@ namespace Core.Services
             }
             return categories;
         }
-        public IEnumerable<BookResponseDto> SortBooks(IEnumerable<BookResponseDto> books, SortType? sort)
+        public IEnumerable<BookDto> SortBooks(IEnumerable<BookDto> books, SortType? sort)
         {
             switch (sort)
             {
@@ -117,95 +120,162 @@ namespace Core.Services
             return users;
         }
         #endregion
-
-        public Dictionary<string, IEnumerable<ISearchable>> SearchAll(string searchString, SortType? sort)
-        {
-            Dictionary<string, IEnumerable<ISearchable>> searchResults = new Dictionary<string, IEnumerable<ISearchable>>();
-
-            var authors = SearchAuthor(searchString, sort);
-            var books = SearchBook(searchString, sort);
-            var categories = SearchCategory(searchString, sort);
-            var users = SearchUser(searchString, sort);
-
-            if (authors.Count() > 0)
-                searchResults.Add(authors.First().GetType().ToString(), authors);
-            if (books.Count() > 0)
-                searchResults.Add(books.First().GetType().ToString(), books);
-            if (categories.Count() > 0)
-                searchResults.Add(categories.First().GetType().ToString(), categories);
-            if (users.Count() > 0)
-                searchResults.Add(users.First().GetType().ToString(), users);
-
-            return searchResults;
-        }
-
-        public IEnumerable<CategoryResponseDto> SearchCategory(string searchString, SortType? sort)
+        #region GetMethods
+        private IEnumerable<AuthorDto> GetAuthors(string searchString, SortType? sort)
         {
             var searchQuerries = ProcessSearchString(searchString);
-            var categories = _categories.GetAll<CategoryResponseDto>().Result.Where(c => ContainsQuerry(c.Name, searchQuerries));
-            if (categories == null) return categories;
-
-            categories = categories.Distinct();
-            categories = SortCategories(categories, sort);
-
-            return categories;
-        }
-
-        public IEnumerable<AuthorResponseDto> SearchAuthor(string searchString, SortType? sort)
-        {
-            var searchQuerries = ProcessSearchString(searchString);
-            var authors = _authors.GetAll<AuthorResponseDto>().Result.Where(a => ContainsQuerry(a.Name, searchQuerries));
-            if (authors == null) return authors;
-
+            var authors = _authors.GetAll<AuthorDto>().Result.Where(a => ContainsQuerry(a.Name, searchQuerries));
+            if (authors.Count() == 0) return null;
             authors = authors.Distinct();
             authors = SortAuthors(authors, sort);
-            
             return authors;
         }
 
-        public IEnumerable<BookResponseDto> SearchBook(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId)
+        private IEnumerable<CategoryDto> GetCategories(string searchString, SortType? sort)
         {
             var searchQuerries = ProcessSearchString(searchString);
-            var books = _books.GetAll<BookResponseDto>().Result.Where(b => ContainsQuerry(b.Title, searchQuerries));
+            var categories = _categories.GetAll<CategoryDto>().Result.Where(c => ContainsQuerry(c.Name, searchQuerries));
+            if (categories.Count() == 0) return null;
+            categories = categories.Distinct();
+            categories = SortCategories(categories, sort);
+            return categories;
+        }
+
+        private IEnumerable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId)
+        {
+            var searchQuerries = ProcessSearchString(searchString);
+            var books = _books.GetAll<BookDto>().Result.Where(b => ContainsQuerry(b.Title, searchQuerries));
             foreach (string querry in searchQuerries)
                 if (int.TryParse(querry, out int year))
                 {
-                    var booksByYear = _books.GetAll<BookResponseDto>().Result.Where(b => b.ReleaseYear == year); //Books released in year "YYYY"
+                    var booksByYear = _books.GetAll<BookDto>().Result.Where(b => b.ReleaseYear == year);
                     books = books.Concat(booksByYear);
                 }
 
             if (categoryId != null) books = books.Where(b => b.CategoryId == categoryId);
             if (minYear != null) books = books.Where(b => b.ReleaseYear >= minYear);
             if (maxYear != null) books = books.Where(b => b.ReleaseYear <= maxYear);
-
-            //books = books.Distinct<BookResponseDto>();
-            var books1 = books.Distinct();
-            books = SortBooks(books, sort);
-            
-            return books; 
-        }
-
-        public IEnumerable<BookResponseDto> SearchBook(string searchString, SortType? sort)
-        {
-            var searchQuerries = ProcessSearchString(searchString);
-            var books = _books.GetAll<BookResponseDto>().Result.Where(b => ContainsQuerry(b.Title, searchQuerries));
-            if (books == null) return books;
-
+            if (books.Count() == 0) return null;
             books = books.Distinct();
             books = SortBooks(books, sort);
 
             return books;
         }
 
-        public IEnumerable<UserSearchDto> SearchUser(string searchString, SortType? sort)
+        private IEnumerable<BookDto> GetBooks(string searchString, SortType? sort)
+        {
+            var searchQuerries = ProcessSearchString(searchString);
+            var books = _books.GetAll<BookDto>().Result.Where(b => ContainsQuerry(b.Title, searchQuerries));
+            foreach (string querry in searchQuerries)
+                if (int.TryParse(querry, out int year))
+                {
+                    var booksByYear = _books.GetAll<BookDto>().Result.Where(b => b.ReleaseYear == year);
+                    books = books.Concat(booksByYear);
+                }
+            if (books.Count() == 0) return null;
+            books = books.Distinct();
+            books = SortBooks(books, sort);
+
+            return books;
+        }
+
+        private IEnumerable<UserSearchDto> GetUsers(string searchString, SortType? sort)
         {
             var searchQuerries = ProcessSearchString(searchString);
             var users = GetUsers(searchQuerries);
-            if (users == null) return users;
+            if (users.Count() == 0) return null;
+            users = users.Distinct();
             users = SortUsers(users, sort);
-
             return users;
         }
+        #endregion
+        #region ServiceResponseMethods
+        public ServiceResponse SearchAll(string searchString, SortType? sort)
+        {
+            Dictionary<SearchType, IEnumerable<object>> searchResults = new Dictionary<SearchType, IEnumerable<object>>();
+            //using ISearchable instead of object returns an empty json result eg:
+            //          "content": {
+            //              "Book": [
+            //                { },
+            //                { }
+            //              ]
+            //           },
+
+            var authors = GetAuthors(searchString, sort);
+            var books = GetBooks(searchString, sort);
+            var categories = GetCategories(searchString, sort);
+            var users = GetUsers(searchString, sort);
+
+            if (authors != null)
+                searchResults.Add(SearchType.Author, authors);
+            if (books != null)
+                searchResults.Add(SearchType.Book, books);
+            if (categories != null)
+                searchResults.Add(SearchType.Category, categories);
+            if (users != null)
+                searchResults.Add(SearchType.User, users);
+
+            if (searchResults.Count == 0) return new SuccessResponse() 
+                { Message = "No search results found", StatusCode = HttpStatusCode.OK };
+
+            return new SuccessResponse<Dictionary<SearchType, IEnumerable<object>>>()
+            { Message = "Search results retrieved.", StatusCode = HttpStatusCode.OK, Content = searchResults };
+        }
+
+        public ServiceResponse SearchAuthor(string searchString, SortType? sort)
+        {
+            var authors = GetAuthors(searchString, sort);
+
+            if (authors == null) return new SuccessResponse()
+                { Message = "No author search results found.", StatusCode = HttpStatusCode.OK };
+
+            return new SuccessResponse<IEnumerable<AuthorDto>>()
+            { Message = "Author search results retrieved.", StatusCode = HttpStatusCode.OK, Content = authors };
+        }
+
+        public ServiceResponse SearchBook(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId)
+        {
+            var books = GetBooks(searchString, sort, minYear, maxYear, categoryId);
+
+            if(books == null) return new SuccessResponse()
+                { Message = "No book search results found.", StatusCode = HttpStatusCode.OK };
+
+            return new SuccessResponse<IEnumerable<BookDto>>()
+            { Message = "Book search results retrieved.", StatusCode = HttpStatusCode.OK, Content = books };
+        }
+
+        public ServiceResponse SearchBook(string searchString, SortType? sort)
+        {
+            var books = GetBooks(searchString, sort);
+            if (books == null) return new SuccessResponse()
+                { Message = "No book search results found.", StatusCode = HttpStatusCode.OK };
+
+            return new SuccessResponse<IEnumerable<BookDto>>()
+            { Message = "Book search results retrieved.", StatusCode = HttpStatusCode.OK, Content = books };
+        }
+
+        public ServiceResponse SearchCategory(string searchString, SortType? sort)
+        {
+            var categories = GetCategories(searchString, sort);
+
+            if (categories == null) return new SuccessResponse()
+                { Message = "No category search results found.", StatusCode = HttpStatusCode.OK };
+
+            return new SuccessResponse<IEnumerable<CategoryDto>>()
+            { Message = "Category search results retrieved.", StatusCode = HttpStatusCode.OK, Content = categories };
+        }
+
+        public ServiceResponse SearchUser(string searchString, SortType? sort)
+        {
+            var users = GetUsers(searchString, sort);
+          
+            if (users == null) return new SuccessResponse()
+                { Message = "No user search results found.", StatusCode = HttpStatusCode.OK };
+
+            return new SuccessResponse<IEnumerable<UserSearchDto>>()
+            { Message = "User search results retrieved.", StatusCode = HttpStatusCode.OK, Content = users };
+        }
+        #endregion
     }
 
     public enum SortType
@@ -214,8 +284,13 @@ namespace Core.Services
         byNameDescending,
         byRelaseYear,
         byRelaseYearDescending
-        //byId,
-        //byAuthor,
-        //byScore
+    };
+
+    public enum SearchType
+    {
+        Author,
+        Book,
+        Category,
+        User
     };
 }

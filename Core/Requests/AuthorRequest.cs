@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Common;
-using Core.Interfaces;
-using Core.Mappings;
 
-namespace Core.DTOs
+namespace Core.Requests
 {
-    public class AuthorResponseDto : IResponseDto, ISearchable
+    public class AuthorRequest : IRequest
     {
-        public string Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Biography { get; set; }
     }
 }

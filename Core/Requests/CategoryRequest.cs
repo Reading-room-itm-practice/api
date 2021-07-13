@@ -1,15 +1,15 @@
 ﻿using Core.Common;
-using Core.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPI.DTOs
+namespace Core.Requests
 {
-    public class CategoryResponseDto : IResponseDto, ISearchable
+    public class CategoryRequest : IRequest
     {
-        public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
     }
 }
