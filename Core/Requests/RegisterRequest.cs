@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Core.Common;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Requests
@@ -13,8 +14,8 @@ namespace Core.Requests
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
-        [RegularExpression(@"^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*0-9]{7,}$",
-            ErrorMessage = "Password is not valid (at least one special sign, digit, upper letter and lenght >= 7)")]
+        [RegularExpression(@SettingsVariables.PasswordExpression,
+            ErrorMessage = "Password is not valid (at least one special sign, digit, upper letter and lenght >= 8)")]
         public string Password { get; set; }
 
         [NotMapped]

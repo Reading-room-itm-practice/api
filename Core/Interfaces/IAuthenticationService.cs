@@ -10,7 +10,7 @@ namespace Core.Interfaces
         public Task<ServiceResponse> Login(LoginRequest model);
         public Task<ServiceResponse> Register(RegisterRequest model);
         public Task<ServiceResponse> ConfirmEmail(EmailDto model);
-        public Task<ServiceResponse> ResetPassword(ResetPasswordDto model);
+        public Task<ServiceResponse> ResetPassword(ResetPasswordRequest model);
         public Task<ServiceResponse> SendResetPasswordEmail(string userName);
     }
 }

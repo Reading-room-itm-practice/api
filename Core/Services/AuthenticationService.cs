@@ -3,7 +3,6 @@ using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
 using Core.Services.Email;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -103,7 +102,7 @@ namespace Core.Services
             var user = await _userManager.FindByNameAsync(model.UserName);
             var result = await _userManager.ConfirmEmailAsync(user, model.Token);
 
-            if (model.UserName == null || user  == null || !result.Succeeded)
+            if (!result.Succeeded)
                 return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
 
             return new SuccessResponse { Message = "Email confirmed succesfully" };
@@ -120,12 +119,12 @@ namespace Core.Services
             return new SuccessResponse { Message = "Email to reset your password's waiting for you in mailbox" };
         }
 
-        public async Task<ServiceResponse> ResetPassword(ResetPasswordDto model)
+        public async Task<ServiceResponse> ResetPassword(ResetPasswordRequest model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
             var result = await _userManager.ResetPasswordAsync(user, model.Token, model.newPassword);
 
-            if (model.UserName == null || user == null || !result.Succeeded)
+            if (!result.Succeeded)
                 return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
 
             return new SuccessResponse { Message = "Password changed succesfully" };
@@ -141,6 +140,16 @@ namespace Core.Services
             var urlString = uriBuilder.ToString();
 
             return urlString;
+        }
+        private string CreateValidationErrorMessage(IdentityResult result)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var error in result.Errors)
+            {
+                builder.Append(error.Description + " ");
+            }
+
+            return builder.ToString();
         }
     }
 }

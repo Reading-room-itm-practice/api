@@ -37,7 +37,7 @@ namespace WebAPI.Controllers
         [Route("Confirm-email")]
         public async Task<ServiceResponse> ConfirmEmail(string token, string username)
         {
-            EmailDto model = new(){Token = token, UserName = username};
+            EmailDto model = new() {Token = token, UserName = username};
 
             return await _authenticationUserService.ConfirmEmail(model);
         }
@@ -58,7 +58,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("Reset-password-done")]
-        public async Task<ServiceResponse> ResetPassword([FromBody] ResetPasswordDto model)
+        public async Task<ServiceResponse> ResetPassword([FromBody] ResetPasswordRequest model)
         {
             return await _authenticationUserService.ResetPassword(model);
         }
