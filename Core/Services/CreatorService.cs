@@ -20,7 +20,7 @@ namespace Core.Services
             _mapper = mapper;
         }
 
-        public async Task<IResponseDto> Create<IResponseDto>(IRequestDto requestDto)
+        public async Task<IResponseDto> Create<IResponseDto>(IRequest requestDto)
         {
             var model = _mapper.Map<T>(requestDto);
             await _repository.Create(model);

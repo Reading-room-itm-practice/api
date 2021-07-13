@@ -389,3 +389,6 @@ FodyWeavers.xsd
 
 #env files
 .env
+
+#Photos folder
+/Storage/Photos

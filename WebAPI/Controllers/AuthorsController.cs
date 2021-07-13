@@ -7,6 +7,7 @@ using Core.DTOs;
 using Core.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 using Storage.Models;
+using Core.Requests;
 
 namespace WebAPI.Controllers
 {
@@ -26,7 +27,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var authors = await _crud.GetAll<AuthorResponseDto>();
+            var authors = await _crud.GetAll<AuthorDto>();
 
             return Ok(authors);
         }
@@ -35,22 +36,22 @@ namespace WebAPI.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Show(int id)
         {
-            var author = await _crud.GetById<AuthorResponseDto>(id);
+            var author = await _crud.GetById<AuthorDto>(id);
 
             return author == null ? NotFound() : Ok(author);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AuthorRequestDto requestDto)
+        public async Task<IActionResult> Create(AuthorRequest requestDto)
         {
-            var author = await _crud.Create<AuthorResponseDto>(requestDto);
+            var author = await _crud.Create<AuthorDto>(requestDto);
 
             return Created($"api/authors/{author.Id}", author);
         }
 
         [SwaggerOperation(Summary = "Update a book author by unique id")]
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Update(int id, AuthorRequestDto requestDto)
+        public async Task<ActionResult> Update(int id, AuthorRequest requestDto)
         {
             await _crud.Update(requestDto, id);
 

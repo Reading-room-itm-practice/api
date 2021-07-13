@@ -4,7 +4,7 @@ using Storage.Identity;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WebAPI.Identity
+namespace Core.Identity
 {
     public static class IdentityDataInitializer
     {

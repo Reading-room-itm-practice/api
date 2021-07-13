@@ -1,5 +1,8 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
+using Core.Requests;
+using Core.ServiceResponses;
+using Core.Services.Email;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +15,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Core.Services
 {
@@ -19,18 +23,24 @@ namespace Core.Services
     {
 
         private readonly UserManager<User> _userManager;
-        private readonly IConfiguration _configuration;
-        public UserAuthenticationService(UserManager<User> userManager, IConfiguration configuration)
+        private readonly IConfiguration _config;
+        private readonly IEmailService _emailService;
+        
+        public UserAuthenticationService(UserManager<User> userManager, IConfiguration config, IEmailService emailService)
         {
             _userManager = userManager;
-            _configuration = configuration;
+            _config = config;
+            _emailService = emailService;
         }
 
-        public async Task<ResponseDto> Login(LoginDto model)
+        public async Task<ServiceResponse> Login(LoginRequest model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
+                if(!await _userManager.IsEmailConfirmedAsync(user))
+                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Invalid username or password!" };
+
                 var userRoles = await _userManager.GetRolesAsync(user);
 
                 var authClaims = new List<Claim>
@@ -44,10 +54,10 @@ namespace Core.Services
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
 
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Secret"]));
 
                 var token = new JwtSecurityToken(
-                    audience: _configuration["JWT:ValidAudience"],
+                    audience: _config["JWT:ValidAudience"],
                     expires: DateTime.Now.AddHours(4),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
@@ -55,57 +65,65 @@ namespace Core.Services
 
                 var tokenResponse = new JwtSecurityTokenHandler().WriteToken(token);
 
-                return new ResponseDto { StatusCode = StatusCodes.Status200OK, Message = $"{tokenResponse}" };
+                return new SuccessResponse<string> { Message = "Successful login", Content = $"{tokenResponse}" };
             }
 
-            return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = "Username or password is not correct!" };
+            return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Username or password is not correct!" };
         }
 
-        public async Task<ResponseDto> Register(RegisterDto model)
+        public async Task<ServiceResponse> Register(RegisterRequest model)
         {
-            User user = new();
-            ResponseDto response = await RegisterUser(model, _userManager, user);
+            if (await _userManager.FindByNameAsync(model.Username) != null || await _userManager.FindByEmailAsync(model.Email) != null)
+                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Account already exists!" };
 
-            if (response == null)
-                return new ResponseDto { StatusCode = StatusCodes.Status201Created, Message = "User created successfully!" };
-
-            return response;
-        }
-
-        public async Task<ResponseDto> RegisterAdmin(RegisterDto model)
-        {
-            User user = new();
-            ResponseDto response = await RegisterUser(model, _userManager, user);
-
-            if (response == null)
+            User user = new()
             {
-                await _userManager.AddToRoleAsync(user, UserRoles.Admin);
-
-                return new ResponseDto { StatusCode = StatusCodes.Status201Created, Message = "User created." };
-            }
-            return response;
-        }
-
-        private async Task<ResponseDto> RegisterUser(RegisterDto model, UserManager<User> _userManager, User user)
-        {
-            var userExists = await _userManager.FindByNameAsync(model.Username);
-            if (userExists != null)
-                return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = "User already exists!" };
-
-            var emailExists = await _userManager.FindByEmailAsync(model.Email);
-            if (emailExists != null)
-                return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = "Email already used!" };
-
-            user.Email = model.Email;
-            user.SecurityStamp = Guid.NewGuid().ToString();
-            user.UserName = model.Username;
+            Email = model.Email,
+            SecurityStamp = Guid.NewGuid().ToString(),
+            UserName = model.Username
+            };
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return new ResponseDto { StatusCode = StatusCodes.Status422UnprocessableEntity, Message = result.Errors.ToString() };
+                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = CreateValidationErrorMessage(result) };
 
             await _userManager.AddToRoleAsync(user, UserRoles.User);
-            return null;
+            var userFromDb = await _userManager.FindByNameAsync(user.UserName);
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(userFromDb);
+
+            var uriBuilder = new UriBuilder(_config["ReturnPaths:ConfirmEmail"]);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["token"] = token;
+            query["username"] = userFromDb.UserName;
+            uriBuilder.Query = query.ToString();
+            var urlString = uriBuilder.ToString();
+
+            var senderEmail = _config["ReturnPaths:SenderEmail"];
+            await _emailService.SendEmailAsync(senderEmail, userFromDb.Email, "Confirm your email address", urlString);
+
+            return new SuccessResponse { StatusCode = HttpStatusCode.Created, Message = "User created successfully! Confirm your email." };
+        }
+        public async Task<ServiceResponse> ConfirmEmail(ConfirmEmailModel model)
+        {
+            var user = await _userManager.FindByNameAsync(model.UserName);
+            var result = await _userManager.ConfirmEmailAsync(user, model.Token);
+
+            if (model.UserName == null || user  == null || user.EmailConfirmed || !result.Succeeded)
+                return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
+
+            return new SuccessResponse { Message = "Email confirmed succesfully" };
+        }
+
+        private string CreateValidationErrorMessage(IdentityResult result)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var error in result.Errors)
+            {
+                builder.Append(error.Description + " ");
+            }
+         
+            return builder.ToString();
         }
     }
 }

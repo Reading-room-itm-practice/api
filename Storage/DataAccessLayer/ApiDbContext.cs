@@ -26,6 +26,7 @@ namespace Storage.DataAccessLayer
         public DbSet<Follow> Follows { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
         public DbSet<Like> Likes { get; set; }
+        public DbSet<Photo> Photos { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<ReadStatus> ReadStatuses { get; set; }
         public DbSet<Review> Reviews { get; set; }
