@@ -8,14 +8,14 @@ namespace Core.Identity
 {
     public static class IdentityDataInitializer
     {
-        public static void SeedData
+        public static void SeedRolesAndAdmin
         (UserManager<User> userMenager, RoleManager<IdentityRole<int>> roleMenager, IConfiguration configuration)
         {
             SeedRoles(roleMenager);
-            SeedUsers(userMenager, configuration);
+            SeedAdmin(userMenager, configuration);
         }
 
-        public static void SeedUsers(UserManager<User> userManager, IConfiguration configuration)
+        public static void SeedAdmin(UserManager<User> userManager, IConfiguration configuration)
         {
             var userExists = userManager.FindByNameAsync(configuration["Admin:Username"]).Result != null;
             if (!userExists)
