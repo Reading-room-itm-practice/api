@@ -98,7 +98,7 @@ namespace WebAPI.Controllers
             catch (Exception e)
             {
                 if (e.InnerException.GetType() == typeof(NotFoundException)) return new ErrorResponse()
-                { Message = "Image not found", StatusCode = System.Net.HttpStatusCode.NotFound };// NotFound("Image not found");
+                { Message = "Image not found", StatusCode = System.Net.HttpStatusCode.NotFound };
 
                 return new ErrorResponse() { Message = e.Message };
             }

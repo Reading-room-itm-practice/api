@@ -41,19 +41,10 @@ namespace Core.Services
 
         public async Task<ServiceResponse> UploadPhoto(IFormFile image, int bookId)
         {
-            if (image == null) return new ErrorResponse() { Message = "No image.", StatusCode = System.Net.HttpStatusCode.BadRequest };
-            if (image.Length > PhotoSizeLimit) return new ErrorResponse() { Message = "File is too large.", StatusCode = System.Net.HttpStatusCode.BadRequest };
-            var extension = "." + image.FileName.Split('.')[image.FileName.Split('.').Length - 1];
-            if (AllowedFileExtensions.All(ex => extension != ex)) return new ErrorResponse() { Message = "Invalid file extension", StatusCode = System.Net.HttpStatusCode.BadRequest };
-            string uniqueFileName = Guid.NewGuid().ToString() + ".jpeg";
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-            var newPhoto = await _crud.Create<PhotoDto>(new PhotoUploadRequest { Path = filePath, BookId = bookId });
-            using (var stream = System.IO.File.Create(filePath))
-            {
-                await image.CopyToAsync(stream);
-            }
+            ServiceResponse result = ValidatePhoto(image);
+            if (!result.Success) return result;
 
-            return new SuccessResponse<PhotoDto>() { Content = newPhoto };
+            return await ProcessPhoto(image, bookId);
         }
 
         public async Task<ServiceResponse> DeletePhoto(int id)
@@ -62,6 +53,36 @@ namespace Core.Services
             await _crud.Delete(id);
             System.IO.File.Delete(photoToDelete.Path);
             return new SuccessResponse();
+        }
+
+        private ServiceResponse ValidatePhoto(IFormFile image)
+        {
+            if (image == null) return new ErrorResponse() { Message = "No image.", StatusCode = System.Net.HttpStatusCode.BadRequest };
+            if (image.Length > PhotoSizeLimit) return new ErrorResponse() { Message = "File is too large.", StatusCode = System.Net.HttpStatusCode.BadRequest };
+            var extension = "." + image.FileName.Split('.')[image.FileName.Split('.').Length - 1];
+            if (AllowedFileExtensions.All(ex => extension != ex)) return new ErrorResponse() { Message = "Invalid file extension", StatusCode = System.Net.HttpStatusCode.BadRequest };
+            return new SuccessResponse();
+        }
+
+        private async Task<ServiceResponse> ProcessPhoto(IFormFile image, int bookId)
+        {
+            try
+            {
+                string uniqueFileName = Guid.NewGuid().ToString() + ".jpeg";
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                var newPhoto = await _crud.Create<PhotoDto>(new PhotoUploadRequest { Path = filePath, BookId = bookId });
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await image.CopyToAsync(stream);
+                }
+                return new SuccessResponse<PhotoDto>() { Content = newPhoto, Message = "Image uploaded." };
+            }
+            catch (Exception e)
+            {
+                if(e.InnerException != null)
+                    return new ErrorResponse() { Message = e.Message + " Inner Exception: " + e.InnerException.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
+                return new ErrorResponse() { Message = e.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
+            }
         }
     }
 }
