@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Photos\**" />
     <Compile Remove="Repositories\**" />
+    <EmbeddedResource Remove="Photos\**" />
     <EmbeddedResource Remove="Repositories\**" />
+    <None Remove="Photos\**" />
     <None Remove="Repositories\**" />
   </ItemGroup>
 
@@ -23,10 +26,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Photos\" />
   </ItemGroup>
 
 </Project>
