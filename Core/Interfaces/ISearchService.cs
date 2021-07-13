@@ -12,11 +12,10 @@ namespace Core.Interfaces
 {
     public interface ISearchService
     {
-        //Task<>, make async
-        public Task<IEnumerable<CategoryResponseDto>> SearchCategory(string searchString, SortType? sort);
-        public Task<IEnumerable<BookResponseDto>> SearchBook(string searchString, SortType? sort);
-        public Task<IEnumerable<AuthorResponseDto>> SearchAuthor(string searchString, SortType? sort);
-        public Task<IEnumerable<UserSearchDto>> SearchUser(string searchString, SortType? sort);
-        public Task<Dictionary<string, IEnumerable<object>>> SearchAll(string searchString, SortType? sort);
+        public IEnumerable<CategoryResponseDto> SearchCategory(string searchString, SortType? sort);
+        public IEnumerable<BookResponseDto> SearchBook(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId);
+        public IEnumerable<AuthorResponseDto> SearchAuthor(string searchString, SortType? sort);
+        public IEnumerable<UserSearchDto> SearchUser(string searchString, SortType? sort);
+        public Dictionary<string, IEnumerable<ISearchable>> SearchAll(string searchString, SortType? sort);
     }
 }

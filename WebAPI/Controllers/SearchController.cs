@@ -22,37 +22,37 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{searchString}/")]
-        public async Task<ActionResult> All(string searchString, SortType? sort)
+        public ActionResult All(string searchString, SortType? sort)
         {
-            var searchResults = await searchService.SearchAll(searchString, sort);
+            var searchResults = searchService.SearchAll(searchString, sort);
             return Ok(searchResults);
         }
 
         [HttpGet("Categories/{searchString}/")]
-        public async Task<ActionResult> Categories([Required]string searchString, SortType? sort)
+        public ActionResult Categories([Required]string searchString, SortType? sort)
         {
-            var categories = await searchService.SearchCategory(searchString, sort);
+            var categories = searchService.SearchCategory(searchString, sort);
             return Ok(categories);
         }
 
-        [HttpGet("Books/{searchString}/")]//{filter?}")]
-        public async Task<ActionResult> Books([Required] string searchString, SortType? sort)
+        [HttpGet("Books/{searchString}/")]
+        public ActionResult Books([Required] string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId)
         {
-            var books = await searchService.SearchBook(searchString, sort);
+            var books = searchService.SearchBook(searchString, sort, minYear, maxYear, categoryId);
             return Ok(books);
         }
 
         [HttpGet("Author/{searchString}/")]
-        public async Task<ActionResult> Authors([Required] string searchString, SortType? sort)
+        public ActionResult Authors([Required] string searchString, SortType? sort)
         {
-            var authors = await searchService.SearchAuthor(searchString, sort);
+            var authors = searchService.SearchAuthor(searchString, sort);
             return Ok(authors);
         }
 
         [HttpGet("User/{searchString}/")]
-        public async Task<ActionResult> Users([Required] string searchString, SortType? sort)
+        public ActionResult Users([Required] string searchString, SortType? sort)
         {
-            var users = await searchService.SearchUser(searchString, sort);
+            var users = searchService.SearchUser(searchString, sort);
             return Ok(users);
         }
     }

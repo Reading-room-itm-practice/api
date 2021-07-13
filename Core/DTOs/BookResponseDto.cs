@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using Core.Common;
+using Core.Interfaces;
 
 namespace Core.DTOs
 {
-    public class BookResponseDto : IResponseDto
+    public class BookResponseDto : IResponseDto, ISearchable
     {
         public string Id { get; set; }
         public int AuthorId { get; set; }
