@@ -4,7 +4,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
 using Storage.DataAccessLayer;
-using System;
 using WebAPI.HosBuilderExtensions;
 
 namespace WebAPI
@@ -13,7 +12,7 @@ namespace WebAPI
     {
         public static void Main(string[] args)
         {
-                CreateHostBuilder(args).Build().MigrateDatabase<ApiDbContext>().Run();
+                CreateHostBuilder(args).Build().MigrateDatabase<ApiDbContext>().SeedData().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
