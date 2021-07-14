@@ -26,7 +26,6 @@ namespace WebAPI.Controllers
         [HttpGet("{searchString}/")]
         public ServiceResponse All(string searchString, SortType? sort)
         {
-            //return searchService.SearchAll(searchString, sort);
             var result = searchService.SearchAll(searchString, sort);
             return result;
         }
