@@ -37,29 +37,31 @@ namespace WebAPI.Controllers
             if (bookId != null)
             {
                 var result = _crud.GetAll<ReviewDto>().Result.Where(r => r.BookId == bookId);
-                return new SuccessResponse<IEnumerable<ReviewDto>>() { Message = $"Reviews for Book with ID = {bookId} retrieved.", StatusCode = HttpStatusCode.OK, Content = result };
+                return new SuccessResponse<IEnumerable<ReviewDto>>() 
+                    { Message = $"Reviews for Book with ID = {bookId} retrieved.", StatusCode = HttpStatusCode.OK, Content = result };
             }
             else
             {
                 var result = await _crud.GetAll<ReviewDto>();
-                return new SuccessResponse<IEnumerable<ReviewDto>>() { Message = "Reviews retrieved.", StatusCode = HttpStatusCode.OK, Content = result };
+                return new SuccessResponse<IEnumerable<ReviewDto>>() 
+                    { Message = "Reviews retrieved.", StatusCode = HttpStatusCode.OK, Content = result };
             }
         }
 
         [HttpPost]
-        public async Task<ServiceResponse> Create(ReviewRequest category)
+        public async Task<ServiceResponse> Create(ReviewRequest review)
         {
-            var newCategory = await _crud.Create<ReviewDto>(category);
+            var newReview = await _crud.Create<ReviewDto>(review);
             return new SuccessResponse<ReviewDto>()
-            { Message = "Review created.", StatusCode = HttpStatusCode.Created, Content = newCategory };
+                { Message = "Review created.", StatusCode = HttpStatusCode.Created, Content = newReview };
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ServiceResponse> Edit(int id, ReviewRequest category)
+        public async Task<ServiceResponse> Edit(int id, ReviewRequest review)
         {
-            await _crud.Update(category, id);
+            await _crud.Update(review, id);
             return new SuccessResponse()
-            { Message = "Review updated.", StatusCode = HttpStatusCode.OK };
+                { Message = "Review updated.", StatusCode = HttpStatusCode.OK };
         }
 
         [HttpDelete("{id:int}")]
@@ -67,7 +69,7 @@ namespace WebAPI.Controllers
         {
             await _crud.Delete(id);
             return new SuccessResponse()
-            { Message = "Review deleted.", StatusCode = HttpStatusCode.OK };
+                { Message = "Review deleted.", StatusCode = HttpStatusCode.OK };
         }
     }
 }
