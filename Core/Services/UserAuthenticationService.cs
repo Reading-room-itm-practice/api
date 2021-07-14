@@ -6,6 +6,7 @@ using Core.Services.Email;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Storage.Identity;
 using System;
@@ -25,12 +26,15 @@ namespace Core.Services
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;
         private readonly IEmailService _emailService;
-        
-        public UserAuthenticationService(UserManager<User> userManager, IConfiguration config, IEmailService emailService)
+
+        private StringValues hostUrl;
+
+        public UserAuthenticationService(UserManager<User> userManager, IConfiguration config, IEmailService emailService, IHttpContextAccessor request)
         {
             _userManager = userManager;
             _config = config;
             _emailService = emailService;
+            request.HttpContext.Request.Headers.TryGetValue("Origin", out hostUrl);
         }
 
         public async Task<ServiceResponse> Login(LoginRequest model)
@@ -92,7 +96,7 @@ namespace Core.Services
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(userFromDb);
 
-            var uriBuilder = new UriBuilder(_config["ReturnPaths:ConfirmEmail"]);
+            var uriBuilder = new UriBuilder(hostUrl.ToString() + _config["ReturnPaths:ConfirmEmail"]);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
             query["token"] = token;
             query["username"] = userFromDb.UserName;
@@ -107,9 +111,10 @@ namespace Core.Services
         public async Task<ServiceResponse> ConfirmEmail(ConfirmEmailModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
+            var isConfirmed = user.EmailConfirmed;
             var result = await _userManager.ConfirmEmailAsync(user, model.Token);
 
-            if (model.UserName == null || user  == null || user.EmailConfirmed || !result.Succeeded)
+            if (isConfirmed || !result.Succeeded)
                 return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
 
             return new SuccessResponse { Message = "Email confirmed succesfully" };

@@ -2,7 +2,9 @@
 using Core.Repositories;
 using Core.Services;
 using Core.Services.Email;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Storage.Interfaces;
 using Storage.Models;
 using System;
@@ -52,10 +54,13 @@ namespace Core
 
             services.AddScoped<IPhotoService, PhotoService>();
 
+            services.AddHttpContextAccessor();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 
             services.AddScoped<IEmailService, EmailService>();
-
+            
             return services;
         }
     }
