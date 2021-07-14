@@ -14,6 +14,5 @@ namespace Core.DTOs
         public int BookId { get; set; }
         public int Stars { get; set; }
         public string Content { get; set; }
-        public ICollection<int> CommentsIds { get; set; }
     }
 }

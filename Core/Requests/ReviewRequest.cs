@@ -17,6 +17,5 @@ namespace Core.Requests
         [Range(1, 5)]
         public int Stars { get; set; }
         public string Content { get; set; }
-        public ICollection<int> CommentsIds { get; set; }
     }
 }
