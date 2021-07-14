@@ -31,7 +31,7 @@ namespace WebAPI
             services.InstallServicesInAssembly(Configuration);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager, IConfiguration conf)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -66,7 +66,6 @@ namespace WebAPI
             app.UseStatusCodePages();
             app.UseCors();
             app.UseAuthentication();
-            //IdentityDataInitializer.SeedData(userManager, roleManager, conf);
             app.UseRouting();
             app.UseAuthorization();
 
