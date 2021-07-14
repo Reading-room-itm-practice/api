@@ -6,6 +6,9 @@ using Core.Interfaces;
 using Storage.Models;
 using Core.Exceptions;
 using Core.Requests;
+using Core.ServiceResponses;
+using System.Net;
+using System.Collections.Generic;
 
 namespace WebAPI.Controllers
 {
@@ -21,61 +24,42 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult> GetCategory(int id)
+        public async Task<ServiceResponse> GetCategory(int id)
         {
             var result = await _crud.GetById<CategoryDto>(id);
-            if (result == null) return NotFound();
-            return Ok(result);
+            if (result == null) return new SuccessResponse() { Message = "Category not found.", StatusCode = HttpStatusCode.OK };
+            return new SuccessResponse<CategoryDto>() { Message = "Category found.", StatusCode = HttpStatusCode.OK, Content = result };
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetCategories()
+        public async Task<ServiceResponse> GetCategories()
         {
             var result = await _crud.GetAll<CategoryDto>();
-            return Ok(result);
+            return new SuccessResponse<IEnumerable<CategoryDto>>() { Message = "Categories retrieved.", StatusCode = HttpStatusCode.OK, Content = result };
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CategoryRequest category)
+        public async Task<ServiceResponse> Create(CategoryRequest category)
         {
-            try
-            {
-                var newCategory = await _crud.Create<CategoryDto>(category);
-                return Created($"api/category/{newCategory.Id}", newCategory);
-            }
-            catch (ArgumentNullException e)
-            {
-                return BadRequest(e.Message);
-                throw;
-            }
+            var newCategory = await _crud.Create<CategoryDto>(category);
+            return new SuccessResponse<CategoryDto>()
+            { Message = "Category created.", StatusCode = HttpStatusCode.Created, Content = newCategory };
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Edit(int id, CategoryRequest category)
+        public async Task<ServiceResponse> Edit(int id, CategoryRequest category)
         {
-            try
-            {
-                await _crud.Update(category, id);
-                return Ok();
-            }
-            catch (NotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            await _crud.Update(category, id);
+            return new SuccessResponse()
+                { Message = "Category updated.", StatusCode = HttpStatusCode.OK };
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ServiceResponse> Delete(int id)
         {
-            try
-            {
-                await _crud.Delete(id);
-                return Ok();
-            }
-            catch (NotFoundException e)
-            {
-                return NotFound(e.Message);
-            }
+            await _crud.Delete(id);
+            return new SuccessResponse()
+                { Message = "Category deleted.", StatusCode = HttpStatusCode.OK };
         }
     }
 }
