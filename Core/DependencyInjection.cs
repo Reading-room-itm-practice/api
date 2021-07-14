@@ -24,11 +24,13 @@ namespace Core
             services.AddScoped<IBaseRepository<Book>, BaseRepository<Book>>();
             services.AddScoped<IBaseRepository<Category>, BaseRepository<Category>>();
             services.AddScoped<IBaseRepository<Photo>, BaseRepository<Photo>>();
+            services.AddScoped<IBaseRepository<Review>, BaseRepository<Review>>();
 
             services.AddScoped<ICrudService<Author>, CrudService<Author>>();
             services.AddScoped<ICrudService<Book>, CrudService<Book>>();
             services.AddScoped<ICrudService<Category>, CrudService<Category>>();
             services.AddScoped<ICrudService<Photo>, CrudService<Photo>>();
+            services.AddScoped<ICrudService<Review>, CrudService<Review>>();
 
             services.AddScoped<ICreatorService<Author>, CreatorService<Author>>();
             services.AddScoped<IGetterService<Author>, GetterService<Author>>();
@@ -49,6 +51,11 @@ namespace Core
             services.AddScoped<IGetterService<Photo>, GetterService<Photo>>();
             services.AddScoped<IUpdaterService<Photo>, UpdaterService<Photo>>();
             services.AddScoped<IDeleterService<Photo>, DeleterService<Photo>>();
+
+            services.AddScoped<ICreatorService<Review>, CreatorService<Review>>();
+            services.AddScoped<IGetterService<Review>, GetterService<Review>>();
+            services.AddScoped<IUpdaterService<Review>, UpdaterService<Review>>();
+            services.AddScoped<IDeleterService<Review>, DeleterService<Review>>();
 
             services.AddScoped<IPhotoService, PhotoService>();
 
