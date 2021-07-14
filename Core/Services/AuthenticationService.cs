@@ -3,7 +3,6 @@ using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
 using Core.Services.Email;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
@@ -20,7 +19,7 @@ using System.Web;
 
 namespace Core.Services
 {
-    public class UserAuthenticationService : IUserAuthenticationService
+    public class AuthenticationService : IAuthenticationService
     {
 
         private readonly UserManager<User> _userManager;
@@ -92,23 +91,17 @@ namespace Core.Services
                 return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = CreateValidationErrorMessage(result) };
 
             await _userManager.AddToRoleAsync(user, UserRoles.User);
+
             var userFromDb = await _userManager.FindByNameAsync(user.UserName);
-
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(userFromDb);
+            var urlString = BuildUrl(token, userFromDb.UserName, _config["ReturnPaths:ConfirmEmail"]);
 
-            var uriBuilder = new UriBuilder(hostUrl.ToString() + _config["ReturnPaths:ConfirmEmail"]);
-            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query["token"] = token;
-            query["username"] = userFromDb.UserName;
-            uriBuilder.Query = query.ToString();
-            var urlString = uriBuilder.ToString();
-
-            var senderEmail = _config["ReturnPaths:SenderEmail"];
-            await _emailService.SendEmailAsync(senderEmail, userFromDb.Email, "Confirm your email address", urlString);
+            await _emailService.SendEmailAsync(_config["ReturnPaths:SenderEmail"], userFromDb.Email, "Confirm your email address", urlString);
 
             return new SuccessResponse { StatusCode = HttpStatusCode.Created, Message = "User created successfully! Confirm your email." };
         }
-        public async Task<ServiceResponse> ConfirmEmail(ConfirmEmailModel model)
+
+        public async Task<ServiceResponse> ConfirmEmail(EmailDto model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
             var isConfirmed = user.EmailConfirmed;
@@ -120,6 +113,39 @@ namespace Core.Services
             return new SuccessResponse { Message = "Email confirmed succesfully" };
         }
 
+        public async Task<ServiceResponse> SendResetPasswordEmail(string email)
+        {
+            var userFromDb = await _userManager.FindByEmailAsync(email);
+            var token = await _userManager.GeneratePasswordResetTokenAsync(userFromDb);
+            var urlString = BuildUrl(token, userFromDb.UserName, _config["ReturnPaths:ResetPassword"]);
+
+            await _emailService.SendEmailAsync(_config["ReturnPaths:SenderEmail"], userFromDb.Email, "Reset your password", urlString);
+
+            return new SuccessResponse { Message = "Email to reset your password's waiting for you in mailbox" };
+        }
+
+        public async Task<ServiceResponse> ResetPassword(ResetPasswordRequest model)
+        {
+            var user = await _userManager.FindByNameAsync(model.UserName);
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.newPassword);
+
+            if (!result.Succeeded)
+                return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
+
+            return new SuccessResponse { Message = "Password changed succesfully" };
+        }
+
+        private string BuildUrl(string token, string username, string path)
+        {
+            var uriBuilder = new UriBuilder(path);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["token"] = token;
+            query["username"] = username;
+            uriBuilder.Query = query.ToString();
+            var urlString = uriBuilder.ToString();
+
+            return urlString;
+        }
         private string CreateValidationErrorMessage(IdentityResult result)
         {
             StringBuilder builder = new StringBuilder();
@@ -127,7 +153,7 @@ namespace Core.Services
             {
                 builder.Append(error.Description + " ");
             }
-         
+
             return builder.ToString();
         }
     }
