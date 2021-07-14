@@ -17,10 +17,12 @@ namespace WebAPI.Controllers
     public class ReviewController : ControllerBase
     {
         private readonly ICrudService<Review> _crud;
+        private readonly IReviewService _reviewService;
 
-        public ReviewController(ICrudService<Review> crud)
+        public ReviewController(ICrudService<Review> crud, IReviewService reviewService)
         {
             _crud = crud;
+            _reviewService = reviewService;
         }
 
         [HttpGet("{id:int}")]
@@ -34,18 +36,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<ServiceResponse> GetReviews(int? bookId)
         {
-            if (bookId != null)
-            {
-                var result = _crud.GetAll<ReviewDto>().Result.Where(r => r.BookId == bookId);
-                return new SuccessResponse<IEnumerable<ReviewDto>>() 
-                    { Message = $"Reviews for Book with ID = {bookId} retrieved.", StatusCode = HttpStatusCode.OK, Content = result };
-            }
-            else
-            {
-                var result = await _crud.GetAll<ReviewDto>();
-                return new SuccessResponse<IEnumerable<ReviewDto>>() 
-                    { Message = "Reviews retrieved.", StatusCode = HttpStatusCode.OK, Content = result };
-            }
+            return await _reviewService.GetReviews(bookId);
         }
 
         [HttpPost]
