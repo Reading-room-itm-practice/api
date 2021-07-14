@@ -57,8 +57,7 @@ namespace Core
 
             services.AddHttpContextAccessor();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddScoped<IEmailService, EmailService>();
             

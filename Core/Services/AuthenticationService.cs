@@ -3,6 +3,7 @@ using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
 using Core.Services.Email;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
@@ -28,7 +29,7 @@ namespace Core.Services
 
         private StringValues hostUrl;
 
-        public UserAuthenticationService(UserManager<User> userManager, IConfiguration config, IEmailService emailService, IHttpContextAccessor request)
+        public AuthenticationService(UserManager<User> userManager, IConfiguration config, IEmailService emailService, IHttpContextAccessor request)
         {
             _userManager = userManager;
             _config = config;
@@ -137,7 +138,7 @@ namespace Core.Services
 
         private string BuildUrl(string token, string username, string path)
         {
-            var uriBuilder = new UriBuilder(path);
+            var uriBuilder = new UriBuilder(hostUrl.ToString() + path);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
             query["token"] = token;
             query["username"] = username;
