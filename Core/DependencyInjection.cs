@@ -1,16 +1,13 @@
 ﻿using Core.Interfaces;
 using Core.Repositories;
 using Core.Services;
+using Core.Services.Auth;
 using Core.Services.Email;
 using Microsoft.Extensions.DependencyInjection;
 using Storage.Interfaces;
 using Storage.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Core
 {
@@ -53,8 +50,8 @@ namespace Core
 
             services.AddScoped<IPhotoService, PhotoService>();
 
-
-
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IGoogleService, GoogleService>();
             services.AddScoped<IEmailService, EmailService>();
 
             return services;

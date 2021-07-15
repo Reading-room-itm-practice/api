@@ -4,6 +4,8 @@ using Core.Interfaces;
 using Core.DTOs;
 using Core.ServiceResponses;
 using Core.Requests;
+using Microsoft.AspNetCore.Identity;
+using Storage.Identity;
 
 namespace WebAPI.Controllers
 {
@@ -13,21 +15,39 @@ namespace WebAPI.Controllers
     public class AuthenticateUserController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationUserService;
+        private readonly IGoogleService _googleService;
 
-        public AuthenticateUserController(IAuthenticationService authenticationService)
+        public AuthenticateUserController(IAuthenticationService authenticationService, IGoogleService googleService)
         {
             _authenticationUserService = authenticationService;
+            _googleService = googleService;
         }
 
         [HttpPost]
-        [Route("login")]
+        [Route("Login")]
         public async Task<ServiceResponse> Login([FromBody] LoginRequest model)
         {
             return await _authenticationUserService.Login(model);
         }
 
         [HttpPost]
-        [Route("register")]
+        [Route("Google-login")]
+        public IActionResult GoogleLogin()
+        {
+            string redirectUrl = Url.Action("GoogleResponse", "Account");
+            var properties = _signIn.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
+            return new ChallengeResult("Google", properties);
+        }
+
+        [HttpGet]
+        [Route("Google-response")]
+        public async Task<ServiceResponse> GoogleResponse()
+        {
+            return await _googleService.Login();
+        }
+
+        [HttpPost]
+        [Route("Register")]
         public async Task<ServiceResponse> Register([FromBody] RegisterRequest model)
         {
             return await _authenticationUserService.Register(model);
