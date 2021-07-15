@@ -55,10 +55,7 @@ namespace Core
 
             services.AddScoped<IPhotoService, PhotoService>();
 
-            services.AddHttpContextAccessor();
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-
             services.AddScoped<IEmailService, EmailService>();
             
             return services;

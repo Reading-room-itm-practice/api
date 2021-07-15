@@ -27,20 +27,17 @@ namespace Core.Services
         private readonly IConfiguration _config;
         private readonly IEmailService _emailService;
 
-        private StringValues hostUrl;
-
-        public AuthenticationService(UserManager<User> userManager, IConfiguration config, IEmailService emailService, IHttpContextAccessor request)
+        public AuthenticationService(UserManager<User> userManager, IConfiguration config, IEmailService emailService)
         {
             _userManager = userManager;
             _config = config;
             _emailService = emailService;
-            request.HttpContext.Request.Headers.TryGetValue("Origin", out hostUrl);
         }
 
         public async Task<ServiceResponse> Login(LoginRequest model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            if (await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 if(!await _userManager.IsEmailConfirmedAsync(user))
                     return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Invalid username or password!" };
@@ -61,7 +58,7 @@ namespace Core.Services
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Secret"]));
 
                 var token = new JwtSecurityToken(
-                    audience: _config["JWT:ValidAudience"],
+                    audience: _config["SMTP:ValidAudience"],
                     expires: DateTime.Now.AddHours(4),
                     claims: authClaims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
@@ -93,52 +90,64 @@ namespace Core.Services
 
             await _userManager.AddToRoleAsync(user, UserRoles.User);
 
-            var userFromDb = await _userManager.FindByNameAsync(user.UserName);
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(userFromDb);
-            var urlString = BuildUrl(token, userFromDb.UserName, _config["ReturnPaths:ConfirmEmail"]);
+            user = await _userManager.FindByNameAsync(user.UserName);
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var urlString = BuildUrl(token, user.UserName, _config["Paths:ConfirmEmail"]);
 
-            await _emailService.SendEmailAsync(_config["ReturnPaths:SenderEmail"], userFromDb.Email, "Confirm your email address", urlString);
+            await _emailService.SendEmailAsync(_config["SMTP:Name"], user.Email, "Confirm your email address", urlString);
 
             return new SuccessResponse { StatusCode = HttpStatusCode.Created, Message = "User created successfully! Confirm your email." };
         }
 
         public async Task<ServiceResponse> ConfirmEmail(EmailDto model)
         {
-            var user = await _userManager.FindByNameAsync(model.UserName);
-            var isConfirmed = user.EmailConfirmed;
-            var result = await _userManager.ConfirmEmailAsync(user, model.Token);
+            try
+            {
+                var user = await _userManager.FindByNameAsync(model.UserName);
+                var isConfirmed = user.EmailConfirmed;
+                var result = await _userManager.ConfirmEmailAsync(user, model.Token);
 
-            if (isConfirmed || !result.Succeeded)
-                return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
+                if (isConfirmed || !result.Succeeded)
+                    throw new ArgumentException();
 
-            return new SuccessResponse { Message = "Email confirmed succesfully" };
+                return new SuccessResponse { Message = "Email confirmed succesfully" };
+            }
+            catch { return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" }; };
         }
 
         public async Task<ServiceResponse> SendResetPasswordEmail(string email)
         {
-            var userFromDb = await _userManager.FindByEmailAsync(email);
-            var token = await _userManager.GeneratePasswordResetTokenAsync(userFromDb);
-            var urlString = BuildUrl(token, userFromDb.UserName, _config["ReturnPaths:ResetPassword"]);
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var urlString = BuildUrl(token, user.UserName, _config["Paths:ResetPassword"]);
 
-            await _emailService.SendEmailAsync(_config["ReturnPaths:SenderEmail"], userFromDb.Email, "Reset your password", urlString);
+                await _emailService.SendEmailAsync(_config["SMTP:Name"], user.Email, "Reset your password", urlString);
+            }
+            catch { return new ErrorResponse { Message = "Something went wrong", StatusCode = HttpStatusCode.UnprocessableEntity}; };
 
             return new SuccessResponse { Message = "Email to reset your password's waiting for you in mailbox" };
         }
 
         public async Task<ServiceResponse> ResetPassword(ResetPasswordRequest model)
         {
-            var user = await _userManager.FindByNameAsync(model.UserName);
-            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.newPassword);
+            try
+            {
+                var user = await _userManager.FindByNameAsync(model.UserName);
+                var result = await _userManager.ResetPasswordAsync(user, model.Token, model.newPassword);
 
-            if (!result.Succeeded)
-                return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
+                if (!result.Succeeded)
+                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = CreateValidationErrorMessage(result) };
 
-            return new SuccessResponse { Message = "Password changed succesfully" };
+                return new SuccessResponse { Message = "Password changed succesfully" };
+            }
+            catch { return new ErrorResponse { Message = "Something went wrong", StatusCode = HttpStatusCode.UnprocessableEntity }; };
         }
 
         private string BuildUrl(string token, string username, string path)
         {
-            var uriBuilder = new UriBuilder(hostUrl.ToString() + path);
+            var uriBuilder = new UriBuilder(path);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
             query["token"] = token;
             query["username"] = username;
@@ -147,6 +156,7 @@ namespace Core.Services
 
             return urlString;
         }
+
         private string CreateValidationErrorMessage(IdentityResult result)
         {
             StringBuilder builder = new StringBuilder();
