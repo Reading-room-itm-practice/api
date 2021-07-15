@@ -77,7 +77,7 @@ namespace Core.Repositories
                             .Where(b => ContainsQuery(b.Title, searchQueries)).AsQueryable();
 
             foreach (string query in searchQueries)
-                if (int.TryParse(query, out int year) && year.ToString().Length >= 3 && year.ToString().Length <= 4)
+                if (int.TryParse(query, out int year) && year.ToString().Length == 4)
                 {
                     var booksByYear = (_mapper.Map<IEnumerable<BookDto>>(_context.Books))
                             .Where(b => b.ReleaseYear == year).AsQueryable();
