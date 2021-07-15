@@ -29,8 +29,8 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> GetReview(int id)
         {
             var result = await _crud.GetById<ReviewDto>(id);
-            if (result == null) return new SuccessResponse() { Message = "Review not found.", StatusCode = HttpStatusCode.OK };
-            return new SuccessResponse<ReviewDto>() { Message = "Review found.", StatusCode = HttpStatusCode.OK, Content = result };
+            if (result == null) return new SuccessResponse() { Message = "Review not found." };
+            return new SuccessResponse<ReviewDto>() { Message = "Review found.", Content = result };
         }
 
         [HttpGet]
@@ -51,16 +51,14 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> Edit(int id, ReviewRequest review)
         {
             await _crud.Update(review, id);
-            return new SuccessResponse()
-                { Message = "Review updated.", StatusCode = HttpStatusCode.OK };
+            return new SuccessResponse() { Message = "Review updated." };
         }
 
         [HttpDelete("{id:int}")]
         public async Task<ServiceResponse> Delete(int id)
         {
             await _crud.Delete(id);
-            return new SuccessResponse()
-                { Message = "Review deleted.", StatusCode = HttpStatusCode.OK };
+            return new SuccessResponse() { Message = "Review deleted." };
         }
     }
 }

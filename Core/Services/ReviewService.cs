@@ -16,35 +16,26 @@ namespace Core.Services
 {
     class ReviewService : IReviewService
     {
-        private readonly ICrudService<Review> _crud;
-        private readonly ApiDbContext _apiDbContext;
-        private readonly IMapper _mapper;
+        private readonly IReviewRepository _reviewRepository;
 
-        public ReviewService(ICrudService<Review> crud, ApiDbContext apiDbContext, IMapper mapper)
+        public ReviewService(IReviewRepository reviewRepository)
         {
-            _crud = crud;
-            _apiDbContext = apiDbContext;
-            _mapper = mapper;
+            _reviewRepository = reviewRepository;
         }
 
         public async Task<ServiceResponse> GetReviews(int? bookId)
         {
-            if (bookId != null)
+            if(bookId == null) return new SuccessResponse<IEnumerable<ReviewDto>>()
             {
-                var book = _apiDbContext.Books.Include(b => b.Reviews).FirstOrDefault(b => b.Id == bookId);
-                if(book == null || book.Reviews.Count == 0) return new SuccessResponse()
-                    { Message = $"Reviews for Book with ID = {bookId} not found.", StatusCode = HttpStatusCode.OK };
+                Message = $"All reviews retrieved.",
+                Content = await _reviewRepository.GetReviews(bookId)
+            };
 
-                var reviews = _mapper.Map<ICollection<ReviewDto>>(book.Reviews);
-                return new SuccessResponse<ICollection<ReviewDto>>()
-                    { Message = $"Reviews for Book with ID = {bookId} retrieved.", StatusCode = HttpStatusCode.OK, Content = reviews };
-            }
-            else
+            return new SuccessResponse<IEnumerable<ReviewDto>>()
             {
-                var reviews = await _crud.GetAll<ReviewDto>();
-                return new SuccessResponse<IEnumerable<ReviewDto>>()
-                    { Message = "Reviews retrieved.", StatusCode = HttpStatusCode.OK, Content = reviews };
-            }
+                Message = $"Reviews for Book with ID = {bookId} retrieved.",
+                Content = await _reviewRepository.GetReviews(bookId)
+            };
         }
     }
 }
