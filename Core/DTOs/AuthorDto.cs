@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Common;
-using Core.Interfaces;
 using Core.Mappings;
 
 namespace Core.DTOs

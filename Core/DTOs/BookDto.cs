@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Core.Common;
-using Core.Interfaces;
 
 namespace Core.DTOs
 {

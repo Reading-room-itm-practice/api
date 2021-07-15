@@ -13,6 +13,7 @@ using AutoMapper;
 using Core.ServiceResponses;
 using System.Net;
 using WebAPI.DTOs;
+using Core.Enums;
 
 namespace Core.Services
 {
@@ -26,7 +27,7 @@ namespace Core.Services
 
         public ServiceResponse SearchAll(string searchString, SortType? sort)
         {
-            Dictionary<SearchType, IQueryable<object>> searchResults = new Dictionary<SearchType, IQueryable<object>>();
+            Dictionary<SearchType, IEnumerable<object>> searchResults = new Dictionary<SearchType, IEnumerable<object>>();
 
             var authors = _searchRepository.GetAuthors(searchString, sort);
             var books = _searchRepository.GetBooks(searchString, sort);
@@ -38,12 +39,12 @@ namespace Core.Services
             searchResults.Add(SearchType.Category, categories);
             searchResults.Add(SearchType.User, users);
 
-            foreach(KeyValuePair<SearchType, IQueryable<object>> results in searchResults)
+            foreach(KeyValuePair<SearchType, IEnumerable<object>> results in searchResults)
                 if(results.Value.Count() != 0)
-                    return new SuccessResponse<Dictionary<SearchType, IQueryable<object>>>()
+                    return new SuccessResponse<Dictionary<SearchType, IEnumerable<object>>>()
                     { Message = "Search results retrieved.", StatusCode = HttpStatusCode.OK, Content = searchResults };
 
-            return new SuccessResponse<Dictionary<SearchType, IQueryable<object>>>() 
+            return new SuccessResponse<Dictionary<SearchType, IEnumerable<object>>>() 
                 { Message = "No search results found", StatusCode = HttpStatusCode.OK, Content = searchResults };
         }
 
@@ -51,10 +52,10 @@ namespace Core.Services
         {
             var authors = _searchRepository.GetAuthors(searchString, sort);
 
-            if (authors.Count() == 0) return new SuccessResponse<IQueryable<AuthorDto>>()
+            if (authors.Count() == 0) return new SuccessResponse<IEnumerable<AuthorDto>>()
                 { Message = "No author search results found.", StatusCode = HttpStatusCode.OK, Content = authors };
 
-            return new SuccessResponse<IQueryable<AuthorDto>>()
+            return new SuccessResponse<IEnumerable<AuthorDto>>()
             { Message = "Author search results retrieved.", StatusCode = HttpStatusCode.OK, Content = authors };
         }
 
@@ -62,10 +63,10 @@ namespace Core.Services
         {
             var books = _searchRepository.GetBooks(searchString, sort, minYear, maxYear, categoryId);
 
-            if(books.Count() == 0) return new SuccessResponse<IQueryable<BookDto>>()
+            if(books.Count() == 0) return new SuccessResponse<IEnumerable<BookDto>>()
                 { Message = "No book search results found.", StatusCode = HttpStatusCode.OK, Content = books };
 
-            return new SuccessResponse<IQueryable<BookDto>>()
+            return new SuccessResponse<IEnumerable<BookDto>>()
             { Message = "Book search results retrieved.", StatusCode = HttpStatusCode.OK, Content = books };
         }
 
@@ -73,10 +74,10 @@ namespace Core.Services
         {
             var books = _searchRepository.GetBooks(searchString, sort);
 
-            if (books.Count() == 0) return new SuccessResponse<IQueryable<BookDto>>()
+            if (books.Count() == 0) return new SuccessResponse<IEnumerable<BookDto>>()
                 { Message = "No book search results found.", StatusCode = HttpStatusCode.OK, Content = books };
 
-            return new SuccessResponse<IQueryable<BookDto>>()
+            return new SuccessResponse<IEnumerable<BookDto>>()
             { Message = "Book search results retrieved.", StatusCode = HttpStatusCode.OK, Content = books };
         }
 
@@ -84,10 +85,10 @@ namespace Core.Services
         {
             var categories = _searchRepository.GetCategories(searchString, sort);
 
-            if (categories.Count() == 0) return new SuccessResponse<IQueryable<CategoryDto>>()
+            if (categories.Count() == 0) return new SuccessResponse<IEnumerable<CategoryDto>>()
                 { Message = "No category search results found.", StatusCode = HttpStatusCode.OK, Content = categories };
 
-            return new SuccessResponse<IQueryable<CategoryDto>>()
+            return new SuccessResponse<IEnumerable<CategoryDto>>()
             { Message = "Category search results retrieved.", StatusCode = HttpStatusCode.OK, Content = categories };
         }
 
@@ -95,27 +96,11 @@ namespace Core.Services
         {
             var users = _searchRepository.GetUsers(searchString, sort);
 
-            if (users.Count() == 0) return new SuccessResponse<IQueryable<UserSearchDto>>()
+            if (users.Count() == 0) return new SuccessResponse<IEnumerable<UserSearchDto>>()
                 { Message = "No user search results found.", StatusCode = HttpStatusCode.OK, Content = users };
 
-            return new SuccessResponse<IQueryable<UserSearchDto>>()
+            return new SuccessResponse<IEnumerable<UserSearchDto>>()
             { Message = "User search results retrieved.", StatusCode = HttpStatusCode.OK, Content = users };
         }
     }
-
-    public enum SortType
-    {
-        byName,
-        byNameDescending,
-        byRelaseYear,
-        byRelaseYearDescending
-    };
-
-    public enum SearchType
-    {
-        Author,
-        Book,
-        Category,
-        User
-    };
 }

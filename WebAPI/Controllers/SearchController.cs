@@ -9,6 +9,7 @@ using Core.Interfaces;
 using Core.Services;
 using Core.ServiceResponses;
 using System.Net;
+using Core.Enums;
 
 namespace WebAPI.Controllers
 {

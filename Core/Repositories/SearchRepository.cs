@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.DTOs;
+using Core.Enums;
 using Core.Interfaces;
 using Core.Services;
 using Microsoft.AspNetCore.Identity;
@@ -26,39 +27,39 @@ namespace Core.Repositories
             _mapper = mapper;
         }
 
-        public IQueryable<AuthorDto> GetAuthors(string searchString, SortType? sort)
+        public IEnumerable<AuthorDto> GetAuthors(string searchString, SortType? sort)
         {
             var searchQueries = ProcessSearchString(searchString);
             var authors = (_mapper.Map<IEnumerable<AuthorDto>>(_context.Authors))
-                .Where(a => ContainsQuery(a.Name, searchQueries)).AsQueryable();
+                .Where(a => ContainsQuery(a.Name, searchQueries));
 
             authors = authors.Distinct();
             authors = SortAuthors(authors, sort);
             return authors;
         }
 
-        public IQueryable<CategoryDto> GetCategories(string searchString, SortType? sort)
+        public IEnumerable<CategoryDto> GetCategories(string searchString, SortType? sort)
         {
             var searchQueries = ProcessSearchString(searchString);
             var categories = (_mapper.Map<IEnumerable<CategoryDto>>(_context.Categories))
-                .Where(c => ContainsQuery(c.Name, searchQueries)).AsQueryable();
+                .Where(c => ContainsQuery(c.Name, searchQueries));
 
             categories = categories.Distinct();
             categories = SortCategories(categories, sort);
             return categories;
         }
 
-        public IQueryable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId)
+        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId)
         {
             var searchQueries = ProcessSearchString(searchString);
             var books = (_mapper.Map<IEnumerable<BookDto>>(_context.Books))
-                            .Where(b => ContainsQuery(b.Title, searchQueries)).AsQueryable();
+                            .Where(b => ContainsQuery(b.Title, searchQueries));
 
             foreach (string query in searchQueries)
                 if (int.TryParse(query, out int year))
                 {
                     var booksByYear = (_mapper.Map<IEnumerable<BookDto>>(_context.Books))
-                            .Where(b => b.ReleaseYear == year).AsQueryable();
+                            .Where(b => b.ReleaseYear == year);
                     books = books.Concat(booksByYear);
                 }
 
@@ -70,17 +71,17 @@ namespace Core.Repositories
             return books;
         }
 
-        public IQueryable<BookDto> GetBooks(string searchString, SortType? sort)
+        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort)
         {
             var searchQueries = ProcessSearchString(searchString);
             var books = (_mapper.Map<IEnumerable<BookDto>>(_context.Books))
-                            .Where(b => ContainsQuery(b.Title, searchQueries)).AsQueryable();
+                            .Where(b => ContainsQuery(b.Title, searchQueries));
 
             foreach (string query in searchQueries)
                 if (int.TryParse(query, out int year) && year.ToString().Length == 4)
                 {
                     var booksByYear = (_mapper.Map<IEnumerable<BookDto>>(_context.Books))
-                            .Where(b => b.ReleaseYear == year).AsQueryable();
+                            .Where(b => b.ReleaseYear == year);
                     books = books.Concat(booksByYear);
                 }
 
@@ -89,7 +90,7 @@ namespace Core.Repositories
             return books;
         }
 
-        public IQueryable<UserSearchDto> GetUsers(string searchString, SortType? sort)
+        public IEnumerable<UserSearchDto> GetUsers(string searchString, SortType? sort)
         {
             var searchQueries = ProcessSearchString(searchString);
             var users = GetUsers(searchQueries);
@@ -98,10 +99,10 @@ namespace Core.Repositories
             return users;
         }
 
-        private IQueryable<UserSearchDto> GetUsers(string[] searchQueries)
+        private IEnumerable<UserSearchDto> GetUsers(string[] searchQueries)
         {
             var users = (_mapper.Map<IEnumerable<UserSearchDto>>(_context.Users))
-                            .Where(u => ContainsQuery(u.UserName, searchQueries)).AsQueryable();
+                            .Where(u => ContainsQuery(u.UserName, searchQueries));
             return users;
         }
 
@@ -121,66 +122,66 @@ namespace Core.Repositories
             return searchString.Split(" ");
         }
 
-        public IQueryable<AuthorDto> SortAuthors(IQueryable<AuthorDto> authors, SortType? sort)
+        private IEnumerable<AuthorDto> SortAuthors(IEnumerable<AuthorDto> authors, SortType? sort)
         {
             switch (sort)
             {
                 default:
-                case SortType.byName:
+                case SortType.ByName:
                     authors = authors.OrderBy(a => a.Name);
                     break;
-                case SortType.byNameDescending:
+                case SortType.ByNameDescending:
                     authors = authors.OrderByDescending(a => a.Name);
                     break;
             }
             return authors;
         }
 
-        public IQueryable<CategoryDto> SortCategories(IQueryable<CategoryDto> categories, SortType? sort)
+        private IEnumerable<CategoryDto> SortCategories(IEnumerable<CategoryDto> categories, SortType? sort)
         {
             switch (sort)
             {
                 default:
-                case SortType.byName:
+                case SortType.ByName:
                     categories = categories.OrderBy(c => c.Name);
                     break;
-                case SortType.byNameDescending:
+                case SortType.ByNameDescending:
                     categories = categories.OrderByDescending(c => c.Name);
                     break;
             }
             return categories;
         }
 
-        public IQueryable<BookDto> SortBooks(IQueryable<BookDto> books, SortType? sort)
+        private IEnumerable<BookDto> SortBooks(IEnumerable<BookDto> books, SortType? sort)
         {
             switch (sort)
             {
                 default:
-                case SortType.byName:
+                case SortType.ByName:
                     books = books.OrderBy(b => b.Title);
                     break;
-                case SortType.byNameDescending:
+                case SortType.ByNameDescending:
                     books = books.OrderByDescending(b => b.Title);
                     break;
-                case SortType.byRelaseYear:
+                case SortType.ByRelaseYear:
                     books = books.OrderBy(b => b.ReleaseYear);
                     break;
-                case SortType.byRelaseYearDescending:
+                case SortType.ByRelaseYearDescending:
                     books = books.OrderByDescending(b => b.ReleaseYear);
                     break;
             }
             return books;
         }
 
-        public IQueryable<UserSearchDto> SortUsers(IQueryable<UserSearchDto> users, SortType? sort)
+        private IEnumerable<UserSearchDto> SortUsers(IEnumerable<UserSearchDto> users, SortType? sort)
         {
             switch (sort)
             {
                 default:
-                case SortType.byName:
+                case SortType.ByName:
                     users = users.OrderBy(u => u.UserName);
                     break;
-                case SortType.byNameDescending:
+                case SortType.ByNameDescending:
                     users = users.OrderByDescending(u => u.UserName);
                     break;
             }

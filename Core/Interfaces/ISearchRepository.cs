@@ -1,4 +1,5 @@
 ﻿using Core.DTOs;
+using Core.Enums;
 using Core.Services;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,10 @@ namespace Core.Interfaces
 {
     public interface ISearchRepository
     {
-        public IQueryable<AuthorDto> GetAuthors(string searchString, SortType? sort);
-        public IQueryable<CategoryDto> GetCategories(string searchString, SortType? sort);
-        public IQueryable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId);
-        public IQueryable<BookDto> GetBooks(string searchString, SortType? sort);
-        public IQueryable<UserSearchDto> GetUsers(string searchString, SortType? sort);
+        public IEnumerable<AuthorDto> GetAuthors(string searchString, SortType? sort);
+        public IEnumerable<CategoryDto> GetCategories(string searchString, SortType? sort);
+        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId);
+        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort);
+        public IEnumerable<UserSearchDto> GetUsers(string searchString, SortType? sort);
     }
 }
