@@ -24,10 +24,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("{searchString}/")]
-        public ServiceResponse All(string searchString, SortType? sort)
+        public ServiceResponse All([Required] string searchString, SortType? sort)
         {
-            var result = searchService.SearchAll(searchString, sort);
-            return result;
+            return searchService.SearchAll(searchString, sort);
         }
 
         [HttpGet("Author/{searchString}/")]
