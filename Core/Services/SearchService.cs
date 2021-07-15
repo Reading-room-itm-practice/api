@@ -42,10 +42,10 @@ namespace Core.Services
             foreach(KeyValuePair<SearchType, IEnumerable<object>> results in searchResults)
                 if(results.Value.Count() != 0)
                     return new SuccessResponse<Dictionary<SearchType, IEnumerable<object>>>()
-                    { Message = "Search results retrieved.", StatusCode = HttpStatusCode.OK, Content = searchResults };
+                        { Message = "Search results retrieved.", Content = searchResults };
 
             return new SuccessResponse<Dictionary<SearchType, IEnumerable<object>>>() 
-                { Message = "No search results found", StatusCode = HttpStatusCode.OK, Content = searchResults };
+                { Message = "No search results found", Content = searchResults };
         }
 
         public ServiceResponse SearchAuthor(string searchString, SortType? sort)
@@ -53,10 +53,10 @@ namespace Core.Services
             var authors = _searchRepository.GetAuthors(searchString, sort);
 
             if (authors.Count() == 0) return new SuccessResponse<IEnumerable<AuthorDto>>()
-                { Message = "No author search results found.", StatusCode = HttpStatusCode.OK, Content = authors };
+                { Message = "No author search results found.", Content = authors };
 
             return new SuccessResponse<IEnumerable<AuthorDto>>()
-            { Message = "Author search results retrieved.", StatusCode = HttpStatusCode.OK, Content = authors };
+                { Message = "Author search results retrieved.", Content = authors };
         }
 
         public ServiceResponse SearchBook(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId)
@@ -64,10 +64,10 @@ namespace Core.Services
             var books = _searchRepository.GetBooks(searchString, sort, minYear, maxYear, categoryId);
 
             if(books.Count() == 0) return new SuccessResponse<IEnumerable<BookDto>>()
-                { Message = "No book search results found.", StatusCode = HttpStatusCode.OK, Content = books };
+                { Message = "No book search results found.", Content = books };
 
             return new SuccessResponse<IEnumerable<BookDto>>()
-            { Message = "Book search results retrieved.", StatusCode = HttpStatusCode.OK, Content = books };
+                { Message = "Book search results retrieved.", Content = books };
         }
 
         public ServiceResponse SearchBook(string searchString, SortType? sort)
@@ -75,10 +75,10 @@ namespace Core.Services
             var books = _searchRepository.GetBooks(searchString, sort);
 
             if (books.Count() == 0) return new SuccessResponse<IEnumerable<BookDto>>()
-                { Message = "No book search results found.", StatusCode = HttpStatusCode.OK, Content = books };
+                { Message = "No book search results found.", Content = books };
 
             return new SuccessResponse<IEnumerable<BookDto>>()
-            { Message = "Book search results retrieved.", StatusCode = HttpStatusCode.OK, Content = books };
+                { Message = "Book search results retrieved.", Content = books };
         }
 
         public ServiceResponse SearchCategory(string searchString, SortType? sort)
@@ -86,10 +86,10 @@ namespace Core.Services
             var categories = _searchRepository.GetCategories(searchString, sort);
 
             if (categories.Count() == 0) return new SuccessResponse<IEnumerable<CategoryDto>>()
-                { Message = "No category search results found.", StatusCode = HttpStatusCode.OK, Content = categories };
+                { Message = "No category search results found.", Content = categories };
 
             return new SuccessResponse<IEnumerable<CategoryDto>>()
-            { Message = "Category search results retrieved.", StatusCode = HttpStatusCode.OK, Content = categories };
+                { Message = "Category search results retrieved.", Content = categories };
         }
 
         public ServiceResponse SearchUser(string searchString, SortType? sort)
@@ -97,10 +97,10 @@ namespace Core.Services
             var users = _searchRepository.GetUsers(searchString, sort);
 
             if (users.Count() == 0) return new SuccessResponse<IEnumerable<UserSearchDto>>()
-                { Message = "No user search results found.", StatusCode = HttpStatusCode.OK, Content = users };
+                { Message = "No user search results found.", Content = users };
 
             return new SuccessResponse<IEnumerable<UserSearchDto>>()
-            { Message = "User search results retrieved.", StatusCode = HttpStatusCode.OK, Content = users };
+                { Message = "User search results retrieved.",  Content = users };
         }
     }
 }
