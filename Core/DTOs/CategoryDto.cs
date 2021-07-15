@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.DTOs
 {
-    public class CategoryDto : IDto, ISearchable
+    public class CategoryDto : IDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

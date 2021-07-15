@@ -4,7 +4,7 @@ using Core.Interfaces;
 
 namespace Core.DTOs
 {
-    public class BookDto : IDto, ISearchable
+    public class BookDto : IDto
     {
         public string Id { get; set; }
         public int AuthorId { get; set; }

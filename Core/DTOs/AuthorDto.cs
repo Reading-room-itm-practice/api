@@ -8,7 +8,7 @@ using Core.Mappings;
 
 namespace Core.DTOs
 {
-    public class AuthorDto : IDto, ISearchable
+    public class AuthorDto : IDto
     {
         public string Id { get; set; }
         public string Name { get; set; }
