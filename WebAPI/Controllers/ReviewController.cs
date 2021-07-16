@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using System.ServiceModel;
 using Storage.Identity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Storage.Interfaces;
 
@@ -24,13 +23,10 @@ namespace WebAPI.Controllers
     {
         private readonly ICrudService<Review> _crud;
         private readonly IReviewService _reviewService;
-        //private readonly UserManager<User> _userManager;
-        private readonly ILoggedUserProvider _loggedUserProvider;
+        
 
         public ReviewController(ICrudService<Review> crud, IReviewService reviewService, ILoggedUserProvider loggedUserProvider)
         {
-            //_userManager = userManager;
-            _loggedUserProvider = loggedUserProvider;
             _crud = crud;
             _reviewService = reviewService;
         }
@@ -43,28 +39,19 @@ namespace WebAPI.Controllers
             return new SuccessResponse<ReviewDto>() { Message = "Review found.", Content = result };
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ServiceResponse> GetReviews(int? bookId)
         {
+            var user = User.Identity;
+            int a;
             return await _reviewService.GetReviews(bookId);
         }
 
         [HttpPost]
         public async Task<ServiceResponse> Create(ReviewRequest review)
         {
-            var userId = _loggedUserProvider.GetUserId();
-            if (await _reviewService.ReviewByUserExists(userId, review.BookId)) return new ErrorResponse();
-
-            //var uid = User.Identity.GetUserId();
-            //var uid1 = HttpContext.User.Identity.GetUserId();
-            //var uid2 = User.Identity.GetUserName();
-            //var uid = await _userManager.GetUserAsync(HttpContext.User);
-            //if (await _reviewService.ReviewByUserExists(User.Identity.GetUserId(), review.BookId)) return new ErrorResponse();
-            // await _reviewService.ReviewByUserExists("", 1);
-
-            var newReview = await _crud.Create<ReviewDto>(review);
-            return new SuccessResponse<ReviewDto>()
-                { Message = "Review created.", StatusCode = HttpStatusCode.Created, Content = newReview };
+            return await _reviewService.AddReview(review);
         }
 
         [HttpPut("{id:int}")]

@@ -47,6 +47,7 @@ namespace Core
             services.AddScoped<IUpdaterService<Category>, UpdaterService<Category>>();
             services.AddScoped<IDeleterService<Category>, DeleterService<Category>>();
 
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ICreatorService<Photo>, CreatorService<Photo>>();
             services.AddScoped<IGetterService<Photo>, GetterService<Photo>>();
             services.AddScoped<IUpdaterService<Photo>, UpdaterService<Photo>>();
@@ -58,11 +59,10 @@ namespace Core
             services.AddScoped<IDeleterService<Review>, DeleterService<Review>>();
 
             services.AddScoped<IPhotoService, PhotoService>();
-
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
 
-            services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 
             services.AddScoped<IEmailService, EmailService>();
 

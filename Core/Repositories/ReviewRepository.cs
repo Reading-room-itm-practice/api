@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.DTOs;
 using Core.Interfaces;
+using Core.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -33,14 +34,17 @@ namespace Core.Repositories
 
             return _mapper.Map<IEnumerable<ReviewDto>>(await FindAll());
         }
+
         public async Task<bool> ReviewByUserExists(int userId, int bookId)
         {
-            //var uu = await _context.Users.Include(u => u.Reviews).FirstOrDefaultAsync(u => u.Id == 1);
-            //if (!(int.TryParse(_userId, out int userId))) return true;
+            var book = await _context.Books.Include(b => b.Reviews).FirstOrDefaultAsync(b => b.Id == bookId);
+            return book.Reviews.Any(r => r.CreatedBy == userId);
+        }
 
-            var userReview = await _context.Users.Include(u => u.Reviews).FirstOrDefaultAsync(u => u.Id == userId);
-            if (userReview.Reviews.Count() != 0) return true;
-            return false;
+        public async Task<ReviewDto> CreateReview(ReviewRequest _review)
+        {
+            var review = _mapper.Map<Review>(_review);
+            return _mapper.Map<ReviewDto>(await Create(review));
         }
     }
 }

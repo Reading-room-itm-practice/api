@@ -1,4 +1,5 @@
 ﻿using Core.DTOs;
+using Core.Requests;
 using Storage.Models;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,6 @@ namespace Core.Interfaces
     {
         public Task<IEnumerable<ReviewDto>> GetReviews(int? bookId);
         public Task<bool> ReviewByUserExists(int userId, int bookId);
+        public Task<ReviewDto> CreateReview(ReviewRequest review);
     }
 }

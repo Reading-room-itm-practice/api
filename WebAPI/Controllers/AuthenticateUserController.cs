@@ -12,9 +12,9 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthenticateUserController : ControllerBase
     {
-        private readonly IUserAuthenticationService _authenticationUserService;
+        private readonly IAuthenticationService _authenticationUserService;
 
-        public AuthenticateUserController(IUserAuthenticationService authenticationService)
+        public AuthenticateUserController(IAuthenticationService authenticationService)
         {
             _authenticationUserService = authenticationService;
         }
@@ -37,9 +37,30 @@ namespace WebAPI.Controllers
         [Route("Confirm-email")]
         public async Task<ServiceResponse> ConfirmEmail(string token, string username)
         {
-            ConfirmEmailModel model = new() { Token = token, UserName = username };
+            EmailDto model = new() {Token = token, UserName = username};
 
             return await _authenticationUserService.ConfirmEmail(model);
+        }
+
+        [HttpPost]
+        [Route("Reset-password-page")]
+        public async Task<ServiceResponse> ResetPasswordPage(string email)
+        {
+           return await _authenticationUserService.SendResetPasswordEmail(email);
+        }
+
+        [HttpGet]
+        [Route("Reset-password")]
+        public IActionResult ResetPassword(string token, string username)
+        {
+            return Ok(token + " " + username);
+        }
+
+        [HttpPost]
+        [Route("Reset-password-done")]
+        public async Task<ServiceResponse> ResetPassword([FromBody] ResetPasswordRequest model)
+        {
+            return await _authenticationUserService.ResetPassword(model);
         }
     }
 }
