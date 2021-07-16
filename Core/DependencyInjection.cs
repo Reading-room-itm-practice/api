@@ -59,10 +59,11 @@ namespace Core
             services.AddScoped<IDeleterService<Review>, DeleterService<Review>>();
 
             services.AddScoped<IPhotoService, PhotoService>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
+
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
 
+            services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 
             services.AddScoped<IEmailService, EmailService>();
 
