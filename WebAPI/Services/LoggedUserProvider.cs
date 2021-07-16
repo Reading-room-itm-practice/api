@@ -17,8 +17,8 @@ namespace WebAPI.Services
         public int GetUserId()
         {
             var loggedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-          
-            return loggedUserId != null ? int.Parse(loggedUserId) : 0;
+
+            return 1;//loggedUserId != null ? int.Parse(loggedUserId) : 0;
         }
     }
 }

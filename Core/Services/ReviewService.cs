@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,11 @@ namespace Core.Services
         public ReviewService(IReviewRepository reviewRepository)
         {
             _reviewRepository = reviewRepository;
+        }
+        public async Task<bool> ReviewByUserExists(int userId, int bookId)
+        {
+            if (await _reviewRepository.ReviewByUserExists(userId, bookId)) return true;
+            return false;
         }
 
         public async Task<ServiceResponse> GetReviews(int? bookId)
