@@ -32,7 +32,7 @@ namespace Core.Services
 
         public async Task<ServiceResponse> AddReview(ReviewRequest review)
         {
-            if (!(await BookExists(review.BookId))) return new ErrorResponse()
+            if (await _bookGetter.GetById<BookDto>(review.BookId) == null) return new ErrorResponse()
             {
                 Message = $"Book with Id: {review.BookId} doesn't exist",
                 StatusCode = HttpStatusCode.BadRequest
@@ -54,18 +54,18 @@ namespace Core.Services
             };
         }
 
-        private async Task<bool> BookExists(int bookId)
-        {
-            if (await _bookGetter.GetById<BookDto>(bookId) == null) return false;
-            return true;
-        }
-
         public async Task<ServiceResponse> GetReviews(int? bookId)
         {
-            if(bookId == null) return new SuccessResponse<IEnumerable<ReviewDto>>()
+            if (bookId == null) return new SuccessResponse<IEnumerable<ReviewDto>>()
             {
                 Message = $"All reviews retrieved.",
                 Content = await _reviewRepository.GetReviews(bookId)
+            };
+
+            if (await _bookGetter.GetById<BookDto>((int)bookId) == null) return new ErrorResponse()
+            {
+                Message = $"Book with Id: {bookId} doesn't exist",
+                StatusCode = HttpStatusCode.BadRequest
             };
 
             return new SuccessResponse<IEnumerable<ReviewDto>>()
@@ -76,3 +76,4 @@ namespace Core.Services
         }
     }
 }
+

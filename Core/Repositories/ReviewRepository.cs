@@ -26,6 +26,7 @@ namespace Core.Repositories
             _userManager = userManager;
             _mapper = mapper;
         }
+
         public async Task<IEnumerable<ReviewDto>> GetReviews(int? bookId)
         {
             if(bookId != null && await _context.Books.AnyAsync(b => b.Id == bookId))
