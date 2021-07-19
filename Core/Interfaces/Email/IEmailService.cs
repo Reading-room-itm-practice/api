@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Core.Services.Email
+namespace Core.Interfaces.Email
 {
     public interface IEmailService
     {

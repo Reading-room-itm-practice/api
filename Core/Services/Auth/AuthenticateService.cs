@@ -1,5 +1,6 @@
 ﻿using Core.DTOs;
 using Core.Interfaces.Auth;
+using Core.Interfaces.Email;
 using Core.Requests;
 using Core.ServiceResponses;
 using Core.Services.Email;
