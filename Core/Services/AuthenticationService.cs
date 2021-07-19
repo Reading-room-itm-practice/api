@@ -39,7 +39,7 @@ namespace Core.Services
             var user = await _userManager.FindByNameAsync(model.Username);
             if (await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                if(!await _userManager.IsEmailConfirmedAsync(user))
+                if (!await _userManager.IsEmailConfirmedAsync(user))
                     return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Invalid username or password!" };
 
                 var userRoles = await _userManager.GetRolesAsync(user);
@@ -79,9 +79,9 @@ namespace Core.Services
 
             User user = new()
             {
-            Email = model.Email,
-            SecurityStamp = Guid.NewGuid().ToString(),
-            UserName = model.Username
+                Email = model.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = model.Username
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -108,11 +108,14 @@ namespace Core.Services
                 var result = await _userManager.ConfirmEmailAsync(user, model.Token);
 
                 if (isConfirmed || !result.Succeeded)
-                    throw new ArgumentException();
+                    throw new();
 
                 return new SuccessResponse { Message = "Email confirmed succesfully" };
             }
-            catch { return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" }; };
+            catch
+            {
+                return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
+            }
         }
 
         public async Task<ServiceResponse> SendResetPasswordEmail(string email)
@@ -125,7 +128,7 @@ namespace Core.Services
 
                 await _emailService.SendEmailAsync(_config["SMTP:Name"], user.Email, "Reset your password", urlString);
             }
-            catch { return new ErrorResponse { Message = "Sending the e-mail failed", StatusCode = HttpStatusCode.UnprocessableEntity}; };
+            catch { return new ErrorResponse { Message = "Sending the e-mail failed", StatusCode = HttpStatusCode.UnprocessableEntity }; };
 
             return new SuccessResponse { Message = "Email to reset your password's waiting for you in mailbox" };
         }
