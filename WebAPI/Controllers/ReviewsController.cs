@@ -19,13 +19,13 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReviewController : ControllerBase
+    public class ReviewsController : ControllerBase
     {
         private readonly ICrudService<Review> _crud;
         private readonly IReviewService _reviewService;
         
 
-        public ReviewController(ICrudService<Review> crud, IReviewService reviewService, ILoggedUserProvider loggedUserProvider)
+        public ReviewsController(ICrudService<Review> crud, IReviewService reviewService, ILoggedUserProvider loggedUserProvider)
         {
             _crud = crud;
             _reviewService = reviewService;
@@ -39,12 +39,9 @@ namespace WebAPI.Controllers
             return new SuccessResponse<ReviewDto>() { Message = "Review found.", Content = result };
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<ServiceResponse> GetReviews(int? bookId)
         {
-            var user = User.Identity;
-            int a;
             return await _reviewService.GetReviews(bookId);
         }
 

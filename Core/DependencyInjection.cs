@@ -63,8 +63,6 @@ namespace Core
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
 
-            services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
-
             services.AddScoped<IEmailService, EmailService>();
 
             return services;

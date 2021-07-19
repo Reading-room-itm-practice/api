@@ -29,16 +29,16 @@ namespace Core.Services
             _reviewRepository = reviewRepository;
             _bookGetter = bookGetter;
         }
+
         public async Task<ServiceResponse> AddReview(ReviewRequest review)
         {
-            var userId = _loggedUserProvider.GetUserId();
-
             if (!(await BookExists(review.BookId))) return new ErrorResponse()
             {
                 Message = $"Book with Id: {review.BookId} doesn't exist",
                 StatusCode = HttpStatusCode.BadRequest
             };
 
+            var userId = _loggedUserProvider.GetUserId();
             if (await _reviewRepository.ReviewByUserExists(userId, review.BookId)) return new ErrorResponse()
             {
                 Message = $"User with Id: {userId} has already posted a review for book Id: {review.BookId}",
@@ -52,8 +52,8 @@ namespace Core.Services
                 StatusCode = HttpStatusCode.Created, 
                 Content = newReview 
             };
-
         }
+
         private async Task<bool> BookExists(int bookId)
         {
             if (await _bookGetter.GetById<BookDto>(bookId) == null) return false;
@@ -74,6 +74,5 @@ namespace Core.Services
                 Content = await _reviewRepository.GetReviews(bookId)
             };
         }
-
     }
 }
