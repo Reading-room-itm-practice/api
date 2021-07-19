@@ -4,6 +4,7 @@ using Core.Interfaces.Auth;
 using Core.DTOs;
 using Core.ServiceResponses;
 using Core.Requests;
+using Core.Interfaces.Auth;
 
 namespace WebAPI.Controllers
 {
@@ -59,21 +60,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Reset-password-page")]
-        public async Task<ServiceResponse> ResetPasswordPage(string email)
+        [Route("Forgot-password")]
+        public async Task<ServiceResponse> ForgotPassword(string email)
         {
            return await _authenticateService.SendResetPasswordEmail(email);
         }
 
-        [HttpGet]
-        [Route("Reset-password")]
-        public IActionResult ResetPassword(string token, string username)
-        {
-            return Ok(token + " " + username);
-        }
-
         [HttpPost]
-        [Route("Reset-password-done")]
+        [Route("Reset-password")]
         public async Task<ServiceResponse> ResetPassword([FromBody] ResetPasswordRequest model)
         {
             return await _authenticateService.ResetPassword(model);
