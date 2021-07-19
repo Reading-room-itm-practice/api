@@ -34,7 +34,7 @@ namespace Core.Repositories
                 .Where(a => ContainsQuery(a.Name, searchQueries));
 
             authors = authors.Distinct();
-            authors = SortAuthors(authors, sort);
+            authors = SortGeneric(authors, sort);
             return authors;
         }
 
@@ -45,11 +45,12 @@ namespace Core.Repositories
                 .Where(c => ContainsQuery(c.Name, searchQueries));
 
             categories = categories.Distinct();
-            categories = SortCategories(categories, sort);
+            categories = SortGeneric(categories, sort);
             return categories;
         }
 
-        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId, int? authorId)
+        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear = null, int? maxYear = null, 
+            int? categoryId = null, int? authorId = null)
         {
             var searchQueries = ProcessSearchString(searchString);
             var books = (_mapper.Map<IEnumerable<BookDto>>(_context.Books))
@@ -67,25 +68,6 @@ namespace Core.Repositories
             if (authorId != null) books = books.Where(b => b.AuthorId == authorId);
             if (minYear != null) books = books.Where(b => b.ReleaseYear >= minYear);
             if (maxYear != null) books = books.Where(b => b.ReleaseYear <= maxYear);
-            books = books.Distinct();
-            books = SortBooks(books, sort);
-            return books;
-        }
-
-        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort)
-        {
-            var searchQueries = ProcessSearchString(searchString);
-            var books = (_mapper.Map<IEnumerable<BookDto>>(_context.Books))
-                            .Where(b => ContainsQuery(b.Title, searchQueries));
-
-            foreach (string query in searchQueries)
-                if (int.TryParse(query, out int year) && year.ToString().Length == 4)
-                {
-                    var booksByYear = (_mapper.Map<IEnumerable<BookDto>>(_context.Books))
-                            .Where(b => b.ReleaseYear == year);
-                    books = books.Concat(booksByYear);
-                }
-
             books = books.Distinct();
             books = SortBooks(books, sort);
             return books;
@@ -115,38 +97,24 @@ namespace Core.Repositories
 
         private string[] ProcessSearchString(string searchString)
         {
+            searchString ??= "";
             searchString = Regex.Replace(searchString, @"\s+", " ");
             return searchString.Split(" ");
         }
 
-        private IEnumerable<AuthorDto> SortAuthors(IEnumerable<AuthorDto> authors, SortType? sort)
+        private IEnumerable<T> SortGeneric<T>(IEnumerable<T> sorted, SortType? sort) where T : INameSortable
         {
             switch (sort)
             {
                 default:
                 case SortType.ByName:
-                    authors = authors.OrderBy(a => a.Name);
+                    sorted = sorted.OrderBy(a => a.Name);
                     break;
                 case SortType.ByNameDescending:
-                    authors = authors.OrderByDescending(a => a.Name);
+                    sorted = sorted.OrderByDescending(a => a.Name);
                     break;
             }
-            return authors;
-        }
-
-        private IEnumerable<CategoryDto> SortCategories(IEnumerable<CategoryDto> categories, SortType? sort)
-        {
-            switch (sort)
-            {
-                default:
-                case SortType.ByName:
-                    categories = categories.OrderBy(c => c.Name);
-                    break;
-                case SortType.ByNameDescending:
-                    categories = categories.OrderByDescending(c => c.Name);
-                    break;
-            }
-            return categories;
+            return sorted;
         }
 
         private IEnumerable<BookDto> SortBooks(IEnumerable<BookDto> books, SortType? sort)

@@ -37,11 +37,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("Books")]
-        public ServiceResponse Books(SortType? sort, int? minYear, int? maxYear, int? categoryId, int? authorId, string searchString = "")
+        public ServiceResponse Books(SortType? sort, int? minYear, int? maxYear, int? categoryId, int? authorId, 
+            string searchString = "")
         {
-            if (minYear == null && maxYear == null && categoryId == null && authorId == null)
-                return searchService.SearchBook(searchString, sort);
-
             return searchService.SearchBook(searchString, sort, minYear, maxYear, categoryId, authorId);
         }
 

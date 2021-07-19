@@ -14,8 +14,8 @@ namespace Core.Interfaces
     {
         public IEnumerable<AuthorDto> GetAuthors(string searchString, SortType? sort);
         public IEnumerable<CategoryDto> GetCategories(string searchString, SortType? sort);
-        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId, int? authorId);
-        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort);
+        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear = null, int? maxYear = null, 
+            int? categoryId = null, int? authorId = null);
         public IEnumerable<UserSearchDto> GetUsers(string searchString, SortType? sort);
     }
 }
