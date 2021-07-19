@@ -8,7 +8,6 @@ namespace WebAPI.Services
     public class LoggedUserProvider : ILoggedUserProvider
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private const string UserIdentifier = "Id";
 
         public LoggedUserProvider(IHttpContextAccessor httpContextAccessor)
         {
@@ -17,7 +16,7 @@ namespace WebAPI.Services
 
         public int GetUserId()
         {
-            var loggedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(UserIdentifier);
+            var loggedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
           
             return loggedUserId != null ? int.Parse(loggedUserId) : 0;
         }
