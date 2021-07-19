@@ -15,7 +15,7 @@ namespace WebAPI.Installers
         {
             services.AddIdentity<User, IdentityRole<int>>(opttion =>
             {
-                opttion.SignIn.RequireConfirmedEmail = true;
+                opttion.SignIn.RequireConfirmedEmail = false;
                 opttion.User.RequireUniqueEmail = true;
             })
                 .AddEntityFrameworkStores<ApiDbContext>()
