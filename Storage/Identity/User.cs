@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Storage.Iterfaces;
 using Storage.Models;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Storage.Identity
 {
     [Table("Users")]
-    public class User : IdentityUser<int>, IFollowable
+    public class User : IdentityUser, IFollowable
     {
         public ICollection<Follow> Followings { get; set; }
         public ICollection<Follow> Followers { get; set; }

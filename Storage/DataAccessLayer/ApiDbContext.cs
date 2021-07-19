@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Storage.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Storage.Models;
 using Storage.Interfaces;
 
 namespace Storage.DataAccessLayer
 {
-    public class ApiDbContext : IdentityDbContext<User, IdentityRole<int>, int>
+    public class ApiDbContext : IdentityDbContext<User>
     {
         private readonly ILoggedUserProvider _loggedUserProvider;
         public ApiDbContext(DbContextOptions<ApiDbContext> options, ILoggedUserProvider loggedUserProvider) : base(options)
@@ -46,12 +45,12 @@ namespace Storage.DataAccessLayer
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = _loggedUserProvider.GetUserId();
+                        entry.Entity.CreatorId = _loggedUserProvider.GetUserId();
                         entry.Entity.Created = DateTime.UtcNow;
                         break;
 
                     case EntityState.Modified:
-                        entry.Entity.LastModifiedBy = _loggedUserProvider.GetUserId();
+                        entry.Entity.UpdaterId = _loggedUserProvider.GetUserId();
                         entry.Entity.LastModified = DateTime.UtcNow;
                         break;
                 }
