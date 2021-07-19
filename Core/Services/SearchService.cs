@@ -59,9 +59,9 @@ namespace Core.Services
                 { Message = "Author search results retrieved.", Content = authors };
         }
 
-        public ServiceResponse SearchBook(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId)
+        public ServiceResponse SearchBook(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId, int? authorId)
         {
-            var books = _searchRepository.GetBooks(searchString, sort, minYear, maxYear, categoryId);
+            var books = _searchRepository.GetBooks(searchString, sort, minYear, maxYear, categoryId, authorId);
 
             if(books.Count() == 0) return new SuccessResponse<IEnumerable<BookDto>>()
                 { Message = "No book search results found.", Content = books };

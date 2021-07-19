@@ -49,7 +49,7 @@ namespace Core.Repositories
             return categories;
         }
 
-        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId)
+        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId, int? authorId)
         {
             var searchQueries = ProcessSearchString(searchString);
             var books = (_mapper.Map<IEnumerable<BookDto>>(_context.Books))
@@ -64,6 +64,7 @@ namespace Core.Repositories
                 }
 
             if (categoryId != null) books = books.Where(b => b.CategoryId == categoryId);
+            if (authorId != null) books = books.Where(b => b.AuthorId == authorId);
             if (minYear != null) books = books.Where(b => b.ReleaseYear >= minYear);
             if (maxYear != null) books = books.Where(b => b.ReleaseYear <= maxYear);
             books = books.Distinct();
@@ -108,11 +109,7 @@ namespace Core.Repositories
 
         private bool ContainsQuery(string name, string[] queries)
         {
-            foreach (string query in queries)
-            {
-                //if (name.ToUpper().Contains(query.ToUpper())) return true; //only one query must match the search name
-                if (queries.All(q => name.ToUpper().Contains(q.ToUpper()))) return true; //all queries must match the search name
-            }
+            if (queries.All(q => name.ToUpper().Contains(q.ToUpper()))) return true;
             return false;
         }
 
