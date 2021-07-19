@@ -57,6 +57,9 @@ namespace Core
 
             services.AddScoped<IEmailService, EmailService>();
 
+            services.AddScoped<ISearchService, SearchService>();
+            services.AddScoped<ISearchRepository, SearchRepository>();
+
             return services;
         }
     }
