@@ -3,9 +3,9 @@ using Core.DTOs;
 using Core.Requests;
 using Core.ServiceResponses;
 
-namespace Core.Interfaces
+namespace Core.Interfaces.Auth
 {
-    public interface IAuthenticationService
+    public interface IAuthenticateService
     {
         public Task<ServiceResponse> Login(LoginRequest model);
         public Task<ServiceResponse> Register(RegisterRequest model);

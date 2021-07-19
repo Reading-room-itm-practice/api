@@ -1,5 +1,5 @@
 ﻿using Core.DTOs;
-using Core.Interfaces;
+using Core.Interfaces.Auth;
 using Core.Requests;
 using Core.ServiceResponses;
 using Core.Services.Email;
@@ -18,14 +18,14 @@ using System.Web;
 
 namespace Core.Services.Auth
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticateService : IAuthenticateService
     {
 
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;
         private readonly IEmailService _emailService;
 
-        public AuthenticationService(UserManager<User> userManager, IConfiguration config, IEmailService emailService)
+        public AuthenticateService(UserManager<User> userManager, IConfiguration config, IEmailService emailService)
         {
             _userManager = userManager;
             _config = config;
@@ -40,29 +40,7 @@ namespace Core.Services.Auth
                 if(!await _userManager.IsEmailConfirmedAsync(user))
                     return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Invalid username or password!" };
 
-                var userRoles = await _userManager.GetRolesAsync(user);
-
-                var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
-
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                }
-
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Secret"]));
-
-                var token = new JwtSecurityToken(
-                    audience: _config["SMTP:ValidAudience"],
-                    expires: DateTime.Now.AddHours(4),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                    );
-
-                var tokenResponse = new JwtSecurityTokenHandler().WriteToken(token);
+                var tokenResponse = await GenerateJWTToken(_userManager, _config, user.Email);
 
                 return new SuccessResponse<string> { Message = "Successful login", Content = $"{tokenResponse}" };
             }
@@ -72,29 +50,35 @@ namespace Core.Services.Auth
 
         public async Task<ServiceResponse> Register(RegisterRequest model)
         {
-            if (await _userManager.FindByNameAsync(model.Username) != null || await _userManager.FindByEmailAsync(model.Email) != null)
-                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Account already exists!" };
-
-            User user = new()
+            try
             {
-            Email = model.Email,
-            SecurityStamp = Guid.NewGuid().ToString(),
-            UserName = model.Username
-            };
+                if (await _userManager.FindByNameAsync(model.Username) != null || await _userManager.FindByEmailAsync(model.Email) != null)
+                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Account already exists!" };
 
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = CreateValidationErrorMessage(result) };
+                User user = new()
+                {
+                    Email = model.Email,
+                    SecurityStamp = Guid.NewGuid().ToString(),
+                    UserName = model.Username
+                };
 
-            await _userManager.AddToRoleAsync(user, UserRoles.User);
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (!result.Succeeded)
+                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = CreateValidationErrorMessage(result) };
 
-            user = await _userManager.FindByNameAsync(user.UserName);
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var urlString = BuildUrl(token, user.UserName, _config["Paths:ConfirmEmail"]);
+                await _userManager.AddToRoleAsync(user, UserRoles.User);
 
-            await _emailService.SendEmailAsync(_config["SMTP:Name"], user.Email, "Confirm your email address", urlString);
+                user = await _userManager.FindByNameAsync(user.UserName);
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var urlString = BuildUrl(token, user.UserName, _config["Paths:ConfirmEmail"]);
 
-            return new SuccessResponse { StatusCode = HttpStatusCode.Created, Message = "User created successfully! Confirm your email." };
+                await _emailService.SendEmailAsync(user.Email, "Confirm your email address", urlString);
+
+                return new SuccessResponse { StatusCode = HttpStatusCode.Created, Message = "User created successfully! Confirm your email." };
+            }
+            catch (Exception e) {
+                return new ErrorResponse { Message = $"Exception occured: {e}" };
+            }
         }
 
         public async Task<ServiceResponse> ConfirmEmail(EmailDto model)
@@ -121,7 +105,7 @@ namespace Core.Services.Auth
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var urlString = BuildUrl(token, user.UserName, _config["Paths:ResetPassword"]);
 
-                await _emailService.SendEmailAsync(_config["SMTP:Name"], user.Email, "Reset your password", urlString);
+                await _emailService.SendEmailAsync(user.Email, "Reset your password", urlString);
             }
             catch { return new ErrorResponse { Message = "Something went wrong", StatusCode = HttpStatusCode.UnprocessableEntity}; };
 
@@ -164,6 +148,35 @@ namespace Core.Services.Auth
             }
 
             return builder.ToString();
+        }
+
+        public static async Task<string> GenerateJWTToken(UserManager<User> _userManager, IConfiguration _config, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var authClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+
+            foreach (var userRole in userRoles)
+            {
+                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+            }
+
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Secret"]));
+
+            var token = new JwtSecurityToken(
+                issuer: _config["JWT:ValidIssuer"],
+                audience: _config["JWT:ValidAudience"],
+                expires: DateTime.Now.AddHours(4),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

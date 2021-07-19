@@ -59,8 +59,8 @@ namespace WebAPI.Installers
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidAudience = configuration["JWT:ValidAudience"],
                     ValidIssuer = configuration["JWT:ValidIssuer"],
+                    ValidAudience = configuration["JWT:ValidAudience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
                 };
             });

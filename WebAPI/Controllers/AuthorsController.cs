@@ -8,10 +8,12 @@ using Core.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 using Storage.Models;
 using Core.Requests;
+using Microsoft.AspNetCore.Authorization;
+using Storage.Identity;
 
 namespace WebAPI.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = UserRoles.Admin)]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorsController : ControllerBase

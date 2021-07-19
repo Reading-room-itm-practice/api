@@ -1,25 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Core.Interfaces;
+using Core.Interfaces.Auth;
 using Core.DTOs;
 using Core.ServiceResponses;
 using Core.Requests;
-using Microsoft.AspNetCore.Identity;
-using Storage.Identity;
 
 namespace WebAPI.Controllers
 {
     
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticateUserController : ControllerBase
+    public class AuthenticateController : ControllerBase
     {
-        private readonly IAuthenticationService _authenticationUserService;
+        private readonly IAuthenticateService _authenticateService;
         private readonly IGoogleService _googleService;
 
-        public AuthenticateUserController(IAuthenticationService authenticationService, IGoogleService googleService)
+        public AuthenticateController(IAuthenticateService authenticationService, IGoogleService googleService)
         {
-            _authenticationUserService = authenticationService;
+            _authenticateService = authenticationService;
             _googleService = googleService;
         }
 
@@ -27,16 +25,14 @@ namespace WebAPI.Controllers
         [Route("Login")]
         public async Task<ServiceResponse> Login([FromBody] LoginRequest model)
         {
-            return await _authenticationUserService.Login(model);
+            return await _authenticateService.Login(model);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("Google-login")]
         public IActionResult GoogleLogin()
         {
-            string redirectUrl = Url.Action("GoogleResponse", "Account");
-            var properties = _signIn.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
-            return new ChallengeResult("Google", properties);
+            return new ChallengeResult("Google", _googleService.GoogleRequest()); 
         }
 
         [HttpGet]
@@ -50,7 +46,7 @@ namespace WebAPI.Controllers
         [Route("Register")]
         public async Task<ServiceResponse> Register([FromBody] RegisterRequest model)
         {
-            return await _authenticationUserService.Register(model);
+            return await _authenticateService.Register(model);
         }
 
         [HttpGet]
@@ -59,14 +55,14 @@ namespace WebAPI.Controllers
         {
             EmailDto model = new() {Token = token, UserName = username};
 
-            return await _authenticationUserService.ConfirmEmail(model);
+            return await _authenticateService.ConfirmEmail(model);
         }
 
         [HttpPost]
         [Route("Reset-password-page")]
         public async Task<ServiceResponse> ResetPasswordPage(string email)
         {
-           return await _authenticationUserService.SendResetPasswordEmail(email);
+           return await _authenticateService.SendResetPasswordEmail(email);
         }
 
         [HttpGet]
@@ -80,7 +76,7 @@ namespace WebAPI.Controllers
         [Route("Reset-password-done")]
         public async Task<ServiceResponse> ResetPassword([FromBody] ResetPasswordRequest model)
         {
-            return await _authenticationUserService.ResetPassword(model);
+            return await _authenticateService.ResetPassword(model);
         }
     }
 }
