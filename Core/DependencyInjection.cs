@@ -1,11 +1,11 @@
 ﻿using Core.Interfaces;
 using Core.Interfaces.Auth;
+using Core.Interfaces.Email;
 using Core.Repositories;
 using Core.Services;
 using Core.Services.Auth;
 using Core.Services.Email;
 using Microsoft.Extensions.DependencyInjection;
-using Storage.Interfaces;
 using Storage.Models;
 using System;
 

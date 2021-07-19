@@ -46,7 +46,7 @@ namespace Core.Services.Auth
             User user = new()
             {
                 Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
-                UserName = info.Principal.FindFirst(ClaimTypes.Email).Value,
+                UserName = info.Principal.FindFirst(ClaimTypes.Name).Value,
                 EmailConfirmed = true
             };
 
