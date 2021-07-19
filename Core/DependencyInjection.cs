@@ -1,18 +1,13 @@
 ﻿using Core.Interfaces;
+using Core.Interfaces.Auth;
+using Core.Interfaces.Email;
 using Core.Repositories;
 using Core.Services;
+using Core.Services.Auth;
 using Core.Services.Email;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Storage.Interfaces;
 using Storage.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core
 {
@@ -55,6 +50,9 @@ namespace Core
 
             services.AddScoped<IPhotoService, PhotoService>();
 
+            services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<IRegisterService, RegisterService>();
+            services.AddScoped<IPasswordResetService, PasswordResetService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IEmailService, EmailService>();
             

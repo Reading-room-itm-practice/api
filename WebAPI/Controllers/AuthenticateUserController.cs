@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Core.Interfaces;
 using Core.DTOs;
 using Core.ServiceResponses;
 using Core.Requests;
+using Core.Interfaces.Auth;
 
 namespace WebAPI.Controllers
 {
