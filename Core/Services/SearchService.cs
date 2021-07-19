@@ -1,19 +1,10 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using Storage.Identity;
-using Storage.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Data.Entity;
-using AutoMapper;
 using Core.ServiceResponses;
-using System.Net;
 using WebAPI.DTOs;
 using Core.Enums;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.Services
 {

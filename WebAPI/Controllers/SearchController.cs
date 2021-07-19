@@ -1,14 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
-using System.ComponentModel.DataAnnotations;
 using Core.Interfaces;
-using Core.Services;
 using Core.ServiceResponses;
-using System.Net;
 using Core.Enums;
 
 namespace WebAPI.Controllers

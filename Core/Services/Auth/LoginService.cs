@@ -1,4 +1,5 @@
-﻿using Core.Interfaces.Auth;
+﻿using Core.Common;
+using Core.Interfaces.Auth;
 using Core.Requests;
 using Core.ServiceResponses;
 using Core.Services.Email;
@@ -33,31 +34,7 @@ namespace Core.Services.Auth
                 if (!await _userManager.IsEmailConfirmedAsync(user))
                     return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Invalid username or password!" };
 
-                var userRoles = await _userManager.GetRolesAsync(user);
-
-                var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
-
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                }
-
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Secret"]));
-
-                var token = new JwtSecurityToken(
-                    audience: _config["JWT:ValidAudience"],
-                    issuer: _config["JWT:ValidIssuer"],
-                    expires: DateTime.Now.AddHours(4),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                    );
-
-                var tokenResponse = new JwtSecurityTokenHandler().WriteToken(token);
+                var tokenResponse = await AdditionalAuthMetods.GenerateJWTToken(_userManager, _config, user.Email);
 
                 return new SuccessResponse<string> { Message = "Successful login", Content = $"{tokenResponse}" };
             }
