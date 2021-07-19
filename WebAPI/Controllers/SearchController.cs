@@ -24,20 +24,20 @@ namespace WebAPI.Controllers
             this.searchService = searchService;
         }
 
-        [HttpGet("{searchString}/")]
-        public ServiceResponse All([Required] string searchString, SortType? sort)
+        [HttpGet]
+        public ServiceResponse All(SortType? sort, string searchString="")
         {
             return searchService.SearchAll(searchString, sort);
         }
 
-        [HttpGet("Author/{searchString}/")]
-        public ServiceResponse Authors([Required] string searchString, SortType? sort)
+        [HttpGet("Author")]
+        public ServiceResponse Authors(SortType? sort, string searchString = "")
         {
             return searchService.SearchAuthor(searchString, sort);
         }
 
-        [HttpGet("Books/{searchString}/")]
-        public ServiceResponse Books([Required] string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId, int? authorId)
+        [HttpGet("Books")]
+        public ServiceResponse Books(SortType? sort, int? minYear, int? maxYear, int? categoryId, int? authorId, string searchString = "")
         {
             if (minYear == null && maxYear == null && categoryId == null && authorId == null)
                 return searchService.SearchBook(searchString, sort);
@@ -45,14 +45,14 @@ namespace WebAPI.Controllers
             return searchService.SearchBook(searchString, sort, minYear, maxYear, categoryId, authorId);
         }
 
-        [HttpGet("Categories/{searchString}/")]
-        public ServiceResponse Categories([Required] string searchString, SortType? sort)
+        [HttpGet("Categories")]
+        public ServiceResponse Categories(SortType? sort, string searchString ="")
         {
             return searchService.SearchCategory(searchString, sort);
         }
 
-        [HttpGet("User/{searchString}/")]
-        public ServiceResponse Users([Required] string searchString, SortType? sort)
+        [HttpGet("User")]
+        public ServiceResponse Users(SortType? sort, string searchString = "")
         {
             return searchService.SearchUser(searchString, sort);
         }
