@@ -21,9 +21,11 @@ namespace Core.Services.Auth
     {
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;
-        public LoginService(UserManager<User> userManager, IConfiguration config) {
+        private readonly IJwtGenerator _jwtGenerator;
+        public LoginService(UserManager<User> userManager, IConfiguration config, IJwtGenerator jwtGenerator) {
             _userManager = userManager;
             _config = config;
+            _jwtGenerator = jwtGenerator;
         }
 
         public async Task<ServiceResponse> Login(LoginRequest model)
@@ -34,7 +36,8 @@ namespace Core.Services.Auth
                 if (!await _userManager.IsEmailConfirmedAsync(user))
                     return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Invalid username or password!" };
 
-                var tokenResponse = await AdditionalAuthMetods.GenerateJWTToken(_userManager, _config, user.Email);
+                var roles = await _userManager.GetRolesAsync(user);
+                var tokenResponse = _jwtGenerator.GenerateJWTToken(_config, user, roles);
 
                 return new SuccessResponse<string> { Message = "Successful login", Content = $"{tokenResponse}" };
             }

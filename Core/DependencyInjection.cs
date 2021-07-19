@@ -55,6 +55,7 @@ namespace Core
             services.AddScoped<IPasswordResetService, PasswordResetService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IJwtGenerator, JwtGenerator>();
 
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<ISearchRepository, SearchRepository>();
