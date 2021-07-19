@@ -125,7 +125,7 @@ namespace Core.Services
 
                 await _emailService.SendEmailAsync(_config["SMTP:Name"], user.Email, "Reset your password", urlString);
             }
-            catch { return new ErrorResponse { Message = "Something went wrong", StatusCode = HttpStatusCode.UnprocessableEntity}; };
+            catch { return new ErrorResponse { Message = "Sending the e-mail failed", StatusCode = HttpStatusCode.UnprocessableEntity}; };
 
             return new SuccessResponse { Message = "Email to reset your password's waiting for you in mailbox" };
         }
@@ -142,7 +142,7 @@ namespace Core.Services
 
                 return new SuccessResponse { Message = "Password changed succesfully" };
             }
-            catch { return new ErrorResponse { Message = "Something went wrong", StatusCode = HttpStatusCode.UnprocessableEntity }; };
+            catch { return new ErrorResponse { Message = "Sending the e-mail failed", StatusCode = HttpStatusCode.UnprocessableEntity }; };
         }
 
         private string BuildUrl(string token, string username, string path)
