@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-using WebAPI.DTOs;
-using Core.Interfaces;
-using Storage.Models;
-using Core.Exceptions;
+﻿using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
-using System.Net;
+using Microsoft.AspNetCore.Mvc;
+using Storage.Models;
 using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
+using WebAPI.DTOs;
 
 namespace WebAPI.Controllers
 {
@@ -51,7 +49,7 @@ namespace WebAPI.Controllers
         {
             await _crud.Update(category, id);
             return new SuccessResponse()
-                { Message = "Category updated.", StatusCode = HttpStatusCode.OK };
+            { Message = "Category updated.", StatusCode = HttpStatusCode.OK };
         }
 
         [HttpDelete("{id:int}")]
@@ -59,7 +57,7 @@ namespace WebAPI.Controllers
         {
             await _crud.Delete(id);
             return new SuccessResponse()
-                { Message = "Category deleted.", StatusCode = HttpStatusCode.OK };
+            { Message = "Category deleted.", StatusCode = HttpStatusCode.OK };
         }
     }
 }

@@ -50,7 +50,7 @@ namespace Core.Services.Auth
                     Content = $"{_jwtGenerator.GenerateJWTToken(_config, Guser, roles)}"
                 };
             }
-                
+
             User user = new()
             {
                 Email = info.Principal.FindFirst(ClaimTypes.Email).Value,

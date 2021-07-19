@@ -42,19 +42,19 @@ namespace WebAPI
             app.UseExceptionHandler(c => c.Run(async context =>
             {
                 var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
-                if(exception is NotFoundException)
+                if (exception is NotFoundException)
                 {
-                    context.Response.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
+                    context.Response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
                     await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = ApiException.ResponseCode, Message = exception.Message });
                 }
-                else if(exception is ApiException)
+                else if (exception is ApiException)
                 {
-                    context.Response.StatusCode = (int) ApiException.ResponseCode;
+                    context.Response.StatusCode = (int)ApiException.ResponseCode;
                     await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = ApiException.ResponseCode, Message = exception.Message });
                 }
-                else 
+                else
                 {
-                    context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = HttpStatusCode.InternalServerError, Message = exception.Message });
                 }
             }));

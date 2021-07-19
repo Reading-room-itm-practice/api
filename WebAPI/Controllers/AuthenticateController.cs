@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+﻿using Core.DTOs;
 using Core.Interfaces.Auth;
-using Core.DTOs;
-using Core.ServiceResponses;
 using Core.Requests;
+using Core.ServiceResponses;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticateController : ControllerBase
@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
         [Route("Google-login")]
         public IActionResult GoogleLogin()
         {
-            return new ChallengeResult("Google", _googleService.GoogleRequest()); 
+            return new ChallengeResult("Google", _googleService.GoogleRequest());
         }
 
         [HttpGet]
@@ -53,7 +53,7 @@ namespace WebAPI.Controllers
         [Route("Confirm-email")]
         public async Task<ServiceResponse> ConfirmEmail(string token, string username)
         {
-            EmailDto model = new() {Token = token, UserName = username};
+            EmailDto model = new() { Token = token, UserName = username };
 
             return await _authenticateService.ConfirmEmail(model);
         }
@@ -62,7 +62,7 @@ namespace WebAPI.Controllers
         [Route("Forgot-password")]
         public async Task<ServiceResponse> ForgotPassword(string email)
         {
-           return await _authenticateService.SendResetPasswordEmail(email);
+            return await _authenticateService.SendResetPasswordEmail(email);
         }
 
         [HttpPost]

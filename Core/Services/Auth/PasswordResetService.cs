@@ -3,7 +3,6 @@ using Core.Interfaces.Auth;
 using Core.Interfaces.Email;
 using Core.Requests;
 using Core.ServiceResponses;
-using Core.Services.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Storage.Identity;
@@ -12,12 +11,13 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Auth
 {
-    class PasswordResetService :  IPasswordResetService
+    class PasswordResetService : IPasswordResetService
     {
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;
         private readonly IEmailService _emailService;
-        public PasswordResetService(UserManager<User> userManager, IConfiguration config, IEmailService emailService) {
+        public PasswordResetService(UserManager<User> userManager, IConfiguration config, IEmailService emailService)
+        {
             _userManager = userManager;
             _config = config;
             _emailService = emailService;

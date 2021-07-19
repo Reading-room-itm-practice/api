@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Storage.DataAccessLayer;
 using Storage.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
 
 namespace WebAPI.Installers
 {
@@ -31,7 +31,8 @@ namespace WebAPI.Installers
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
-                    builder => {
+                    builder =>
+                    {
                         builder.WithOrigins("http://localhost:8080", "https://localhost:8080")
                                .AllowAnyHeader()
                                .AllowAnyMethod()
