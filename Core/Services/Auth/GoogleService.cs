@@ -14,12 +14,14 @@ namespace Core.Services.Auth
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signIn;
         private readonly IConfiguration _config;
+        private readonly IJwtGenerator _jwtGenerator;
 
-        public GoogleService(UserManager<User> userManager, SignInManager<User> signIn, IConfiguration config)
+        public GoogleService(UserManager<User> userManager, SignInManager<User> signIn, IConfiguration config, IJwtGenerator jwtGenerator)
         {
             _userManager = userManager;
             _signIn = signIn;
             _config = config;
+            _jwtGenerator = jwtGenerator;
         }
 
         public AuthenticationProperties GoogleRequest()
@@ -38,11 +40,17 @@ namespace Core.Services.Auth
             var result = await _signIn.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
 
             if (result.Succeeded)
+            {
+                var Guser = await _userManager.FindByEmailAsync(info.Principal.FindFirst(ClaimTypes.Email).Value);
+                var roles = await _userManager.GetRolesAsync(Guser);
                 return new SuccessResponse<string>
                 {
+
                     Message = "Successful login",
-                    Content = $"{await AuthenticateService.GenerateJWTToken(_userManager, _config, info.Principal.FindFirst(ClaimTypes.Email).Value)}" 
+                    Content = $"{_jwtGenerator.GenerateJWTToken(_config, Guser, roles)}"
                 };
+            }
+                
             User user = new()
             {
                 Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
@@ -57,11 +65,11 @@ namespace Core.Services.Auth
                 if (identResult.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, UserRoles.User);
-                    await _signIn.SignInAsync(user, false);
+                    var roles = await _userManager.GetRolesAsync(user);
                     return new SuccessResponse<string>
                     {
                         Message = "Successful login",
-                        Content = $"{await AuthenticateService.GenerateJWTToken(_userManager, _config, info.Principal.FindFirst(ClaimTypes.Email).Value)}"
+                        Content = $"{_jwtGenerator.GenerateJWTToken(_config, user, roles)}"
                     };
                 }
             }

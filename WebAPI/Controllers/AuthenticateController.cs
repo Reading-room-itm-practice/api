@@ -4,7 +4,6 @@ using Core.Interfaces.Auth;
 using Core.DTOs;
 using Core.ServiceResponses;
 using Core.Requests;
-using Core.Interfaces.Auth;
 
 namespace WebAPI.Controllers
 {
@@ -13,10 +12,10 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-        private readonly IAuthenticateService _authenticateService;
+        private readonly IAuthenticationService _authenticateService;
         private readonly IGoogleService _googleService;
 
-        public AuthenticateController(IAuthenticateService authenticationService, IGoogleService googleService)
+        public AuthenticateController(IAuthenticationService authenticationService, IGoogleService googleService)
         {
             _authenticateService = authenticationService;
             _googleService = googleService;

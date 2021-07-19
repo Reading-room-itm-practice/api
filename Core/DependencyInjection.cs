@@ -64,12 +64,10 @@ namespace Core
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IJwtGenerator, JwtGenerator>();
+            services.AddScoped<IGoogleService, GoogleService>();
 
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<ISearchRepository, SearchRepository>();
-            services.AddScoped<IAuthenticateService, AuthenticateService>();
-            services.AddScoped<IGoogleService, GoogleService>();
-            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }

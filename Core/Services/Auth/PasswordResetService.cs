@@ -1,5 +1,6 @@
 ﻿using Core.Common;
 using Core.Interfaces.Auth;
+using Core.Interfaces.Email;
 using Core.Requests;
 using Core.ServiceResponses;
 using Core.Services.Email;
@@ -30,7 +31,7 @@ namespace Core.Services.Auth
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var urlString = AdditionalAuthMetods.BuildUrl(token, user.UserName, _config["Paths:ResetPassword"]);
 
-                await _emailService.SendEmailAsync(_config["SMTP:Name"], user.Email, "Reset your password", urlString);
+                await _emailService.SendEmailAsync(user.Email, "Reset your password", urlString);
             }
             catch { return new ErrorResponse { Message = "Sending the e-mail failed", StatusCode = HttpStatusCode.UnprocessableEntity }; };
 
