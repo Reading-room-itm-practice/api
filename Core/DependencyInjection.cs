@@ -24,11 +24,13 @@ namespace Core
             services.AddScoped<IBaseRepository<Book>, BaseRepository<Book>>();
             services.AddScoped<IBaseRepository<Category>, BaseRepository<Category>>();
             services.AddScoped<IBaseRepository<Photo>, BaseRepository<Photo>>();
+            services.AddScoped<IBaseRepository<ReviewComment>, BaseRepository<ReviewComment>>();
 
             services.AddScoped<ICrudService<Author>, CrudService<Author>>();
             services.AddScoped<ICrudService<Book>, CrudService<Book>>();
             services.AddScoped<ICrudService<Category>, CrudService<Category>>();
             services.AddScoped<ICrudService<Photo>, CrudService<Photo>>();
+            services.AddScoped<ICrudService<ReviewComment>, CrudService<ReviewComment>>();
 
             services.AddScoped<ICreatorService<Author>, CreatorService<Author>>();
             services.AddScoped<IGetterService<Author>, GetterService<Author>>();
@@ -50,11 +52,26 @@ namespace Core
             services.AddScoped<IUpdaterService<Photo>, UpdaterService<Photo>>();
             services.AddScoped<IDeleterService<Photo>, DeleterService<Photo>>();
 
+            services.AddScoped<ICreatorService<ReviewComment>, CreatorService<ReviewComment>>();
+            services.AddScoped<IGetterService<ReviewComment>, GetterService<ReviewComment>>();
+            services.AddScoped<IUpdaterService<ReviewComment>, UpdaterService<ReviewComment>>();
+            services.AddScoped<IDeleterService<ReviewComment>, DeleterService<ReviewComment>>();
+
             services.AddScoped<IPhotoService, PhotoService>();
 
             services.AddScoped<IUserAuthenticationService, UserAuthenticationService>();
 
             services.AddScoped<IEmailService, EmailService>();
+
+            services.AddScoped<IReviewCommentRepository, ReviewCommentRepository>();
+            services.AddScoped<IReviewCommentService, ReviewCommentService>();
+
+
+
+
+
+            services.AddScoped<IGetterService<Review>, GetterService<Review>>();
+            services.AddScoped<IBaseRepository<Review>, BaseRepository<Review>>();
 
             return services;
         }
