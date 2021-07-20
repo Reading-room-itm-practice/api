@@ -36,7 +36,10 @@ namespace Core.Services.Auth
         {
             ExternalLoginInfo info = await _signIn.GetExternalLoginInfoAsync();
             if (info == null)
-                return new ErrorResponse { Message = "Data not fetch" };
+                return new ErrorResponse { 
+                    Message = "Error loading external login information",
+                    StatusCode = System.Net.HttpStatusCode.NotFound
+                };
 
             var result = await _signIn.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
 

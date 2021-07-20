@@ -1,6 +1,4 @@
-﻿using Core.DTOs;
-using Core.Interfaces.Auth;
-using Core.Requests;
+﻿using Core.Interfaces.Auth;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
