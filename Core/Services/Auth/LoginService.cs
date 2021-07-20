@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Auth
 {
-    class LoginService : BaseAuthServicesProvider, ILoginService
+    class LoginService : AuthServicesProvider, ILoginService
     {
         public LoginService(UserManager<User> userManager, IConfiguration config, IJwtGenerator jwtGenerator) 
             : base(userManager, config, jwtGenerator) { }

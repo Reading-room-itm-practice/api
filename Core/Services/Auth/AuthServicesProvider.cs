@@ -6,7 +6,7 @@ using Storage.Identity;
 
 namespace Core.Services.Auth
 {
-    class BaseAuthServicesProvider
+    class AuthServicesProvider
     {
         protected readonly SignInManager<User> _signIn;
         protected readonly UserManager<User> _userManager;
@@ -14,21 +14,21 @@ namespace Core.Services.Auth
         protected readonly IJwtGenerator _jwtGenerator;
         protected readonly IEmailService _emailService;
 
-        public BaseAuthServicesProvider(UserManager<User> userManager, IConfiguration config, IJwtGenerator jwtGenerator)
+        public AuthServicesProvider(UserManager<User> userManager, IConfiguration config, IJwtGenerator jwtGenerator)
         {
             _config = config;
             _userManager = userManager;
             _jwtGenerator = jwtGenerator;
         }
 
-        public BaseAuthServicesProvider(UserManager<User> userManager, IConfiguration config, IEmailService emailService)
+        public AuthServicesProvider(UserManager<User> userManager, IConfiguration config, IEmailService emailService)
         {
             _config = config;
             _userManager = userManager;
             _emailService = emailService;
         }
 
-        public BaseAuthServicesProvider(UserManager<User> userManager, SignInManager<User> signIn, IConfiguration config, IJwtGenerator jwtGenerator)
+        public AuthServicesProvider(UserManager<User> userManager, SignInManager<User> signIn, IConfiguration config, IJwtGenerator jwtGenerator)
         {
             _config = config;
             _signIn = signIn;

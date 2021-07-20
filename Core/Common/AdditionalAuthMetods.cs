@@ -11,7 +11,7 @@ using System.Web;
 
 namespace Core.Common
 {
-    class AdditionalAuthMetods : BaseAuthServicesProvider, IAdditionalAuthMetods
+    class AdditionalAuthMetods : AuthServicesProvider, IAdditionalAuthMetods
     {
         public AdditionalAuthMetods(UserManager<User> _userManager, IConfiguration _config, IJwtGenerator _jwtGenerator) 
             : base(_userManager, _config, _jwtGenerator) {}
