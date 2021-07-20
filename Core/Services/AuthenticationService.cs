@@ -37,8 +37,8 @@ namespace Core.Services
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                //if(!await _userManager.IsEmailConfirmedAsync(user))
-                //    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Invalid username or password!" };
+                if (!await _userManager.IsEmailConfirmedAsync(user))
+                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Invalid username or password!" };
 
                 var userRoles = await _userManager.GetRolesAsync(user);
 

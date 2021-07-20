@@ -25,7 +25,7 @@ namespace WebAPI.Controllers
         private readonly IReviewService _reviewService;
         
 
-        public ReviewsController(ICrudService<Review> crud, IReviewService reviewService, ILoggedUserProvider loggedUserProvider)
+        public ReviewsController(ICrudService<Review> crud, IReviewService reviewService)
         {
             _crud = crud;
             _reviewService = reviewService;
