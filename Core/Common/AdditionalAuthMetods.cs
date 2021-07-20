@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Storage.Identity;
 using System;
+using System.Security.Claims;
 using System.Text;
 using System.Web;
 
@@ -28,6 +30,17 @@ namespace Core.Common
             }
 
             return builder.ToString();
+        }
+
+        public static User CreateExternalUser(ExternalLoginInfo info)
+        {
+            User user = new()
+            {
+                Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
+                UserName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+                EmailConfirmed = true
+            };
+            return user;
         }
     }
 }

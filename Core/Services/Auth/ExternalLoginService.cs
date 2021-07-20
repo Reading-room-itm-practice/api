@@ -1,4 +1,5 @@
-﻿using Core.Interfaces.Auth;
+﻿using Core.Common;
+using Core.Interfaces.Auth;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -45,21 +46,10 @@ namespace Core.Services.Auth
 
             if (result.Succeeded)
             {
-                var gUser = await _userManager.FindByEmailAsync(info.Principal.FindFirst(ClaimTypes.Email).Value);
-                var roles = await _userManager.GetRolesAsync(gUser);
-                return new SuccessResponse<string>
-                {
-                    Message = "Successful login",
-                    Content = $"{_jwtGenerator.GenerateJWTToken(_config, gUser, roles)}"
-                };
+                await UserTokenResponse(info.Principal.FindFirst(ClaimTypes.Email).Value);
             }
 
-            User user = new()
-            {
-                Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
-                UserName = info.Principal.FindFirst(ClaimTypes.Name).Value,
-                EmailConfirmed = true
-            };
+            User user = AdditionalAuthMetods.CreateExternalUser(info);
 
             IdentityResult identResult = await _userManager.CreateAsync(user);
             if (identResult.Succeeded)
@@ -67,16 +57,21 @@ namespace Core.Services.Auth
                 identResult = await _userManager.AddLoginAsync(user, info);
                 if (identResult.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, UserRoles.User);
-                    var roles = await _userManager.GetRolesAsync(user);
-                    return new SuccessResponse<string>
-                    {
-                        Message = "Successful login",
-                        Content = $"{_jwtGenerator.GenerateJWTToken(_config, user, roles)}"
-                    };
+                    await UserTokenResponse(user.Email);
                 }
             }
             return new ErrorResponse { Message = "User not created" };
+        }
+
+        private async Task<ServiceResponse> UserTokenResponse(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            var roles = await _userManager.GetRolesAsync(user);
+            return new SuccessResponse<string>
+            {
+                Message = "Successful login",
+                Content = $"{_jwtGenerator.GenerateJWTToken(_config, user, roles)}"
+            };
         }
     }
 }
