@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Auth
 {
-    class ExternalLoginService : BaseAuthProvider, IExternalLoginService
+    class ExternalLoginService : BaseAuthServicesProvider, IExternalLoginService
     {
         private readonly IAdditionalAuthMetods _additionalAuthMetods;
         public ExternalLoginService(UserManager<User> _userManager, SignInManager<User> _signIn, IConfiguration _config, IJwtGenerator _jwtGenerator, IAdditionalAuthMetods add) 
@@ -29,7 +29,8 @@ namespace Core.Services.Auth
         {
             ExternalLoginInfo info = await _signIn.GetExternalLoginInfoAsync();
             if (info == null)
-                return new ErrorResponse { 
+                return new ErrorResponse
+                { 
                     Message = "Error loading external login information",
                     StatusCode = System.Net.HttpStatusCode.NoContent
                 };
@@ -38,7 +39,7 @@ namespace Core.Services.Auth
 
             if (result.Succeeded)
             {
-                return await _additionalAuthMetods.UserTokenResponse(info.Principal.FindFirst(ClaimTypes.Email).Value);
+                return await _additionalAuthMetods.GetUserTokenResponse(info.Principal.FindFirst(ClaimTypes.Email).Value);
             }
 
             User user = CreateExternalUser(info);
@@ -47,9 +48,10 @@ namespace Core.Services.Auth
             if (identResult.Succeeded)
             {
                 identResult = await _userManager.AddLoginAsync(user, info);
+                await _userManager.AddToRoleAsync(user, UserRoles.User);
                 if (identResult.Succeeded)
                 {
-                    return await _additionalAuthMetods.UserTokenResponse(user.Email);
+                    return await _additionalAuthMetods.GetUserTokenResponse(user.Email);
                 }
             }
             return new ErrorResponse { Message = "User not created" };
@@ -63,6 +65,7 @@ namespace Core.Services.Auth
                 UserName = info.Principal.FindFirst(ClaimTypes.Name).Value,
                 EmailConfirmed = true
             };
+            
             return user;
         }
         

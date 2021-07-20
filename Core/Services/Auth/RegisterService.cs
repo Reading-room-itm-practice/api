@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Auth
 {
-    class RegisterService : BaseAuthProvider, IRegisterService
+    class RegisterService : BaseAuthServicesProvider, IRegisterService
     {
         private readonly IAdditionalAuthMetods _additionalAuthMetods;
         public RegisterService(UserManager<User> userManager, IConfiguration config, IEmailService emailService, IAdditionalAuthMetods add)

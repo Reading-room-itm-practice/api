@@ -11,9 +11,10 @@ using System.Web;
 
 namespace Core.Common
 {
-    class AdditionalAuthMetods : BaseAuthProvider, IAdditionalAuthMetods
+    class AdditionalAuthMetods : BaseAuthServicesProvider, IAdditionalAuthMetods
     {
-        public AdditionalAuthMetods(UserManager<User> _userManager, IConfiguration _config, IJwtGenerator _jwtGenerator) : base(_userManager, _config, _jwtGenerator) {}
+        public AdditionalAuthMetods(UserManager<User> _userManager, IConfiguration _config, IJwtGenerator _jwtGenerator) 
+            : base(_userManager, _config, _jwtGenerator) {}
 
         public string BuildUrl(string token, string username, string path)
         {
@@ -38,7 +39,7 @@ namespace Core.Common
             return builder.ToString();
         }
 
-        public async Task<ServiceResponse> UserTokenResponse(string email)
+        public async Task<ServiceResponse> GetUserTokenResponse(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             var roles = await _userManager.GetRolesAsync(user);

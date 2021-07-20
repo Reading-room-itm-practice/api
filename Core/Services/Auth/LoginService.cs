@@ -9,17 +9,10 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Auth
 {
-    public class LoginService : ILoginService
+    class LoginService : BaseAuthServicesProvider, ILoginService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IConfiguration _config;
-        private readonly IJwtGenerator _jwtGenerator;
-        public LoginService(UserManager<User> userManager, IConfiguration config, IJwtGenerator jwtGenerator)
-        {
-            _userManager = userManager;
-            _config = config;
-            _jwtGenerator = jwtGenerator;
-        }
+        public LoginService(UserManager<User> userManager, IConfiguration config, IJwtGenerator jwtGenerator) 
+            : base(userManager, config, jwtGenerator) { }
 
         public async Task<ServiceResponse> Login(LoginRequest model)
         {
