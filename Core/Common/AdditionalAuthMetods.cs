@@ -1,15 +1,21 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Core.Interfaces.Auth;
+using Core.ServiceResponses;
+using Core.Services.Auth;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Storage.Identity;
 using System;
-using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace Core.Common
 {
-    class AdditionalAuthMetods
+    class AdditionalAuthMetods : BaseAuthProvider, IAdditionalAuthMetods
     {
-        public static string BuildUrl(string token, string username, string path)
+        public AdditionalAuthMetods(UserManager<User> _userManager, IConfiguration _config, IJwtGenerator _jwtGenerator) : base(_userManager, _config, _jwtGenerator) {}
+
+        public string BuildUrl(string token, string username, string path)
         {
             var uriBuilder = new UriBuilder(path);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
@@ -21,7 +27,7 @@ namespace Core.Common
             return urlString;
         }
 
-        public static string CreateValidationErrorMessage(IdentityResult result)
+        public string CreateValidationErrorMessage(IdentityResult result)
         {
             StringBuilder builder = new StringBuilder();
             foreach (var error in result.Errors)
@@ -32,15 +38,15 @@ namespace Core.Common
             return builder.ToString();
         }
 
-        public static User CreateExternalUser(ExternalLoginInfo info)
+        public async Task<ServiceResponse> UserTokenResponse(string email)
         {
-            User user = new()
+            var user = await _userManager.FindByEmailAsync(email);
+            var roles = await _userManager.GetRolesAsync(user);
+            return new SuccessResponse<string>
             {
-                Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
-                UserName = info.Principal.FindFirst(ClaimTypes.Name).Value,
-                EmailConfirmed = true
+                Message = "Successful login",
+                Content = $"{_jwtGenerator.GenerateJWTToken(_config, user, roles)}"
             };
-            return user;
         }
     }
 }

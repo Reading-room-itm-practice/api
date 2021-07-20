@@ -11,16 +11,14 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Auth
 {
-    class PasswordResetService : IPasswordResetService
+    class PasswordResetService : BaseAuthProvider, IPasswordResetService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IConfiguration _config;
-        private readonly IEmailService _emailService;
-        public PasswordResetService(UserManager<User> userManager, IConfiguration config, IEmailService emailService)
+        private readonly IAdditionalAuthMetods _additionalAuthMetods;
+
+        public PasswordResetService(UserManager<User> userManager, IConfiguration config, IEmailService emailService, IAdditionalAuthMetods add) 
+            : base(userManager, config, emailService)
         {
-            _userManager = userManager;
-            _config = config;
-            _emailService = emailService;
+            _additionalAuthMetods = add;
         }
 
         public async Task<ServiceResponse> SendResetPasswordEmail(string email)
@@ -29,7 +27,7 @@ namespace Core.Services.Auth
             {
                 var user = await _userManager.FindByEmailAsync(email);
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var urlString = AdditionalAuthMetods.BuildUrl(token, user.UserName, _config["Paths:ResetPassword"]);
+                var urlString = _additionalAuthMetods.BuildUrl(token, user.UserName, _config["Paths:ResetPassword"]);
 
                 await _emailService.SendEmailAsync(user.Email, "Reset your password", urlString);
             }
@@ -46,7 +44,7 @@ namespace Core.Services.Auth
                 var result = await _userManager.ResetPasswordAsync(user, model.Token, model.newPassword);
 
                 if (!result.Succeeded)
-                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = AdditionalAuthMetods.CreateValidationErrorMessage(result) };
+                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = _additionalAuthMetods.CreateValidationErrorMessage(result) };
 
                 return new SuccessResponse { Message = "Password changed succesfully" };
             }

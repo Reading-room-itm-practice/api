@@ -1,4 +1,5 @@
-﻿using Core.Interfaces;
+﻿using Core.Common;
+using Core.Interfaces;
 using Core.Interfaces.Auth;
 using Core.Interfaces.Email;
 using Core.Repositories;
@@ -56,6 +57,7 @@ namespace Core
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IJwtGenerator, JwtGenerator>();
             services.AddScoped<IExternalLoginService, ExternalLoginService>();
+            services.AddScoped<IAdditionalAuthMetods, AdditionalAuthMetods>();
 
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<ISearchRepository, SearchRepository>();

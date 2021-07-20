@@ -1,7 +1,5 @@
-﻿using Core.Common;
-using Core.Interfaces.Auth;
+﻿using Core.Interfaces.Auth;
 using Core.ServiceResponses;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -11,19 +9,13 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Auth
 {
-    class ExternalLoginService : IExternalLoginService
+    class ExternalLoginService : BaseAuthProvider, IExternalLoginService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signIn;
-        private readonly IConfiguration _config;
-        private readonly IJwtGenerator _jwtGenerator;
-
-        public ExternalLoginService(UserManager<User> userManager, SignInManager<User> signIn, IConfiguration config, IJwtGenerator jwtGenerator)
+        private readonly IAdditionalAuthMetods _additionalAuthMetods;
+        public ExternalLoginService(UserManager<User> _userManager, SignInManager<User> _signIn, IConfiguration _config, IJwtGenerator _jwtGenerator, IAdditionalAuthMetods add) 
+            : base(_userManager, _signIn, _config, _jwtGenerator)
         {
-            _userManager = userManager;
-            _signIn = signIn;
-            _config = config;
-            _jwtGenerator = jwtGenerator;
+            _additionalAuthMetods = add;
         }
 
         public ChallengeResult Request(string provider)
@@ -39,17 +31,17 @@ namespace Core.Services.Auth
             if (info == null)
                 return new ErrorResponse { 
                     Message = "Error loading external login information",
-                    StatusCode = System.Net.HttpStatusCode.NotFound
+                    StatusCode = System.Net.HttpStatusCode.NoContent
                 };
 
             var result = await _signIn.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
 
             if (result.Succeeded)
             {
-                await UserTokenResponse(info.Principal.FindFirst(ClaimTypes.Email).Value);
+                return await _additionalAuthMetods.UserTokenResponse(info.Principal.FindFirst(ClaimTypes.Email).Value);
             }
 
-            User user = AdditionalAuthMetods.CreateExternalUser(info);
+            User user = CreateExternalUser(info);
 
             IdentityResult identResult = await _userManager.CreateAsync(user);
             if (identResult.Succeeded)
@@ -57,21 +49,22 @@ namespace Core.Services.Auth
                 identResult = await _userManager.AddLoginAsync(user, info);
                 if (identResult.Succeeded)
                 {
-                    await UserTokenResponse(user.Email);
+                    return await _additionalAuthMetods.UserTokenResponse(user.Email);
                 }
             }
             return new ErrorResponse { Message = "User not created" };
         }
 
-        private async Task<ServiceResponse> UserTokenResponse(string email)
+        private User CreateExternalUser(ExternalLoginInfo info)
         {
-            var user = await _userManager.FindByEmailAsync(email);
-            var roles = await _userManager.GetRolesAsync(user);
-            return new SuccessResponse<string>
+            User user = new()
             {
-                Message = "Successful login",
-                Content = $"{_jwtGenerator.GenerateJWTToken(_config, user, roles)}"
+                Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
+                UserName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+                EmailConfirmed = true
             };
+            return user;
         }
+        
     }
 }

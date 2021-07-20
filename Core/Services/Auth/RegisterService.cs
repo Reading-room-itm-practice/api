@@ -13,16 +13,13 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Auth
 {
-    class RegisterService : IRegisterService
+    class RegisterService : BaseAuthProvider, IRegisterService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IConfiguration _config;
-        private readonly IEmailService _emailService;
-        public RegisterService(UserManager<User> userManager, IConfiguration config, IEmailService emailService)
+        private readonly IAdditionalAuthMetods _additionalAuthMetods;
+        public RegisterService(UserManager<User> userManager, IConfiguration config, IEmailService emailService, IAdditionalAuthMetods add)
+            :base(userManager, config, emailService)
         {
-            _userManager = userManager;
-            _config = config;
-            _emailService = emailService;
+            _additionalAuthMetods = add;
         }
 
         public async Task<ServiceResponse> Register(RegisterRequest model)
@@ -39,13 +36,13 @@ namespace Core.Services.Auth
 
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = AdditionalAuthMetods.CreateValidationErrorMessage(result) };
+                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = _additionalAuthMetods.CreateValidationErrorMessage(result) };
 
             await _userManager.AddToRoleAsync(user, UserRoles.User);
 
             user = await _userManager.FindByNameAsync(user.UserName);
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var urlString = AdditionalAuthMetods.BuildUrl(token, user.UserName, _config["Paths:ConfirmEmail"]);
+            var urlString = _additionalAuthMetods.BuildUrl(token, user.UserName, _config["Paths:ConfirmEmail"]);
 
             await _emailService.SendEmailAsync(user.Email, "Confirm your email address", urlString);
 
