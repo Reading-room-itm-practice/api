@@ -2,6 +2,7 @@
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Storage.Identity;
 using System.Security.Claims;
@@ -9,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Auth
 {
-    class GoogleService : IGoogleService
+    class ExternalLoginService : IExternalLoginService
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signIn;
         private readonly IConfiguration _config;
         private readonly IJwtGenerator _jwtGenerator;
 
-        public GoogleService(UserManager<User> userManager, SignInManager<User> signIn, IConfiguration config, IJwtGenerator jwtGenerator)
+        public ExternalLoginService(UserManager<User> userManager, SignInManager<User> signIn, IConfiguration config, IJwtGenerator jwtGenerator)
         {
             _userManager = userManager;
             _signIn = signIn;
@@ -24,11 +25,11 @@ namespace Core.Services.Auth
             _jwtGenerator = jwtGenerator;
         }
 
-        public AuthenticationProperties GoogleRequest()
+        public ChallengeResult Request(string provider)
         {
-            string redirectUri = _config["Google:RedirectUrl"];
-            var properties = _signIn.ConfigureExternalAuthenticationProperties("Google", redirectUri);
-            return properties;
+            string redirectUri = _config["External:RedirectUrl"];
+            var properties = _signIn.ConfigureExternalAuthenticationProperties(provider, redirectUri);
+            return new ChallengeResult(provider, properties) ;
         }
 
         public async Task<ServiceResponse> Login()
@@ -41,13 +42,12 @@ namespace Core.Services.Auth
 
             if (result.Succeeded)
             {
-                var Guser = await _userManager.FindByEmailAsync(info.Principal.FindFirst(ClaimTypes.Email).Value);
-                var roles = await _userManager.GetRolesAsync(Guser);
+                var gUser = await _userManager.FindByEmailAsync(info.Principal.FindFirst(ClaimTypes.Email).Value);
+                var roles = await _userManager.GetRolesAsync(gUser);
                 return new SuccessResponse<string>
                 {
-
                     Message = "Successful login",
-                    Content = $"{_jwtGenerator.GenerateJWTToken(_config, Guser, roles)}"
+                    Content = $"{_jwtGenerator.GenerateJWTToken(_config, gUser, roles)}"
                 };
             }
 

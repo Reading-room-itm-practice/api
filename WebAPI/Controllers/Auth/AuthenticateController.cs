@@ -5,7 +5,7 @@ using Core.ServiceResponses;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace WebAPI.Controllers
+namespace WebAPI.Controllers.Auth
 {
 
     [Route("api/[controller]")]
@@ -13,12 +13,10 @@ namespace WebAPI.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly IAuthenticationService _authenticateService;
-        private readonly IGoogleService _googleService;
 
-        public AuthenticateController(IAuthenticationService authenticationService, IGoogleService googleService)
+        public AuthenticateController(IAuthenticationService authenticationService)
         {
             _authenticateService = authenticationService;
-            _googleService = googleService;
         }
 
         [HttpPost]
@@ -26,20 +24,6 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> Login([FromBody] LoginRequest model)
         {
             return await _authenticateService.Login(model);
-        }
-
-        [HttpGet]
-        [Route("Google-login")]
-        public IActionResult GoogleLogin()
-        {
-            return new ChallengeResult("Google", _googleService.GoogleRequest());
-        }
-
-        [HttpGet]
-        [Route("Google-response")]
-        public async Task<ServiceResponse> GoogleResponse()
-        {
-            return await _googleService.Login();
         }
 
         [HttpPost]
