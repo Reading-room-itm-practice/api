@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPI.DTOs
+namespace Core.DTOs
 {
     public class CategoryDto : IDto, INameSortable
     {

@@ -1,9 +1,10 @@
 ﻿using Core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Storage.Interfaces;
+using System;
 using System.Security.Claims;
 
-namespace WebAPI.Services
+namespace Storage.Services
 {
     public class LoggedUserProvider : ILoggedUserProvider
     {
@@ -17,7 +18,7 @@ namespace WebAPI.Services
         public int GetUserId()
         {
             var loggedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-          
+
             return loggedUserId != null ? int.Parse(loggedUserId) : 0;
         }
     }

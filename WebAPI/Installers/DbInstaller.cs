@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Storage.DataAccessLayer;
 
-namespace WebAPI.Installers
+namespace Storage.Installers
 {
     public class DbInstaller : Installer
     {

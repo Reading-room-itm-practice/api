@@ -1,19 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Storage.Models;
 
 namespace Storage.DataAccessLayer.Configurations
 {
-    public class ReviewConfiguration : IEntityTypeConfiguration<Review>
+    public class NotificationConfig : IEntityTypeConfiguration<Notification>
     {
-        public void Configure(EntityTypeBuilder<Review> builder)
+        public void Configure(EntityTypeBuilder<Notification> builder)
         {
             builder.Property(c => c.Content)
-                .HasMaxLength(int.MaxValue)
+                .HasMaxLength(200)
                 .IsRequired();
         }
     }

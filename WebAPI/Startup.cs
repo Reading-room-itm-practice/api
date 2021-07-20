@@ -8,10 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Net;
-using WebAPI.Installers;
-using WebAPI.Middleware;
+using Storage.Installers;
+using Storage.Middleware;
 
-namespace WebAPI
+namespace Storage
 {
     public class Startup
     {

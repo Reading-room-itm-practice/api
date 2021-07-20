@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Storage.Identity;
 using System;
 
-namespace WebAPI.HosBuilderExtensions
+namespace Storage.HosBuilderExtensions
 {
     public static class DataSeeder
     {

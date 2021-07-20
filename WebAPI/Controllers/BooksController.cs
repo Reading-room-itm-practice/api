@@ -9,7 +9,7 @@ using Storage.Models;
 using Core.DTOs;
 using Core.Requests;
 
-namespace WebAPI.Controllers
+namespace Storage.Controllers
 {
     //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]

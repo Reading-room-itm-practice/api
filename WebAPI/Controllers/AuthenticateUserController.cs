@@ -5,7 +5,7 @@ using Core.DTOs;
 using Core.ServiceResponses;
 using Core.Requests;
 
-namespace WebAPI.Controllers
+namespace Storage.Controllers
 {
     
     [Route("api/[controller]")]

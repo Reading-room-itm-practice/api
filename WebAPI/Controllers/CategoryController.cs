@@ -1,16 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-using WebAPI.DTOs;
+﻿using Core.DTOs;
 using Core.Interfaces;
-using Storage.Models;
-using Core.Exceptions;
 using Core.Requests;
 using Core.ServiceResponses;
-using System.Net;
+using Microsoft.AspNetCore.Mvc;
+using Storage.Models;
 using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 
-namespace WebAPI.Controllers
+namespace Storage.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

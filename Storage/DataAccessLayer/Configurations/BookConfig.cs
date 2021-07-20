@@ -1,14 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Storage.Models;
 
 namespace Storage.DataAccessLayer.Configurations
 {
-    public class BookConfiguration : IEntityTypeConfiguration<Book>
+    public class BookConfig : IEntityTypeConfiguration<Book>
     {
         public void Configure(EntityTypeBuilder<Book> builder)
         {
@@ -22,6 +18,10 @@ namespace Storage.DataAccessLayer.Configurations
 
             builder.Property(r => r.ReleaseYear)
                 .HasPrecision(4, 0);
+
+            builder.HasOne(a => a.Author)
+                .WithMany(b => b.Books)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

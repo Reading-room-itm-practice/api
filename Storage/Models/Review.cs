@@ -1,4 +1,5 @@
 ﻿using Storage.Iterfaces;
+using Storage.Models.Likes;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,6 +15,6 @@ namespace Storage.Models
         public int Stars { get; set; }
         public string Content { get; set; }
         public ICollection<ReviewComment> Comments { get; set; }
-        public ICollection<Like> Likes { get; set; }
+        public ICollection<ReviewLike> Likes { get; set; }
     }
 }

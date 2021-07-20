@@ -1,4 +1,5 @@
-﻿using Storage.Iterfaces;
+﻿using Storage.Identity;
+using Storage.Iterfaces;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Storage.Models
@@ -8,6 +9,7 @@ namespace Storage.Models
     {
         public int BookId { get; set; }
         public int UserId { get; set; }
+        public User User { get; set; }
         public bool IsRead { get; set; }
         public bool IsWantRead { get; set; }
         public bool IsFavorite { get; set; }

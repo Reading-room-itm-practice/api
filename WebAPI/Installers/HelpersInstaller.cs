@@ -2,9 +2,9 @@
 using Core.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebAPI.Helpers;
+using Storage.Helpers;
 
-namespace WebAPI.Installers
+namespace Storage.Installers
 {
     public class HelpersInstaller : Installer
     {

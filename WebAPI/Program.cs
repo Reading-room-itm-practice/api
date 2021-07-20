@@ -4,9 +4,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
 using Storage.DataAccessLayer;
-using WebAPI.HosBuilderExtensions;
+using Storage.HosBuilderExtensions;
 
-namespace WebAPI
+namespace Storage
 {
     public class Program
     {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Threading.Tasks;
-using WebAPI.Helpers;
+using Storage.Helpers;
 
-namespace WebAPI.Middleware
+namespace Storage.Middleware
 {
     public class ResponseStatusCodeMiddleware 
     {

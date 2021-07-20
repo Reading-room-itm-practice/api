@@ -1,23 +1,18 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Core.DTOs;
+using Core.Exceptions;
+using Core.Interfaces;
+using Core.Requests;
+using Core.ServiceResponses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Storage.Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Common;
-using WebAPI.DTOs;
-using Core.Exceptions;
-using Storage.Models;
-using Core.Interfaces;
-using Core.DTOs;
-using Core.Requests;
-using Core.ServiceResponses;
 
-namespace WebAPI.Controllers
+namespace Storage.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

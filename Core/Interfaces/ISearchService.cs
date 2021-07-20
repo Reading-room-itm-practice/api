@@ -1,13 +1,5 @@
-﻿using Core.DTOs;
-using Core.Enums;
+﻿using Core.Enums;
 using Core.ServiceResponses;
-using Core.Services;
-using Storage.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebAPI.DTOs;
 
 namespace Core.Interfaces
 {

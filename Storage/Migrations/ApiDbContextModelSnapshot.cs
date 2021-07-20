@@ -149,7 +149,7 @@ namespace Storage.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("WebAPI.Identity.User", b =>
+            modelBuilder.Entity("Storage.Identity.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -199,9 +199,6 @@ namespace Storage.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -216,12 +213,10 @@ namespace Storage.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Author", b =>
+            modelBuilder.Entity("Storage.Models.Author", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -255,7 +250,7 @@ namespace Storage.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Book", b =>
+            modelBuilder.Entity("Storage.Models.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -311,7 +306,7 @@ namespace Storage.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Category", b =>
+            modelBuilder.Entity("Storage.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -340,105 +335,74 @@ namespace Storage.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Follow", b =>
+            modelBuilder.Entity("Storage.Models.Follows.Follow", b =>
                 {
-                    b.Property<int>("FollowableId")
-                        .HasColumnType("int");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("FollowableType")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("AuthorId")
+                    b.Property<int>("FollowerId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("LastModifiedBy")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
-
-                    b.HasKey("FollowableId", "FollowableType");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
+                    b.HasKey("Id");
 
                     b.ToTable("Follows");
+
+                    b.HasDiscriminator<string>("FollowableType").HasValue("Follow");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.FriendRequest", b =>
+            modelBuilder.Entity("Storage.Models.FriendRequest", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<int>("FromId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<int>("ToId")
                         .HasColumnType("int");
 
-                    b.HasKey("FromId", "ToId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("FromId");
+
+                    b.HasIndex("ToId");
 
                     b.ToTable("Friend_requests");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Like", b =>
+            modelBuilder.Entity("Storage.Models.Likes.Like", b =>
                 {
-                    b.Property<int>("LikeableId")
-                        .HasColumnType("int");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("LikeableType")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CreatedBy")
+                    b.Property<int>("LikerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("LastModifiedBy")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ReviewCommentId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ReviewId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("LikeableId", "LikeableType");
-
-                    b.HasIndex("ReviewCommentId");
-
-                    b.HasIndex("ReviewId");
-
-                    b.HasIndex("UserId");
+                    b.HasKey("Id");
 
                     b.ToTable("Likes");
+
+                    b.HasDiscriminator<string>("LikeableType").HasValue("Like");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Notification", b =>
+            modelBuilder.Entity("Storage.Models.Notification", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -458,7 +422,7 @@ namespace Storage.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Photo", b =>
+            modelBuilder.Entity("Storage.Models.Photo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -491,7 +455,7 @@ namespace Storage.Migrations
                     b.ToTable("Photos");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.ReadStatus", b =>
+            modelBuilder.Entity("Storage.Models.ReadStatus", b =>
                 {
                     b.Property<int>("BookId")
                         .HasColumnType("int");
@@ -515,7 +479,7 @@ namespace Storage.Migrations
                     b.ToTable("Read_statuses");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Review", b =>
+            modelBuilder.Entity("Storage.Models.Review", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -557,7 +521,7 @@ namespace Storage.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.ReviewComment", b =>
+            modelBuilder.Entity("Storage.Models.ReviewComment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -596,7 +560,7 @@ namespace Storage.Migrations
                     b.ToTable("Review_comments");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Suggestion", b =>
+            modelBuilder.Entity("Storage.Models.Suggestion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -634,6 +598,86 @@ namespace Storage.Migrations
                     b.ToTable("Suggestions");
                 });
 
+            modelBuilder.Entity("Storage.Models.Follows.AuthorFollow", b =>
+                {
+                    b.HasBaseType("Storage.Models.Follows.Follow");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("FollowerId");
+
+                    b.ToTable("Follows");
+
+                    b.HasDiscriminator().HasValue("AuthorFollow");
+                });
+
+            modelBuilder.Entity("Storage.Models.Follows.CategoryFollow", b =>
+                {
+                    b.HasBaseType("Storage.Models.Follows.Follow");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("FollowerId");
+
+                    b.ToTable("Follows");
+
+                    b.HasDiscriminator().HasValue("CategoryFollow");
+                });
+
+            modelBuilder.Entity("Storage.Models.Follows.UserFollow", b =>
+                {
+                    b.HasBaseType("Storage.Models.Follows.Follow");
+
+                    b.Property<int>("FollowingId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("FollowerId");
+
+                    b.HasIndex("FollowingId");
+
+                    b.ToTable("Follows");
+
+                    b.HasDiscriminator().HasValue("UserFollow");
+                });
+
+            modelBuilder.Entity("Storage.Models.Likes.ReviewCommentLike", b =>
+                {
+                    b.HasBaseType("Storage.Models.Likes.Like");
+
+                    b.Property<int>("ReviewCommentId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("LikerId");
+
+                    b.HasIndex("ReviewCommentId");
+
+                    b.ToTable("Likes");
+
+                    b.HasDiscriminator().HasValue("ReviewCommentLike");
+                });
+
+            modelBuilder.Entity("Storage.Models.Likes.ReviewLike", b =>
+                {
+                    b.HasBaseType("Storage.Models.Likes.Like");
+
+                    b.Property<int>("ReviewId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("LikerId");
+
+                    b.HasIndex("ReviewId");
+
+                    b.ToTable("Likes");
+
+                    b.HasDiscriminator().HasValue("ReviewLike");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<int>", null)
@@ -645,7 +689,7 @@ namespace Storage.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("WebAPI.Identity.User", null)
+                    b.HasOne("Storage.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -654,7 +698,7 @@ namespace Storage.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("WebAPI.Identity.User", null)
+                    b.HasOne("Storage.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -669,7 +713,7 @@ namespace Storage.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebAPI.Identity.User", null)
+                    b.HasOne("Storage.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -678,35 +722,28 @@ namespace Storage.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("WebAPI.Identity.User", null)
+                    b.HasOne("Storage.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebAPI.Identity.User", b =>
+            modelBuilder.Entity("Storage.Models.Book", b =>
                 {
-                    b.HasOne("WebAPI.Identity.User", null)
-                        .WithMany("Friends")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("WebAPI.Models.Book", b =>
-                {
-                    b.HasOne("WebAPI.Models.Author", "Author")
+                    b.HasOne("Storage.Models.Author", "Author")
                         .WithMany("Books")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebAPI.Models.Category", "Category")
+                    b.HasOne("Storage.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebAPI.Models.Photo", "MainPhoto")
+                    b.HasOne("Storage.Models.Photo", "MainPhoto")
                         .WithMany()
                         .HasForeignKey("MainPhotoId1");
 
@@ -717,117 +754,207 @@ namespace Storage.Migrations
                     b.Navigation("MainPhoto");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Follow", b =>
+            modelBuilder.Entity("Storage.Models.FriendRequest", b =>
                 {
-                    b.HasOne("WebAPI.Models.Author", null)
-                        .WithMany("Followers")
-                        .HasForeignKey("AuthorId");
+                    b.HasOne("Storage.Identity.User", "From")
+                        .WithMany("SentRequests")
+                        .HasForeignKey("FromId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("WebAPI.Models.Category", null)
-                        .WithMany("Followers")
-                        .HasForeignKey("CategoryId");
+                    b.HasOne("Storage.Identity.User", "To")
+                        .WithMany("RecivedRequests")
+                        .HasForeignKey("ToId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("WebAPI.Identity.User", null)
-                        .WithMany("Followers")
-                        .HasForeignKey("UserId");
+                    b.Navigation("From");
 
-                    b.HasOne("WebAPI.Identity.User", null)
-                        .WithMany("Followings")
-                        .HasForeignKey("UserId1");
+                    b.Navigation("To");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Like", b =>
+            modelBuilder.Entity("Storage.Models.Photo", b =>
                 {
-                    b.HasOne("WebAPI.Models.ReviewComment", null)
-                        .WithMany("Likes")
-                        .HasForeignKey("ReviewCommentId");
-
-                    b.HasOne("WebAPI.Models.Review", null)
-                        .WithMany("Likes")
-                        .HasForeignKey("ReviewId");
-
-                    b.HasOne("WebAPI.Identity.User", null)
-                        .WithMany("Likes")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("WebAPI.Models.Photo", b =>
-                {
-                    b.HasOne("WebAPI.Models.Book", null)
+                    b.HasOne("Storage.Models.Book", null)
                         .WithMany("Photos")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebAPI.Models.ReadStatus", b =>
+            modelBuilder.Entity("Storage.Models.ReadStatus", b =>
                 {
-                    b.HasOne("WebAPI.Models.Book", null)
+                    b.HasOne("Storage.Models.Book", null)
                         .WithMany("ReadStatuses")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebAPI.Identity.User", null)
+                    b.HasOne("Storage.Identity.User", "User")
                         .WithMany("ReadStatuses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Review", b =>
+            modelBuilder.Entity("Storage.Models.Review", b =>
                 {
-                    b.HasOne("WebAPI.Models.Book", null)
+                    b.HasOne("Storage.Models.Book", null)
                         .WithMany("Reviews")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebAPI.Identity.User", null)
+                    b.HasOne("Storage.Identity.User", null)
                         .WithMany("Reviews")
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.ReviewComment", b =>
+            modelBuilder.Entity("Storage.Models.ReviewComment", b =>
                 {
-                    b.HasOne("WebAPI.Models.Review", "Review")
+                    b.HasOne("Storage.Models.Review", "Review")
                         .WithMany("Comments")
                         .HasForeignKey("ReviewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebAPI.Identity.User", null)
+                    b.HasOne("Storage.Identity.User", null)
                         .WithMany("ReviewComments")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Review");
                 });
 
-            modelBuilder.Entity("WebAPI.Identity.User", b =>
+            modelBuilder.Entity("Storage.Models.Follows.AuthorFollow", b =>
                 {
+                    b.HasOne("Storage.Models.Author", "Author")
+                        .WithMany("Followers")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Storage.Identity.User", "Follower")
+                        .WithMany("FollowingsAuthors")
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Follower");
+                });
+
+            modelBuilder.Entity("Storage.Models.Follows.CategoryFollow", b =>
+                {
+                    b.HasOne("Storage.Models.Category", "Category")
+                        .WithMany("Followers")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Storage.Identity.User", "Follower")
+                        .WithMany("FollwingsCategories")
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Follower");
+                });
+
+            modelBuilder.Entity("Storage.Models.Follows.UserFollow", b =>
+                {
+                    b.HasOne("Storage.Identity.User", "Follower")
+                        .WithMany("Followings")
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Storage.Identity.User", "Following")
+                        .WithMany("Followers")
+                        .HasForeignKey("FollowingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Follower");
+
+                    b.Navigation("Following");
+                });
+
+            modelBuilder.Entity("Storage.Models.Likes.ReviewCommentLike", b =>
+                {
+                    b.HasOne("Storage.Identity.User", "Liker")
+                        .WithMany("CommentLikes")
+                        .HasForeignKey("LikerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Storage.Models.ReviewComment", "ReviewComment")
+                        .WithMany("Likes")
+                        .HasForeignKey("ReviewCommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Liker");
+
+                    b.Navigation("ReviewComment");
+                });
+
+            modelBuilder.Entity("Storage.Models.Likes.ReviewLike", b =>
+                {
+                    b.HasOne("Storage.Identity.User", "Liker")
+                        .WithMany("ReviewLikes")
+                        .HasForeignKey("LikerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Storage.Models.Review", "Review")
+                        .WithMany("Likes")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Liker");
+
+                    b.Navigation("Review");
+                });
+
+            modelBuilder.Entity("Storage.Identity.User", b =>
+                {
+                    b.Navigation("CommentLikes");
+
                     b.Navigation("Followers");
 
                     b.Navigation("Followings");
 
-                    b.Navigation("Friends");
+                    b.Navigation("FollowingsAuthors");
 
-                    b.Navigation("Likes");
+                    b.Navigation("FollwingsCategories");
 
                     b.Navigation("ReadStatuses");
 
+                    b.Navigation("RecivedRequests");
+
                     b.Navigation("ReviewComments");
 
+                    b.Navigation("ReviewLikes");
+
                     b.Navigation("Reviews");
+
+                    b.Navigation("SentRequests");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Author", b =>
+            modelBuilder.Entity("Storage.Models.Author", b =>
                 {
                     b.Navigation("Books");
 
                     b.Navigation("Followers");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Book", b =>
+            modelBuilder.Entity("Storage.Models.Book", b =>
                 {
                     b.Navigation("Photos");
 
@@ -836,19 +963,19 @@ namespace Storage.Migrations
                     b.Navigation("Reviews");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Category", b =>
+            modelBuilder.Entity("Storage.Models.Category", b =>
                 {
                     b.Navigation("Followers");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.Review", b =>
+            modelBuilder.Entity("Storage.Models.Review", b =>
                 {
                     b.Navigation("Comments");
 
                     b.Navigation("Likes");
                 });
 
-            modelBuilder.Entity("WebAPI.Models.ReviewComment", b =>
+            modelBuilder.Entity("Storage.Models.ReviewComment", b =>
                 {
                     b.Navigation("Likes");
                 });

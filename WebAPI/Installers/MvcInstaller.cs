@@ -9,9 +9,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using WebAPI.Services;
+using Storage.Services;
 
-namespace WebAPI.Installers
+namespace Storage.Installers
 {
     public class MvcInstaller : Installer
     {

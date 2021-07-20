@@ -11,7 +11,7 @@ using Core.ServiceResponses;
 using System.Net;
 using Core.Enums;
 
-namespace WebAPI.Controllers
+namespace Storage.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

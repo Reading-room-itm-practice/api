@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPI.Installers
+namespace Storage.Installers
 {
     public static class InstallerExtension
     {
