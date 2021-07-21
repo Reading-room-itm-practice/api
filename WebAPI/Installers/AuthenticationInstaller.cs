@@ -63,8 +63,8 @@ namespace WebAPI.Installers
             //})
             .AddGitHub(options =>
             {
-                options.ClientId = "580f3ba333ddf4bed2e2";
-                options.ClientSecret = "4fc8273adcb78aad9276f13a56c84f805d012539";
+                options.ClientId = configuration["GitHub:Id"];
+                options.ClientSecret = configuration["GitHub:Secret"];
             })
             .AddJwtBearer(options =>
             {
