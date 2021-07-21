@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Core.Common;
+﻿using Core.Common;
 using Storage.Iterfaces;
+using System.Threading.Tasks;
 
 namespace Core.Interfaces
 {

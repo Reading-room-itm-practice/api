@@ -1,18 +1,16 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.IO;
-using WebAPI.DTOs;
-using Storage.Models;
-using Microsoft.AspNetCore.Hosting;
-using Core.Interfaces;
+﻿using AutoMapper;
 using Core.DTOs;
-using AutoMapper;
+using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Storage.Models;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Core.Services
 {
@@ -79,7 +77,7 @@ namespace Core.Services
             }
             catch (Exception e)
             {
-                if(e.InnerException != null)
+                if (e.InnerException != null)
                     return new ErrorResponse() { Message = e.Message + " Inner Exception: " + e.InnerException.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
                 return new ErrorResponse() { Message = e.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
             }

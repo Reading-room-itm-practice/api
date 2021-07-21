@@ -1,13 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Storage.Identity;
+using Storage.Interfaces;
+using Storage.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Storage.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using Storage.Models;
-using Storage.Interfaces;
 
 namespace Storage.DataAccessLayer
 {
@@ -18,7 +18,7 @@ namespace Storage.DataAccessLayer
         {
             _loggedUserProvider = loggedUserProvider;
         }
-        
+
         public override DbSet<User> Users { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }

@@ -1,21 +1,16 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Core.DTOs;
+using Core.Exceptions;
+using Core.Interfaces;
+using Core.Requests;
+using Core.ServiceResponses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Storage.Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Common;
-using WebAPI.DTOs;
-using Core.Exceptions;
-using Storage.Models;
-using Core.Interfaces;
-using Core.DTOs;
-using Core.Requests;
-using Core.ServiceResponses;
 
 namespace WebAPI.Controllers
 {
@@ -39,7 +34,7 @@ namespace WebAPI.Controllers
             {
                 return new SuccessResponse<IEnumerable<PhotoDto>>() { Content = _crud.GetAll<PhotoDto>().Result.Where(p => p.BookId == book_id) };
             }
-            return new SuccessResponse<IEnumerable<PhotoDto>>(){ Content = await _crud.GetAll<PhotoDto>() };
+            return new SuccessResponse<IEnumerable<PhotoDto>>() { Content = await _crud.GetAll<PhotoDto>() };
         }
 
         [HttpGet("{id:int}")]

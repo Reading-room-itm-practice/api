@@ -12,7 +12,7 @@ namespace WebAPI
     {
         public static void Main(string[] args)
         {
-                CreateHostBuilder(args).Build().MigrateDatabase<ApiDbContext>().SeedData().Run();
+            CreateHostBuilder(args).Build().MigrateDatabase<ApiDbContext>().SeedData().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

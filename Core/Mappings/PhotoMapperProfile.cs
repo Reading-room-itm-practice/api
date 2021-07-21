@@ -1,12 +1,7 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WebAPI.DTOs;
-using Storage.Models;
 using Core.DTOs;
 using Core.Requests;
+using Storage.Models;
 
 namespace Core.Mappings
 {
