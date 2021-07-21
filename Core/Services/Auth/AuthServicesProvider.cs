@@ -8,8 +8,8 @@ namespace Core.Services.Auth
 {
     abstract class AuthServicesProvider
     {
-        protected readonly SignInManager<User> _signInManager;
         protected readonly UserManager<User> _userManager;
+        protected readonly SignInManager<User> _signInManager;
         protected readonly IConfiguration _config;
         protected readonly IJwtGenerator _jwtGenerator;
         protected readonly IEmailService _emailService;
@@ -23,9 +23,9 @@ namespace Core.Services.Auth
             IEmailService emailService = null
             )
         {
-            _config = config;
-            _signInManager = signInManager;
             _userManager = userManager;
+            _signInManager = signInManager;
+            _config = config;
             _jwtGenerator = jwtGenerator;
             _emailService = emailService;
         }
