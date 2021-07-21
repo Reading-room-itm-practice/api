@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Core.Enums;
 using Core.Interfaces;
 using Core.ServiceResponses;
-using Core.Enums;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
@@ -17,7 +17,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public ServiceResponse All(SortType? sort, string searchString="")
+        public ServiceResponse All(SortType? sort, string searchString = "")
         {
             return searchService.SearchAll(searchString, sort);
         }
@@ -29,14 +29,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("Books")]
-        public ServiceResponse Books(SortType? sort, int? minYear, int? maxYear, int? categoryId, int? authorId, 
+        public ServiceResponse Books(SortType? sort, int? minYear, int? maxYear, int? categoryId, int? authorId,
             string searchString = "")
         {
             return searchService.SearchBook(searchString, sort, minYear, maxYear, categoryId, authorId);
         }
 
         [HttpGet("Categories")]
-        public ServiceResponse Categories(SortType? sort, string searchString ="")
+        public ServiceResponse Categories(SortType? sort, string searchString = "")
         {
             return searchService.SearchCategory(searchString, sort);
         }

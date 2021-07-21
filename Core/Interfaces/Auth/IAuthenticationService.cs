@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using Core.DTOs;
+﻿using Core.DTOs;
 using Core.Requests;
 using Core.ServiceResponses;
+using System.Threading.Tasks;
 
 namespace Core.Interfaces.Auth
 {

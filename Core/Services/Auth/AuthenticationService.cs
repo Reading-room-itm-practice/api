@@ -1,5 +1,4 @@
 ﻿using Core.DTOs;
-using Core.Interfaces;
 using Core.Interfaces.Auth;
 using Core.Requests;
 using Core.ServiceResponses;

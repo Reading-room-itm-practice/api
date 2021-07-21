@@ -1,32 +1,18 @@
-﻿using Core.Common;
-using Core.Interfaces.Auth;
+﻿using Core.Interfaces.Auth;
 using Core.Requests;
 using Core.ServiceResponses;
-using Core.Services.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Storage.Identity;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Core.Services.Auth
 {
-    public class LoginService : ILoginService
+    internal class LoginService : AuthServicesProvider, ILoginService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IConfiguration _config;
-        private readonly IJwtGenerator _jwtGenerator;
-        public LoginService(UserManager<User> userManager, IConfiguration config, IJwtGenerator jwtGenerator) {
-            _userManager = userManager;
-            _config = config;
-            _jwtGenerator = jwtGenerator;
-        }
+        public LoginService(UserManager<User> userManager, IConfiguration config, IJwtGenerator jwtGenerator) 
+            : base(userManager, config: config, jwtGenerator: jwtGenerator) { }
 
         public async Task<ServiceResponse> Login(LoginRequest model)
         {

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Core.Common;
+﻿using Core.Common;
+using System.Collections.Generic;
 
 namespace Core.DTOs
 {

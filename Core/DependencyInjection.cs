@@ -1,4 +1,5 @@
-﻿using Core.Interfaces;
+﻿using Core.Common;
+using Core.Interfaces;
 using Core.Interfaces.Auth;
 using Core.Interfaces.Email;
 using Core.Repositories;
@@ -42,7 +43,6 @@ namespace Core
             services.AddScoped<IUpdaterService<Category>, UpdaterService<Category>>();
             services.AddScoped<IDeleterService<Category>, DeleterService<Category>>();
 
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ICreatorService<Photo>, CreatorService<Photo>>();
             services.AddScoped<IGetterService<Photo>, GetterService<Photo>>();
             services.AddScoped<IUpdaterService<Photo>, UpdaterService<Photo>>();
@@ -56,6 +56,8 @@ namespace Core
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IJwtGenerator, JwtGenerator>();
+            services.AddScoped<IExternalLoginService, ExternalLoginService>();
+            services.AddScoped<IAdditionalAuthMetods, AdditionalAuthMetods>();
 
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<ISearchRepository, SearchRepository>();

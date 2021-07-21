@@ -1,8 +1,8 @@
 ﻿using Core.Common;
 using Core.Interfaces.Auth;
+using Core.Interfaces.Email;
 using Core.Requests;
 using Core.ServiceResponses;
-using Core.Services.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Storage.Identity;
@@ -11,15 +11,14 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Auth
 {
-    class PasswordResetService :  IPasswordResetService
+    internal class PasswordResetService : AuthServicesProvider, IPasswordResetService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IConfiguration _config;
-        private readonly IEmailService _emailService;
-        public PasswordResetService(UserManager<User> userManager, IConfiguration config, IEmailService emailService) {
-            _userManager = userManager;
-            _config = config;
-            _emailService = emailService;
+        private readonly IAdditionalAuthMetods _additionalAuthMetods;
+
+        public PasswordResetService(UserManager<User> userManager, IConfiguration config, IEmailService emailService, IAdditionalAuthMetods additionalAuthMethods) 
+            : base(userManager, config: config, emailService: emailService)
+        {
+            _additionalAuthMetods = additionalAuthMethods;
         }
 
         public async Task<ServiceResponse> SendResetPasswordEmail(string email)
@@ -28,9 +27,9 @@ namespace Core.Services.Auth
             {
                 var user = await _userManager.FindByEmailAsync(email);
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var urlString = AdditionalAuthMetods.BuildUrl(token, user.UserName, _config["Paths:ResetPassword"]);
+                var urlString = _additionalAuthMetods.BuildUrl(token, user.UserName, _config["Paths:ResetPassword"]);
 
-                await _emailService.SendEmailAsync(_config["SMTP:Name"], user.Email, "Reset your password", urlString);
+                await _emailService.SendEmailAsync(user.Email, "Reset your password", urlString);
             }
             catch { return new ErrorResponse { Message = "Sending the e-mail failed", StatusCode = HttpStatusCode.UnprocessableEntity }; };
 
@@ -45,7 +44,7 @@ namespace Core.Services.Auth
                 var result = await _userManager.ResetPasswordAsync(user, model.Token, model.newPassword);
 
                 if (!result.Succeeded)
-                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = AdditionalAuthMetods.CreateValidationErrorMessage(result) };
+                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = _additionalAuthMetods.CreateValidationErrorMessage(result) };
 
                 return new SuccessResponse { Message = "Password changed succesfully" };
             }

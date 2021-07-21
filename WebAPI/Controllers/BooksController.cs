@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Core.DTOs;
 using Core.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
-using Storage.Models;
-using Core.DTOs;
 using Core.Requests;
+using Microsoft.AspNetCore.Mvc;
+using Storage.Models;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {

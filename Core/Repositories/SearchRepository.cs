@@ -2,17 +2,10 @@
 using Core.DTOs;
 using Core.Enums;
 using Core.Interfaces;
-using Core.Services;
-using Microsoft.AspNetCore.Identity;
 using Storage.DataAccessLayer;
-using Storage.Identity;
-using Storage.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using WebAPI.DTOs;
 
 namespace Core.Repositories
@@ -49,7 +42,7 @@ namespace Core.Repositories
             return categories;
         }
 
-        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear = null, int? maxYear = null, 
+        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
             int? categoryId = null, int? authorId = null)
         {
             var searchQueries = ProcessSearchString(searchString);

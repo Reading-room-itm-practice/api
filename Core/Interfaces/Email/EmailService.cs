@@ -1,10 +1,10 @@
-﻿using Core.Services.Email;
+﻿using Core.Interfaces.Email;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace Core.Interfaces.Email
+namespace Core.Services.Email
 {
     public class EmailService : IEmailService
     {
@@ -15,9 +15,9 @@ namespace Core.Interfaces.Email
             _config = config;
         }
 
-        public async Task SendEmailAsync(string fromAddress, string toAddress, string subject, string message)
+        public async Task SendEmailAsync(string toAddress, string subject, string message)
         {
-            var mailMessage = new MailMessage(fromAddress, toAddress, subject, message);
+            var mailMessage = new MailMessage(_config["SMTP:Name"], toAddress, subject, message);
 
             using var client = new SmtpClient(_config["SMTP:Host"], int.Parse(_config["SMTP:Port"]))
             {

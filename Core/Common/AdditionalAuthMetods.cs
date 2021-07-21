@@ -1,20 +1,22 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Core.Interfaces.Auth;
+using Core.ServiceResponses;
+using Core.Services.Auth;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Storage.Identity;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
 namespace Core.Common
 {
-    class AdditionalAuthMetods
+    class AdditionalAuthMetods : AuthServicesProvider, IAdditionalAuthMetods
     {
-        public static string BuildUrl(string token, string username, string path)
+        public AdditionalAuthMetods(UserManager<User> _userManager, IConfiguration _config, IJwtGenerator _jwtGenerator) 
+            : base(_userManager, config: _config, jwtGenerator: _jwtGenerator) {}
+
+        public string BuildUrl(string token, string username, string path)
         {
             var uriBuilder = new UriBuilder(path);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
@@ -26,7 +28,7 @@ namespace Core.Common
             return urlString;
         }
 
-        public static string CreateValidationErrorMessage(IdentityResult result)
+        public string CreateValidationErrorMessage(IdentityResult result)
         {
             StringBuilder builder = new StringBuilder();
             foreach (var error in result.Errors)
@@ -35,6 +37,17 @@ namespace Core.Common
             }
 
             return builder.ToString();
+        }
+
+        public async Task<ServiceResponse> GetUserTokenResponse(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            var roles = await _userManager.GetRolesAsync(user);
+            return new SuccessResponse<string>
+            {
+                Message = "Successful login",
+                Content = $"{_jwtGenerator.GenerateJWTToken(_config, user, roles)}"
+            };
         }
     }
 }

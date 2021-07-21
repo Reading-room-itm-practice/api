@@ -1,9 +1,9 @@
 ﻿using Core.Common;
 using Core.DTOs;
 using Core.Interfaces.Auth;
+using Core.Interfaces.Email;
 using Core.Requests;
 using Core.ServiceResponses;
-using Core.Services.Email;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Storage.Identity;
@@ -13,42 +13,47 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Auth
 {
-    class RegisterService : IRegisterService
+    internal class RegisterService : AuthServicesProvider, IRegisterService
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IConfiguration _config;
-        private readonly IEmailService _emailService;
-        public RegisterService(UserManager<User> userManager, IConfiguration config, IEmailService emailService){
-            _userManager = userManager;
-            _config = config;
-            _emailService = emailService;
+        private readonly IAdditionalAuthMetods _additionalAuthMetods;
+        public RegisterService(UserManager<User> userManager, IConfiguration config, IEmailService emailService, IAdditionalAuthMetods additionalAuthMethods)
+            :base(userManager, config: config, emailService: emailService)
+        {
+            _additionalAuthMetods = additionalAuthMethods;
         }
 
         public async Task<ServiceResponse> Register(RegisterRequest model)
         {
-            if (await _userManager.FindByNameAsync(model.Username) != null || await _userManager.FindByEmailAsync(model.Email) != null)
-                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Account already exists!" };
-
-            User user = new()
+            try
             {
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
-            };
+                if (await _userManager.FindByNameAsync(model.Username) != null || await _userManager.FindByEmailAsync(model.Email) != null)
+                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Account already exists!" };
 
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = AdditionalAuthMetods.CreateValidationErrorMessage(result) };
+                User user = new()
+                {
+                    Email = model.Email,
+                    SecurityStamp = Guid.NewGuid().ToString(),
+                    UserName = model.Username
+                };
 
-            await _userManager.AddToRoleAsync(user, UserRoles.User);
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (!result.Succeeded)
+                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = _additionalAuthMetods.CreateValidationErrorMessage(result) };
 
-            user = await _userManager.FindByNameAsync(user.UserName);
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var urlString = AdditionalAuthMetods.BuildUrl(token, user.UserName, _config["Paths:ConfirmEmail"]);
+                await _userManager.AddToRoleAsync(user, UserRoles.User);
 
-            await _emailService.SendEmailAsync(_config["SMTP:Name"], user.Email, "Confirm your email address", urlString);
+                user = await _userManager.FindByNameAsync(user.UserName);
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var urlString = _additionalAuthMetods.BuildUrl(token, user.UserName, _config["Paths:ConfirmEmail"]);
 
-            return new SuccessResponse { StatusCode = HttpStatusCode.Created, Message = "User created successfully! Confirm your email." };
+                await _emailService.SendEmailAsync(user.Email, "Confirm your email address", urlString);
+
+                return new SuccessResponse { StatusCode = HttpStatusCode.Created, Message = "User created successfully! Confirm your email." };
+            }
+            catch
+            {
+                return new ErrorResponse { Message = "An error accured while creating account.", StatusCode = HttpStatusCode.UnprocessableEntity};
+            }
         }
 
         public async Task<ServiceResponse> ConfirmEmail(EmailDto model)
