@@ -11,6 +11,10 @@ namespace Storage.DataAccessLayer.Configurations
             builder.Property(c => c.Content)
                 .HasMaxLength(200)
                 .IsRequired();
+
+            builder.HasOne(u => u.User)
+                .WithMany(n => n.Notifications)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

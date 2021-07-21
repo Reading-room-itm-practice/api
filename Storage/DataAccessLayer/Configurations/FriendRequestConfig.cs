@@ -8,8 +8,7 @@ namespace Storage.DataAccessLayer.Configurations
     {
         public void Configure(EntityTypeBuilder<FriendRequest> builder)
         {
-            
-            builder.HasOne(c => c.From)
+            builder.HasOne(c => c.Creator)
                 .WithMany(f => f.SentRequests)
                 .OnDelete(DeleteBehavior.Cascade);
 

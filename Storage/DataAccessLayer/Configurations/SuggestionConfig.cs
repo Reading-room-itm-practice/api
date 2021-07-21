@@ -18,6 +18,10 @@ namespace Storage.DataAccessLayer.Configurations
 
             builder.Property(t => t.Comment)
                 .HasMaxLength(400);
+
+            builder.HasOne(c => c.Creator)
+               .WithMany(f => f.Suggestions)
+               .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

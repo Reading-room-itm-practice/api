@@ -6,6 +6,7 @@ using System.Text;
 using Storage.DataAccessLayer;
 using Storage.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System;
 
 namespace Storage.Installers
 {
@@ -13,7 +14,7 @@ namespace Storage.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddIdentity<User, IdentityRole<int>>(opttion =>
+            services.AddIdentity<User, IdentityRole<Guid>>(opttion =>
             {
                 opttion.SignIn.RequireConfirmedEmail = false;
                 opttion.User.RequireUniqueEmail = true;

@@ -15,6 +15,10 @@ namespace Storage.DataAccessLayer.Configurations
             builder.Property(b => b.Biography)
                 .HasMaxLength(int.MaxValue)
                 .IsRequired();
+
+            builder.HasOne(c => c.Creator)
+                .WithMany(a => a.Authors)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

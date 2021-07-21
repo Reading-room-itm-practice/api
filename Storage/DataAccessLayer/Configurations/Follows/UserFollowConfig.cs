@@ -8,12 +8,13 @@ namespace Storage.DataAccessLayer.Configurations.Follows
     {
         public void Configure(EntityTypeBuilder<UserFollow> builder)
         {
-            builder.HasOne(c => c.Follower)
+            builder.HasOne(c => c.Creator)
                 .WithMany(f => f.Followings)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(f => f.Following)
-                .WithMany(f => f.Followers);
+                .WithMany(f => f.Followers)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

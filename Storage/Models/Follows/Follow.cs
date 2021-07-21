@@ -6,12 +6,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Storage.Models.Follows
 {
     [Table("Follows")]
-    public class Follow : IDbMasterKey
+    public class Follow : AuditableModel, IDbMasterKey
     {
         [Key]
         public int Id { get; set; }
-        public int FollowerId { get; set; }
-        public User Follower { get; set; }
         public string FollowableType { get; set; }
     }
 }

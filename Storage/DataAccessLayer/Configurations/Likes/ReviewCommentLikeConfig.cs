@@ -12,9 +12,13 @@ namespace Storage.DataAccessLayer.Configurations.Likes
                 .WithMany(l => l.Likes)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(c => c.Liker)
+            builder.HasOne(c => c.Creator)
                 .WithMany(l => l.CommentLikes)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(c => c.ReviewComment)
+               .WithMany(f => f.Likes)
+               .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

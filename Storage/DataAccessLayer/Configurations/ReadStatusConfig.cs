@@ -8,15 +8,13 @@ namespace Storage.DataAccessLayer.Configurations
     {
         public void Configure(EntityTypeBuilder<ReadStatus> builder)
         {
-            builder.HasKey(r => new { r.BookId, r.UserId });
-
-            builder.HasOne(u => u.User)
+            builder.HasOne(u => u.Creator)
                 .WithMany(r => r.ReadStatuses)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(u => u.User)
-                .WithMany(r => r.ReadStatuses)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(u => u.Book)
+              .WithMany(r => r.ReadStatuses)
+              .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

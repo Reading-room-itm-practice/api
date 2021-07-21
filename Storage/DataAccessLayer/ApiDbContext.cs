@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Storage.DataAccessLayer
 {
-    public class ApiDbContext : IdentityDbContext<User, IdentityRole<int>, int>
+    public class ApiDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         private readonly ILoggedUserProvider _loggedUserProvider;
        
@@ -52,12 +52,12 @@ namespace Storage.DataAccessLayer
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = _loggedUserProvider.GetUserId();
+                        entry.Entity.CreatorId = _loggedUserProvider.GetUserId();
                         entry.Entity.Created = DateTime.UtcNow;
                         break;
 
                     case EntityState.Modified:
-                        entry.Entity.LastModifiedBy = _loggedUserProvider.GetUserId();
+                        entry.Entity.UpdaterId = _loggedUserProvider.GetUserId();
                         entry.Entity.LastModified = DateTime.UtcNow;
                         break;
                 }

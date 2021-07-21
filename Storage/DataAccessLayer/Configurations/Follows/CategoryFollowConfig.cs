@@ -12,7 +12,7 @@ namespace Storage.DataAccessLayer.Configurations.Follows
                 .WithMany(f => f.Followers)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(c => c.Follower)
+            builder.HasOne(c => c.Creator)
                 .WithMany(f => f.FollwingsCategories)
                 .OnDelete(DeleteBehavior.Cascade);
         }
