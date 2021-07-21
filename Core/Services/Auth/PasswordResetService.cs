@@ -15,10 +15,10 @@ namespace Core.Services.Auth
     {
         private readonly IAdditionalAuthMetods _additionalAuthMetods;
 
-        public PasswordResetService(UserManager<User> userManager, IConfiguration config, IEmailService emailService, IAdditionalAuthMetods add) 
+        public PasswordResetService(UserManager<User> userManager, IConfiguration config, IEmailService emailService, IAdditionalAuthMetods additionalAuthMethods) 
             : base(userManager, config, emailService)
         {
-            _additionalAuthMetods = add;
+            _additionalAuthMetods = additionalAuthMethods;
         }
 
         public async Task<ServiceResponse> SendResetPasswordEmail(string email)

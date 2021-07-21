@@ -6,7 +6,7 @@ using Storage.Identity;
 
 namespace Core.Services.Auth
 {
-    class AuthServicesProvider
+    abstract class AuthServicesProvider
     {
         protected readonly SignInManager<User> _signIn;
         protected readonly UserManager<User> _userManager;

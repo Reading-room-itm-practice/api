@@ -12,10 +12,10 @@ namespace Core.Services.Auth
     class ExternalLoginService : AuthServicesProvider, IExternalLoginService
     {
         private readonly IAdditionalAuthMetods _additionalAuthMetods;
-        public ExternalLoginService(UserManager<User> _userManager, SignInManager<User> _signIn, IConfiguration _config, IJwtGenerator _jwtGenerator, IAdditionalAuthMetods add) 
+        public ExternalLoginService(UserManager<User> _userManager, SignInManager<User> _signIn, IConfiguration _config, IJwtGenerator _jwtGenerator, IAdditionalAuthMetods additionalAuthMethods) 
             : base(_userManager, _signIn, _config, _jwtGenerator)
         {
-            _additionalAuthMetods = add;
+            _additionalAuthMetods = additionalAuthMethods;
         }
 
         public ChallengeResult Request(string provider)
