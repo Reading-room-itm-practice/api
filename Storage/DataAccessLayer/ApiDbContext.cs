@@ -10,6 +10,7 @@ using Storage.Interfaces;
 using Storage.Models.Follows;
 using Storage.Models.Likes;
 using Microsoft.AspNetCore.Identity;
+using Storage.Models.Photos;
 
 namespace Storage.DataAccessLayer
 {
@@ -32,7 +33,12 @@ namespace Storage.DataAccessLayer
         public DbSet<AuthorFollow> AuthorFollows { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
         public DbSet<Like> Likes { get; set; }
+        public DbSet<ReviewCommentLike> CommentLikes { get; set; }
+        public DbSet<ReviewLike> ReviewLikes { get; set; }
         public DbSet<Photo> Photos { get; set; }
+        public DbSet<ProfilePhoto> ProfilePhotos { get; set; }
+        public DbSet<BookPhoto> BookPhotos { get; set; }
+        public DbSet<AuthorPhoto> AuthorPhotos { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<ReadStatus> ReadStatuses { get; set; }
         public DbSet<Review> Reviews { get; set; }
@@ -52,7 +58,7 @@ namespace Storage.DataAccessLayer
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatorId = _loggedUserProvider.GetUserId();
+                        entry.Entity.CreatorId = Guid.NewGuid(); // _loggedUserProvider.GetUserId();
                         entry.Entity.Created = DateTime.UtcNow;
                         break;
 

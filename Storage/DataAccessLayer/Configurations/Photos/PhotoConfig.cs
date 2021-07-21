@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Storage.Models;
+using Storage.Models.Photos;
 
 namespace Storage.DataAccessLayer.Configurations.Photos
 {
@@ -8,12 +8,13 @@ namespace Storage.DataAccessLayer.Configurations.Photos
     {
         public void Configure(EntityTypeBuilder<Photo> builder)
         {
+            builder.HasDiscriminator(t => t.PhotoType);
+
             builder.Property(c => c.Path)
                    .IsRequired();
 
             builder.HasOne(c => c.Creator)
-                   .WithMany(l => l.Photos)
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .WithMany(l => l.AddedPhotos);
         }
     }
 }

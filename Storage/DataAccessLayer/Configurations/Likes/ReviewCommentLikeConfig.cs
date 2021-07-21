@@ -8,17 +8,14 @@ namespace Storage.DataAccessLayer.Configurations.Likes
     {
         public void Configure(EntityTypeBuilder<ReviewCommentLike> builder)
         {
-            builder.HasOne(r => r.ReviewComment)
-                .WithMany(l => l.Likes)
-                .OnDelete(DeleteBehavior.Cascade);
-
             builder.HasOne(c => c.Creator)
                 .WithMany(l => l.CommentLikes)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(f => f.CreatorId);
 
             builder.HasOne(c => c.ReviewComment)
                .WithMany(f => f.Likes)
-               .OnDelete(DeleteBehavior.Cascade);
+               .HasForeignKey(f => f.ReviewCommentId)
+               .IsRequired(false);
         }
     }
 }

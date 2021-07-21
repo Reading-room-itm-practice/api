@@ -10,11 +10,11 @@ namespace Storage.DataAccessLayer.Configurations
         {
             builder.HasOne(u => u.Creator)
                 .WithMany(r => r.ReadStatuses)
+                .HasForeignKey(f => f.CreatorId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(u => u.Book)
-              .WithMany(r => r.ReadStatuses)
-              .OnDelete(DeleteBehavior.Cascade);
+              .WithMany(r => r.ReadStatuses);
         }
     }
 }

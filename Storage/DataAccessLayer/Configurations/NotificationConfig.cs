@@ -14,7 +14,7 @@ namespace Storage.DataAccessLayer.Configurations
 
             builder.HasOne(u => u.User)
                 .WithMany(n => n.Notifications)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(f => f.UserId);
         }
     }
 }

@@ -14,7 +14,12 @@ namespace Storage.DataAccessLayer.Configurations
 
             builder.HasOne(c => c.Creator)
                    .WithMany(f => f.Reviews)
-                   .OnDelete(DeleteBehavior.Cascade);
+                   .HasForeignKey(f => f.CreatorId);
+
+            builder.HasOne(c => c.Book)
+               .WithMany(f => f.Reviews)
+               .HasForeignKey(f => f.BookId)
+               .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

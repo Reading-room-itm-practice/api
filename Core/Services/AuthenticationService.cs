@@ -80,7 +80,7 @@ namespace Core.Services
             {
             Email = model.Email,
             SecurityStamp = Guid.NewGuid().ToString(),
-            UserName = model.Username
+            UserName = model.Username,
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);

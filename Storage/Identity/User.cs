@@ -3,6 +3,7 @@ using Storage.Iterfaces;
 using Storage.Models;
 using Storage.Models.Follows;
 using Storage.Models.Likes;
+using Storage.Models.Photos;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,6 +13,8 @@ namespace Storage.Identity
     [Table("Users")]
     public class User : IdentityUser<Guid>, IFollowable
     {
+        public int? ProfilePhotoId { get; set; }
+        public ProfilePhoto ProfilePhoto { get; set; }
         public ICollection<UserFollow> Followings { get; set; }
         public ICollection<UserFollow> Followers { get; set; }
         public ICollection<AuthorFollow> FollowingsAuthors { get; set; }
@@ -27,7 +30,7 @@ namespace Storage.Identity
         public ICollection<Author> Authors { get; set; }
         public ICollection<Book> Books { get; set; }
         public ICollection<Suggestion> Suggestions { get; set; }
-        public ICollection<Photo> Photos { get; set; }
+        public ICollection<Photo> AddedPhotos { get; set; }
         public ICollection<Notification> Notifications { get; set; }
     }
 }

@@ -3,14 +3,9 @@ using Core.Repositories;
 using Core.Services;
 using Core.Services.Email;
 using Microsoft.Extensions.DependencyInjection;
-using Storage.Interfaces;
 using Storage.Models;
+using Storage.Models.Photos;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core
 {

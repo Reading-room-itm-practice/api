@@ -1,10 +1,11 @@
 ﻿using Storage.Identity;
+using System;
 
 namespace Storage.Models.Follows
 {
     public class UserFollow : Follow
     {
-        public int FollowingId { get; set; }
+        public Guid FollowingId { get; set; }
         public User Following { get; set; }
     }
 }

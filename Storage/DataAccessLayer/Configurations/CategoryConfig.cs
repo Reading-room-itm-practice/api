@@ -14,7 +14,7 @@ namespace Storage.DataAccessLayer.Configurations
 
             builder.HasOne(c => c.Creator)
                 .WithMany(a => a.Categories)
-                .OnDelete(DeleteBehavior.SetNull);
+                .HasForeignKey(f => f.CreatorId);
         }
     }
 }

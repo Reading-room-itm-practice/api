@@ -10,11 +10,12 @@ namespace Storage.DataAccessLayer.Configurations.Follows
         {
             builder.HasOne(c => c.Creator)
                 .WithMany(f => f.Followings)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(f => f.CreatorId);
 
             builder.HasOne(f => f.Following)
                 .WithMany(f => f.Followers)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(f => f.FollowingId)
+                .IsRequired(false);
         }
     }
 }

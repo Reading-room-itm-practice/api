@@ -9,7 +9,7 @@ namespace Storage.Models
         public Guid CreatorId { get; set; }
         public User Creator { get; set; }
         public DateTime? LastModified { get; set; }
-        public Guid UpdaterId { get; set; }
-        public User Updater { get; set; }
+        public Guid? UpdaterId { get; set; }
+        public virtual User Updater { get; set; }
     }
 }

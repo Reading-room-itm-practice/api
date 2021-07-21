@@ -21,7 +21,7 @@ namespace Storage.DataAccessLayer.Configurations
 
             builder.HasOne(c => c.Creator)
                .WithMany(f => f.Suggestions)
-               .OnDelete(DeleteBehavior.Cascade);
+               .HasForeignKey(f => f.CreatorId);
         }
     }
 }
