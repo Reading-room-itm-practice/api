@@ -3,8 +3,10 @@ using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Storage.DataAccessLayer;
+using Storage.Identity;
 using Storage.Interfaces;
 using Storage.Models;
 using System;
@@ -22,12 +24,15 @@ namespace Core.Services
         private readonly IReviewRepository _reviewRepository;
         private readonly IGetterService<Book> _bookGetter;
         private readonly ILoggedUserProvider _loggedUserProvider;
+        private readonly UserManager<User> _userManager;
 
-        public ReviewService(IReviewRepository reviewRepository, IGetterService<Book> bookGetter, ILoggedUserProvider loggedUserProvider)
+        public ReviewService(IReviewRepository reviewRepository, IGetterService<Book> bookGetter, 
+            ILoggedUserProvider loggedUserProvider, UserManager<User> userManager)
         {
             _loggedUserProvider = loggedUserProvider;
             _reviewRepository = reviewRepository;
             _bookGetter = bookGetter;
+            _userManager = userManager;
         }
 
         public async Task<ServiceResponse> AddReview(ReviewRequest review)
@@ -41,11 +46,12 @@ namespace Core.Services
             var userId = _loggedUserProvider.GetUserId();
             if (await _reviewRepository.ReviewByUserExists(userId, review.BookId)) return new ErrorResponse()
             {
-                Message = $"User with Id: {userId} has already posted a review for book Id: {review.BookId}",
+                Message = $"You have already posted a review for book Id: {review.BookId}",
                 StatusCode = HttpStatusCode.BadRequest
             };
 
             var newReview = await _reviewRepository.CreateReview(review);
+
             return new SuccessResponse<ReviewDto>()
             { 
                 Message = "Review created.", 
