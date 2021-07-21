@@ -16,7 +16,7 @@ namespace Core.Services.Auth
 
         public AuthServicesProvider
             (
-            UserManager<User> userManager = null, 
+            UserManager<User> userManager, 
             SignInManager<User> signInManager = null, 
             IConfiguration config = null, 
             IJwtGenerator jwtGenerator = null, 
