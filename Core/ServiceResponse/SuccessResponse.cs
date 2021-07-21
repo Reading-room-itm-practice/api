@@ -1,7 +1,4 @@
-﻿using Core.Common;
-using Core.DTOs;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 
 namespace Core.ServiceResponses
 {

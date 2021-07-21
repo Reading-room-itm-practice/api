@@ -1,12 +1,9 @@
 ﻿using Core.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Core.Interfaces;
 
 namespace WebAPI.DTOs
 {
-    public class CategoryDto : IDto
+    public class CategoryDto : IDto, INameSortable
     {
         public int Id { get; set; }
         public string Name { get; set; }

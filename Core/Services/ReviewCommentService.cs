@@ -36,21 +36,21 @@ namespace Core.Services
             var userId = _loggedUserProvider.GetUserId();
             if (await _reviewCommentRepository.CheckCommentCount(comment.ReviewId, userId)) return new ErrorResponse()
             {
-                Message = $"A single user (Id: {userId}) can post only {_reviewCommentRepository.MaxCommentPerReview} " +
-                    $"comments per single review (Id: {comment.ReviewId}). Try again later",
+                Message = $"A single user can post only {_reviewCommentRepository.MaxCommentPerReview} " +
+                    $"comments per single review (Id: {comment.ReviewId})",
                 StatusCode = HttpStatusCode.BadRequest
             };
 
             if (await _reviewCommentRepository.CheckCommentsDate(comment.ReviewId, userId)) return new ErrorResponse()
             {
-                Message = $"A single user (Id: {userId}) can post only {_reviewCommentRepository.MaxCommentPerHourPerReview} " +
+                Message = $"A single user can post only {_reviewCommentRepository.MaxCommentPerHourPerReview} " +
                     $"comments per hour on a single review (Id: {comment.ReviewId}). Try again later",
                 StatusCode = HttpStatusCode.BadRequest
             };
 
             return new SuccessResponse<ReviewCommentDto>()
             {
-                Message = "Review created.",
+                Message = "Comment posted.",
                 StatusCode = HttpStatusCode.Created,
                 Content = await _reviewCommentRepository.CreateReviewComment(comment)
             };
@@ -78,7 +78,13 @@ namespace Core.Services
             
             if (reviewId == null && userId != null && currentUser != true) return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
             {
-                Message = $"All comments by user with Id: {userId} retrieved.",
+                Message = $"All comments by user with retrieved.",
+                Content = await _reviewCommentRepository.GetComments(reviewId, userId)
+            };
+
+            if (reviewId != null && userId != null && currentUser != true) return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
+            {
+                Message = $"All comments for review with Id: {reviewId} by user retrieved.",
                 Content = await _reviewCommentRepository.GetComments(reviewId, userId)
             };
 
@@ -87,7 +93,7 @@ namespace Core.Services
                 userId = _loggedUserProvider.GetUserId();
                 return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
                 {
-                    Message = $"All comments by current user with Id: {userId} retrieved.",
+                    Message = $"All comments by current user retrieved.",
                     Content = await _reviewCommentRepository.GetComments(reviewId, userId)
                 };
             }
@@ -97,16 +103,11 @@ namespace Core.Services
                 userId = _loggedUserProvider.GetUserId();
                 return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
                 {
-                    Message = $"All comments for review with Id: {reviewId} by current user with Id: {userId} retrieved.",
+                    Message = $"All comments for review with Id: {reviewId} by current user retrieved.",
                     Content = await _reviewCommentRepository.GetComments(reviewId, userId)
                 };
             }
-
-            return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
-            {
-                Message = $"All comments for review with Id: {reviewId} by user with Id: {userId} retrieved.",
-                Content = await _reviewCommentRepository.GetComments(reviewId, userId)
-            };
+            return new ErrorResponse() { StatusCode = HttpStatusCode.BadRequest };
         }
     }
 }

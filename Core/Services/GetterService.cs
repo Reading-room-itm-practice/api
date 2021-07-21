@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using System;
+using Core.Interfaces;
+using Storage.Iterfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Common;
-using Core.Interfaces;
-using Storage.Iterfaces;
 
 namespace Core.Services
 {

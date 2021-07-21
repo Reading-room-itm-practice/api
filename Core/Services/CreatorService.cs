@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Core.Common;
 using Core.Interfaces;
 using Storage.Iterfaces;
+using System.Threading.Tasks;
 
 namespace Core.Services
 {
@@ -24,7 +21,7 @@ namespace Core.Services
         {
             var model = _mapper.Map<T>(requestDto);
             await _repository.Create(model);
-           
+
             return _mapper.Map<IResponseDto>(model);
         }
     }

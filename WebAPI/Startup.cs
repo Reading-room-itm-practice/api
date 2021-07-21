@@ -1,15 +1,12 @@
-using Core.DTOs;
 using Core.Exceptions;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Storage.Identity;
 using System.Net;
 using WebAPI.Installers;
 using WebAPI.Middleware;
@@ -45,20 +42,19 @@ namespace WebAPI
             app.UseExceptionHandler(c => c.Run(async context =>
             {
                 var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
-                if(exception is NotFoundException)
+                if (exception is NotFoundException)
                 {
-                    var type = context.Response.ContentType;
-                    context.Response.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
+                    context.Response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
                     await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = ApiException.ResponseCode, Message = exception.Message });
                 }
-                else if(exception is ApiException)
+                else if (exception is ApiException)
                 {
-                    context.Response.StatusCode = (int) ApiException.ResponseCode;
+                    context.Response.StatusCode = (int)ApiException.ResponseCode;
                     await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = ApiException.ResponseCode, Message = exception.Message });
                 }
-                else 
+                else
                 {
-                    context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = HttpStatusCode.InternalServerError, Message = exception.Message });
                 }
             }));

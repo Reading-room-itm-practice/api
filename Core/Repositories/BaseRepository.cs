@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Storage.DataAccessLayer;
+using Storage.Iterfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Core.Common;
-using Storage.DataAccessLayer;
-using Core.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using Storage.Iterfaces;
+using System.Threading.Tasks;
 
 namespace Core.Repositories
 {
@@ -24,7 +23,7 @@ namespace Core.Repositories
         {
             _context.Add(model);
             await _context.SaveChangesAsync();
-          
+
             return model;
         }
         public async Task Delete(T model)

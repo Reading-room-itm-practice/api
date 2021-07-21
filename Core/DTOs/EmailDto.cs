@@ -2,7 +2,7 @@
 
 namespace Core.DTOs
 {
-    public class ConfirmEmailModel
+    public class EmailDto
     {
         [Required]
         public string Token { get; set; }

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Core.Common;
-using Core.Mappings;
+﻿using Core.Common;
+using Core.Interfaces;
 
 namespace Core.DTOs
 {
-    public class AuthorDto : IDto
+    public class AuthorDto : IDto, INameSortable
     {
         public string Id { get; set; }
         public string Name { get; set; }
