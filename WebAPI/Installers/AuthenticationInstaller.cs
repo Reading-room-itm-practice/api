@@ -9,15 +9,13 @@ using System.Text;
 
 namespace WebAPI.Installers
 {
-    public class UserAuthenticationInstaller : Installer
+    public class AuthenticationInstaller : Installer
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddIdentity<User, IdentityRole<int>>(opttion =>
             {
                 opttion.SignIn.RequireConfirmedEmail = true;
-
-                opttion.User.RequireUniqueEmail = true;
 
                 opttion.Password.RequireDigit = true;
                 opttion.Password.RequireLowercase = true;
@@ -51,6 +49,22 @@ namespace WebAPI.Installers
                 opts.ClientId = configuration["Google:Id"];
                 opts.ClientSecret = configuration["Google:Secret"];
                 opts.SignInScheme = IdentityConstants.ExternalScheme;
+            })
+            //.AddFacebook(options =>
+            //{
+            //    options.AppId = configuration["Facebook:AppId"];
+            //    options.AppSecret = configuration["Facebook:Secret"];
+            //})
+            //.AddTwitter(twitterOptions =>
+            //{
+            //    twitterOptions.ConsumerKey = configuration["Twitter:APIKey"];
+            //    twitterOptions.ConsumerSecret = configuration["Twitter:Secret"];
+            //    twitterOptions.RetrieveUserDetails = true;
+            //})
+            .AddGitHub(options =>
+            {
+                options.ClientId = "580f3ba333ddf4bed2e2";
+                options.ClientSecret = "4fc8273adcb78aad9276f13a56c84f805d012539";
             })
             .AddJwtBearer(options =>
             {
