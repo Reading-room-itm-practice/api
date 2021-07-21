@@ -16,7 +16,7 @@ namespace Core.Services.Auth
         private readonly IAdditionalAuthMetods _additionalAuthMetods;
 
         public PasswordResetService(UserManager<User> userManager, IConfiguration config, IEmailService emailService, IAdditionalAuthMetods additionalAuthMethods) 
-            : base(userManager, config, emailService)
+            : base(userManager, config: config, emailService: emailService)
         {
             _additionalAuthMetods = additionalAuthMethods;
         }

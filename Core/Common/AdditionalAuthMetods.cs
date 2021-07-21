@@ -14,7 +14,7 @@ namespace Core.Common
     class AdditionalAuthMetods : AuthServicesProvider, IAdditionalAuthMetods
     {
         public AdditionalAuthMetods(UserManager<User> _userManager, IConfiguration _config, IJwtGenerator _jwtGenerator) 
-            : base(_userManager, _config, _jwtGenerator) {}
+            : base(_userManager, config: _config, jwtGenerator: _jwtGenerator) {}
 
         public string BuildUrl(string token, string username, string path)
         {
