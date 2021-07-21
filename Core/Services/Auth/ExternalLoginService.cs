@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Auth
 {
-    class ExternalLoginService : AuthServicesProvider, IExternalLoginService
+    internal class ExternalLoginService : AuthServicesProvider, IExternalLoginService
     {
         private readonly IAdditionalAuthMetods _additionalAuthMetods;
         public ExternalLoginService(UserManager<User> _userManager, SignInManager<User> _signInManager, IConfiguration _config, IJwtGenerator _jwtGenerator, IAdditionalAuthMetods additionalAuthMethods) 

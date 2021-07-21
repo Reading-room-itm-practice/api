@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Core.Services.Auth
 {
-    class PasswordResetService : AuthServicesProvider, IPasswordResetService
+    internal class PasswordResetService : AuthServicesProvider, IPasswordResetService
     {
         private readonly IAdditionalAuthMetods _additionalAuthMetods;
 
