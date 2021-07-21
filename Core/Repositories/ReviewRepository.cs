@@ -42,9 +42,9 @@ namespace Core.Repositories
             return book.Reviews.Any(r => r.CreatedBy == userId);
         }
 
-        public async Task<ReviewDto> CreateReview(ReviewRequest _review)
+        public async Task<ReviewDto> CreateReview(ReviewRequest reviewRequest)
         {
-            var review = _mapper.Map<Review>(_review);
+            var review = _mapper.Map<Review>(reviewRequest);
             return _mapper.Map<ReviewDto>(await Create(review));
         }
     }
