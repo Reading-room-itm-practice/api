@@ -18,6 +18,5 @@ namespace Core.Interfaces
         public Task<ReviewCommentDto> CreateReviewComment(ReviewCommentRequest newComment);
         public int MaxCommentPerReview { get; }
         public int MaxCommentPerHourPerReview { get; }
-
     }
 }

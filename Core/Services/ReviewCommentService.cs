@@ -18,33 +18,35 @@ namespace Core.Services
         private readonly IReviewCommentRepository _reviewCommentRepository;
         private readonly ILoggedUserProvider _loggedUserProvider;
         private readonly IGetterService<Review> _reviewGetter;
+        private readonly IGetterService<Book> _bookGetter;
         public ReviewCommentService(IReviewCommentRepository reviewCommentRepository, ILoggedUserProvider loggedUserProvider,
-            IGetterService<Review> reviewGetter)
+            IGetterService<Review> reviewGetter, IGetterService<Book> bookGetter)
         {
             _reviewCommentRepository = reviewCommentRepository;
             _loggedUserProvider = loggedUserProvider;
             _reviewGetter = reviewGetter;
+            _bookGetter = bookGetter;
         }
         public async Task<ServiceResponse> AddReviewComment(ReviewCommentRequest comment)
         {
             if (await _reviewGetter.GetById<Review>(comment.ReviewId) == null) return new ErrorResponse()
             {
-                Message = $"Review with Id: {comment.ReviewId} doesn't exist.",
+                Message = $"Review doesn't exist.",
                 StatusCode = HttpStatusCode.BadRequest
             };
 
             var userId = _loggedUserProvider.GetUserId();
             if (await _reviewCommentRepository.CheckCommentCount(comment.ReviewId, userId)) return new ErrorResponse()
             {
-                Message = $"A single user can post only {_reviewCommentRepository.MaxCommentPerReview} " +
-                    $"comments per single review (Id: {comment.ReviewId})",
+                Message = $"You can post only {_reviewCommentRepository.MaxCommentPerReview} " +
+                    $"comments per single review",
                 StatusCode = HttpStatusCode.BadRequest
             };
 
             if (await _reviewCommentRepository.CheckCommentsDate(comment.ReviewId, userId)) return new ErrorResponse()
             {
-                Message = $"A single user can post only {_reviewCommentRepository.MaxCommentPerHourPerReview} " +
-                    $"comments per hour on a single review (Id: {comment.ReviewId}). Try again later",
+                Message = $"You can post only {_reviewCommentRepository.MaxCommentPerHourPerReview} " +
+                    $"comments per hour on a single review. Try again later",
                 StatusCode = HttpStatusCode.BadRequest
             };
 
@@ -60,7 +62,7 @@ namespace Core.Services
         {
             if (reviewId != null && await _reviewGetter.GetById<Review>((int)reviewId) == null) return new ErrorResponse()
             {
-                Message = $"Review with Id: {reviewId} doesn't exist.",
+                Message = $"Review doesn't exist.",
                 StatusCode = HttpStatusCode.BadRequest
             };
 
@@ -72,7 +74,7 @@ namespace Core.Services
 
             if (reviewId != null && userId == null && currentUser != true) return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
             {
-                Message = $"All comments for review with Id: {reviewId} retrieved.",
+                Message = $"All comments for review of {await GetBookTitle((int)reviewId)} retrieved.",
                 Content = await _reviewCommentRepository.GetComments(reviewId, userId)
             };
             
@@ -84,7 +86,7 @@ namespace Core.Services
 
             if (reviewId != null && userId != null && currentUser != true) return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
             {
-                Message = $"All comments for review with Id: {reviewId} by user retrieved.",
+                Message = $"All comments for review of {await GetBookTitle((int)reviewId)} by user retrieved.",
                 Content = await _reviewCommentRepository.GetComments(reviewId, userId)
             };
 
@@ -103,11 +105,16 @@ namespace Core.Services
                 userId = _loggedUserProvider.GetUserId();
                 return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
                 {
-                    Message = $"All comments for review with Id: {reviewId} by current user retrieved.",
+                    Message = $"All comments for review of {await GetBookTitle((int)reviewId)} by current user retrieved.",
                     Content = await _reviewCommentRepository.GetComments(reviewId, userId)
                 };
             }
             return new ErrorResponse() { StatusCode = HttpStatusCode.BadRequest };
+        }
+        private async Task<string> GetBookTitle(int reviewId)
+        {
+            var book = await _bookGetter.GetById<BookDto>((await _reviewGetter.GetById<ReviewDto>(reviewId)).BookId);
+            return book.Title;
         }
     }
 }

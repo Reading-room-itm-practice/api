@@ -39,14 +39,14 @@ namespace Core.Services
         {
             if (await _bookGetter.GetById<BookDto>(review.BookId) == null) return new ErrorResponse()
             {
-                Message = $"Book with Id: {review.BookId} doesn't exist",
+                Message = $"Book doesn't exist",
                 StatusCode = HttpStatusCode.BadRequest
             };
 
             var userId = _loggedUserProvider.GetUserId();
             if (await _reviewRepository.ReviewByUserExists(userId, review.BookId)) return new ErrorResponse()
             {
-                Message = $"You have already posted a review for book Id: {review.BookId}",
+                Message = $"You have already posted a review for {await GetBookTitle(review.BookId)}",
                 StatusCode = HttpStatusCode.BadRequest
             };
 
@@ -70,15 +70,21 @@ namespace Core.Services
 
             if (await _bookGetter.GetById<BookDto>((int)bookId) == null) return new ErrorResponse()
             {
-                Message = $"Book with Id: {bookId} doesn't exist",
+                Message = $"Book doesn't exist",
                 StatusCode = HttpStatusCode.BadRequest
             };
 
             return new SuccessResponse<IEnumerable<ReviewDto>>()
             {
-                Message = $"Reviews for Book with ID = {bookId} retrieved.",
+                Message = $"Reviews for {await GetBookTitle((int)bookId)} retrieved.",
                 Content = await _reviewRepository.GetReviews(bookId)
             };
+        }
+
+        private async Task<string> GetBookTitle(int bookId)
+        {
+            var book = await _bookGetter.GetById<BookDto>(bookId);
+            return book.Title;
         }
     }
 }
