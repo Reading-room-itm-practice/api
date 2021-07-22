@@ -30,7 +30,7 @@ namespace Core.Common
 
         public string CreateValidationErrorMessage(IdentityResult result)
         {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new ();
             foreach (var error in result.Errors)
             {
                 builder.Append(error.Description + " ");
@@ -39,9 +39,14 @@ namespace Core.Common
             return builder.ToString();
         }
 
-        public async Task<ServiceResponse> GetUserTokenResponse(string email)
+        public async Task<ServiceResponse> GetUserTokenResponse(string userInfo)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            User user = new ();
+            if(userInfo.Contains('@'))
+                user = await _userManager.FindByEmailAsync(userInfo);
+            else
+                user = await _userManager.FindByNameAsync(userInfo);
+
             var roles = await _userManager.GetRolesAsync(user);
             return new SuccessResponse<string>
             {
