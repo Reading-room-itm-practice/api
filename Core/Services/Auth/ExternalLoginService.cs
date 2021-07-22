@@ -39,7 +39,8 @@ namespace Core.Services.Auth
 
             if (result.Succeeded)
             {
-                return await _additionalAuthMetods.GetUserTokenResponse(info.Principal.FindFirst(ClaimTypes.Name).Value);
+                var username = info.Principal.FindFirst(ClaimTypes.Name).Value.Replace(" ", "_");
+                return await _additionalAuthMetods.GetUserTokenResponse(username);
             }
 
             User user = CreateExternalUser(info);
@@ -61,8 +62,7 @@ namespace Core.Services.Auth
         {
             User user = new()
             {
-                Email = info.Principal.FindFirst(ClaimTypes.Email)?.Value,
-                UserName = info.Principal.FindFirst(ClaimTypes.Name).Value,
+                UserName = info.Principal.FindFirst(ClaimTypes.Name).Value.Replace(" ", "_"),
                 EmailConfirmed = true
             };
             

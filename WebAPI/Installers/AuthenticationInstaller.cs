@@ -50,17 +50,17 @@ namespace WebAPI.Installers
                 opts.ClientSecret = configuration["Google:Secret"];
                 opts.SignInScheme = IdentityConstants.ExternalScheme;
             })
-            //.AddFacebook(options =>
-            //{
-            //    options.AppId = configuration["Facebook:AppId"];
-            //    options.AppSecret = configuration["Facebook:Secret"];
-            //})
-            //.AddTwitter(twitterOptions =>
-            //{
-            //    twitterOptions.ConsumerKey = configuration["Twitter:APIKey"];
-            //    twitterOptions.ConsumerSecret = configuration["Twitter:Secret"];
-            //    twitterOptions.RetrieveUserDetails = true;
-            //})
+            .AddFacebook(options =>
+            {
+                options.AppId = configuration["Facebook:AppId"];
+                options.AppSecret = configuration["Facebook:Secret"];
+            })
+            .AddTwitter(twitterOptions =>
+            {
+                twitterOptions.ConsumerKey = configuration["Twitter:APIKey"];
+                twitterOptions.ConsumerSecret = configuration["Twitter:Secret"];
+                twitterOptions.RetrieveUserDetails = true;
+            })
             .AddGitHub(options =>
             {
                 options.ClientId = configuration["GitHub:Id"];
