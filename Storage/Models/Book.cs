@@ -17,7 +17,7 @@ namespace Storage.Models
         public int? CategoryId { get; set; }
         public Category Category { get; set; }
         public int? MainPhotoId { get; set; }
-        public Photo MainPhoto { get; set; }
+        public BookPhoto MainPhoto { get; set; }
         public ICollection<BookPhoto> Photos { get; set; }
         public string Title { get; set; }
         public DateTime? RelaseDate { get; set; }

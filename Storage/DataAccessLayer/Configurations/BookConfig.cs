@@ -8,10 +8,6 @@ namespace Storage.DataAccessLayer.Configurations
     {
         public void Configure(EntityTypeBuilder<Book> builder)
         {
-            builder.Property(t => t.Title)
-                .HasMaxLength(200)
-                .IsRequired();
-
             builder.Property(d => d.Description)
                 .HasMaxLength(int.MaxValue)
                 .IsRequired();

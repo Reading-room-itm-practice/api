@@ -15,6 +15,11 @@ namespace Storage.DataAccessLayer.Configurations.Photos
 
             builder.HasOne(c => c.Creator)
                    .WithMany(l => l.AddedPhotos);
+
+            builder.HasDiscriminator(b => b.PhotoType)
+                .HasValue<AuthorPhoto>(PhotoTypes.AuthorPhoto)
+                .HasValue<BookPhoto>(PhotoTypes.BookPhoto)
+                .HasValue<ProfilePhoto>(PhotoTypes.ProfilePhoto);
         }
     }
 }

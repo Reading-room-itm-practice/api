@@ -8,7 +8,9 @@ namespace Storage.DataAccessLayer.Configurations.Likes
     {
         public void Configure(EntityTypeBuilder<Like> builder)
         {
-            builder.HasDiscriminator(b => b.LikeableType);
+            builder.HasDiscriminator(b => b.LikeableType)
+                .HasValue<ReviewLike>(LikeableTypes.Review)
+                .HasValue<ReviewCommentLike>(LikeableTypes.ReviewComment);
         }
     }
 }

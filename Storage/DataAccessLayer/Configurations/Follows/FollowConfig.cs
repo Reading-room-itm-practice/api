@@ -8,7 +8,10 @@ namespace Storage.DataAccessLayer.Configurations.Follows
     {
         public void Configure(EntityTypeBuilder<Follow> builder)
         {
-            builder.HasDiscriminator(b => b.FollowableType);
+            builder.HasDiscriminator(b => b.FollowableType)
+                .HasValue<CategoryFollow>(FollowableTypes.Category)
+                .HasValue<AuthorFollow>(FollowableTypes.Author)
+                .HasValue<UserFollow>(FollowableTypes.User);
         }
     }
 }

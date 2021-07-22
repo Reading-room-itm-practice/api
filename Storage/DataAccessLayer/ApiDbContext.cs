@@ -48,6 +48,12 @@ namespace Storage.DataAccessLayer
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            //builder.Entity<Follow>().HasDiscriminator(b => b.FollowableType)
+            //        .HasValue<CategoryFollow>(FollowableTypes.Category)
+            //        .HasValue<AuthorFollow>(FollowableTypes.Author)
+            //        .HasValue<UserFollow>(FollowableTypes.User);
+
             builder.ApplyConfigurationsFromAssembly(typeof(ApiDbContext).Assembly);
         }
 
@@ -59,12 +65,12 @@ namespace Storage.DataAccessLayer
                 {
                     case EntityState.Added:
                         entry.Entity.CreatorId = _loggedUserProvider.GetUserId();
-                        entry.Entity.Created = DateTime.UtcNow;
+                        entry.Entity.CreatedAt = DateTime.UtcNow;
                         break;
 
                     case EntityState.Modified:
                         entry.Entity.UpdaterId = _loggedUserProvider.GetUserId();
-                        entry.Entity.LastModified = DateTime.UtcNow;
+                        entry.Entity.LastModifiedAt = DateTime.UtcNow;
                         break;
                 }
             }

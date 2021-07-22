@@ -15,10 +15,10 @@ namespace Storage.Identity
     {
         public int? ProfilePhotoId { get; set; }
         public ProfilePhoto ProfilePhoto { get; set; }
-        public ICollection<UserFollow> Followings { get; set; }
         public ICollection<UserFollow> Followers { get; set; }
-        public ICollection<AuthorFollow> FollowingsAuthors { get; set; }
-        public ICollection<CategoryFollow> FollwingsCategories { get; set; }
+        public ICollection<UserFollow> FollowingUsers { get; set; }
+        public ICollection<AuthorFollow> FollowingAuthors { get; set; }
+        public ICollection<CategoryFollow> FollwingCategories { get; set; }
         public ICollection<FriendRequest> SentRequests { get; set; }
         public ICollection<FriendRequest> RecivedRequests { get; set; }
         public ICollection<Review> Reviews { get; set; }
