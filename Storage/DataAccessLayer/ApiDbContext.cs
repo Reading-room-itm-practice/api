@@ -58,7 +58,7 @@ namespace Storage.DataAccessLayer
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatorId = Guid.NewGuid(); // _loggedUserProvider.GetUserId();
+                        entry.Entity.CreatorId = _loggedUserProvider.GetUserId();
                         entry.Entity.Created = DateTime.UtcNow;
                         break;
 

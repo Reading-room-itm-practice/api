@@ -55,7 +55,7 @@ namespace Storage
                 else
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = HttpStatusCode.InternalServerError, Message = exception.InnerException.Message });
+                    await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = HttpStatusCode.InternalServerError, Message = exception.Message });
                 }
             }));
 

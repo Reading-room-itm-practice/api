@@ -15,9 +15,9 @@ namespace Storage.DataAccessLayer.Configurations
             builder.Property(d => d.Description)
                 .HasMaxLength(int.MaxValue)
                 .IsRequired();
-
-            builder.Property(r => r.ReleaseYear)
-                .HasPrecision(4, 0);
+            
+            builder.Property(d => d.RelaseDate)
+                .HasColumnType("date");
 
             builder.HasOne(a => a.Author)
                 .WithMany(b => b.Books)
