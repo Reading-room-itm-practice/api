@@ -10,7 +10,7 @@ using Storage.DataAccessLayer;
 namespace Storage.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210722074749_Refactored_Database")]
+    [Migration("20210722134541_Refactored_Database")]
     partial class Refactored_Database
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -235,14 +235,23 @@ namespace Storage.Migrations
                         .HasMaxLength(2147483647)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("LastModified")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("MainPhotoId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MainPhotoId1")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -255,6 +264,8 @@ namespace Storage.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatorId");
+
+                    b.HasIndex("MainPhotoId1");
 
                     b.HasIndex("UpdaterId");
 
@@ -274,7 +285,7 @@ namespace Storage.Migrations
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
@@ -285,19 +296,23 @@ namespace Storage.Migrations
                         .HasMaxLength(2147483647)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("LastModified")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("MainPhotoId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MainPhotoId1")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("RelaseDate")
                         .HasColumnType("date");
 
                     b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("UpdaterId")
                         .HasColumnType("uniqueidentifier");
@@ -310,7 +325,7 @@ namespace Storage.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.HasIndex("MainPhotoId");
+                    b.HasIndex("MainPhotoId1");
 
                     b.HasIndex("UpdaterId");
 
@@ -324,13 +339,16 @@ namespace Storage.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("LastModified")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -357,17 +375,19 @@ namespace Storage.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("FollowableType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("FollowableType")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime?>("LastModified")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("UpdaterId")
@@ -379,7 +399,7 @@ namespace Storage.Migrations
 
                     b.ToTable("Follows");
 
-                    b.HasDiscriminator<string>("FollowableType").HasValue("Follow");
+                    b.HasDiscriminator<int>("FollowableType");
                 });
 
             modelBuilder.Entity("Storage.Models.FriendRequest", b =>
@@ -389,7 +409,7 @@ namespace Storage.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
@@ -398,7 +418,10 @@ namespace Storage.Migrations
                     b.Property<bool>("IsConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("LastModified")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("ToId")
@@ -425,18 +448,20 @@ namespace Storage.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("LastModified")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("LikeableType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("LikeableType")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("UpdaterId")
                         .HasColumnType("uniqueidentifier");
@@ -447,7 +472,7 @@ namespace Storage.Migrations
 
                     b.ToTable("Likes");
 
-                    b.HasDiscriminator<string>("LikeableType").HasValue("Like");
+                    b.HasDiscriminator<int>("LikeableType");
                 });
 
             modelBuilder.Entity("Storage.Models.Notification", b =>
@@ -461,6 +486,12 @@ namespace Storage.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -479,22 +510,24 @@ namespace Storage.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("LastModified")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhotoType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PhotoType")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("UpdaterId")
                         .HasColumnType("uniqueidentifier");
@@ -507,7 +540,7 @@ namespace Storage.Migrations
 
                     b.ToTable("Photos");
 
-                    b.HasDiscriminator<string>("PhotoType").HasValue("Photo");
+                    b.HasDiscriminator<int>("PhotoType");
                 });
 
             modelBuilder.Entity("Storage.Models.ReadStatus", b =>
@@ -520,11 +553,14 @@ namespace Storage.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsFavorite")
                         .HasColumnType("bit");
@@ -535,7 +571,7 @@ namespace Storage.Migrations
                     b.Property<bool>("IsWantRead")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("LastModified")
+                    b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("UpdaterId")
@@ -567,13 +603,16 @@ namespace Storage.Migrations
                         .HasMaxLength(2147483647)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("LastModified")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Stars")
@@ -605,13 +644,16 @@ namespace Storage.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("LastModified")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("ReviewId")
@@ -647,13 +689,16 @@ namespace Storage.Migrations
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("LastModified")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
@@ -686,7 +731,7 @@ namespace Storage.Migrations
 
                     b.ToTable("Follows");
 
-                    b.HasDiscriminator().HasValue("AuthorFollow");
+                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Storage.Models.Follows.CategoryFollow", b =>
@@ -702,7 +747,7 @@ namespace Storage.Migrations
 
                     b.ToTable("Follows");
 
-                    b.HasDiscriminator().HasValue("CategoryFollow");
+                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("Storage.Models.Follows.UserFollow", b =>
@@ -718,7 +763,7 @@ namespace Storage.Migrations
 
                     b.ToTable("Follows");
 
-                    b.HasDiscriminator().HasValue("UserFollow");
+                    b.HasDiscriminator().HasValue(3);
                 });
 
             modelBuilder.Entity("Storage.Models.Likes.ReviewCommentLike", b =>
@@ -734,7 +779,7 @@ namespace Storage.Migrations
 
                     b.ToTable("Likes");
 
-                    b.HasDiscriminator().HasValue("ReviewCommentLike");
+                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Storage.Models.Likes.ReviewLike", b =>
@@ -750,7 +795,7 @@ namespace Storage.Migrations
 
                     b.ToTable("Likes");
 
-                    b.HasDiscriminator().HasValue("ReviewLike");
+                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("Storage.Models.Photos.AuthorPhoto", b =>
@@ -764,7 +809,7 @@ namespace Storage.Migrations
 
                     b.ToTable("Photos");
 
-                    b.HasDiscriminator().HasValue("AuthorPhoto");
+                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("Storage.Models.Photos.BookPhoto", b =>
@@ -778,7 +823,7 @@ namespace Storage.Migrations
 
                     b.ToTable("Photos");
 
-                    b.HasDiscriminator().HasValue("BookPhoto");
+                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Storage.Models.Photos.ProfilePhoto", b =>
@@ -790,7 +835,7 @@ namespace Storage.Migrations
 
                     b.ToTable("Photos");
 
-                    b.HasDiscriminator().HasValue("ProfilePhoto");
+                    b.HasDiscriminator().HasValue(3);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -861,11 +906,17 @@ namespace Storage.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Storage.Models.Photos.AuthorPhoto", "MainPhoto")
+                        .WithMany()
+                        .HasForeignKey("MainPhotoId1");
+
                     b.HasOne("Storage.Identity.User", "Updater")
                         .WithMany()
                         .HasForeignKey("UpdaterId");
 
                     b.Navigation("Creator");
+
+                    b.Navigation("MainPhoto");
 
                     b.Navigation("Updater");
                 });
@@ -874,21 +925,23 @@ namespace Storage.Migrations
                 {
                     b.HasOne("Storage.Models.Author", "Author")
                         .WithMany("Books")
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Storage.Models.Category", "Category")
                         .WithMany("Books")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Storage.Identity.User", "Creator")
                         .WithMany("Books")
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Storage.Models.Photos.Photo", "MainPhoto")
+                    b.HasOne("Storage.Models.Photos.BookPhoto", "MainPhoto")
                         .WithMany()
-                        .HasForeignKey("MainPhotoId");
+                        .HasForeignKey("MainPhotoId1");
 
                     b.HasOne("Storage.Identity.User", "Updater")
                         .WithMany()
@@ -942,7 +995,7 @@ namespace Storage.Migrations
                     b.HasOne("Storage.Identity.User", "To")
                         .WithMany("RecivedRequests")
                         .HasForeignKey("ToId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Storage.Identity.User", "Updater")
@@ -1054,7 +1107,7 @@ namespace Storage.Migrations
                     b.HasOne("Storage.Models.Review", "Review")
                         .WithMany("Comments")
                         .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Storage.Identity.User", "Updater")
@@ -1092,7 +1145,7 @@ namespace Storage.Migrations
                         .HasForeignKey("AuthorId");
 
                     b.HasOne("Storage.Identity.User", "Creator")
-                        .WithMany("FollowingsAuthors")
+                        .WithMany("FollowedAuthors")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1109,7 +1162,7 @@ namespace Storage.Migrations
                         .HasForeignKey("CategoryId");
 
                     b.HasOne("Storage.Identity.User", "Creator")
-                        .WithMany("FollwingsCategories")
+                        .WithMany("FollwedCategories")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1122,7 +1175,7 @@ namespace Storage.Migrations
             modelBuilder.Entity("Storage.Models.Follows.UserFollow", b =>
                 {
                     b.HasOne("Storage.Identity.User", "Creator")
-                        .WithMany("Followings")
+                        .WithMany("FollowedUsers")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1200,13 +1253,13 @@ namespace Storage.Migrations
 
                     b.Navigation("CommentLikes");
 
+                    b.Navigation("FollowedAuthors");
+
+                    b.Navigation("FollowedUsers");
+
                     b.Navigation("Followers");
 
-                    b.Navigation("Followings");
-
-                    b.Navigation("FollowingsAuthors");
-
-                    b.Navigation("FollwingsCategories");
+                    b.Navigation("FollwedCategories");
 
                     b.Navigation("Notifications");
 

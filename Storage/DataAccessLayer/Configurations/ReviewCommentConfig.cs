@@ -19,7 +19,8 @@ namespace Storage.DataAccessLayer.Configurations
 
             builder.HasOne(c => c.Review)
                .WithMany(f => f.Comments)
-               .HasForeignKey(f => f.ReviewId);
+               .HasForeignKey(f => f.ReviewId)
+               .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

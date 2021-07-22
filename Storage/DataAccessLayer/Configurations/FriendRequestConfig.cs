@@ -14,7 +14,8 @@ namespace Storage.DataAccessLayer.Configurations
 
             builder.HasOne(c => c.To)
              .WithMany(f => f.RecivedRequests)
-             .HasForeignKey(f => f.ToId);
+             .HasForeignKey(f => f.ToId)
+             .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Storage.DataAccessLayer.Configurations.Follows
                 .IsRequired(false);
 
             builder.HasOne(c => c.Creator)
-                .WithMany(f => f.FollwingCategories)
+                .WithMany(f => f.FollwedCategories)
                 .HasForeignKey(f => f.CreatorId);
         }
     }

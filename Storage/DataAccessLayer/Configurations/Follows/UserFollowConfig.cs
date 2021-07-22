@@ -9,7 +9,7 @@ namespace Storage.DataAccessLayer.Configurations.Follows
         public void Configure(EntityTypeBuilder<UserFollow> builder)
         {
             builder.HasOne(c => c.Creator)
-                .WithMany(f => f.FollowingUsers)
+                .WithMany(f => f.FollowedUsers)
                 .HasForeignKey(f => f.CreatorId);
 
             builder.HasOne(f => f.Following)

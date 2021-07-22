@@ -17,15 +17,18 @@ namespace Storage.DataAccessLayer.Configurations
 
             builder.HasOne(a => a.Author)
                 .WithMany(b => b.Books)
-                .HasForeignKey(f => f.AuthorId);
+                .HasForeignKey(f => f.AuthorId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(u => u.Creator)
               .WithMany(r => r.Books)
-              .HasForeignKey(f => f.CreatorId);
+              .HasForeignKey(f => f.CreatorId)
+              .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(u => u.Category)
               .WithMany(r => r.Books)
-              .HasForeignKey(f => f.CategoryId);
+              .HasForeignKey(f => f.CategoryId)
+              .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -111,10 +111,13 @@ namespace Storage.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Biography = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MainPhotoId = table.Column<int>(type: "int", nullable: true),
+                    MainPhotoId1 = table.Column<int>(type: "int", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -130,13 +133,15 @@ namespace Storage.Migrations
                     AuthorId = table.Column<int>(type: "int", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: true),
                     MainPhotoId = table.Column<int>(type: "int", nullable: true),
-                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    MainPhotoId1 = table.Column<int>(type: "int", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RelaseDate = table.Column<DateTime>(type: "date", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,8 +150,7 @@ namespace Storage.Migrations
                         name: "FK_Books_Authors_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "Authors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -156,10 +160,11 @@ namespace Storage.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -172,14 +177,15 @@ namespace Storage.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FollowableType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FollowableType = table.Column<int>(type: "int", nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: true),
                     FollowingId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -206,10 +212,11 @@ namespace Storage.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ToId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -222,13 +229,14 @@ namespace Storage.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    LikeableType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LikeableType = table.Column<int>(type: "int", nullable: false),
                     ReviewCommentId = table.Column<int>(type: "int", nullable: true),
                     ReviewId = table.Column<int>(type: "int", nullable: true),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -242,7 +250,9 @@ namespace Storage.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                    Content = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -255,15 +265,16 @@ namespace Storage.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PhotoType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhotoType = table.Column<int>(type: "int", nullable: false),
                     Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: true),
                     BookId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -324,10 +335,11 @@ namespace Storage.Migrations
                     IsRead = table.Column<bool>(type: "bit", nullable: false),
                     IsWantRead = table.Column<bool>(type: "bit", nullable: false),
                     IsFavorite = table.Column<bool>(type: "bit", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -361,10 +373,11 @@ namespace Storage.Migrations
                     BookId = table.Column<int>(type: "int", nullable: false),
                     Stars = table.Column<int>(type: "int", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", maxLength: 2147483647, nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -398,10 +411,11 @@ namespace Storage.Migrations
                     Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Author = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -428,10 +442,11 @@ namespace Storage.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ReviewId = table.Column<int>(type: "int", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    LastModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdaterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -452,8 +467,7 @@ namespace Storage.Migrations
                         name: "FK_Review_comments_Reviews_ReviewId",
                         column: x => x.ReviewId,
                         principalTable: "Reviews",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -508,6 +522,11 @@ namespace Storage.Migrations
                 column: "CreatorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Authors_MainPhotoId1",
+                table: "Authors",
+                column: "MainPhotoId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Authors_UpdaterId",
                 table: "Authors",
                 column: "UpdaterId");
@@ -528,9 +547,9 @@ namespace Storage.Migrations
                 column: "CreatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_MainPhotoId",
+                name: "IX_Books_MainPhotoId1",
                 table: "Books",
-                column: "MainPhotoId");
+                column: "MainPhotoId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_UpdaterId",
@@ -736,12 +755,19 @@ namespace Storage.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_Authors_Photos_MainPhotoId1",
+                table: "Authors",
+                column: "MainPhotoId1",
+                principalTable: "Photos",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Books_AspNetUsers_CreatorId",
                 table: "Books",
                 column: "CreatorId",
                 principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.NoAction);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Books_AspNetUsers_UpdaterId",
@@ -756,13 +782,12 @@ namespace Storage.Migrations
                 table: "Books",
                 column: "CategoryId",
                 principalTable: "Categories",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Books_Photos_MainPhotoId",
+                name: "FK_Books_Photos_MainPhotoId1",
                 table: "Books",
-                column: "MainPhotoId",
+                column: "MainPhotoId1",
                 principalTable: "Photos",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -821,7 +846,7 @@ namespace Storage.Migrations
                 column: "ToId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.NoAction);
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Friend_requests_AspNetUsers_UpdaterId",
@@ -923,7 +948,11 @@ namespace Storage.Migrations
                 table: "Photos");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Books_Photos_MainPhotoId",
+                name: "FK_Authors_Photos_MainPhotoId1",
+                table: "Authors");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Books_Photos_MainPhotoId1",
                 table: "Books");
 
             migrationBuilder.DropTable(
