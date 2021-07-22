@@ -1,6 +1,7 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
+using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
 using Swashbuckle.AspNetCore.Annotations;
@@ -22,9 +23,9 @@ namespace WebAPI.Controllers
 
         [SwaggerOperation(Summary = "Retrieves all books")]
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] PaginationFilter filter)
         {
-            var books = await _crud.GetAll<BookDto>();
+            var books = await _crud.GetAll<BookDto>(filter);
             return Ok(books);
         }
 

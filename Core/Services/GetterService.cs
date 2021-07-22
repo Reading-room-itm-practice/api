@@ -18,9 +18,9 @@ namespace Core.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<IResponseDto>> GetAll<IResponseDto>()
+        public async Task<IEnumerable<IResponseDto>> GetAll<IResponseDto>(PaginationFilter filter)
         {
-            var models = await _repository.FindAll();
+            var models = await _repository.FindAll(filter);
 
             return _mapper.Map<IEnumerable<IResponseDto>>(models);
         }

@@ -1,6 +1,7 @@
 ﻿using Core.Enums;
 using Core.Interfaces;
 using Core.ServiceResponses;
+using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -17,34 +18,34 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public ServiceResponse All(SortType? sort, string searchString = "")
+        public ServiceResponse All([FromQuery] PaginationFilter filter, SortType? sort, string searchString = "")
         {
-            return searchService.SearchAll(searchString, sort);
+            return searchService.SearchAll(filter, searchString, sort);
         }
 
         [HttpGet("Author")]
-        public ServiceResponse Authors(SortType? sort, string searchString = "")
+        public ServiceResponse Authors([FromQuery] PaginationFilter filter, SortType? sort, string searchString = "")
         {
-            return searchService.SearchAuthor(searchString, sort);
+            return searchService.SearchAuthor(filter, searchString, sort);
         }
 
         [HttpGet("Books")]
-        public ServiceResponse Books(SortType? sort, int? minYear, int? maxYear, int? categoryId, int? authorId,
+        public ServiceResponse Books([FromQuery] PaginationFilter filter, SortType? sort, int? minYear, int? maxYear, int? categoryId, int? authorId,
             string searchString = "")
         {
-            return searchService.SearchBook(searchString, sort, minYear, maxYear, categoryId, authorId);
+            return searchService.SearchBook(filter, searchString, sort, minYear, maxYear, categoryId, authorId);
         }
 
         [HttpGet("Categories")]
-        public ServiceResponse Categories(SortType? sort, string searchString = "")
+        public ServiceResponse Categories([FromQuery] PaginationFilter filter, SortType? sort, string searchString = "")
         {
-            return searchService.SearchCategory(searchString, sort);
+            return searchService.SearchCategory(filter, searchString, sort);
         }
 
         [HttpGet("User")]
-        public ServiceResponse Users(SortType? sort, string searchString = "")
+        public ServiceResponse Users([FromQuery] PaginationFilter filter, SortType? sort, string searchString = "")
         {
-            return searchService.SearchUser(searchString, sort);
+            return searchService.SearchUser(filter, searchString, sort);
         }
     }
 }

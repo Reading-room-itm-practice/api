@@ -1,4 +1,5 @@
 ﻿using Core.Interfaces;
+using Core.Services;
 using Microsoft.EntityFrameworkCore;
 using Storage.DataAccessLayer;
 using Storage.Iterfaces;
@@ -38,8 +39,15 @@ namespace Core.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<T>> FindAll()
+        public async Task<IEnumerable<T>> FindAll(PaginationFilter filter)
         {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            if (validFilter.PageSize != 0)
+                return await _context.Set<T>()
+                .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
+                .Take(validFilter.PageSize)
+                .ToListAsync();
+
             return await _context.Set<T>().ToListAsync();
         }
 

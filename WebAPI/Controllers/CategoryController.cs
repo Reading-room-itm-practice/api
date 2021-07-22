@@ -1,6 +1,7 @@
 ﻿using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
+using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
 using System.Collections.Generic;
@@ -30,9 +31,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ServiceResponse> GetCategories()
+        public async Task<ServiceResponse> GetCategories([FromQuery] PaginationFilter filter)
         {
-            var result = await _crud.GetAll<CategoryDto>();
+            var result = await _crud.GetAll<CategoryDto>(filter);
             return new SuccessResponse<IEnumerable<CategoryDto>>() { Message = "Categories retrieved.", StatusCode = HttpStatusCode.OK, Content = result };
         }
 

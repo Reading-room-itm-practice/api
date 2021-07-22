@@ -1,4 +1,5 @@
-﻿using Storage.Iterfaces;
+﻿using Core.Services;
+using Storage.Iterfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -11,7 +12,7 @@ namespace Core.Interfaces
         public Task<T> Create(T model);
         public Task Delete(T model);
         public Task Edit(T model);
-        public Task<IEnumerable<T>> FindAll();
+        public Task<IEnumerable<T>> FindAll(PaginationFilter filter);
         public Task<IEnumerable<T>> FindByConditions(Expression<Func<T, bool>> expresion);
     }
 }

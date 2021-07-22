@@ -2,6 +2,7 @@
 using Core.DTOs;
 using Core.Enums;
 using Core.Interfaces;
+using Core.Services;
 using Storage.DataAccessLayer;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace Core.Repositories
             _mapper = mapper;
         }
 
-        public IEnumerable<AuthorDto> GetAuthors(string searchString, SortType? sort)
+        public IEnumerable<AuthorDto> GetAuthors(PaginationFilter filter, string searchString, SortType? sort)
         {
             var searchQueries = ProcessSearchString(searchString);
             var authors = (_mapper.Map<IEnumerable<AuthorDto>>(_context.Authors))
@@ -28,10 +29,10 @@ namespace Core.Repositories
 
             authors = authors.Distinct();
             authors = SortGeneric(authors, sort);
-            return authors;
+            return Pagination<AuthorDto>(filter, authors);
         }
 
-        public IEnumerable<CategoryDto> GetCategories(string searchString, SortType? sort)
+        public IEnumerable<CategoryDto> GetCategories(PaginationFilter filter, string searchString, SortType? sort)
         {
             var searchQueries = ProcessSearchString(searchString);
             var categories = (_mapper.Map<IEnumerable<CategoryDto>>(_context.Categories))
@@ -39,10 +40,10 @@ namespace Core.Repositories
 
             categories = categories.Distinct();
             categories = SortGeneric(categories, sort);
-            return categories;
+            return Pagination<CategoryDto>(filter, categories);
         }
 
-        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
+        public IEnumerable<BookDto> GetBooks(PaginationFilter filter, string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
             int? categoryId = null, int? authorId = null)
         {
             var searchQueries = ProcessSearchString(searchString);
@@ -63,23 +64,23 @@ namespace Core.Repositories
             if (maxYear != null) books = books.Where(b => b.ReleaseYear <= maxYear);
             books = books.Distinct();
             books = SortBooks(books, sort);
-            return books;
+            return Pagination<BookDto>(filter, books);
         }
 
-        public IEnumerable<UserSearchDto> GetUsers(string searchString, SortType? sort)
+        public IEnumerable<UserSearchDto> GetUsers(PaginationFilter filter, string searchString, SortType? sort)
         {
             var searchQueries = ProcessSearchString(searchString);
-            var users = GetUsers(searchQueries);
+            var users = GetUsers(filter, searchQueries);
             users = users.Distinct();
             users = SortUsers(users, sort);
-            return users;
+            return Pagination<UserSearchDto>(filter, users);
         }
 
-        private IEnumerable<UserSearchDto> GetUsers(string[] searchQueries)
+        private IEnumerable<UserSearchDto> GetUsers(PaginationFilter filter, string[] searchQueries)
         {
             var users = (_mapper.Map<IEnumerable<UserSearchDto>>(_context.Users))
                             .Where(u => ContainsQuery(u.UserName, searchQueries));
-            return users;
+            return Pagination<UserSearchDto>(filter, users);
         }
 
         private bool ContainsQuery(string name, string[] queries)
@@ -144,6 +145,16 @@ namespace Core.Repositories
                     break;
             }
             return users;
+        }
+
+        private IEnumerable<T> Pagination<T>(PaginationFilter filter, IEnumerable<T> data) where T : class
+        {
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+            if (validFilter.PageSize != 0)
+                return data
+                .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
+                .Take(validFilter.PageSize);
+            return data;   
         }
     }
 }

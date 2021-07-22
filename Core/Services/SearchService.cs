@@ -16,14 +16,14 @@ namespace Core.Services
             _searchRepository = searchRepository;
         }
 
-        public ServiceResponse SearchAll(string searchString, SortType? sort)
+        public ServiceResponse SearchAll(PaginationFilter filter, string searchString, SortType? sort)
         {
             Dictionary<SearchType, IEnumerable<object>> searchResults = new Dictionary<SearchType, IEnumerable<object>>();
 
-            var authors = _searchRepository.GetAuthors(searchString, sort);
-            var books = _searchRepository.GetBooks(searchString, sort);
-            var categories = _searchRepository.GetCategories(searchString, sort);
-            var users = _searchRepository.GetUsers(searchString, sort);
+            var authors = _searchRepository.GetAuthors(filter ,searchString, sort);
+            var books = _searchRepository.GetBooks(filter, searchString, sort);
+            var categories = _searchRepository.GetCategories(filter, searchString, sort);
+            var users = _searchRepository.GetUsers(filter, searchString, sort);
 
             searchResults.Add(SearchType.Author, authors);
             searchResults.Add(SearchType.Book, books);
@@ -39,9 +39,9 @@ namespace Core.Services
             { Message = "No search results found", Content = searchResults };
         }
 
-        public ServiceResponse SearchAuthor(string searchString, SortType? sort)
+        public ServiceResponse SearchAuthor(PaginationFilter filter, string searchString, SortType? sort)
         {
-            var authors = _searchRepository.GetAuthors(searchString, sort);
+            var authors = _searchRepository.GetAuthors(filter, searchString, sort);
 
             if (authors.Count() == 0) return new SuccessResponse<IEnumerable<AuthorDto>>()
             { Message = "No author search results found.", Content = authors };
@@ -50,10 +50,10 @@ namespace Core.Services
             { Message = "Author search results retrieved.", Content = authors };
         }
 
-        public ServiceResponse SearchBook(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId,
+        public ServiceResponse SearchBook(PaginationFilter filter, string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId,
             int? authorId)
         {
-            var books = _searchRepository.GetBooks(searchString, sort, minYear, maxYear, categoryId, authorId);
+            var books = _searchRepository.GetBooks(filter, searchString, sort, minYear, maxYear, categoryId, authorId);
 
             if (books.Count() == 0) return new SuccessResponse<IEnumerable<BookDto>>()
             { Message = "No book search results found.", Content = books };
@@ -62,9 +62,9 @@ namespace Core.Services
             { Message = "Book search results retrieved.", Content = books };
         }
 
-        public ServiceResponse SearchCategory(string searchString, SortType? sort)
+        public ServiceResponse SearchCategory(PaginationFilter filter, string searchString, SortType? sort)
         {
-            var categories = _searchRepository.GetCategories(searchString, sort);
+            var categories = _searchRepository.GetCategories(filter, searchString, sort);
 
             if (categories.Count() == 0) return new SuccessResponse<IEnumerable<CategoryDto>>()
             { Message = "No category search results found.", Content = categories };
@@ -73,9 +73,9 @@ namespace Core.Services
             { Message = "Category search results retrieved.", Content = categories };
         }
 
-        public ServiceResponse SearchUser(string searchString, SortType? sort)
+        public ServiceResponse SearchUser(PaginationFilter filter, string searchString, SortType? sort)
         {
-            var users = _searchRepository.GetUsers(searchString, sort);
+            var users = _searchRepository.GetUsers(filter, searchString, sort);
 
             if (users.Count() == 0) return new SuccessResponse<IEnumerable<UserSearchDto>>()
             { Message = "No user search results found.", Content = users };

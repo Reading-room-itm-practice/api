@@ -3,6 +3,7 @@ using Core.Exceptions;
 using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
+using Core.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,13 +29,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<ServiceResponse> GetPhotos(int? book_id)
+        public async Task<ServiceResponse> GetPhotos([FromQuery] PaginationFilter filter)
         {
-            if (book_id != null)
-            {
-                return new SuccessResponse<IEnumerable<PhotoDto>>() { Content = _crud.GetAll<PhotoDto>().Result.Where(p => p.BookId == book_id) };
-            }
-            return new SuccessResponse<IEnumerable<PhotoDto>>() { Content = await _crud.GetAll<PhotoDto>() };
+            return new SuccessResponse<IEnumerable<PhotoDto>>() { Content = await _crud.GetAll<PhotoDto>(filter) };
         }
 
         [HttpGet("{id:int}")]

@@ -1,6 +1,7 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
+using Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Identity;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    [Authorize(Roles = UserRoles.Admin)]
+    //[Authorize(Roles = UserRoles.Admin)]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorsController : ControllerBase
@@ -24,9 +25,9 @@ namespace WebAPI.Controllers
 
         [SwaggerOperation(Summary = "Retrieves all book authors")]
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] PaginationFilter filter)
         {
-            var authors = await _crud.GetAll<AuthorDto>();
+            var authors = await _crud.GetAll<AuthorDto>(filter);
 
             return Ok(authors);
         }

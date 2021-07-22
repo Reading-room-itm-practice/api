@@ -26,9 +26,9 @@ namespace Core.Services
             return await _creator.Create<IResponseDto>(requestDto);
         }
 
-        public async Task<IEnumerable<IResponseDto>> GetAll<IResponseDto>()
+        public async Task<IEnumerable<IResponseDto>> GetAll<IResponseDto>(PaginationFilter filter)
         {
-            return await _getter.GetAll<IResponseDto>();
+            return await _getter.GetAll<IResponseDto>(filter);
         }
 
         public async Task<IResponseDto> GetById<IResponseDto>(int id)
