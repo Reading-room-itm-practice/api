@@ -30,7 +30,7 @@ namespace Core.Common
 
         public string CreateValidationErrorMessage(IdentityResult result)
         {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new ();
             foreach (var error in result.Errors)
             {
                 builder.Append(error.Description + " ");
