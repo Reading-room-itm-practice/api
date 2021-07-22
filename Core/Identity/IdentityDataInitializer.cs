@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Storage.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +10,7 @@ namespace Core.Identity
     public static class IdentityDataInitializer
     {
         public static void SeedRolesAndAdmin
-        (UserManager<User> userMenager, RoleManager<IdentityRole<int>> roleMenager, IConfiguration configuration)
+        (UserManager<User> userMenager, RoleManager<IdentityRole<Guid>> roleMenager, IConfiguration configuration)
         {
             SeedRoles(roleMenager);
             SeedAdmin(userMenager, configuration);
@@ -35,7 +36,7 @@ namespace Core.Identity
                 }
             }
         }
-        public static void SeedRoles(RoleManager<IdentityRole<int>> roleMenager)
+        public static void SeedRoles(RoleManager<IdentityRole<Guid>> roleMenager)
         {
             var type = typeof(UserRoles);
             var fields = type.GetFields();
@@ -44,7 +45,7 @@ namespace Core.Identity
             for (int i = 0; i < fields.Length; i++)
             {
                 if (!roleMenager.RoleExistsAsync(fields[i].GetValue(type).ToString()).Result)
-                    roleMenager.CreateAsync(new IdentityRole<int>(fields[i].GetValue(type).ToString())).Wait();
+                    roleMenager.CreateAsync(new IdentityRole<Guid>(fields[i].GetValue(type).ToString())).Wait();
             }
         }
     }

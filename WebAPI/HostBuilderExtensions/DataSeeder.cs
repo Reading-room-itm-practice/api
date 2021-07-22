@@ -19,7 +19,7 @@ namespace Storage.HosBuilderExtensions
                 try
                 {
                     var manager = services.GetRequiredService<UserManager<User>>();
-                    var role = services.GetRequiredService<RoleManager<IdentityRole<int>>>();
+                    var role = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
                     var conf = services.GetRequiredService<IConfiguration>();
                     IdentityDataInitializer.SeedRolesAndAdmin(manager, role, conf);
                 }
