@@ -8,7 +8,7 @@ using Storage.Models;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 
-namespace Storage.Controllers
+namespace WebAPI.Controllers
 {
     [Authorize(Roles = UserRoles.Admin)]
     [Route("api/[controller]")]

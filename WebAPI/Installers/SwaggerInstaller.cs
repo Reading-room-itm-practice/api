@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-namespace Storage.Installers
+namespace WebAPI.Installers
 {
     public class SwaggerInstaller : Installer
     {

@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 
-namespace Storage.Installers
+namespace WebAPI.Installers
 {
     public static class InstallerExtension
     {

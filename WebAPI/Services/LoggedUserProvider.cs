@@ -1,10 +1,9 @@
-﻿using Core.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Storage.Interfaces;
 using System;
 using System.Security.Claims;
 
-namespace Storage.Services
+namespace WebAPI.Services
 {
     public class LoggedUserProvider : ILoggedUserProvider
     {

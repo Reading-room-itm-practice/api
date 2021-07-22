@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Storage.DataAccessLayer;
 using System.Text;
 
-namespace Storage.Installers
+namespace WebAPI.Installers
 {
     public class DbInstaller : Installer
     {

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Storage.Helpers
+namespace WebAPI.Helpers
 {
     public class JsonKeyValueGetter : IJsonKeyValueGetter
     {

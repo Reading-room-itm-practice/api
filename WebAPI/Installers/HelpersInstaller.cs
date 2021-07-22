@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Storage.Helpers;
+using WebAPI.Helpers;
 
-namespace Storage.Installers
+namespace WebAPI.Installers
 {
     public class HelpersInstaller : Installer
     {

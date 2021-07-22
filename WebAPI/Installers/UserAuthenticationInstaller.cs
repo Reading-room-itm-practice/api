@@ -8,7 +8,7 @@ using Storage.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
 
-namespace Storage.Installers
+namespace WebAPI.Installers
 {
     public class UserAuthenticationInstaller : Installer
     {

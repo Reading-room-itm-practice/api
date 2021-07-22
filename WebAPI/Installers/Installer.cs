@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Storage.Installers
+namespace WebAPI.Installers
 {
     public interface Installer
     {

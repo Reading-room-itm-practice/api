@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace Storage.HosBuilderExtensions
+namespace WebAPI.HosBuilderExtensions
 {
     public static class HostBuilderMigrator
     {

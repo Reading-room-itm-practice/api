@@ -3,7 +3,7 @@ using Core.Interfaces;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Storage.Controllers
+namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
