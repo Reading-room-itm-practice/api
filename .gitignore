@@ -391,4 +391,4 @@ FodyWeavers.xsd
 .env
 
 #Photos folder
-/Storage/Photos
+/Storage/Photos/*
