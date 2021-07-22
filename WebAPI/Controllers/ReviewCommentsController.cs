@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ServiceResponse> GetComments(int? reviewId, int? userId, bool? currentUser)
+        public async Task<ServiceResponse> GetComments(int? reviewId, int? userId, bool currentUser)
         {
             return await _reviewCommentService.GetComments(reviewId, userId, currentUser);
         }

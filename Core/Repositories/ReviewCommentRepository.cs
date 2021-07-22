@@ -56,7 +56,7 @@ namespace Core.Repositories
 
         public async Task<IEnumerable<ReviewCommentDto>> GetComments(int? reviewId, int? userId)
         {
-            if (reviewId == null && userId == null) return _mapper.Map<IEnumerable<ReviewCommentDto>>(await FindAll());
+            if (reviewId == null && userId == null) return await GetComments();
 
             if (reviewId != null && userId == null) 
                 return _mapper.Map<IEnumerable<ReviewCommentDto>>(_context.Reviews.Include(r => r.Comments)

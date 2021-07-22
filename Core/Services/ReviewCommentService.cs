@@ -58,7 +58,7 @@ namespace Core.Services
             };
         }
 
-        public async Task<ServiceResponse> GetComments(int? reviewId, int? userId, bool? currentUser)
+        public async Task<ServiceResponse> GetComments(int? reviewId, int? userId, bool currentUser)
         {
             if (reviewId != null && await _reviewGetter.GetById<Review>((int)reviewId) == null) return new ErrorResponse()
             {
@@ -72,45 +72,27 @@ namespace Core.Services
                 Content = await _reviewCommentRepository.GetComments()
             };
 
-            if (reviewId != null && userId == null && currentUser != true) return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
-            {
-                Message = $"All comments for review of {await GetBookTitle((int)reviewId)} retrieved.",
-                Content = await _reviewCommentRepository.GetComments(reviewId, userId)
-            };
-            
-            if (reviewId == null && userId != null && currentUser != true) return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
-            {
-                Message = $"All comments by user with retrieved.",
-                Content = await _reviewCommentRepository.GetComments(reviewId, userId)
-            };
+            var message = await CreateMessage(reviewId, userId, currentUser);
+            if (currentUser) userId = _loggedUserProvider.GetUserId();
+            var comments = await _reviewCommentRepository.GetComments(reviewId, userId);
 
-            if (reviewId != null && userId != null && currentUser != true) return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
+            return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
             {
-                Message = $"All comments for review of {await GetBookTitle((int)reviewId)} by user retrieved.",
-                Content = await _reviewCommentRepository.GetComments(reviewId, userId)
+                Message = message,
+                Content = comments
             };
-
-            if (reviewId == null && currentUser == true)
-            {
-                userId = _loggedUserProvider.GetUserId();
-                return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
-                {
-                    Message = $"All comments by current user retrieved.",
-                    Content = await _reviewCommentRepository.GetComments(reviewId, userId)
-                };
-            }
-
-            if (reviewId != null && currentUser == true)
-            {
-                userId = _loggedUserProvider.GetUserId();
-                return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
-                {
-                    Message = $"All comments for review of {await GetBookTitle((int)reviewId)} by current user retrieved.",
-                    Content = await _reviewCommentRepository.GetComments(reviewId, userId)
-                };
-            }
-            return new ErrorResponse() { StatusCode = HttpStatusCode.BadRequest };
         }
+
+        private async Task<string> CreateMessage(int? reviewId, int? userId, bool currentUser)
+        {
+            StringBuilder message = new StringBuilder("All comments ");
+            if (reviewId.HasValue) message.Append($"for review of {await GetBookTitle((int)reviewId)} ");
+            if (currentUser) message.Append("by current user ");
+            else if (userId != null) message.Append("by user ");
+            message.Append("retrieved.");
+            return message.ToString();
+        }
+
         private async Task<string> GetBookTitle(int reviewId)
         {
             var book = await _bookGetter.GetById<BookDto>((await _reviewGetter.GetById<ReviewDto>(reviewId)).BookId);
