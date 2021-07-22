@@ -6,13 +6,13 @@ using Core.ServiceResponses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Storage.Models.Photos;
+using Storage.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Storage.Controllers
+namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -34,7 +34,7 @@ namespace Storage.Controllers
             {
                 return new SuccessResponse<IEnumerable<PhotoDto>>() { Content = _crud.GetAll<PhotoDto>().Result.Where(p => p.BookId == book_id) };
             }
-            return new SuccessResponse<IEnumerable<PhotoDto>>(){ Content = await _crud.GetAll<PhotoDto>() };
+            return new SuccessResponse<IEnumerable<PhotoDto>>() { Content = await _crud.GetAll<PhotoDto>() };
         }
 
         [HttpGet("{id:int}")]

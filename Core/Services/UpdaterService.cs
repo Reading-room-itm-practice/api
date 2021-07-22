@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Core.Common;
 using Core.Exceptions;
 using Core.Interfaces;
 using Storage.Iterfaces;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Core.Services
 {
@@ -29,7 +27,7 @@ namespace Core.Services
             {
                 throw new NotFoundException("Entity does not exists");
             }
-            
+
             var updatedModel = _mapper.Map(requestDto, model.FirstOrDefault());
             await _repository.Edit(updatedModel);
         }

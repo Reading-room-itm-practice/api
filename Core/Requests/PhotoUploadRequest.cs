@@ -1,9 +1,5 @@
 ﻿using Core.Common;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Core.Requests
 {
@@ -12,6 +8,6 @@ namespace Core.Requests
         [Required]
         public int BookId { get; set; }
         [Required]
-        public string Path { get; set;}
+        public string Path { get; set; }
     }
 }

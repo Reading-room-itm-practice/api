@@ -5,7 +5,7 @@ using Storage.Helpers;
 
 namespace Storage.Middleware
 {
-    public class ResponseStatusCodeMiddleware 
+    public class ResponseStatusCodeMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly IJsonKeyValueGetter _jsonKeyValueGetter;
@@ -52,7 +52,7 @@ namespace Storage.Middleware
             await _next(context);
             context.Response.Body.Position = 0;
             var responseReader = new StreamReader(context.Response.Body);
-            
+
             return responseReader.ReadToEnd();
         }
 

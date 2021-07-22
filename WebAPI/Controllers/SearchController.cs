@@ -1,15 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
-using System.ComponentModel.DataAnnotations;
+﻿using Core.Enums;
 using Core.Interfaces;
-using Core.Services;
 using Core.ServiceResponses;
-using System.Net;
-using Core.Enums;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Storage.Controllers
 {
@@ -25,7 +17,7 @@ namespace Storage.Controllers
         }
 
         [HttpGet]
-        public ServiceResponse All(SortType? sort, string searchString="")
+        public ServiceResponse All(SortType? sort, string searchString = "")
         {
             return searchService.SearchAll(searchString, sort);
         }
@@ -37,14 +29,14 @@ namespace Storage.Controllers
         }
 
         [HttpGet("Books")]
-        public ServiceResponse Books(SortType? sort, int? minYear, int? maxYear, int? categoryId, int? authorId, 
+        public ServiceResponse Books(SortType? sort, int? minYear, int? maxYear, int? categoryId, int? authorId,
             string searchString = "")
         {
             return searchService.SearchBook(searchString, sort, minYear, maxYear, categoryId, authorId);
         }
 
         [HttpGet("Categories")]
-        public ServiceResponse Categories(SortType? sort, string searchString ="")
+        public ServiceResponse Categories(SortType? sort, string searchString = "")
         {
             return searchService.SearchCategory(searchString, sort);
         }

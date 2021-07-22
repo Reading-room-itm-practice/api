@@ -1,5 +1,4 @@
-﻿using Core.DTOs;
-using Core.Interfaces;
+﻿using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +6,9 @@ using Storage.Models;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using WebAPI.DTOs;
 
-namespace Storage.Controllers
+namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -49,7 +49,7 @@ namespace Storage.Controllers
         {
             await _crud.Update(category, id);
             return new SuccessResponse()
-                { Message = "Category updated.", StatusCode = HttpStatusCode.OK };
+            { Message = "Category updated.", StatusCode = HttpStatusCode.OK };
         }
 
         [HttpDelete("{id:int}")]
@@ -57,7 +57,7 @@ namespace Storage.Controllers
         {
             await _crud.Delete(id);
             return new SuccessResponse()
-                { Message = "Category deleted.", StatusCode = HttpStatusCode.OK };
+            { Message = "Category deleted.", StatusCode = HttpStatusCode.OK };
         }
     }
 }
