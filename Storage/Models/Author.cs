@@ -19,5 +19,6 @@ namespace Storage.Models
         public ICollection<Book> Books { get; set; }
         public ICollection<AuthorPhoto> Photos { get; set; }
         public virtual ICollection<AuthorFollow> Followers { get; set; }
+        public bool Confirmed { get; set; }
     }
 }

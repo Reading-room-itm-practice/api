@@ -43,7 +43,6 @@ namespace Storage.DataAccessLayer
         public DbSet<ReadStatus> ReadStatuses { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<ReviewComment> ReviewComments { get; set; }
-        public DbSet<Suggestion> Suggestions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
