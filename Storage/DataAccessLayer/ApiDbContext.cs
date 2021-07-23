@@ -48,12 +48,6 @@ namespace Storage.DataAccessLayer
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            //builder.Entity<Follow>().HasDiscriminator(b => b.FollowableType)
-            //        .HasValue<CategoryFollow>(FollowableTypes.Category)
-            //        .HasValue<AuthorFollow>(FollowableTypes.Author)
-            //        .HasValue<UserFollow>(FollowableTypes.User);
-
             builder.ApplyConfigurationsFromAssembly(typeof(ApiDbContext).Assembly);
         }
 
