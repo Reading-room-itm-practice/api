@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Storage.Iterfaces;
+using Storage.Interfaces;
 using Storage.Models;
 using Storage.Models.Follows;
 using Storage.Models.Likes;

@@ -1,4 +1,4 @@
-﻿using Storage.Iterfaces;
+﻿using Storage.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;

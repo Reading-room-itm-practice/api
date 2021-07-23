@@ -1,6 +1,6 @@
 ﻿using Core.Exceptions;
 using Core.Interfaces;
-using Storage.Iterfaces;
+using Storage.Interfaces;
 using System.Linq;
 using System.Threading.Tasks;
 

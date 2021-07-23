@@ -1,4 +1,4 @@
-﻿namespace Storage.Iterfaces
+﻿namespace Storage.Interfaces
 {
     public interface IFollowable
     {

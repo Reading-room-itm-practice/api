@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.Common;
 using Core.Interfaces;
-using Storage.Iterfaces;
+using Storage.Interfaces;
 using System.Threading.Tasks;
 
 namespace Core.Services

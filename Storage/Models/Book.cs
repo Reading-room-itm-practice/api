@@ -1,4 +1,4 @@
-﻿using Storage.Iterfaces;
+﻿using Storage.Interfaces;
 using Storage.Models.Photos;
 using System;
 using System.Collections.Generic;
