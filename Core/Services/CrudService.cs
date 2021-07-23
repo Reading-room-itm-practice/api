@@ -1,5 +1,7 @@
 ﻿using Core.Common;
 using Core.Interfaces;
+using Core.ServiceResponses;
+using Storage.Iterfaces;
 using Storage.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,19 +23,19 @@ namespace Core.Services
             _deleter = deleter;
         }
 
-        public async Task<IResponseDto> Create<IResponseDto>(IRequest requestDto)
+        public async Task<ServiceResponse<IDto>> Create<IDto>(IRequest requestDto)
         {
-            return await _creator.Create<IResponseDto>(requestDto);
+            return await _creator.Create<IDto>(requestDto);
         }
 
-        public async Task<IEnumerable<IResponseDto>> GetAll<IResponseDto>()
+        public async Task<ServiceResponse<IEnumerable<IDto>>> GetAll<IDto>()
         {
-            return await _getter.GetAll<IResponseDto>();
+            return await _getter.GetAll<IDto>();
         }
 
-        public async Task<IResponseDto> GetById<IResponseDto>(int id)
+        public async Task<ServiceResponse<IDto>> GetById<IDto>(int id)
         {
-            return await _getter.GetById<IResponseDto>(id);
+            return await _getter.GetById<IDto>(id);
         }
 
         public async Task Update(IRequest requestDto, int id)
