@@ -24,6 +24,6 @@ namespace Storage.Models
         public string Description { get; set; }
         public ICollection<ReadStatus> ReadStatuses { get; set; }
         public ICollection<Review> Reviews { get; set; }
-        public bool Confirmed { get; set; }
+        public bool Approved { get; set; }
     }
 }

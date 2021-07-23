@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Storage.Migrations
 {
-    public partial class Suggestions_update : Migration
+    public partial class Suggestions_Update : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,21 +11,21 @@ namespace Storage.Migrations
                 name: "Suggestions");
 
             migrationBuilder.AddColumn<bool>(
-                name: "Confirmed",
+                name: "Approved",
                 table: "Categories",
                 type: "bit",
                 nullable: false,
                 defaultValue: false);
 
             migrationBuilder.AddColumn<bool>(
-                name: "Confirmed",
+                name: "Approved",
                 table: "Books",
                 type: "bit",
                 nullable: false,
                 defaultValue: false);
 
             migrationBuilder.AddColumn<bool>(
-                name: "Confirmed",
+                name: "Approved",
                 table: "Authors",
                 type: "bit",
                 nullable: false,
@@ -35,15 +35,15 @@ namespace Storage.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Confirmed",
+                name: "Approved",
                 table: "Categories");
 
             migrationBuilder.DropColumn(
-                name: "Confirmed",
+                name: "Approved",
                 table: "Books");
 
             migrationBuilder.DropColumn(
-                name: "Confirmed",
+                name: "Approved",
                 table: "Authors");
 
             migrationBuilder.CreateTable(

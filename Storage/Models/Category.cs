@@ -14,6 +14,6 @@ namespace Storage.Models
         public string Name { get; set; }
         public ICollection<Book> Books { get; set; }
         public ICollection<CategoryFollow> Followers { get; set; }
-        public bool Confirmed { get; set; }
+        public bool Approved { get; set; }
     }
 }

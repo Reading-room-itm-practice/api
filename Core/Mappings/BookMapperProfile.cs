@@ -11,6 +11,8 @@ namespace Core.Mappings
         {
             CreateMap<Book, BookDto>().ReverseMap();
             CreateMap<BookRequest, Book>().ReverseMap();
+            CreateMap<Book, ApprovedBookDto>().ReverseMap();
+            CreateMap<ApproveBookRequest, Book>().ReverseMap();
         }
     }
 }
