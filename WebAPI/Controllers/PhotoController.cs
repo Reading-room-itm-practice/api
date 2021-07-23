@@ -10,6 +10,7 @@ using Storage.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -32,17 +33,22 @@ namespace WebAPI.Controllers
         {
             if (book_id != null)
             {
-                return new SuccessResponse<IEnumerable<PhotoDto>>() { Content = _crud.GetAll<PhotoDto>().Result.Where(p => p.BookId == book_id) };
+                return ServiceResponse<IEnumerable<PhotoDto>>.Success(_crud.GetAll<PhotoDto>().Result.Content.Where(p => p.BookId == book_id));
             }
-            return new SuccessResponse<IEnumerable<PhotoDto>>() { Content = await _crud.GetAll<PhotoDto>() };
+
+            return await _crud.GetAll<PhotoDto>();
         }
 
         [HttpGet("{id:int}")]
         public async Task<ServiceResponse> GetPhoto(int id)
         {
             var result = await _crud.GetById<PhotoDto>(id);
-            if (result == null) return new ErrorResponse() { Message = "Photo not found.", StatusCode = System.Net.HttpStatusCode.NotFound };
-            return new SuccessResponse<PhotoDto>() { Content = result };
+            if (result.Content == null)
+            {
+                return ServiceResponse.Error("Photo not found.", HttpStatusCode.NotFound);
+            } 
+
+            return result;
         }
 
         [HttpPost()]
@@ -55,7 +61,7 @@ namespace WebAPI.Controllers
             }
             catch (DbUpdateException e)
             {
-                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
+                return ServiceResponse.Error(e.InnerException.Message, HttpStatusCode.BadRequest);
             }
         }
 
@@ -65,11 +71,11 @@ namespace WebAPI.Controllers
             try
             {
                 await _crud.Update(photo_bookId, id);
-                return new SuccessResponse() { Message = "Image updated" };
+                return ServiceResponse.Success("Image updated");
             }
             catch (DbUpdateException e)
             {
-                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
+                return ServiceResponse.Error(e.InnerException.Message, HttpStatusCode.BadRequest);
             }
         }
 
@@ -79,23 +85,25 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _photoService.DeletePhoto(id);
-                return new SuccessResponse() { Message = "Image deleted." };
+
+                return ServiceResponse.Success("Image deleted.");
             }
             catch (NotFoundException e)
             {
-                return new ErrorResponse() { Message = e.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
-
+                return ServiceResponse.Error(e.Message, HttpStatusCode.BadRequest);
             }
             catch (DbUpdateException e)
             {
-                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
+                return ServiceResponse.Error(e.InnerException.Message, HttpStatusCode.BadRequest);
             }
             catch (Exception e)
             {
-                if (e.InnerException.GetType() == typeof(NotFoundException)) return new ErrorResponse()
-                { Message = "Image not found", StatusCode = System.Net.HttpStatusCode.NotFound };
+                if (e.InnerException.GetType() == typeof(NotFoundException))
+                {
+                    return ServiceResponse.Error("Image not found", HttpStatusCode.NotFound);
+                }
 
-                return new ErrorResponse() { Message = e.Message };
+                return ServiceResponse.Error(e.Message);
             }
         }
     }

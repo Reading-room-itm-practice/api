@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class BooksController : ControllerBase
@@ -25,6 +24,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Index()
         {
             var books = await _crud.GetAll<BookDto>();
+
             return Ok(books);
         }
 
@@ -42,7 +42,8 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Create(BookRequest model)
         {
             var book = await _crud.Create<BookDto>(model);
-            return Created($"api/books/{book.Id}", book);
+
+            return Created($"api/books/{book.Content.Id}", book);
         }
 
         [SwaggerOperation(Summary = "Updates a book by unique id")]
@@ -50,6 +51,7 @@ namespace WebAPI.Controllers
         public async Task<ActionResult> Update(int id, BookRequest updateModel)
         {
             await _crud.Update(updateModel, id);
+
             return Ok("Resource updated");
         }
 
@@ -58,6 +60,7 @@ namespace WebAPI.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             await _crud.Delete(id);
+
             return Ok("Resource deleted");
         }
     }

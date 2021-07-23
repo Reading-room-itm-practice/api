@@ -4,16 +4,7 @@ using Core.Requests;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using System.ServiceModel;
-using Storage.Identity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
-using Storage.Interfaces;
 
 namespace WebAPI.Controllers
 {
@@ -35,8 +26,12 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> GetReview(int id)
         {
             var result = await _crud.GetById<ReviewDto>(id);
-            if (result == null) return new SuccessResponse() { Message = "Review not found." };
-            return new SuccessResponse<ReviewDto>() { Message = "Review found.", Content = result };
+            if (result == null)
+            { 
+                ServiceResponse.Error("Review not found.");
+            }
+
+            return result;
         }
 
         [HttpGet]
@@ -55,14 +50,16 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> Edit(int id, ReviewRequest review)
         {
             await _crud.Update(review, id);
-            return new SuccessResponse() { Message = "Review updated." };
+
+            return ServiceResponse.Success("Review updated.");
         }
 
         [HttpDelete("{id:int}")]
         public async Task<ServiceResponse> Delete(int id)
         {
             await _crud.Delete(id);
-            return new SuccessResponse() { Message = "Review deleted." };
+
+            return ServiceResponse.Success("Review deleted.");
         }
     }
 }

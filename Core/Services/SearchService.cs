@@ -31,57 +31,47 @@ namespace Core.Services
             searchResults.Add(SearchType.User, users);
 
             foreach (KeyValuePair<SearchType, IEnumerable<object>> results in searchResults)
+            {
                 if (results.Value.Count() != 0)
-                    return new SuccessResponse<Dictionary<SearchType, IEnumerable<object>>>()
-                    { Message = "Search results retrieved.", Content = searchResults };
+                {
+                    return ServiceResponse<Dictionary<SearchType, IEnumerable<object>>>.Success(searchResults, "Search results retrieved.");
+                }
+            }
 
-            return new SuccessResponse<Dictionary<SearchType, IEnumerable<object>>>()
-            { Message = "No search results found", Content = searchResults };
+            return ServiceResponse<Dictionary<SearchType, IEnumerable<object>>>.Success(searchResults, "No search results found");
         }
 
         public ServiceResponse SearchAuthor(string searchString, SortType? sort)
         {
             var authors = _searchRepository.GetAuthors(searchString, sort);
+            var message = authors.Count() == 0 ? "No author search results found." : "Author search results retrieved.";
 
-            if (authors.Count() == 0) return new SuccessResponse<IEnumerable<AuthorDto>>()
-            { Message = "No author search results found.", Content = authors };
-
-            return new SuccessResponse<IEnumerable<AuthorDto>>()
-            { Message = "Author search results retrieved.", Content = authors };
+            return ServiceResponse<IEnumerable<AuthorDto>>.Success(authors, message);
         }
 
         public ServiceResponse SearchBook(string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId,
             int? authorId)
         {
             var books = _searchRepository.GetBooks(searchString, sort, minYear, maxYear, categoryId, authorId);
+            var message = books.Count() == 0 ? "No book search results found." : "Book search results retrieved.";
 
-            if (books.Count() == 0) return new SuccessResponse<IEnumerable<BookDto>>()
-            { Message = "No book search results found.", Content = books };
-
-            return new SuccessResponse<IEnumerable<BookDto>>()
-            { Message = "Book search results retrieved.", Content = books };
+            return ServiceResponse<IEnumerable<BookDto>>.Success(books, message);
         }
 
         public ServiceResponse SearchCategory(string searchString, SortType? sort)
         {
             var categories = _searchRepository.GetCategories(searchString, sort);
+            var message = categories.Count() == 0 ? "No category search results found." : "Category search results retrieved.";
 
-            if (categories.Count() == 0) return new SuccessResponse<IEnumerable<CategoryDto>>()
-            { Message = "No category search results found.", Content = categories };
-
-            return new SuccessResponse<IEnumerable<CategoryDto>>()
-            { Message = "Category search results retrieved.", Content = categories };
+            return ServiceResponse<IEnumerable<CategoryDto>>.Success(categories, message);
         }
 
         public ServiceResponse SearchUser(string searchString, SortType? sort)
         {
             var users = _searchRepository.GetUsers(searchString, sort);
+            var message = users.Count() == 0 ? "No user search results found." : "User search results retrieved.";
 
-            if (users.Count() == 0) return new SuccessResponse<IEnumerable<UserSearchDto>>()
-            { Message = "No user search results found.", Content = users };
-
-            return new SuccessResponse<IEnumerable<UserSearchDto>>()
-            { Message = "User search results retrieved.", Content = users };
+            return ServiceResponse<IEnumerable<UserSearchDto>>.Success(users, message);
         }
     }
 }
