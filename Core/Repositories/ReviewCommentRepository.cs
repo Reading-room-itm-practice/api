@@ -58,15 +58,12 @@ namespace Core.Repositories
         {
             if (reviewId == null && userId == null) return await GetComments();
 
-            if (reviewId != null && userId == null) 
-                return _mapper.Map<IEnumerable<ReviewCommentDto>>(_context.Reviews.Include(r => r.Comments)
-                     .FirstOrDefault(r => r.Id == reviewId).Comments);
-
             if (reviewId == null && userId != null)
                 return _mapper.Map<IEnumerable<ReviewCommentDto>>(_context.ReviewComments.Where(c => c.CreatedBy == userId));
 
-            return _mapper.Map<IEnumerable<ReviewCommentDto>>(_context.Reviews.Include(r => r.Comments)
-                     .FirstOrDefault(r => r.Id == reviewId).Comments.Where(c => c.CreatedBy == userId));
+            var comments = _context.Reviews.Include(r => r.Comments).FirstOrDefault(r => r.Id == reviewId).Comments.AsEnumerable();
+            comments = (reviewId != null && userId == null) ? comments : comments.Where(c => c.CreatedBy == userId);
+            return _mapper.Map<IEnumerable<ReviewCommentDto>>(comments);
         }
     }
 }
