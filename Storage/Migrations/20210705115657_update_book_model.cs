@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace WebAPI.Migrations
+namespace Storage.Migrations
 {
     public partial class update_book_model : Migration
     {

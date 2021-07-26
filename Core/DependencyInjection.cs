@@ -8,6 +8,7 @@ using Core.Services.Auth;
 using Core.Services.Email;
 using Microsoft.Extensions.DependencyInjection;
 using Storage.Models;
+using Storage.Models.Photos;
 using System;
 
 namespace Core

@@ -6,6 +6,7 @@ using Core.ServiceResponses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Storage.Models;
+using Storage.Models.Photos;
 using System;
 using System.Collections.Generic;
 using System.IO;

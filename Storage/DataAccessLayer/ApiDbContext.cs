@@ -1,19 +1,23 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Storage.Identity;
-using Storage.Interfaces;
-using Storage.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Storage.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Storage.Models;
+using Storage.Interfaces;
+using Storage.Models.Follows;
+using Storage.Models.Likes;
+using Microsoft.AspNetCore.Identity;
+using Storage.Models.Photos;
 
 namespace Storage.DataAccessLayer
 {
-    public class ApiDbContext : IdentityDbContext<User, IdentityRole<int>, int>
+    public class ApiDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         private readonly ILoggedUserProvider _loggedUserProvider;
+       
         public ApiDbContext(DbContextOptions<ApiDbContext> options, ILoggedUserProvider loggedUserProvider) : base(options)
         {
             _loggedUserProvider = loggedUserProvider;
@@ -24,9 +28,17 @@ namespace Storage.DataAccessLayer
         public DbSet<Book> Books { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Follow> Follows { get; set; }
+        public DbSet<UserFollow> UserFollows { get; set; }
+        public DbSet<CategoryFollow> CategoryFollows { get; set; }
+        public DbSet<AuthorFollow> AuthorFollows { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
         public DbSet<Like> Likes { get; set; }
+        public DbSet<ReviewCommentLike> CommentLikes { get; set; }
+        public DbSet<ReviewLike> ReviewLikes { get; set; }
         public DbSet<Photo> Photos { get; set; }
+        public DbSet<ProfilePhoto> ProfilePhotos { get; set; }
+        public DbSet<BookPhoto> BookPhotos { get; set; }
+        public DbSet<AuthorPhoto> AuthorPhotos { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<ReadStatus> ReadStatuses { get; set; }
         public DbSet<Review> Reviews { get; set; }
@@ -46,13 +58,13 @@ namespace Storage.DataAccessLayer
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = _loggedUserProvider.GetUserId();
-                        entry.Entity.Created = DateTime.UtcNow;
+                        entry.Entity.CreatorId = _loggedUserProvider.GetUserId();
+                        entry.Entity.CreatedAt = DateTime.UtcNow;
                         break;
 
                     case EntityState.Modified:
-                        entry.Entity.LastModifiedBy = _loggedUserProvider.GetUserId();
-                        entry.Entity.LastModified = DateTime.UtcNow;
+                        entry.Entity.UpdaterId = _loggedUserProvider.GetUserId();
+                        entry.Entity.LastModifiedAt = DateTime.UtcNow;
                         break;
                 }
             }

@@ -1,11 +1,11 @@
-﻿using Core.Interfaces;
+﻿using Core.DTOs;
+using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
 using System.Net;
 using System.Threading.Tasks;
-using WebAPI.DTOs;
 
 namespace WebAPI.Controllers
 {

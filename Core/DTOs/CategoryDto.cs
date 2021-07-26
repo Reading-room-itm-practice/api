@@ -1,7 +1,7 @@
 ﻿using Core.Common;
 using Core.Interfaces;
 
-namespace WebAPI.DTOs
+namespace Core.DTOs
 {
     public class CategoryDto : IDto, INameSortable
     {

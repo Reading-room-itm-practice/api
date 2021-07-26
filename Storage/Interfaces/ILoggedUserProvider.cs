@@ -1,7 +1,9 @@
-﻿namespace Storage.Interfaces
+﻿using System;
+
+namespace Storage.Interfaces
 {
     public interface ILoggedUserProvider
     {
-        public int GetUserId();
+        public Guid GetUserId();
     }
 }
