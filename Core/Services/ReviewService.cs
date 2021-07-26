@@ -1,20 +1,13 @@
-﻿using AutoMapper;
-using Core.DTOs;
+﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Storage.DataAccessLayer;
 using Storage.Identity;
 using Storage.Interfaces;
 using Storage.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Core.Services
@@ -78,6 +71,20 @@ namespace Core.Services
             {
                 Message = $"Reviews for {await GetBookTitle((int)bookId)} retrieved.",
                 Content = await _reviewRepository.GetReviews(bookId)
+            };
+        }
+
+        public async Task<ServiceResponse> GetReview(int reviewId)
+        {
+            var review = await _reviewRepository.GetReview(reviewId);
+            if(review != null) return new SuccessResponse<ReviewDto>()
+            {
+                Message = $"Review retrieved.",
+                Content = review
+            };
+            return new ErrorResponse
+            {
+                Message = "Review not found."
             };
         }
 

@@ -29,23 +29,25 @@ namespace Core.Repositories
 
         public async Task<IEnumerable<ReviewDto>> GetReviews(int? bookId)
         {
-            if(bookId != null && await _context.Books.AnyAsync(b => b.Id == bookId))
-                return _mapper.Map<IEnumerable<ReviewDto>>((await _context.Books.Include(b => b.Reviews)
-                    .FirstOrDefaultAsync(b => b.Id == bookId)).Reviews.AsEnumerable());
-
-            return _mapper.Map<IEnumerable<ReviewDto>>(await FindAll());
+            var reviews = _mapper.Map<IEnumerable<ReviewDto>>(_context.Reviews.Include(r => r.Creator));
+            if (bookId != null && await _context.Books.AnyAsync(b => b.Id == bookId)) return reviews.Where(r => r.BookId == bookId);
+            return reviews;
         }
 
-        public async Task<bool> ReviewByUserExists(int userId, int bookId)
+        public async Task<bool> ReviewByUserExists(Guid userId, int bookId)
         {
             var book = await _context.Books.Include(b => b.Reviews).FirstOrDefaultAsync(b => b.Id == bookId);
-            return book.Reviews.Any(r => r.CreatedBy == userId);
+            return book.Reviews.Any(r => r.CreatorId == userId);
         }
 
         public async Task<ReviewDto> CreateReview(ReviewRequest reviewRequest)
         {
             var review = _mapper.Map<Review>(reviewRequest);
             return _mapper.Map<ReviewDto>(await Create(review));
+        }
+        public async Task<ReviewDto> GetReview(int reviewId)
+        {
+            return _mapper.Map<ReviewDto>(await _context.Reviews.Include(r => r.Creator).FirstOrDefaultAsync(r => r.Id == reviewId));
         }
     }
 }

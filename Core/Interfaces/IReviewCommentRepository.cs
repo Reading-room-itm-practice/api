@@ -11,10 +11,12 @@ namespace Core.Interfaces
 {
     public interface IReviewCommentRepository : IBaseRepository<ReviewComment>
     {
-        public Task<IEnumerable<ReviewCommentDto>> GetComments(int? reviewId, int? userId);
-        public Task<IEnumerable<ReviewCommentDto>> GetComments();
-        public Task<bool> CheckCommentCount(int reviewId, int userId);
-        public Task<bool> CheckCommentsDate(int reviewId, int userId);
+        public IEnumerable<ReviewCommentDto> GetComments(int? reviewId, Guid? userId);
+        public IEnumerable<ReviewCommentDto> GetComments();
+        public Task<ReviewCommentDto> GetComment(int reviewCommentId);
+        public Task<bool> CheckCommentCount(int reviewId, Guid userId);
+        public Task<bool> CheckCommentsDate(int reviewId, Guid userId);
+        public Task<bool> ReviewExists(int reviewId);
         public Task<ReviewCommentDto> CreateReviewComment(ReviewCommentRequest newComment);
         public int MaxCommentPerReview { get; }
         public int MaxCommentPerHourPerReview { get; }

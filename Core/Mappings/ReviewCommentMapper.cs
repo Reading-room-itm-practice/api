@@ -14,8 +14,11 @@ namespace Core.Mappings
     {
         public ReviewCommentMapper()
         {
-            CreateMap<ReviewComment, ReviewCommentDto>().ReverseMap();
             CreateMap<ReviewCommentRequest, ReviewComment>().ReverseMap();
+            CreateMap<ReviewComment, ReviewCommentDto>().AfterMap((src, dest) =>
+            {
+                dest.CreatorUserName = src.Creator.UserName;
+            });
         }
     }
 }

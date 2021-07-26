@@ -17,19 +17,19 @@ namespace Core.Services
     {
         private readonly IReviewCommentRepository _reviewCommentRepository;
         private readonly ILoggedUserProvider _loggedUserProvider;
-        private readonly IGetterService<Review> _reviewGetter;
+        private readonly IReviewRepository _reviewRepository;
         private readonly IGetterService<Book> _bookGetter;
         public ReviewCommentService(IReviewCommentRepository reviewCommentRepository, ILoggedUserProvider loggedUserProvider,
-            IGetterService<Review> reviewGetter, IGetterService<Book> bookGetter)
+            IReviewRepository reviewRepository, IGetterService<Book> bookGetter)
         {
             _reviewCommentRepository = reviewCommentRepository;
             _loggedUserProvider = loggedUserProvider;
-            _reviewGetter = reviewGetter;
+            _reviewRepository = reviewRepository;
             _bookGetter = bookGetter;
         }
         public async Task<ServiceResponse> AddReviewComment(ReviewCommentRequest comment)
         {
-            if (await _reviewGetter.GetById<Review>(comment.ReviewId) == null) return new ErrorResponse()
+            if (!(await _reviewCommentRepository.ReviewExists(comment.ReviewId))) return new ErrorResponse()
             {
                 Message = $"Review doesn't exist.",
                 StatusCode = HttpStatusCode.BadRequest
@@ -58,9 +58,24 @@ namespace Core.Services
             };
         }
 
-        public async Task<ServiceResponse> GetComments(int? reviewId, int? userId, bool currentUser)
+        public async Task<ServiceResponse> GetComment(int reviewCommentId)
         {
-            if (reviewId != null && await _reviewGetter.GetById<Review>((int)reviewId) == null) return new ErrorResponse()
+            var reviewComment = await _reviewCommentRepository.GetComment(reviewCommentId);
+            if (reviewComment != null) return new SuccessResponse<ReviewCommentDto>()
+            {
+                Message = "Comment retrieved.",
+                Content = reviewComment
+            };
+
+            return new ErrorResponse()
+            {
+                Message = "Comment not found."
+            };
+        }
+
+        public async Task<ServiceResponse> GetComments(int? reviewId, Guid? userId, bool currentUser)
+        {
+            if (reviewId != null && !(await _reviewCommentRepository.ReviewExists((int)reviewId))) return new ErrorResponse()
             {
                 Message = $"Review doesn't exist.",
                 StatusCode = HttpStatusCode.BadRequest
@@ -69,12 +84,12 @@ namespace Core.Services
             if (reviewId == null && userId == null && currentUser != true) return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
             {
                 Message = $"All comments retrieved.",
-                Content = await _reviewCommentRepository.GetComments()
+                Content = _reviewCommentRepository.GetComments()
             };
 
             var message = await CreateMessage(reviewId, userId, currentUser);
             if (currentUser) userId = _loggedUserProvider.GetUserId();
-            var comments = await _reviewCommentRepository.GetComments(reviewId, userId);
+            var comments = _reviewCommentRepository.GetComments(reviewId, userId);
 
             return new SuccessResponse<IEnumerable<ReviewCommentDto>>()
             {
@@ -83,7 +98,7 @@ namespace Core.Services
             };
         }
 
-        private async Task<string> CreateMessage(int? reviewId, int? userId, bool currentUser)
+        private async Task<string> CreateMessage(int? reviewId, Guid? userId, bool currentUser)
         {
             StringBuilder message = new StringBuilder("All comments ");
             if (reviewId.HasValue) message.Append($"for review of {await GetBookTitle((int)reviewId)} ");
@@ -95,7 +110,7 @@ namespace Core.Services
 
         private async Task<string> GetBookTitle(int reviewId)
         {
-            var book = await _bookGetter.GetById<BookDto>((await _reviewGetter.GetById<ReviewDto>(reviewId)).BookId);
+            var book = await _bookGetter.GetById<BookDto>((await _reviewRepository.GetReview(reviewId)).BookId);
             return book.Title;
         }
     }

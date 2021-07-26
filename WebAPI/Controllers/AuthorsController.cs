@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    [Authorize(Roles = UserRoles.Admin)]
+    //[Authorize(Roles = UserRoles.Admin)]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorsController : ControllerBase

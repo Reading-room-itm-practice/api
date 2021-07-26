@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Storage.Interfaces;
+using System;
 using System.Security.Claims;
 
 namespace WebAPI.Services
@@ -13,11 +14,11 @@ namespace WebAPI.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public int GetUserId()
+        public Guid GetUserId()
         {
             var loggedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            return loggedUserId != null ? int.Parse(loggedUserId) : 0;
+            return loggedUserId != null ? new Guid(loggedUserId) : throw new UnauthorizedAccessException();
         }
     }
 }

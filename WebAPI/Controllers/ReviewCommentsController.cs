@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using WebAPI.DTOs;
 using Core.Interfaces;
 using Storage.Models;
 using Core.Exceptions;
@@ -26,16 +25,14 @@ namespace WebAPI.Controllers
             _reviewCommentService = reviewCommentService;
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ServiceResponse> GetComment(int id)
+        [HttpGet("{reviewCommentId:int}")]
+        public async Task<ServiceResponse> GetComment(int reviewCommentId)
         {
-            var result = await _crud.GetById<ReviewCommentDto>(id);
-            if (result == null) return new SuccessResponse() { Message = "Comment not found." };
-            return new SuccessResponse<ReviewCommentDto>() { Message = "Comment found.", Content = result };
+            return await _reviewCommentService.GetComment(reviewCommentId);
         }
 
         [HttpGet]
-        public async Task<ServiceResponse> GetComments(int? reviewId, int? userId, bool currentUser)
+        public async Task<ServiceResponse> GetComments(int? reviewId, Guid? userId, bool currentUser)
         {
             return await _reviewCommentService.GetComments(reviewId, userId, currentUser);
         }

@@ -12,5 +12,6 @@ namespace Core.DTOs
         public int Id { get; set; }
         public int ReviewId { get; set; }
         public string Content { get; set; }
+        public string CreatorUserName { get; set; }
     }
 }

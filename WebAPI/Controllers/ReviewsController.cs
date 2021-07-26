@@ -4,16 +4,7 @@ using Core.Requests;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using System.ServiceModel;
-using Storage.Identity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
-using Storage.Interfaces;
 
 namespace WebAPI.Controllers
 {
@@ -31,12 +22,10 @@ namespace WebAPI.Controllers
             _reviewService = reviewService;
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ServiceResponse> GetReview(int id)
+        [HttpGet("{reviewId:int}")]
+        public async Task<ServiceResponse> GetReview(int reviewId)
         {
-            var result = await _crud.GetById<ReviewDto>(id);
-            if (result == null) return new SuccessResponse() { Message = "Review not found." };
-            return new SuccessResponse<ReviewDto>() { Message = "Review found.", Content = result };
+            return await _reviewService.GetReview(reviewId);
         }
 
         [HttpGet]

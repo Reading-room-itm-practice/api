@@ -19,8 +19,8 @@ namespace Core.Services.Auth
             var user = await _userManager.FindByNameAsync(model.Username);
             if (await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                if (!await _userManager.IsEmailConfirmedAsync(user))
-                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Invalid username or password!" };
+                //if (!await _userManager.IsEmailConfirmedAsync(user))
+                //    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Invalid username or password!" };
 
                 var roles = await _userManager.GetRolesAsync(user);
                 var tokenResponse = _jwtGenerator.GenerateJWTToken(_config, user, roles);

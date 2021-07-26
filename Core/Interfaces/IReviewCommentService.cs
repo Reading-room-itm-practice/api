@@ -10,7 +10,8 @@ namespace Core.Interfaces
 {
     public interface IReviewCommentService
     {
-        public Task<ServiceResponse> GetComments(int? reviewId, int? userId, bool currentUser);
+        public Task<ServiceResponse> GetComments(int? reviewId, Guid? userId, bool currentUser);
+        public Task<ServiceResponse> GetComment(int reviewCommentId);
         public Task<ServiceResponse> AddReviewComment(ReviewCommentRequest comment);
     }
 }
