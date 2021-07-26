@@ -8,6 +8,7 @@ using Core.Services.Auth;
 using Core.Services.Email;
 using Microsoft.Extensions.DependencyInjection;
 using Storage.Models;
+using Storage.Models.Follows;
 using Storage.Models.Photos;
 using System;
 
@@ -19,6 +20,7 @@ namespace Core
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+            services.AddScoped<IBaseRepository<AuthorFollow>, BaseRepository<AuthorFollow>>();
             services.AddScoped<IBaseRepository<Author>, BaseRepository<Author>>();
             services.AddScoped<IBaseRepository<Book>, BaseRepository<Book>>();
             services.AddScoped<IBaseRepository<Category>, BaseRepository<Category>>();
@@ -30,11 +32,17 @@ namespace Core
             services.AddScoped<ICrudService<Category>, CrudService<Category>>();
             services.AddScoped<ICrudService<Photo>, CrudService<Photo>>();
             services.AddScoped<ICrudService<Review>, CrudService<Review>>();
+            services.AddScoped<ICrudService<AuthorFollow>, CrudService<AuthorFollow>>();
 
             services.AddScoped<ICreatorService<Author>, CreatorService<Author>>();
             services.AddScoped<IGetterService<Author>, GetterService<Author>>();
             services.AddScoped<IUpdaterService<Author>, UpdaterService<Author>>();
             services.AddScoped<IDeleterService<Author>, DeleterService<Author>>();
+
+            services.AddScoped<ICreatorService<AuthorFollow>, CreatorService<AuthorFollow>>();
+            services.AddScoped<IGetterService<AuthorFollow>, GetterService<AuthorFollow>>();
+            services.AddScoped<IUpdaterService<AuthorFollow>, UpdaterService<AuthorFollow>>();
+            services.AddScoped<IDeleterService<AuthorFollow>, DeleterService<AuthorFollow>>();
 
             services.AddScoped<ICreatorService<Book>, CreatorService<Book>>();
             services.AddScoped<IGetterService<Book>, GetterService<Book>>();
