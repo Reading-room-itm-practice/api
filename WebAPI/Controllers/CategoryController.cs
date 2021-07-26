@@ -39,21 +39,5 @@ namespace WebAPI.Controllers
         {
             return await _crud.Create<CategoryDto>(category);
         }
-
-        [HttpPut("{id:int}")]
-        public async Task<ServiceResponse> Edit(int id, CategoryRequest category)
-        {
-            await _crud.Update(category, id);
-
-            return ServiceResponse.Success("Category updated.");
-        }
-
-        [HttpDelete("{id:int}")]
-        public async Task<ServiceResponse> Delete(int id)
-        {
-            await _crud.Delete(id);
-
-            return ServiceResponse.Success("Category deleted.");
-        }
     }
 }

@@ -40,23 +40,5 @@ namespace WebAPI.Controllers
         {
             return await _crud.Create<BookDto>(model);
         }
-
-        [SwaggerOperation(Summary = "Updates a book by unique id")]
-        [HttpPut("{id:int}")]
-        public async Task<ServiceResponse> Update(int id, BookRequest updateModel)
-        {
-            await _crud.Update(updateModel, id);
-
-            return ServiceResponse.Success("Resource updated");
-        }
-
-        [SwaggerOperation(Summary = "Deletes a book by unique id")]
-        [HttpDelete("{id:int}")]
-        public async Task<ServiceResponse> Delete(int id)
-        {
-            await _crud.Delete(id);
-
-            return ServiceResponse.Success("Resource deleted");
-        }
     }
 }

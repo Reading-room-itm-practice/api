@@ -1,6 +1,7 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
+using Core.ServiceResponses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Identity;
@@ -23,46 +24,22 @@ namespace WebAPI.Controllers
 
         [SwaggerOperation(Summary = "Retrieves all book authors")]
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<ServiceResponse> Index()
         {
-            var authors = await _crud.GetAll<AuthorDto>();
-
-            return Ok(authors);
+            return await _crud.GetAll<AuthorDto>();
         }
 
         [SwaggerOperation(Summary = "Retrieves a specific book author by unique id")]
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> Show(int id)
+        public async Task<ServiceResponse> Show(int id)
         {
-            var author = await _crud.GetById<AuthorDto>(id);
-
-            return author == null ? NotFound() : Ok(author);
+            return await _crud.GetById<AuthorDto>(id);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AuthorRequest requestDto)
+        public async Task<ServiceResponse> Create(AuthorRequest requestDto)
         {
-            var author = await _crud.Create<AuthorDto>(requestDto);
-
-            return Created($"api/authors/{author.Content.Id}", author);
-        }
-
-        [SwaggerOperation(Summary = "Update a book author by unique id")]
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult> Update(int id, AuthorRequest requestDto)
-        {
-            await _crud.Update(requestDto, id);
-
-            return Ok("Resource updated");
-        }
-
-        [SwaggerOperation(Summary = "Delete a book author by unique id")]
-        [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            await _crud.Delete(id);
-
-            return Ok("Resource deleted");
+            return await _crud.Create<AuthorDto>(requestDto);
         }
     }
 }
