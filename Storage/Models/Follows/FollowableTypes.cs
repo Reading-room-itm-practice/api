@@ -7,7 +7,7 @@ namespace Storage.Models.Follows
         Category = 1,
         Author = 2,
         User = 3
-    }        
+    }
 
     public static class FollowableTypesExtension
     {
