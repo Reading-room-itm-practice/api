@@ -1,10 +1,12 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
+using Core.Response;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -23,10 +25,12 @@ namespace WebAPI.Controllers
 
         [SwaggerOperation(Summary = "Retrieves all books")]
         [HttpGet]
-        public async Task<IActionResult> Index([FromQuery] PaginationFilter filter)
+        public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
-            var books = await _crud.GetAll<BookDto>(filter);
-            return Ok(books);
+            var route = Request.Path.Value;
+            var books = await _crud.GetAll<BookDto>(filter, route);
+
+            return new SuccessResponse<PagedResponse<BookDto>>() { Message = "Books retrieved.", StatusCode = HttpStatusCode.OK, Content = books };
         }
 
         [SwaggerOperation(Summary = "Retrieves a specific book by unique id")]

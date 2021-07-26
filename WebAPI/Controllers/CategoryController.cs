@@ -33,8 +33,10 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<ServiceResponse> GetCategories([FromQuery] PaginationFilter filter)
         {
-            var result = await _crud.GetAll<CategoryDto>(filter);
-            return new SuccessResponse<IEnumerable<CategoryDto>>() { Message = "Categories retrieved.", StatusCode = HttpStatusCode.OK, Content = result };
+            var route = Request.Path.Value;
+            var categories = await _crud.GetAll<CategoryDto>(filter, route);
+
+            return new SuccessResponse<PagedResponse<CategoryDto>>() { Message = "Categories retrieved.", StatusCode = HttpStatusCode.OK, Content = categories };
         }
 
         [HttpPost]

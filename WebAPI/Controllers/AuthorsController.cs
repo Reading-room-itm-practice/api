@@ -1,12 +1,14 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
+using Core.Response;
 using Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Identity;
 using Storage.Models;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -25,11 +27,12 @@ namespace WebAPI.Controllers
 
         [SwaggerOperation(Summary = "Retrieves all book authors")]
         [HttpGet]
-        public async Task<IActionResult> Index([FromQuery] PaginationFilter filter)
+        public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
-            var authors = await _crud.GetAll<AuthorDto>(filter);
+            var route = Request.Path.Value;
+            var authors = await _crud.GetAll<AuthorDto>(filter, route);
 
-            return Ok(authors);
+            return new SuccessResponse<PagedResponse<AuthorDto>>() { Message = "Authors retrieved.", StatusCode = HttpStatusCode.OK, Content = authors };
         }
 
         [SwaggerOperation(Summary = "Retrieves a specific book author by unique id")]

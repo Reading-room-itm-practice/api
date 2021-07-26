@@ -1,4 +1,5 @@
 ﻿using Core.Common;
+using Core.Response;
 using Core.Services;
 using Storage.Iterfaces;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace Core.Interfaces
     public interface ICrudService<T> : ICreatorService<T>, IGetterService<T>, IUpdaterService<T>, IDeleterService<T> where T : IDbModel
     {
         public Task<IReponseDto> Create<IReponseDto>(IRequest model);
-        public Task<IEnumerable<IResponseDto>> GetAll<IResponseDto>(PaginationFilter filter);
+        public Task<PagedResponse<IResponseDto>> GetAll<IResponseDto>(PaginationFilter filter, string route);
         public Task<IResponseDto> GetById<IResponseDto>(int id);
         public Task Update(IRequest updateModel, int id);
         public Task Delete(int id);

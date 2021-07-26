@@ -9,8 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Storage.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -31,7 +30,10 @@ namespace WebAPI.Controllers
         [HttpGet("All")]
         public async Task<ServiceResponse> GetPhotos([FromQuery] PaginationFilter filter)
         {
-            return new SuccessResponse<IEnumerable<PhotoDto>>() { Content = await _crud.GetAll<PhotoDto>(filter) };
+            var route = Request.Path.Value;
+            var photos = (await _crud.GetAll<PhotoDto>(filter, route));
+
+            return new SuccessResponse<PagedResponse<PhotoDto>>() { Message = "Photos retrieved.", StatusCode = HttpStatusCode.OK, Content = photos };
         }
 
         [HttpGet("{id:int}")]

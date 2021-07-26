@@ -1,4 +1,6 @@
-﻿namespace Core.Services
+﻿using System;
+
+namespace Core.Services
 {
     public class PaginationFilter
     {
@@ -10,10 +12,16 @@
             PageSize = 0;
         }
 
+        public PaginationFilter(int pageNumber, int pageSize)
+        {
+            PageNumber = pageNumber;
+            PageSize = pageSize;
+            Valid();
+        }
         public void Valid()
         {
             PageNumber = PageNumber < 1 ? 1 : PageNumber;
-            PageSize = PageSize < 0 ? 1 : PageSize;
+            PageSize = Math.Abs(PageSize);
         }
     }
 }

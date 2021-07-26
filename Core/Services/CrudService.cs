@@ -1,5 +1,6 @@
 ﻿using Core.Common;
 using Core.Interfaces;
+using Core.Response;
 using Storage.Iterfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -26,9 +27,9 @@ namespace Core.Services
             return await _creator.Create<IResponseDto>(requestDto);
         }
 
-        public async Task<IEnumerable<IResponseDto>> GetAll<IResponseDto>(PaginationFilter filter)
+        public async Task<PagedResponse<IResponseDto>> GetAll<IResponseDto>(PaginationFilter filter, string route)
         {
-            return await _getter.GetAll<IResponseDto>(filter);
+            return await _getter.GetAll<IResponseDto>(filter, route);
         }
 
         public async Task<IResponseDto> GetById<IResponseDto>(int id)

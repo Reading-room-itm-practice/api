@@ -4,8 +4,6 @@ using Core.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Storage.Interfaces;
-using WebAPI.Services;
 
 namespace WebAPI.Installers
 {
