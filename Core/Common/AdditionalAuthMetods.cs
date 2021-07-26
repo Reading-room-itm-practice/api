@@ -42,17 +42,18 @@ namespace Core.Common
         public async Task<ServiceResponse> GetUserTokenResponse(string userInfo)
         {
             User user = new ();
-            if(userInfo.Contains('@'))
+            if (userInfo.Contains('@'))
+            {
                 user = await _userManager.FindByEmailAsync(userInfo);
+            }
             else
+            {
                 user = await _userManager.FindByNameAsync(userInfo);
+            }
 
             var roles = await _userManager.GetRolesAsync(user);
-            return new SuccessResponse<string>
-            {
-                Message = "Successful login",
-                Content = $"{_jwtGenerator.GenerateJWTToken(_config, user, roles)}"
-            };
+
+            return ServiceResponse<string>.Success($"{_jwtGenerator.GenerateJWTToken(_config, user, roles)}", "Successful login");
         }
     }
 }

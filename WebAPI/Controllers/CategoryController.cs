@@ -4,7 +4,6 @@ using Core.Requests;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -25,39 +24,36 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> GetCategory(int id)
         {
             var result = await _crud.GetById<CategoryDto>(id);
-            if (result == null) return new SuccessResponse() { Message = "Category not found.", StatusCode = HttpStatusCode.OK };
-            return new SuccessResponse<CategoryDto>() { Message = "Category found.", StatusCode = HttpStatusCode.OK, Content = result };
+
+            return result.Content == null ? ServiceResponse.Error("Category not found.", HttpStatusCode.NotFound) : result;
         }
 
         [HttpGet]
         public async Task<ServiceResponse> GetCategories()
         {
-            var result = await _crud.GetAll<CategoryDto>();
-            return new SuccessResponse<IEnumerable<CategoryDto>>() { Message = "Categories retrieved.", StatusCode = HttpStatusCode.OK, Content = result };
+            return await _crud.GetAll<CategoryDto>();        
         }
 
         [HttpPost]
         public async Task<ServiceResponse> Create(CategoryRequest category)
         {
-            var newCategory = await _crud.Create<CategoryDto>(category);
-            return new SuccessResponse<CategoryDto>()
-            { Message = "Category created.", StatusCode = HttpStatusCode.Created, Content = newCategory };
+            return await _crud.Create<CategoryDto>(category);
         }
 
         [HttpPut("{id:int}")]
         public async Task<ServiceResponse> Edit(int id, CategoryRequest category)
         {
             await _crud.Update(category, id);
-            return new SuccessResponse()
-            { Message = "Category updated.", StatusCode = HttpStatusCode.OK };
+
+            return ServiceResponse.Success("Category updated.");
         }
 
         [HttpDelete("{id:int}")]
         public async Task<ServiceResponse> Delete(int id)
         {
             await _crud.Delete(id);
-            return new SuccessResponse()
-            { Message = "Category deleted.", StatusCode = HttpStatusCode.OK };
+
+            return ServiceResponse.Success("Category deleted.");
         }
     }
 }
