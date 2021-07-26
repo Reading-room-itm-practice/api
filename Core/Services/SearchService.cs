@@ -1,7 +1,7 @@
 ﻿using Core.DTOs;
 using Core.Enums;
 using Core.Interfaces;
-using Core.ServiceResponses;
+using Core.Response;
 using System.Collections.Generic;
 using System.Linq;
 using WebAPI.DTOs;

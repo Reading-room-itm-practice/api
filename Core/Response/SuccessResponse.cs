@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Core.ServiceResponses
+namespace Core.Response
 {
     public class SuccessResponse : ServiceResponse
     {

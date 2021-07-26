@@ -1,4 +1,4 @@
-﻿using Core.ServiceResponses;
+﻿using Core.Response;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

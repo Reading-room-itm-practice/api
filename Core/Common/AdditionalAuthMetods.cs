@@ -1,5 +1,5 @@
 ﻿using Core.Interfaces.Auth;
-using Core.ServiceResponses;
+using Core.Response;
 using Core.Services.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;

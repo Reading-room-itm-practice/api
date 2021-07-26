@@ -1,5 +1,5 @@
 ﻿using Core.Enums;
-using Core.ServiceResponses;
+using Core.Response;
 using Core.Services;
 
 namespace Core.Interfaces

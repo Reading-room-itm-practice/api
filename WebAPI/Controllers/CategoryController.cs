@@ -1,6 +1,6 @@
 ﻿using Core.Interfaces;
 using Core.Requests;
-using Core.ServiceResponses;
+using Core.Response;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;

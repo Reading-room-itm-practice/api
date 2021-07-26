@@ -2,7 +2,7 @@
 using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
-using Core.ServiceResponses;
+using Core.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Storage.Models;

@@ -1,4 +1,4 @@
-﻿using Core.ServiceResponses;
+﻿using Core.Response;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 

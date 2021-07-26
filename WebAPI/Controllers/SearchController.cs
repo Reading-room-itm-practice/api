@@ -1,6 +1,6 @@
 ﻿using Core.Enums;
 using Core.Interfaces;
-using Core.ServiceResponses;
+using Core.Response;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
