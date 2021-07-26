@@ -1,4 +1,5 @@
 ﻿using Storage.Iterfaces;
+using Storage.Models.Likes;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,6 +14,6 @@ namespace Storage.Models
         public int ReviewId { get; set; }
         public Review Review { get; set; }
         public string Content { get; set; }
-        public ICollection<Like> Likes { get; set; }
+        public virtual ICollection<ReviewCommentLike> Likes { get; set; }
     }
 }

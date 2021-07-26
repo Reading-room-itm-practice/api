@@ -4,16 +4,7 @@ using Core.Requests;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using System.ServiceModel;
-using Storage.Identity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
-using Storage.Interfaces;
 
 namespace WebAPI.Controllers
 {

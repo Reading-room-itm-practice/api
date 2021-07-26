@@ -1,20 +1,13 @@
-﻿using AutoMapper;
-using Core.DTOs;
+﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Storage.DataAccessLayer;
 using Storage.Identity;
 using Storage.Interfaces;
 using Storage.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Core.Services

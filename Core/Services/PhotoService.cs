@@ -6,6 +6,7 @@ using Core.ServiceResponses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Storage.Models;
+using Storage.Models.Photos;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -77,7 +78,7 @@ namespace Core.Services
             }
             catch (Exception e)
             {
-                if (e.InnerException != null)
+                if(e.InnerException != null)
                     return new ErrorResponse() { Message = e.Message + " Inner Exception: " + e.InnerException.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
                 return new ErrorResponse() { Message = e.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
             }

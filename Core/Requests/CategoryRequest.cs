@@ -5,7 +5,7 @@ namespace Core.Requests
 {
     public class CategoryRequest : IRequest
     {
-        [Required]
+        [Required, MaxLength(200)]
         public string Name { get; set; }
     }
 }
