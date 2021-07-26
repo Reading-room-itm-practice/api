@@ -728,6 +728,8 @@ namespace Storage.Migrations
                     b.HasIndex("CreatorId");
 
                     b.ToTable("Follows");
+
+                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Storage.Models.Follows.CategoryFollow", b =>
@@ -742,6 +744,8 @@ namespace Storage.Migrations
                     b.HasIndex("CreatorId");
 
                     b.ToTable("Follows");
+
+                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("Storage.Models.Follows.UserFollow", b =>
@@ -772,6 +776,8 @@ namespace Storage.Migrations
                     b.HasIndex("ReviewCommentId");
 
                     b.ToTable("Likes");
+
+                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Storage.Models.Likes.ReviewLike", b =>
@@ -800,6 +806,8 @@ namespace Storage.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("Photos");
+
+                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("Storage.Models.Photos.BookPhoto", b =>
@@ -812,6 +820,8 @@ namespace Storage.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("Photos");
+
+                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Storage.Models.Photos.ProfilePhoto", b =>
