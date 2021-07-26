@@ -30,48 +30,36 @@ namespace Core.Services
 
         public async Task<ServiceResponse> AddReview(ReviewRequest review)
         {
-            if (await _bookGetter.GetById<BookDto>(review.BookId) == null) return new ErrorResponse()
+            if (await _bookGetter.GetById<BookDto>(review.BookId) == null)
             {
-                Message = $"Book with Id: {review.BookId} doesn't exist",
-                StatusCode = HttpStatusCode.BadRequest
-            };
+                return ServiceResponse.Error($"Book with Id: {review.BookId} doesn't exist", HttpStatusCode.BadRequest);
+            }
 
             var userId = _loggedUserProvider.GetUserId();
-            if (await _reviewRepository.ReviewByUserExists(userId, review.BookId)) return new ErrorResponse()
+
+            if (await _reviewRepository.ReviewByUserExists(userId, review.BookId))
             {
-                Message = $"You have already posted a review for book Id: {review.BookId}",
-                StatusCode = HttpStatusCode.BadRequest
-            };
+                return ServiceResponse.Error($"You have already posted a review for book Id: {review.BookId}", HttpStatusCode.BadRequest);
+            }
 
             var newReview = await _reviewRepository.CreateReview(review);
 
-            return new SuccessResponse<ReviewDto>()
-            { 
-                Message = "Review created.", 
-                StatusCode = HttpStatusCode.Created, 
-                Content = newReview 
-            };
+            return ServiceResponse<ReviewDto>.Success(newReview, "Review created.", HttpStatusCode.Created);
         }
 
         public async Task<ServiceResponse> GetReviews(int? bookId)
         {
-            if (bookId == null) return new SuccessResponse<IEnumerable<ReviewDto>>()
+            if (bookId == null)
             {
-                Message = $"All reviews retrieved.",
-                Content = await _reviewRepository.GetReviews(bookId)
-            };
+                return ServiceResponse<IEnumerable<ReviewDto>>.Success(await _reviewRepository.GetReviews(bookId), $"All reviews retrieved.");
+            }    
 
-            if (await _bookGetter.GetById<BookDto>((int)bookId) == null) return new ErrorResponse()
+            if (await _bookGetter.GetById<BookDto>((int)bookId) == null)
             {
-                Message = $"Book with Id: {bookId} doesn't exist",
-                StatusCode = HttpStatusCode.BadRequest
-            };
+                return ServiceResponse.Error($"Book with Id: {bookId} doesn't exist", HttpStatusCode.BadRequest);
+            }
 
-            return new SuccessResponse<IEnumerable<ReviewDto>>()
-            {
-                Message = $"Reviews for Book with ID = {bookId} retrieved.",
-                Content = await _reviewRepository.GetReviews(bookId)
-            };
+            return ServiceResponse<IEnumerable<ReviewDto>>.Success(await _reviewRepository.GetReviews(bookId), $"Reviews for Book with ID = {bookId} retrieved.");
         }
     }
 }
