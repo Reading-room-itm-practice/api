@@ -10,10 +10,10 @@
             PageSize = 0;
         }
 
-        public PaginationFilter(int pageNumber, int pageSize)
+        public void Valid()
         {
-            PageNumber = pageNumber < 1 ? 1 : pageNumber;
-            PageSize = pageSize;
+            PageNumber = PageNumber < 1 ? 1 : PageNumber;
+            PageSize = PageSize < 0 ? 1 : PageSize;
         }
     }
 }

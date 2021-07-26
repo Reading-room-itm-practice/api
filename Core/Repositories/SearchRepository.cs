@@ -149,11 +149,11 @@ namespace Core.Repositories
 
         private IEnumerable<T> Pagination<T>(PaginationFilter filter, IEnumerable<T> data) where T : class
         {
-            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
-            if (validFilter.PageSize != 0)
+            filter.Valid();
+            if (filter.PageSize != 0)
                 return data
-                .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
-                .Take(validFilter.PageSize);
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize);
             return data;   
         }
     }
