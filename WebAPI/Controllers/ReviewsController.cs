@@ -44,14 +44,14 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> Edit(int id, ReviewRequest review)
         {
             await _crud.Update(review, id);
-            return new SuccessResponse() { Message = "Review updated." };
+            return ServiceResponse.Success("Review updated.");
         }
 
         [HttpDelete("{id:int}")]
         public async Task<ServiceResponse> Delete(int id)
         {
             await _crud.Delete(id);
-            return new SuccessResponse() { Message = "Review deleted." };
+            return ServiceResponse.Success("Review deleted.");
         }
     }
 }

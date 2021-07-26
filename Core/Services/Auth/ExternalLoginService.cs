@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Storage.Identity;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -22,6 +23,7 @@ namespace Core.Services.Auth
         {
             string redirectUri = _config["External:RedirectUrl"];
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUri);
+
             return new ChallengeResult(provider, properties) ;
         }
 
@@ -29,12 +31,10 @@ namespace Core.Services.Auth
         {
             ExternalLoginInfo info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
-                return new ErrorResponse
-                { 
-                    Message = "Error loading external login information",
-                    StatusCode = System.Net.HttpStatusCode.NoContent
-                };
-            
+            {
+                return ServiceResponse.Error("Error loading external login information", HttpStatusCode.NoContent);
+            }
+
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
 
             if (result.Succeeded)
@@ -44,8 +44,8 @@ namespace Core.Services.Auth
             }
 
             User user = CreateExternalUser(info);
-
             IdentityResult identResult = await _userManager.CreateAsync(user);
+           
             if (identResult.Succeeded)
             {
                 identResult = await _userManager.AddLoginAsync(user, info);
@@ -55,7 +55,8 @@ namespace Core.Services.Auth
                     return await _additionalAuthMetods.GetUserTokenResponse(user.UserName);
                 }
             }
-            return new ErrorResponse { Message = "User not created", StatusCode = System.Net.HttpStatusCode.UnprocessableEntity };
+
+            return ServiceResponse.Error("User not created", HttpStatusCode.UnprocessableEntity);
         }
 
         private User CreateExternalUser(ExternalLoginInfo info)
@@ -68,6 +69,5 @@ namespace Core.Services.Auth
             
             return user;
         }
-        
     }
 }

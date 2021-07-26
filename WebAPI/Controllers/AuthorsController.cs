@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    //[Authorize(Roles = UserRoles.Admin)]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorsController : ControllerBase
@@ -45,7 +44,7 @@ namespace WebAPI.Controllers
         {
             var author = await _crud.Create<AuthorDto>(requestDto);
 
-            return Created($"api/authors/{author.Id}", author);
+            return Created($"api/authors/{author.Content.Id}", author);
         }
 
         [SwaggerOperation(Summary = "Update a book author by unique id")]
