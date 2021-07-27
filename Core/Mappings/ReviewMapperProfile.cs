@@ -15,11 +15,7 @@ namespace Core.Mappings
         public ReviewMapperProfile()
         {
             CreateMap<ReviewRequest, Review>().ReverseMap();
-            CreateMap<ReviewDto, Review>();
-            CreateMap<Review, ReviewDto>().AfterMap((src, dest) =>
-            {
-                dest.CreatorUserName = src.Creator.UserName;
-            });
+            CreateMap<ReviewDto, Review>().ReverseMap();
         }
     }
 }

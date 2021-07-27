@@ -45,8 +45,7 @@ namespace Core.Repositories
         public async Task<ReviewCommentDto> CreateReviewComment(ReviewCommentRequest _newComment)
         {
             var newComment = _mapper.Map<ReviewComment>(_newComment);
-            await Create(newComment);
-            return _mapper.Map<ReviewCommentDto>(newComment);
+            return await GetComment((await Create(newComment)).Id);
         }
 
         public IEnumerable<ReviewCommentDto> GetComments()

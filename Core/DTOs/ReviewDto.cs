@@ -14,6 +14,8 @@ namespace Core.DTOs
         public int BookId { get; set; }
         public int Stars { get; set; }
         public string Content { get; set; }
-        public string CreatorUserName { get; set; }
+        public UserDto Creator { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? LastModifiedAt { get; set; }
     }
 }

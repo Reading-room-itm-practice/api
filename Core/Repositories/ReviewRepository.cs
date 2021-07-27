@@ -43,7 +43,7 @@ namespace Core.Repositories
         public async Task<ReviewDto> CreateReview(ReviewRequest reviewRequest)
         {
             var review = _mapper.Map<Review>(reviewRequest);
-            return _mapper.Map<ReviewDto>(await Create(review));
+            return await GetReview((await Create(review)).Id);
         }
         public async Task<ReviewDto> GetReview(int reviewId)
         {
