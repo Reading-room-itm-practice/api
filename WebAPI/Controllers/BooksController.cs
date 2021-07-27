@@ -13,9 +13,9 @@ namespace WebAPI.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly IUserBookCrudService _crud;
+        private readonly IUserCrudService<Book> _crud;
 
-        public BooksController(IUserBookCrudService crud)
+        public BooksController(IUserCrudService<Book> crud)
         {
             _crud = crud;
         }

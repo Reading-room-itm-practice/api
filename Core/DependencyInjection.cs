@@ -73,9 +73,9 @@ namespace Core
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<ISearchRepository, SearchRepository>();
 
-            services.AddScoped<IUserAuthorCrudService, UserAuthorCrudService>();
-            services.AddScoped<IUserBookCrudService, UserBookCrudService>();
-            services.AddScoped<IUserCategoryCrudService, UserCategoryCrudService>();
+            services.AddScoped<IUserCrudService<Author>, UserCrudService<Author>>();
+            services.AddScoped<IUserCrudService<Book>, UserCrudService<Book>>();
+            services.AddScoped<IUserCrudService<Category>, UserCrudService<Category>>();
 
             return services;
         }

@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Storage.Models
 {
     [Table("Authors")]
-    public class Author : AuditableModel, IDbMasterKey, IFollowable
+    public class Author : AuditableModel, IDbMasterKey, IFollowable, IApproveable
     {
         [Key]
         public int Id { get; set; }

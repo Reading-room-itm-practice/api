@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class GetterService<T> : IGetterService<T> where T : class, IDbModel, IDbMasterKey
+    public class GetterService<T> : IGetterService<T> where T : class, IDbMasterKey
     {
         private readonly IBaseRepository<T> _repository;
         private readonly IMapper _mapper;

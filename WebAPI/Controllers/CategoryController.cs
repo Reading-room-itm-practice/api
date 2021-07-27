@@ -13,9 +13,9 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly IUserCategoryCrudService _crud;
+        private readonly IUserCrudService<Category> _crud;
 
-        public CategoryController(IUserCategoryCrudService crud)
+        public CategoryController(IUserCrudService<Category> crud)
         {
             _crud = crud;
         }

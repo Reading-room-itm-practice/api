@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class CrudService<T> : ICrudService<T> where T : class, IDbModel, IDbMasterKey
+    public class CrudService<T> : ICrudService<T> where T : class, IDbMasterKey
     {
         private readonly ICreatorService<T> _creator;
         private readonly IGetterService<T> _getter;

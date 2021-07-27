@@ -16,9 +16,9 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-        private readonly IUserAuthorCrudService _crud;
+        private readonly IUserCrudService<Author> _crud;
 
-        public AuthorsController(IUserAuthorCrudService crud)
+        public AuthorsController(IUserCrudService<Author> crud)
         {
             _crud = crud;
         }
