@@ -6,7 +6,7 @@ namespace Core.Requests
     public class PhotoUploadRequest : IRequest
     {
         [Required]
-        public int BookId { get; set; }
+        public string TypeId { get; set; }
         [Required]
         public string Path { get; set; }
     }

@@ -2,6 +2,7 @@
 using Core.DTOs;
 using Core.Requests;
 using Storage.Models.Photos;
+using System;
 
 namespace Core.Mappings
 {
@@ -9,9 +10,40 @@ namespace Core.Mappings
     {
         public PhotoMapperProfile()
         {
-            CreateMap<Photo, PhotoDto>().ReverseMap();
-            CreateMap<PhotoUploadRequest, Photo>().ReverseMap();
-            CreateMap<PhotoUpdateRequest, Photo>().ReverseMap();
+            //CreateMap<AuthorPhoto, BookPhoto>().ReverseMap();
+            CreateMap<Photo, BookPhoto>().ReverseMap();
+            CreateMap<AuthorPhoto, Photo>().ReverseMap();
+
+
+            CreateMap<AuthorPhoto, PhotoDto>().ReverseMap();
+            CreateMap<PhotoUploadRequest, AuthorPhoto>().AfterMap((src, dest) =>
+            {
+                dest.AuthorId = int.Parse(src.TypeId);
+            });
+            CreateMap<PhotoUpdateRequest, AuthorPhoto>().AfterMap((src, dest) =>
+            {
+                dest.AuthorId = int.Parse(src.TypeId);
+            });
+
+            CreateMap<BookPhoto, PhotoDto>().ReverseMap();
+            CreateMap<PhotoUploadRequest, BookPhoto>().AfterMap((src, dest) =>
+            {
+                dest.BookId = int.Parse(src.TypeId);
+            });
+            CreateMap<PhotoUpdateRequest, BookPhoto>().AfterMap((src, dest) =>
+            {
+                dest.BookId = int.Parse(src.TypeId);
+            });
+
+            CreateMap<ProfilePhoto, PhotoDto>().ReverseMap();
+            CreateMap<PhotoUploadRequest, ProfilePhoto>().AfterMap((src, dest) =>
+            {
+                dest.UserId = Guid.Parse(src.TypeId);
+            });
+            CreateMap<PhotoUpdateRequest, ProfilePhoto>().AfterMap((src, dest) =>
+            {
+                dest.UserId = Guid.Parse(src.TypeId);
+            });
         }
     }
 }

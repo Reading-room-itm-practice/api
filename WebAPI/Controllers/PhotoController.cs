@@ -52,11 +52,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost()]
-        public async Task<ServiceResponse> Upload(IFormFile image, int bookId)
+        public async Task<ServiceResponse> Upload(IFormFile image, string id, PhotoTypes type)
         {
             try
             {
-                var result = await _photoService.UploadPhoto(image, bookId);
+                var result = await _photoService.UploadPhoto(image, id, type);
                 return result;
             }
             catch (DbUpdateException e)
@@ -66,12 +66,13 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ServiceResponse> Edit(int id, PhotoUpdateRequest photo_bookId)
+        public async Task<ServiceResponse> Edit(int id, PhotoUpdateRequest photo, PhotoTypes type)
         {
             try
             {
-                await _crud.Update(photo_bookId, id);
-                return ServiceResponse.Success("Image updated");
+                return await _photoService.UpdatePhoto(id, photo, type);
+                //await _crud.Update(photo_bookId, id);
+                //return ServiceResponse.Success("Image updated");
             }
             catch (DbUpdateException e)
             {

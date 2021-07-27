@@ -1,12 +1,15 @@
-﻿using Core.ServiceResponses;
+﻿using Core.Requests;
+using Core.ServiceResponses;
 using Microsoft.AspNetCore.Http;
+using Storage.Models.Photos;
 using System.Threading.Tasks;
 
 namespace Core.Interfaces
 {
     public interface IPhotoService
     {
-        public Task<ServiceResponse> UploadPhoto(IFormFile image, int bookId);
+        public Task<ServiceResponse> UploadPhoto(IFormFile image, string id, PhotoTypes type);
+        public Task<ServiceResponse> UpdatePhoto(int id, PhotoUpdateRequest photo, PhotoTypes type);
         public Task<ServiceResponse> DeletePhoto(int id);
     }
 }

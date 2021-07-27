@@ -6,6 +6,6 @@ namespace Core.Requests
     public class PhotoUpdateRequest : IRequest
     {
         [Required]
-        public int BookId { get; set; }
+        public string TypeId { get; set; }
     }
 }
