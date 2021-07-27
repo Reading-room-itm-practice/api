@@ -2,7 +2,9 @@
 using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Storage.Identity;
 using Storage.Models;
 using System.Threading.Tasks;
 

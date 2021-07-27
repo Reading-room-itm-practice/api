@@ -1,16 +1,19 @@
 ﻿using Core.Exceptions;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Storage.Interfaces;
 using Storage.Iterfaces;
+using Storage.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class DeleterService<T> : IDeleterService<T> where T : class, IDbModel, IDbMasterKey
+    public class DeleterService<T> : AuthorizationBasedService, IDeleterService<T> where T : AuditableModel, IDbMasterKey
     {
         private readonly IBaseRepository<T> _repository;
 
-        public DeleterService(IBaseRepository<T> repository)
+        public DeleterService(IBaseRepository<T> repository, IAuthorizationService authService, ILoggedUserProvider loggedUserProvider) : base(authService, loggedUserProvider)
         {
             _repository = repository;
         }
@@ -18,12 +21,7 @@ namespace Core.Services
         public async Task Delete(int id)
         {
             var model = await _repository.FindByConditions(x => x.Id == id);
-
-            if (model.FirstOrDefault() == null)
-            {
-                throw new NotFoundException("Entity does not exists");
-            }
-
+            await CheckCanBeModify(model.FirstOrDefault());
             await _repository.Delete(model.FirstOrDefault());
         }
     }

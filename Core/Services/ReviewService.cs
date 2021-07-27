@@ -17,15 +17,13 @@ namespace Core.Services
         private readonly IReviewRepository _reviewRepository;
         private readonly IGetterService<Book> _bookGetter;
         private readonly ILoggedUserProvider _loggedUserProvider;
-        private readonly UserManager<User> _userManager;
 
         public ReviewService(IReviewRepository reviewRepository, IGetterService<Book> bookGetter, 
-            ILoggedUserProvider loggedUserProvider, UserManager<User> userManager)
+            ILoggedUserProvider loggedUserProvider)
         {
             _loggedUserProvider = loggedUserProvider;
             _reviewRepository = reviewRepository;
             _bookGetter = bookGetter;
-            _userManager = userManager;
         }
 
         public async Task<ServiceResponse> AddReview(ReviewRequest review)

@@ -14,31 +14,36 @@ namespace WebAPI.Controllers.Follows
     [ApiController]
     public class UserFollowsController : ControllerBase
     {
-        private readonly ICrudService<UserFollow> _followsService;
-        public UserFollowsController(ICrudService<UserFollow> crudService)
+        private readonly IDeleterService<UserFollow> _deleterService;
+        private readonly IExtendedGetterService<UserFollow> _getterService;
+        private readonly ICreatorService<UserFollow> _creatorService;
+
+        public UserFollowsController(IDeleterService<UserFollow> deleter, IExtendedGetterService<UserFollow> getter, ICreatorService<UserFollow> creator)
         {
-            _followsService = crudService;
+            _deleterService = deleter;
+            _getterService = getter;
+            _creatorService = creator;
         }
 
         [SwaggerOperation(Summary = "Retrieves all categories follows")]
         [HttpGet]
-        public async Task<ServiceResponse> Index()
+        public async Task<ServiceResponse> Index(Guid userId)
         {
-            return await _followsService.GetAll<UserFollowDto>();
+            return await _getterService.GetAllByCreator<UserFollowDto>(userId);
         }
 
         [SwaggerOperation(Summary = "Create category follow for logged user")]
         [HttpPost]
         public async Task<ServiceResponse> Create(Guid userId)
         {
-            return await _followsService.Create<UserFollowDto>(new UserFollowRequest { FollowableId = userId });
+            return await _creatorService.Create<UserFollowDto>(new UserFollowRequest { FollowableId = userId });
         }
 
         [SwaggerOperation(Summary = "Delete a category follow by unique id")]
         [HttpDelete("{id:int}")]
         public async Task<ServiceResponse> Delete(int id)
         {
-            await _followsService.Delete(id);
+            await _deleterService.Delete(id);
 
             return ServiceResponse.Success("Resource has been deleted");
         }

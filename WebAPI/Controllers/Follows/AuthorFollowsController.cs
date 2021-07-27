@@ -2,46 +2,53 @@
 using Core.Interfaces;
 using Core.Requests.Follows;
 using Core.ServiceResponses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models.Follows;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers.Follows
 {
-    [Route("api/[Controller]")]
     [ApiController]
     public class AuthorFollowsController : ControllerBase
     {
-        private readonly ICrudService<AuthorFollow> _crudService;
+        private readonly IDeleterService<AuthorFollow> _deleterService;
+        private readonly IExtendedGetterService<AuthorFollow> _getterService;
+        private readonly ICreatorService<AuthorFollow> _creatorService;
 
-        public AuthorFollowsController(ICrudService<AuthorFollow> crudService)
+        public AuthorFollowsController(IDeleterService<AuthorFollow> deleter, IExtendedGetterService<AuthorFollow> getter, ICreatorService<AuthorFollow> creator)
         {
-            _crudService = crudService;
+            _deleterService = deleter;
+            _getterService = getter;
+            _creatorService = creator;
         }
 
-        [SwaggerOperation(Summary = "Retrieves all authors follows")]
+        [SwaggerOperation(Description = "Retrieves all authors follows")]
+        [Route("api/users/{id:guid}/author-follows")]
         [HttpGet]
-        public async Task<ServiceResponse> Index()
+        public async Task<ServiceResponse> Index(Guid userId)
         {
-            return await _crudService.GetAll<FollowDto>();
+            return await _getterService.GetAllByCreator<FollowDto>(userId);
         }
 
-        [SwaggerOperation(Summary = "Create author follow for logged user")]
+        [SwaggerOperation(Description  = "Create author follow for logged user")]
+        [Route("api/authors/{id:int}/follows")]
         [HttpPost]
-        public async Task<ServiceResponse> Create(int authorId)
+        public async Task<ServiceResponse> Create(int id)
         {
-            return await _crudService.Create<FollowDto>(new FollowRequest {FollowableId = authorId });
+            return await _creatorService.Create<FollowDto>(new FollowRequest {FollowableId = id });
         }
 
-        [SwaggerOperation(Summary = "Delete a follow by unique id")]
-        [HttpDelete("{id:int}")]
+        [SwaggerOperation(Description = "Delete a follow by unique id")]
+        [Route("api/authors/follows/{id:int}")]
+        [HttpDelete]
         public async Task<ServiceResponse> Delete(int id)
         {
-            await _crudService.Delete(id);
+            await _deleterService.Delete(id);
 
             return ServiceResponse.Success("Resource has been deleted");
         }
-
     }
 }

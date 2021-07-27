@@ -6,7 +6,7 @@ using System.Text;
 
 namespace WebAPI.Installers
 {
-    public class DbInstaller : Installer
+    public class DbInstaller : IInstaller
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {

@@ -18,8 +18,14 @@ namespace WebAPI.Services
         {
             var loggedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            //return loggedUserId != null ? new Guid(loggedUserId) : throw new UnauthorizedAccessException();
-            return new Guid("9BC54F88-AC95-4FDD-CAE1-08D950289010");
+            return loggedUserId != null ? new Guid(loggedUserId) : throw new UnauthorizedAccessException();
+        }
+
+        public ClaimsPrincipal GetUserClaimsPrincipal()
+        {
+            var loggedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            return loggedUserId != null ? _httpContextAccessor.HttpContext.User : throw new UnauthorizedAccessException();
         }
     }
 }

@@ -10,7 +10,7 @@ using System;
 
 namespace WebAPI.Installers
 {
-    public class AuthenticationInstaller : Installer
+    public class AuthenticationInstaller : IInstaller
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {

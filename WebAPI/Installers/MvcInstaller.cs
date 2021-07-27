@@ -6,7 +6,7 @@ using WebAPI.Services;
 
 namespace WebAPI.Installers
 {
-    public class MvcInstaller : Installer
+    public class MvcInstaller : IInstaller
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {

@@ -34,10 +34,6 @@ namespace Core
             services.AddScoped<ICrudService<Category>, CrudService<Category>>();
             services.AddScoped<ICrudService<Photo>, CrudService<Photo>>();
             services.AddScoped<ICrudService<Review>, CrudService<Review>>();
-            services.AddScoped<ICrudService<AuthorFollow>, CrudService<AuthorFollow>>();
-            services.AddScoped<ICrudService<CategoryFollow>, CrudService<CategoryFollow>>();
-            services.AddScoped<ICrudService<UserFollow>, CrudService<UserFollow>>();
-
 
             services.AddScoped<ICreatorService<Author>, CreatorService<Author>>();
             services.AddScoped<IGetterService<Author>, GetterService<Author>>();
@@ -45,18 +41,15 @@ namespace Core
             services.AddScoped<IDeleterService<Author>, DeleterService<Author>>();
 
             services.AddScoped<ICreatorService<CategoryFollow>, CreatorService<CategoryFollow>>();
-            services.AddScoped<IGetterService<CategoryFollow>, GetterService<CategoryFollow>>();
-            services.AddScoped<IUpdaterService<CategoryFollow>, UpdaterService<CategoryFollow>>();
+            services.AddScoped<IExtendedGetterService<CategoryFollow>, ExtendedGetterService<CategoryFollow>>();
             services.AddScoped<IDeleterService<CategoryFollow>, DeleterService<CategoryFollow>>();
 
             services.AddScoped<ICreatorService<UserFollow>, CreatorService<UserFollow>>();
-            services.AddScoped<IGetterService<UserFollow>, GetterService<UserFollow>>();
-            services.AddScoped<IUpdaterService<UserFollow>, UpdaterService<UserFollow>>();
+            services.AddScoped<IExtendedGetterService<UserFollow>, ExtendedGetterService<UserFollow>>();
             services.AddScoped<IDeleterService<UserFollow>, DeleterService<UserFollow>>();
 
             services.AddScoped<ICreatorService<AuthorFollow>, CreatorService<AuthorFollow>>();
-            services.AddScoped<IGetterService<AuthorFollow>, GetterService<AuthorFollow>>();
-            services.AddScoped<IUpdaterService<AuthorFollow>, UpdaterService<AuthorFollow>>();
+            services.AddScoped<IExtendedGetterService<AuthorFollow>, ExtendedGetterService<AuthorFollow>>();
             services.AddScoped<IDeleterService<AuthorFollow>, DeleterService<AuthorFollow>>();
 
             services.AddScoped<ICreatorService<Book>, CreatorService<Book>>();

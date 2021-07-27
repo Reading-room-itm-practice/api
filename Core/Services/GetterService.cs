@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class GetterService<T> : IGetterService<T> where T : class, IDbModel, IDbMasterKey
+    public class GetterService<T> : IGetterService<T> where T : class, IDbMasterKey
     {
-        private readonly IBaseRepository<T> _repository;
-        private readonly IMapper _mapper;
+        protected readonly IBaseRepository<T> _repository;
+        protected readonly IMapper _mapper;
 
-        public GetterService(IBaseRepository<T> postRepository, IMapper mapper)
+        public GetterService(IBaseRepository<T> repository, IMapper mapper)
         {
-            _repository = postRepository;
+            _repository = repository;
             _mapper = mapper;
         }
 
