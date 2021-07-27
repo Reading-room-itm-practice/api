@@ -10,7 +10,7 @@ using Storage.DataAccessLayer;
 namespace Storage.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210726123627_Suggestions_Update")]
+    [Migration("20210727100003_Suggestions_Update")]
     partial class Suggestions_Update
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

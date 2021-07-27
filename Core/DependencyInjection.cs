@@ -73,6 +73,10 @@ namespace Core
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<ISearchRepository, SearchRepository>();
 
+            services.AddScoped<IUserAuthorCrudService, UserAuthorCrudService>();
+            services.AddScoped<IUserBookCrudService, UserBookCrudService>();
+            services.AddScoped<IUserCategoryCrudService, UserCategoryCrudService>();
+
             return services;
         }
     }

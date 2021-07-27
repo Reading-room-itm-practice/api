@@ -2,6 +2,7 @@
 using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
+using Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Identity;
@@ -15,9 +16,9 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-        private readonly ICrudService<Author> _crud;
+        private readonly IUserAuthorCrudService _crud;
 
-        public AuthorsController(ICrudService<Author> crud)
+        public AuthorsController(IUserAuthorCrudService crud)
         {
             _crud = crud;
         }
