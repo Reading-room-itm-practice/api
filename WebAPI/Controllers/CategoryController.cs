@@ -26,8 +26,8 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> GetCategory(int id)
         {
             var result = await _crud.GetById<CategoryDto>(id);
-            if (result == null) return new SuccessResponse() { Message = "Category not found.", StatusCode = HttpStatusCode.OK };
-            return new SuccessResponse<CategoryDto>() { Message = "Category found.", StatusCode = HttpStatusCode.OK, Content = result };
+            if (result == null) return new SuccessResponse() { Message = "Category not found." };
+            return new SuccessResponse<CategoryDto>() { Message = "Category found.", Content = result };
         }
 
         [HttpGet]
@@ -36,7 +36,7 @@ namespace WebAPI.Controllers
             var route = Request.Path.Value;
             var categories = await _crud.GetAll<CategoryDto>(filter, route);
 
-            return new SuccessResponse<PagedResponse<CategoryDto>>() { Message = "Categories retrieved.", StatusCode = HttpStatusCode.OK, Content = categories };
+            return new SuccessResponse<PagedResponse<IEnumerable<CategoryDto>>>() { Message = "Categories retrieved.", Content = categories };
         }
 
         [HttpPost]
@@ -52,7 +52,7 @@ namespace WebAPI.Controllers
         {
             await _crud.Update(category, id);
             return new SuccessResponse()
-            { Message = "Category updated.", StatusCode = HttpStatusCode.OK };
+            { Message = "Category updated." };
         }
 
         [HttpDelete("{id:int}")]
@@ -60,7 +60,7 @@ namespace WebAPI.Controllers
         {
             await _crud.Delete(id);
             return new SuccessResponse()
-            { Message = "Category deleted.", StatusCode = HttpStatusCode.OK };
+            { Message = "Category deleted." };
         }
     }
 }

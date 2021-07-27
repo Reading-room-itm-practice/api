@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Storage.Identity;
 using Storage.Models;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -32,7 +33,7 @@ namespace WebAPI.Controllers
             var route = Request.Path.Value;
             var authors = await _crud.GetAll<AuthorDto>(filter, route);
 
-            return new SuccessResponse<PagedResponse<AuthorDto>>() { Message = "Authors retrieved.", StatusCode = HttpStatusCode.OK, Content = authors };
+            return new SuccessResponse<PagedResponse<IEnumerable<AuthorDto>>>() { Message = "Authors retrieved.", Content = authors };
         }
 
         [SwaggerOperation(Summary = "Retrieves a specific book author by unique id")]

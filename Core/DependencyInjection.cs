@@ -2,10 +2,13 @@
 using Core.Interfaces;
 using Core.Interfaces.Auth;
 using Core.Interfaces.Email;
+using Core.Interfaces.Search;
 using Core.Repositories;
+using Core.Repositories.Search;
 using Core.Services;
 using Core.Services.Auth;
 using Core.Services.Email;
+using Core.Services.Search;
 using Microsoft.Extensions.DependencyInjection;
 using Storage.Models;
 using System;
@@ -61,6 +64,11 @@ namespace Core
 
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<ISearchRepository, SearchRepository>();
+            services.AddScoped<ISearchBookRepository, SearchBookRepository>();
+            services.AddScoped<ISearchAuthorRepository, SearchAuthorRepository>();
+            services.AddScoped<ISearchUserRepository, SearchUserRepository>();
+            services.AddScoped<ISearchCategoryRepository, SearchCategoryRepository>();
+            services.AddScoped<ISearchAllRepository, SearchAllRepository>();
 
             return services;
         }

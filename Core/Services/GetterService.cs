@@ -22,7 +22,7 @@ namespace Core.Services
             _uriService = uriService;
         }
 
-        public async Task<PagedResponse<IResponseDto>> GetAll<IResponseDto>(PaginationFilter filter, string route)
+        public async Task<PagedResponse<IEnumerable<IResponseDto>>> GetAll<IResponseDto>(PaginationFilter filter, string route)
         {
             var models = await _repository.FindAll(filter);
             var data = _mapper.Map<IEnumerable<IResponseDto>>(models.data);

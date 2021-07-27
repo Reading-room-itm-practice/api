@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Storage.Models;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -33,7 +34,7 @@ namespace WebAPI.Controllers
             var route = Request.Path.Value;
             var photos = (await _crud.GetAll<PhotoDto>(filter, route));
 
-            return new SuccessResponse<PagedResponse<PhotoDto>>() { Message = "Photos retrieved.", StatusCode = HttpStatusCode.OK, Content = photos };
+            return new SuccessResponse<PagedResponse<IEnumerable<PhotoDto>>>() { Message = "Photos retrieved.", Content = photos };
         }
 
         [HttpGet("{id:int}")]
@@ -54,7 +55,7 @@ namespace WebAPI.Controllers
             }
             catch (DbUpdateException e)
             {
-                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
+                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = HttpStatusCode.BadRequest };
             }
         }
 
@@ -68,7 +69,7 @@ namespace WebAPI.Controllers
             }
             catch (DbUpdateException e)
             {
-                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
+                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = HttpStatusCode.BadRequest };
             }
         }
 
@@ -82,17 +83,17 @@ namespace WebAPI.Controllers
             }
             catch (NotFoundException e)
             {
-                return new ErrorResponse() { Message = e.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
+                return new ErrorResponse() { Message = e.Message, StatusCode = HttpStatusCode.BadRequest };
 
             }
             catch (DbUpdateException e)
             {
-                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
+                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = HttpStatusCode.BadRequest };
             }
             catch (Exception e)
             {
                 if (e.InnerException.GetType() == typeof(NotFoundException)) return new ErrorResponse()
-                { Message = "Image not found", StatusCode = System.Net.HttpStatusCode.NotFound };
+                { Message = "Image not found", StatusCode = HttpStatusCode.NotFound };
 
                 return new ErrorResponse() { Message = e.Message };
             }

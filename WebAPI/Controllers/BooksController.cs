@@ -6,6 +6,7 @@ using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -30,16 +31,16 @@ namespace WebAPI.Controllers
             var route = Request.Path.Value;
             var books = await _crud.GetAll<BookDto>(filter, route);
 
-            return new SuccessResponse<PagedResponse<BookDto>>() { Message = "Books retrieved.", StatusCode = HttpStatusCode.OK, Content = books };
+            return new SuccessResponse<PagedResponse<IEnumerable<BookDto>>>() { Message = "Books retrieved.", Content = books };
         }
 
         [SwaggerOperation(Summary = "Retrieves a specific book by unique id")]
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> Show(int id)
+        public async Task<ServiceResponse> Show(int id)
         {
             var book = await _crud.GetById<BookDto>(id);
 
-            return book == null ? NotFound() : Ok(book);
+            return book == null ? new ErrorResponse() { StatusCode = HttpStatusCode.NotFound } : new SuccessResponse<BookDto>() { Message = "Book found.", Content = book };
         }
 
         [SwaggerOperation(Summary = "Creates a new entry of a book")]

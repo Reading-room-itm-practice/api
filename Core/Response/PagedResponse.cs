@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Core.Response
 {
@@ -13,8 +12,8 @@ namespace Core.Response
         public int TotalRecords { get; set; }
         public Uri NextPage { get; set; }
         public Uri PreviousPage { get; set; }
-        public IEnumerable<T> Data { get; set; }
-        public PagedResponse(IEnumerable<T> data, int pageNumber, int pageSize)
+        public T Data { get; set; }
+        public PagedResponse(T data, int pageNumber, int pageSize)
         {
             Data = data;
             PageNumber = pageNumber;
