@@ -40,15 +40,15 @@ namespace Core
             services.AddScoped<IUpdaterService<Author>, UpdaterService<Author>>();
             services.AddScoped<IDeleterService<Author>, DeleterService<Author>>();
 
-            services.AddScoped<ICreatorService<CategoryFollow>, CreatorService<CategoryFollow>>();
+            services.AddScoped<IFollowCreatorService<CategoryFollow>, FollowsCreatorService<CategoryFollow>>();
             services.AddScoped<IExtendedGetterService<CategoryFollow>, ExtendedGetterService<CategoryFollow>>();
             services.AddScoped<IDeleterService<CategoryFollow>, DeleterService<CategoryFollow>>();
 
-            services.AddScoped<ICreatorService<UserFollow>, CreatorService<UserFollow>>();
+            services.AddScoped<IFollowCreatorService<UserFollow>, FollowsCreatorService<UserFollow>>();
             services.AddScoped<IExtendedGetterService<UserFollow>, ExtendedGetterService<UserFollow>>();
             services.AddScoped<IDeleterService<UserFollow>, DeleterService<UserFollow>>();
 
-            services.AddScoped<ICreatorService<AuthorFollow>, CreatorService<AuthorFollow>>();
+            services.AddScoped<IFollowCreatorService<AuthorFollow>, FollowsCreatorService<AuthorFollow>>();
             services.AddScoped<IExtendedGetterService<AuthorFollow>, ExtendedGetterService<AuthorFollow>>();
             services.AddScoped<IDeleterService<AuthorFollow>, DeleterService<AuthorFollow>>();
 
@@ -88,6 +88,8 @@ namespace Core
 
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<ISearchRepository, SearchRepository>();
+
+            services.AddScoped<IModifyAvalibilityChecker, ModifyAvilabilityChecker>();
 
             return services;
         }
