@@ -5,8 +5,6 @@ using Core.Interfaces;
 using Core.Interfaces.Search;
 using Core.Response;
 using System.Collections.Generic;
-using System.Linq;
-using WebAPI.DTOs;
 
 namespace Core.Services.Search
 {
@@ -24,62 +22,45 @@ namespace Core.Services.Search
         {
             var searchResults = _searchRepository.SearchAll(filter, route, searchString, sort);
             var pagedReponse = PaginationHelper.CreatePagedReponse(searchResults.singleData, filter, searchResults.count, _uriService, route);
+            var message = searchResults.singleData.Count() == 0 ? "No search results found" : "Search results retrieved.";
 
-            if (searchResults.singleData.Count() != 0)
-                return new SuccessResponse<PagedResponse<SearchAll>>()
-                { Message = "Search results retrieved.", Content = pagedReponse };
-
-            return new SuccessResponse<PagedResponse<SearchAll>>()
-            { Message = "No search results found", Content = pagedReponse };
+            return ServiceResponse<PagedResponse<SearchAll>>.Success(pagedReponse, message);
         }
 
         public ServiceResponse SearchAuthor(PaginationFilter filter, string route, string searchString, SortType? sort)
         {
             var authors = _searchRepository.GetAuthors(filter, searchString, sort);
             var pagedReponse = PaginationHelper.CreatePagedReponse(authors.data, filter, authors.count, _uriService, route);
+            var message = authors.count == 0 ? "No author search results found." : "Author search results retrieved.";
 
-            if (authors.count == 0) return new SuccessResponse<PagedResponse<IEnumerable<AuthorDto>>>()
-            { Message = "No author search results found.", Content = pagedReponse };
-
-            return new SuccessResponse<PagedResponse<IEnumerable<AuthorDto>>>()
-            { Message = "Author search results retrieved.", Content = pagedReponse };
+            return ServiceResponse<PagedResponse<IEnumerable<AuthorDto>>>.Success(pagedReponse, message);
         }
-
         public ServiceResponse SearchBook(PaginationFilter filter, string route, string searchString, SortType? sort, int? minYear, int? maxYear, int? categoryId,
             int? authorId)
         {
             var books = _searchRepository.GetBooks(filter, searchString, sort, minYear, maxYear, categoryId, authorId);
             var pagedReponse = PaginationHelper.CreatePagedReponse(books.data, filter, books.count, _uriService, route);
+            var message = books.count == 0 ? "No book search results found." : "Book search results retrieved.";
 
-            if (books.count == 0) return new SuccessResponse<PagedResponse<IEnumerable<BookDto>>>()
-            { Message = "No book search results found.", Content = pagedReponse };
-
-            return new SuccessResponse<PagedResponse<IEnumerable<BookDto>>>()
-            { Message = "Book search results retrieved.", Content = pagedReponse };
+            return ServiceResponse<PagedResponse<IEnumerable<BookDto>>>.Success(pagedReponse, message);
         }
 
         public ServiceResponse SearchCategory(PaginationFilter filter, string route, string searchString, SortType? sort)
         {
             var categories = _searchRepository.GetCategories(filter, searchString, sort);
             var pagedReponse = PaginationHelper.CreatePagedReponse(categories.data, filter, categories.count, _uriService, route);
+            var message = categories.count == 0 ? "No book search results found." : "Book search results retrieved.";
 
-            if (categories.count == 0) return new SuccessResponse<PagedResponse<IEnumerable<CategoryDto>>>()
-            { Message = "No category search results found.", Content = pagedReponse };
-
-            return new SuccessResponse<PagedResponse<IEnumerable<CategoryDto>>>()
-            { Message = "Category search results retrieved.", Content = pagedReponse };
+            return ServiceResponse<PagedResponse<IEnumerable<CategoryDto>>>.Success(pagedReponse, message);
         }
 
         public ServiceResponse SearchUser(PaginationFilter filter, string route, string searchString, SortType? sort)
         {
             var users = _searchRepository.GetUsers(filter, searchString, sort);
             var pagedReponse = PaginationHelper.CreatePagedReponse(users.data, filter, users.count, _uriService, route);
+            var message = users.count == 0 ? "No book search results found." : "Book search results retrieved.";
 
-            if (users.count == 0) return new SuccessResponse<PagedResponse<IEnumerable<UserSearchDto>>>()
-            { Message = "No user search results found.", Content = pagedReponse };
-
-            return new SuccessResponse<PagedResponse<IEnumerable<UserSearchDto>>>()
-            { Message = "User search results retrieved.", Content = pagedReponse };
+            return ServiceResponse<PagedResponse<IEnumerable<UserSearchDto>>>.Success(pagedReponse, message);
         }
     }
 }

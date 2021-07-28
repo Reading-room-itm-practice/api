@@ -4,7 +4,7 @@ using Storage.Models;
 
 namespace Storage.DataAccessLayer.Configurations
 {
-    public class AuthorConfiguration : IEntityTypeConfiguration<Author>
+    public class AuthorConfig : IEntityTypeConfiguration<Author>
     {
         public void Configure(EntityTypeBuilder<Author> builder)
         {
@@ -15,6 +15,10 @@ namespace Storage.DataAccessLayer.Configurations
             builder.Property(b => b.Biography)
                 .HasMaxLength(int.MaxValue)
                 .IsRequired();
+
+            builder.HasOne(c => c.Creator)
+                .WithMany(a => a.Authors)
+                .HasForeignKey(f => f.CreatorId);
         }
     }
 }

@@ -6,7 +6,6 @@ using Core.Services;
 using Storage.DataAccessLayer;
 using System.Collections.Generic;
 using System.Linq;
-using WebAPI.DTOs;
 
 namespace Core.Repositories.Search
 {

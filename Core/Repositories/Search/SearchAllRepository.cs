@@ -1,19 +1,13 @@
 ﻿using AutoMapper;
 using Core.DTOs;
 using Core.Enums;
-using Core.Interfaces;
 using Core.Interfaces.Search;
-using Core.Response;
 using Core.Services;
 using Core.Services.Search;
 using Storage.DataAccessLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using WebAPI.DTOs;
 
 namespace Core.Repositories.Search
 {

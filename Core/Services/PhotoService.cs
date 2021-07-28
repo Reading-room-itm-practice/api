@@ -6,10 +6,12 @@ using Core.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Storage.Models;
+using Storage.Models.Photos;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Core.Services
@@ -21,16 +23,10 @@ namespace Core.Services
         public readonly string uploadsFolder;
 
         private readonly ICrudService<Photo> _crud;
-        private readonly ICrudService<Book> _bookCrud;
-        private readonly IMapper _mapper;
-        private readonly IConfiguration configuration;
 
-        public PhotoService(IConfiguration configuration, ICrudService<Photo> crud, ICrudService<Book> bookCrud, IMapper mapper)
+        public PhotoService(IConfiguration configuration, ICrudService<Photo> crud)
         {
-            this.configuration = configuration;
             _crud = crud;
-            _bookCrud = bookCrud;
-            _mapper = mapper;
 
             PhotoSizeLimit = long.Parse(configuration["FileSizeLimit"]);
             AllowedFileExtensions = configuration["AllowedPhotoExtensions"].Split(", ").ToList();
@@ -40,7 +36,7 @@ namespace Core.Services
         public async Task<ServiceResponse> UploadPhoto(IFormFile image, int bookId)
         {
             ServiceResponse result = ValidatePhoto(image);
-            if (!result.Success) return result;
+            if (!result.SuccessStatus) return result;
 
             return await ProcessPhoto(image, bookId);
         }
@@ -49,17 +45,18 @@ namespace Core.Services
         {
             var photoToDelete = await _crud.GetById<PhotoDto>(id);
             await _crud.Delete(id);
-            System.IO.File.Delete(photoToDelete.Path);
-            return new SuccessResponse();
+            File.Delete(photoToDelete.Content.Path);
+            return  ServiceResponse.Success();
         }
 
         private ServiceResponse ValidatePhoto(IFormFile image)
         {
-            if (image == null) return new ErrorResponse() { Message = "No image.", StatusCode = System.Net.HttpStatusCode.BadRequest };
-            if (image.Length > PhotoSizeLimit) return new ErrorResponse() { Message = "File is too large.", StatusCode = System.Net.HttpStatusCode.BadRequest };
+            if (image == null) return ServiceResponse.Error("No image.", HttpStatusCode.BadRequest);
+            if (image.Length > PhotoSizeLimit) return ServiceResponse.Error("File is too large.", HttpStatusCode.BadRequest);
             var extension = "." + image.FileName.Split('.')[image.FileName.Split('.').Length - 1];
-            if (AllowedFileExtensions.All(ex => extension != ex)) return new ErrorResponse() { Message = "Invalid file extension", StatusCode = System.Net.HttpStatusCode.BadRequest };
-            return new SuccessResponse();
+            if (AllowedFileExtensions.All(ex => extension != ex)) return ServiceResponse.Error("Invalid file extension", HttpStatusCode.BadRequest);
+
+            return  ServiceResponse.Success();
         }
 
         private async Task<ServiceResponse> ProcessPhoto(IFormFile image, int bookId)
@@ -69,17 +66,18 @@ namespace Core.Services
                 string uniqueFileName = Guid.NewGuid().ToString() + ".jpeg";
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 var newPhoto = await _crud.Create<PhotoDto>(new PhotoUploadRequest { Path = filePath, BookId = bookId });
-                using (var stream = System.IO.File.Create(filePath))
+                using (var stream = File.Create(filePath))
                 {
                     await image.CopyToAsync(stream);
                 }
-                return new SuccessResponse<PhotoDto>() { Content = newPhoto, Message = "Image uploaded." };
+
+                return  ServiceResponse<PhotoDto>.Success(newPhoto.Content, "Image uploaded." );
             }
             catch (Exception e)
             {
-                if (e.InnerException != null)
-                    return new ErrorResponse() { Message = e.Message + " Inner Exception: " + e.InnerException.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
-                return new ErrorResponse() { Message = e.Message, StatusCode = System.Net.HttpStatusCode.BadRequest };
+                if (e.InnerException != null) return ServiceResponse.Error(e.Message + " Inner Exception: " + e.InnerException.Message, HttpStatusCode.BadRequest );
+
+                return  ServiceResponse.Error( e.Message, HttpStatusCode.BadRequest);
             }
         }
     }

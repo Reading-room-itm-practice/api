@@ -4,7 +4,7 @@ using Storage.Models;
 
 namespace Storage.DataAccessLayer.Configurations
 {
-    public class SuggestionConfiguration : IEntityTypeConfiguration<Suggestion>
+    public class SuggestionConfig : IEntityTypeConfiguration<Suggestion>
     {
         public void Configure(EntityTypeBuilder<Suggestion> builder)
         {
@@ -18,6 +18,10 @@ namespace Storage.DataAccessLayer.Configurations
 
             builder.Property(t => t.Comment)
                 .HasMaxLength(400);
+
+            builder.HasOne(c => c.Creator)
+               .WithMany(f => f.Suggestions)
+               .HasForeignKey(f => f.CreatorId);
         }
     }
 }

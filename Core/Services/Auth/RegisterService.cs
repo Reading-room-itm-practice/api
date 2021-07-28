@@ -27,7 +27,7 @@ namespace Core.Services.Auth
             try
             {
                 if (await _userManager.FindByNameAsync(model.Username) != null || await _userManager.FindByEmailAsync(model.Email) != null)
-                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = "Account already exists!" };
+                    return ServiceResponse.Error("Account already exists!");
 
                 User user = new()
                 {
@@ -38,7 +38,7 @@ namespace Core.Services.Auth
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (!result.Succeeded)
-                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = _additionalAuthMetods.CreateValidationErrorMessage(result) };
+                    return ServiceResponse.Error(_additionalAuthMetods.CreateValidationErrorMessage(result));
 
                 await _userManager.AddToRoleAsync(user, UserRoles.User);
 
@@ -48,11 +48,11 @@ namespace Core.Services.Auth
 
                 await _emailService.SendEmailAsync(user.Email, "Confirm your email address", urlString);
 
-                return new SuccessResponse { StatusCode = HttpStatusCode.Created, Message = "User created successfully! Confirm your email." };
+                return ServiceResponse.Success("User created successfully! Confirm your email.", HttpStatusCode.Created);
             }
             catch
             {
-                return new ErrorResponse { Message = "An error accured while creating account.", StatusCode = HttpStatusCode.UnprocessableEntity};
+                return ServiceResponse.Error("An error accured while creating account.");
             }
         }
 
@@ -67,11 +67,11 @@ namespace Core.Services.Auth
                 if (isConfirmed || !result.Succeeded)
                     throw new();
 
-                return new SuccessResponse { Message = "Email confirmed succesfully" };
+                return ServiceResponse.Success("Email confirmed succesfully");
             }
             catch
             {
-                return new ErrorResponse { StatusCode = HttpStatusCode.BadRequest, Message = "Link is invalid" };
+                return ServiceResponse.Error("Link is invalid", HttpStatusCode.BadRequest);
             }
         }
     }

@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Core.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace Core.DTOs
 {
-    public class EmailDto
+    public class EmailDto : IDto
     {
         [Required]
         public string Token { get; set; }

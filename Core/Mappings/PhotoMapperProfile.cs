@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.DTOs;
 using Core.Requests;
-using Storage.Models;
+using Storage.Models.Photos;
 
 namespace Core.Mappings
 {

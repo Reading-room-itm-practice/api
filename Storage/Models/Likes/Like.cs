@@ -2,14 +2,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Storage.Models
+namespace Storage.Models.Likes
 {
-    [Table("Photos")]
-    public class Photo : AuditableModel, IDbModel, IDbMasterKey
+    [Table("Likes")]
+    public abstract class Like : AuditableModel, IDbMasterKey
     {
         [Key]
         public int Id { get; set; }
-        public int BookId { get; set; }
-        public string Path { get; set; }
+        public LikeableTypes LikeableType { get; set; }
     }
 }

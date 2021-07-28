@@ -45,17 +45,17 @@ namespace WebAPI
                 if (exception is NotFoundException)
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
-                    await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = ApiException.ResponseCode, Message = exception.Message });
+                    await context.Response.WriteAsJsonAsync(ServiceResponse.Error(exception.Message, ApiException.ResponseCode));
                 }
                 else if (exception is ApiException)
                 {
                     context.Response.StatusCode = (int)ApiException.ResponseCode;
-                    await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = ApiException.ResponseCode, Message = exception.Message });
+                    await context.Response.WriteAsJsonAsync(ServiceResponse.Error(exception.Message, ApiException.ResponseCode));
                 }
                 else
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    await context.Response.WriteAsJsonAsync(new ErrorResponse { StatusCode = HttpStatusCode.InternalServerError, Message = exception.Message });
+                    await context.Response.WriteAsJsonAsync(ServiceResponse.Error(exception.Message, HttpStatusCode.InternalServerError));
                 }
             }));
 

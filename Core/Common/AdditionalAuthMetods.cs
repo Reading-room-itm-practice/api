@@ -30,7 +30,7 @@ namespace Core.Common
 
         public string CreateValidationErrorMessage(IdentityResult result)
         {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = new ();
             foreach (var error in result.Errors)
             {
                 builder.Append(error.Description + " ");
@@ -39,15 +39,21 @@ namespace Core.Common
             return builder.ToString();
         }
 
-        public async Task<ServiceResponse> GetUserTokenResponse(string email)
+        public async Task<ServiceResponse> GetUserTokenResponse(string userInfo)
         {
-            var user = await _userManager.FindByEmailAsync(email);
-            var roles = await _userManager.GetRolesAsync(user);
-            return new SuccessResponse<string>
+            User user = new ();
+            if (userInfo.Contains('@'))
             {
-                Message = "Successful login",
-                Content = $"{_jwtGenerator.GenerateJWTToken(_config, user, roles)}"
-            };
+                user = await _userManager.FindByEmailAsync(userInfo);
+            }
+            else
+            {
+                user = await _userManager.FindByNameAsync(userInfo);
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return ServiceResponse<string>.Success($"{_jwtGenerator.GenerateJWTToken(_config, user, roles)}", "Successful login");
         }
     }
 }

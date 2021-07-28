@@ -7,9 +7,10 @@ using Core.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Storage.Models;
+using Storage.Models.Photos;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -29,20 +30,27 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<ServiceResponse> GetPhotos([FromQuery] PaginationFilter filter)
+        public async Task<ServiceResponse> GetPhotos([FromQuery] PaginationFilter filter, int? book_id)
         {
             var route = Request.Path.Value;
-            var photos = (await _crud.GetAll<PhotoDto>(filter, route));
+            if (book_id != null)
+            {
+                return ServiceResponse<IEnumerable<PhotoDto>>.Success(_crud.GetAll<PhotoDto>(filter, route).Result.Content.Data.Where(p => p.BookId == book_id));
+            }
 
-            return new SuccessResponse<PagedResponse<IEnumerable<PhotoDto>>>() { Message = "Photos retrieved.", Content = photos };
+            return await _crud.GetAll<PhotoDto>(filter, route);
         }
 
         [HttpGet("{id:int}")]
         public async Task<ServiceResponse> GetPhoto(int id)
         {
             var result = await _crud.GetById<PhotoDto>(id);
-            if (result == null) return new ErrorResponse() { Message = "Photo not found.", StatusCode = System.Net.HttpStatusCode.NotFound };
-            return new SuccessResponse<PhotoDto>() { Content = result };
+            if (result.Content == null)
+            {
+                return ServiceResponse.Error("Photo not found.", HttpStatusCode.NotFound);
+            } 
+
+            return result;
         }
 
         [HttpPost()]
@@ -55,7 +63,7 @@ namespace WebAPI.Controllers
             }
             catch (DbUpdateException e)
             {
-                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = HttpStatusCode.BadRequest };
+                return ServiceResponse.Error(e.InnerException.Message, HttpStatusCode.BadRequest);
             }
         }
 
@@ -65,11 +73,11 @@ namespace WebAPI.Controllers
             try
             {
                 await _crud.Update(photo_bookId, id);
-                return new SuccessResponse() { Message = "Image updated" };
+                return ServiceResponse.Success("Image updated");
             }
             catch (DbUpdateException e)
             {
-                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = HttpStatusCode.BadRequest };
+                return ServiceResponse.Error(e.InnerException.Message, HttpStatusCode.BadRequest);
             }
         }
 
@@ -79,23 +87,25 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _photoService.DeletePhoto(id);
-                return new SuccessResponse() { Message = "Image deleted." };
+
+                return ServiceResponse.Success("Image deleted.");
             }
             catch (NotFoundException e)
             {
-                return new ErrorResponse() { Message = e.Message, StatusCode = HttpStatusCode.BadRequest };
-
+                return ServiceResponse.Error(e.Message, HttpStatusCode.BadRequest);
             }
             catch (DbUpdateException e)
             {
-                return new ErrorResponse() { Message = e.InnerException.Message, StatusCode = HttpStatusCode.BadRequest };
+                return ServiceResponse.Error(e.InnerException.Message, HttpStatusCode.BadRequest);
             }
             catch (Exception e)
             {
-                if (e.InnerException.GetType() == typeof(NotFoundException)) return new ErrorResponse()
-                { Message = "Image not found", StatusCode = HttpStatusCode.NotFound };
+                if (e.InnerException.GetType() == typeof(NotFoundException))
+                {
+                    return ServiceResponse.Error("Image not found", HttpStatusCode.NotFound);
+                }
 
-                return new ErrorResponse() { Message = e.Message };
+                return ServiceResponse.Error(e.Message);
             }
         }
     }

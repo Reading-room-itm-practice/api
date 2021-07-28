@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Storage.Models
 {
     [Table("Suggestions")]
-    public class Suggestion : AuditableModel, IDbModel, IDbMasterKey
+    public class Suggestion : AuditableModel, IDbMasterKey
     {
         [Key]
         public int Id { get; set; }

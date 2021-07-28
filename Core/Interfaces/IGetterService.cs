@@ -8,7 +8,7 @@ namespace Core.Interfaces
 {
     public interface IGetterService<T> where T : IDbModel
     {
-        public Task<PagedResponse<IEnumerable<IResponseDto>>> GetAll<IResponseDto>(PaginationFilter filter, string route);
-        public Task<IResponseDto> GetById<IResponseDto>(int id);
+        public Task<ServiceResponse<PagedResponse<IEnumerable<IDto>>>> GetAll<IDto>(PaginationFilter filter, string route);
+        public Task<ServiceResponse<IDto>> GetById<IDto>(int id);
     }
 }

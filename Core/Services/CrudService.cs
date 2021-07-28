@@ -22,19 +22,19 @@ namespace Core.Services
             _deleter = deleter;
         }
 
-        public async Task<IResponseDto> Create<IResponseDto>(IRequest requestDto)
+        public async Task<ServiceResponse<IDto>> Create<IDto>(IRequest requestDto)
         {
-            return await _creator.Create<IResponseDto>(requestDto);
+            return await _creator.Create<IDto>(requestDto);
         }
 
-        public async Task<PagedResponse<IEnumerable<IResponseDto>>> GetAll<IResponseDto>(PaginationFilter filter, string route)
+        public virtual async Task<ServiceResponse<PagedResponse<IEnumerable<IDto>>>> GetAll<IDto>(PaginationFilter filter, string route)
         {
-            return await _getter.GetAll<IResponseDto>(filter, route);
+            return await _getter.GetAll<IDto>(filter, route);
         }
 
-        public async Task<IResponseDto> GetById<IResponseDto>(int id)
+        public async Task<ServiceResponse<IDto>> GetById<IDto>(int id)
         {
-            return await _getter.GetById<IResponseDto>(id);
+            return await _getter.GetById<IDto>(id);
         }
 
         public async Task Update(IRequest requestDto, int id)

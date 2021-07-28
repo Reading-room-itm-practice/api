@@ -22,20 +22,22 @@ namespace Core.Services
             _uriService = uriService;
         }
 
-        public async Task<PagedResponse<IEnumerable<IResponseDto>>> GetAll<IResponseDto>(PaginationFilter filter, string route)
+        async Task<ServiceResponse<PagedResponse<IEnumerable<IDto>>>> IGetterService<T>.GetAll<IDto>(PaginationFilter filter, string route)
         {
             var models = await _repository.FindAll(filter);
-            var data = _mapper.Map<IEnumerable<IResponseDto>>(models.data);
+            var data = _mapper.Map<IEnumerable<IDto>>(models.data);
             var pagedReponse = PaginationHelper.CreatePagedReponse(data, filter, models.count, _uriService, route);
 
-            return pagedReponse;
+            return ServiceResponse<PagedResponse<IEnumerable<IDto>>>.Success(pagedReponse, "Retrived resource");
         }
 
-        public async Task<IResponseDto> GetById<IResponseDto>(int id)
+        public async Task<ServiceResponse<IDto>> GetById<IDto>(int id)
         {
             var model = await _repository.FindByConditions(x => x.Id == id);
+            var responseModel = _mapper.Map<IDto>(model.FirstOrDefault());
 
-            return _mapper.Map<IResponseDto>(model.FirstOrDefault());
+            return ServiceResponse<IDto>.Success(responseModel, "Retrived resource");
         }
+
     }
 }

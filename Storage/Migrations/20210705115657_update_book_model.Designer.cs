@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Storage.DataAccessLayer;
 
-namespace WebAPI.Migrations
+namespace Storage.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
     [Migration("20210705115657_update_book_model")]

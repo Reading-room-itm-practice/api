@@ -31,9 +31,12 @@ namespace Core.Services.Auth
 
                 await _emailService.SendEmailAsync(user.Email, "Reset your password", urlString);
             }
-            catch { return new ErrorResponse { Message = "Sending the e-mail failed", StatusCode = HttpStatusCode.UnprocessableEntity }; };
+            catch
+            {
+                return ServiceResponse.Error("Sending the e-mail failed"); 
+            }
 
-            return new SuccessResponse { Message = "Email to reset your password's waiting for you in mailbox" };
+            return ServiceResponse.Success("Email to reset your password's waiting for you in mailbox");
         }
 
         public async Task<ServiceResponse> ResetPassword(ResetPasswordRequest model)
@@ -44,11 +47,14 @@ namespace Core.Services.Auth
                 var result = await _userManager.ResetPasswordAsync(user, model.Token, model.newPassword);
 
                 if (!result.Succeeded)
-                    return new ErrorResponse { StatusCode = HttpStatusCode.UnprocessableEntity, Message = _additionalAuthMetods.CreateValidationErrorMessage(result) };
+                    return ServiceResponse.Error(_additionalAuthMetods.CreateValidationErrorMessage(result));
 
-                return new SuccessResponse { Message = "Password changed succesfully" };
+                return ServiceResponse.Success("Password changed succesfully");
             }
-            catch { return new ErrorResponse { Message = "Sending the e-mail failed", StatusCode = HttpStatusCode.UnprocessableEntity }; };
+            catch 
+            {
+                return ServiceResponse.Error("Sending the e-mail failed", HttpStatusCode.UnprocessableEntity);
+            }
         }
     }
 }

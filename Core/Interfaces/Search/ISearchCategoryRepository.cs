@@ -1,7 +1,6 @@
 ﻿using Core.DTOs;
 using Core.Enums;
 using Core.Services;
-using WebAPI.DTOs;
 
 namespace Core.Interfaces.Search
 {

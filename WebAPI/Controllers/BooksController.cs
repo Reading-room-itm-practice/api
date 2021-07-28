@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    //[Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class BooksController : ControllerBase
@@ -31,7 +30,7 @@ namespace WebAPI.Controllers
             var route = Request.Path.Value;
             var books = await _crud.GetAll<BookDto>(filter, route);
 
-            return new SuccessResponse<PagedResponse<IEnumerable<BookDto>>>() { Message = "Books retrieved.", Content = books };
+            return books;
         }
 
         [SwaggerOperation(Summary = "Retrieves a specific book by unique id")]
@@ -40,31 +39,32 @@ namespace WebAPI.Controllers
         {
             var book = await _crud.GetById<BookDto>(id);
 
-            return book == null ? new ErrorResponse() { StatusCode = HttpStatusCode.NotFound } : new SuccessResponse<BookDto>() { Message = "Book found.", Content = book };
+            return book;
         }
 
         [SwaggerOperation(Summary = "Creates a new entry of a book")]
         [HttpPost]
-        public async Task<IActionResult> Create(BookRequest model)
+        public async Task<ServiceResponse> Create(BookRequest model)
         {
-            var book = await _crud.Create<BookDto>(model);
-            return Created($"api/books/{book.Id}", book);
+            return await _crud.Create<BookDto>(model);
         }
 
         [SwaggerOperation(Summary = "Updates a book by unique id")]
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> Update(int id, BookRequest updateModel)
+        public async Task<ServiceResponse> Update(int id, BookRequest updateModel)
         {
             await _crud.Update(updateModel, id);
-            return Ok("Resource updated");
+
+            return ServiceResponse.Success("Resource updated");
         }
 
         [SwaggerOperation(Summary = "Deletes a book by unique id")]
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ServiceResponse> Delete(int id)
         {
             await _crud.Delete(id);
-            return Ok("Resource deleted");
+
+            return ServiceResponse.Success("Resource deleted");
         }
     }
 }
