@@ -1,5 +1,5 @@
 ﻿using Core.ServiceResponses;
-using Storage.Iterfaces;
+using Storage.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

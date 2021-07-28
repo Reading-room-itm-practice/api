@@ -13,9 +13,9 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICrudService<Category> _crud;
+        private readonly IUserCrudService<Category> _crud;
 
-        public CategoryController(ICrudService<Category> crud)
+        public CategoryController(IUserCrudService<Category> crud)
         {
             _crud = crud;
         }
@@ -38,22 +38,6 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> Create(CategoryRequest category)
         {
             return await _crud.Create<CategoryDto>(category);
-        }
-
-        [HttpPut("{id:int}")]
-        public async Task<ServiceResponse> Edit(int id, CategoryRequest category)
-        {
-            await _crud.Update(category, id);
-
-            return ServiceResponse.Success("Category updated.");
-        }
-
-        [HttpDelete("{id:int}")]
-        public async Task<ServiceResponse> Delete(int id)
-        {
-            await _crud.Delete(id);
-
-            return ServiceResponse.Success("Category deleted.");
         }
     }
 }

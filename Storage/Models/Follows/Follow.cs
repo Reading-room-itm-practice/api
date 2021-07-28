@@ -1,4 +1,4 @@
-﻿using Storage.Iterfaces;
+﻿using Storage.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Storage.Iterfaces
+namespace Storage.Interfaces
 {
     public interface IDbMasterKey : IDbModel
     {

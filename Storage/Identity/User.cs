@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Storage.Iterfaces;
+using Storage.Interfaces;
 using Storage.Models;
 using Storage.Models.Follows;
 using Storage.Models.Likes;
@@ -29,7 +29,6 @@ namespace Storage.Identity
         public ICollection<Category> Categories { get; set; }
         public ICollection<Author> Authors { get; set; }
         public ICollection<Book> Books { get; set; }
-        public ICollection<Suggestion> Suggestions { get; set; }
         public ICollection<Photo> AddedPhotos { get; set; }
         public ICollection<Notification> Notifications { get; set; }
     }

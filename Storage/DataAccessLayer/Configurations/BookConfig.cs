@@ -29,6 +29,9 @@ namespace Storage.DataAccessLayer.Configurations
               .WithMany(r => r.Books)
               .HasForeignKey(f => f.CategoryId)
               .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Property(a => a.Approved)
+                .HasDefaultValue(false);
         }
     }
 }

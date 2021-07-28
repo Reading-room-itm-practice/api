@@ -1,4 +1,4 @@
-﻿using Storage.Iterfaces;
+﻿using Storage.Interfaces;
 using Storage.Models.Photos;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Storage.Models
 {
     [Table("Books")]
-    public class Book : AuditableModel, IDbMasterKey
+    public class Book : AuditableModel, IDbMasterKey, IApproveable
     {
         [Key]
         public int Id { get; set; }
@@ -24,5 +24,6 @@ namespace Storage.Models
         public string Description { get; set; }
         public ICollection<ReadStatus> ReadStatuses { get; set; }
         public ICollection<Review> Reviews { get; set; }
+        public bool Approved { get; set; }
     }
 }
