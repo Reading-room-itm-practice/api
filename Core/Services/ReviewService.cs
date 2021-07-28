@@ -30,7 +30,7 @@ namespace Core.Services
 
         public async Task<ServiceResponse> AddReview(ReviewRequest review)
         {
-            if (await _bookGetter.GetById<BookDto>(review.BookId) == null)
+            if ((await _bookGetter.GetById<BookDto>(review.BookId)).Content == null)
                 return ServiceResponse.Error($"The book you are trying to post a review for doesn't exist", HttpStatusCode.BadRequest);
 
             var userId = _loggedUserProvider.GetUserId();

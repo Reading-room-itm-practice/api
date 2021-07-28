@@ -59,12 +59,8 @@ namespace Core.Services
             if (reviewId != null && !(await _reviewCommentRepository.ReviewExists((int)reviewId)))
                 return ServiceResponse.Error($"Review doesn't exist.", HttpStatusCode.BadRequest);
 
-            if (reviewId == null && userId == null && currentUser != true)
-                return ServiceResponse<IEnumerable<ReviewCommentDto>>.Success(_reviewCommentRepository.GetComments(),
-                    $"All comments retrieved.");
-
-            var message = await CreateMessage(reviewId, userId, currentUser);
             if (currentUser) userId = _loggedUserProvider.GetUserId();
+            var message = await CreateMessage(reviewId, userId, currentUser);
             var comments = _reviewCommentRepository.GetComments(reviewId, userId);
 
             return ServiceResponse<IEnumerable<ReviewCommentDto>>.Success(comments, message);
