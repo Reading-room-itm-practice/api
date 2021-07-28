@@ -21,6 +21,8 @@ namespace Core.Repositories
             _mapper = mapper;
         }
 
+
+
         public async Task<PhotoDto> UploadPhoto(PhotoUploadRequest photo, PhotoTypes type)
         {
             switch (type)

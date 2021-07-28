@@ -29,11 +29,12 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<ServiceResponse> GetPhotos(int? book_id)
+        public async Task<ServiceResponse> GetPhotos(string typeId, PhotoTypes? type)
         {
-            if (book_id != null)
+            if (typeId != null && type != null)
             {
-                return ServiceResponse<IEnumerable<PhotoDto>>.Success(_crud.GetAll<PhotoDto>().Result.Content.Where(p => p.BookId == book_id));
+                return ServiceResponse<IEnumerable<PhotoDto>>.Success(_crud.GetAll<PhotoDto>().Result.Content
+                    .Where(p => p.TypeId == typeId && p.PhotoType == type));
             }
 
             return await _crud.GetAll<PhotoDto>();

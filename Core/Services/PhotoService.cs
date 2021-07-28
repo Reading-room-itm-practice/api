@@ -43,6 +43,13 @@ namespace Core.Services
             AllowedFileExtensions = configuration["AllowedPhotoExtensions"].Split(", ").ToList();
             uploadsFolder = configuration["PhotoUploadsFolder"];
         }
+
+        public async Task<ServiceResponse> GetPhoto(int id)
+        {
+            var photo = _photoRepository.
+        }
+
+
         public async Task<ServiceResponse> DeletePhoto(int id)
         {
             var photoToDelete = await _crud.GetById<PhotoDto>(id);
