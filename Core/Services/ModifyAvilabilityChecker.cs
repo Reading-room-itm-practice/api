@@ -13,7 +13,7 @@ namespace Core.Services
         private readonly IAuthorizationService _authorizationService;
         private readonly ILoggedUserProvider _loggedUserProvider;
 
-        protected ModifyAvilabilityChecker(IAuthorizationService authorizationService, ILoggedUserProvider loggedUserProvider)
+        public ModifyAvilabilityChecker(IAuthorizationService authorizationService, ILoggedUserProvider loggedUserProvider)
         {
             _authorizationService = authorizationService;
             _loggedUserProvider = loggedUserProvider;

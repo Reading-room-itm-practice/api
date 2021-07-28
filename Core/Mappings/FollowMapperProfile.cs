@@ -39,15 +39,21 @@ namespace Core.Mappings.Follows
 
             CreateMap<FollowRequest, AuthorFollow>()
                 .ForMember(dest => dest.AuthorId, opt 
-                => opt.MapFrom(src => src.FollowableId));
+                => opt.MapFrom(src => src.FollowableId))
+                .ForMember(dest => dest.CreatorId, opt
+                =>opt.MapFrom(src => src.CreatorId));
 
             CreateMap<FollowRequest, CategoryFollow>()
                 .ForMember(dest => dest.CategoryId, opt 
-                => opt.MapFrom(src => src.FollowableId));
+                => opt.MapFrom(src => src.FollowableId))
+                .ForMember(dest => dest.CreatorId, opt
+                => opt.MapFrom(src => src.CreatorId));
 
             CreateMap<UserFollowRequest, UserFollow>()
                 .ForMember(dest => dest.FollowingId, opt
-                => opt.MapFrom(src => src.FollowableId));
+                => opt.MapFrom(src => src.FollowableId))
+                .ForMember(dest => dest.CreatorId, opt
+                => opt.MapFrom(src => src.CreatorId));
         }
     }
 }

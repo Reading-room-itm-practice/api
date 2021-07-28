@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Storage.Models.Follows;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers.Follows
@@ -38,7 +39,8 @@ namespace WebAPI.Controllers.Follows
         [HttpPost]
         public async Task<ServiceResponse> Create(int id)
         {
-            return await _creatorService.Create<FollowDto>(new FollowRequest {FollowableId = id });
+            return await _creatorService.Create<FollowDto>(
+                new FollowRequest {FollowableId = id , CreatorId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)) });
         }
 
         [SwaggerOperation(Description = "Delete a follow by unique id")]

@@ -5,6 +5,7 @@ namespace Core.Interfaces
 {
     public interface IModifyAvalibilityChecker
     {
+#nullable enable
         public Task CheckCanBeModify(AuditableModel? model);
     }
 }

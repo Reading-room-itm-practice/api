@@ -1,4 +1,5 @@
 ﻿using Core.Authorization.Requirements;
+using Core.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Storage.Interfaces;
@@ -26,8 +27,7 @@ namespace Core.Authorization
             }
             else
             {
-                _logger.LogInformation(
-                    "User{ id: " + _loggedUserProvider.GetUserId() +", name: " + context.User.Identity.Name + " } - tried perform unauthorize action");
+                _logger.LogInformation(LoggerMessages.UnauthorizeOperation(_loggedUserProvider.GetUserId(), context.User.Identity.Name));
             }
 
             return Task.CompletedTask;
