@@ -47,7 +47,7 @@ namespace Core.Services
             if (bookId == null) return ServiceResponse<IEnumerable<ReviewDto>>.Success
                     (_mapper.Map<IEnumerable<ReviewDto>>(await _reviewRepository.GetReviews(bookId)), $"All reviews retrieved.");
 
-            if (await _bookGetter.GetById<BookDto>((int)bookId) == null)
+            if ((await _bookGetter.GetById<BookDto>((int)bookId)).Content == null)
                 return ServiceResponse.Error($"The book you are trying to find a review for doesn't exist", HttpStatusCode.NotFound);
 
             return ServiceResponse<IEnumerable<ReviewDto>>.Success
