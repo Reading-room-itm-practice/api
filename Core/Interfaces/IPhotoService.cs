@@ -9,7 +9,6 @@ namespace Core.Interfaces
     public interface IPhotoService
     {
         public Task<ServiceResponse> UploadPhoto(IFormFile image, string id, PhotoTypes type);
-        public Task<ServiceResponse> UpdatePhoto(int id, PhotoUpdateRequest photo, PhotoTypes type);
         public Task<ServiceResponse> DeletePhoto(int id);
     }
 }

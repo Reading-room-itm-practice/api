@@ -12,6 +12,5 @@ namespace Core.Interfaces
     public interface IPhotoRepository
     {
         public Task<PhotoDto> UploadPhoto(PhotoUploadRequest photo, PhotoTypes type);
-        public Task UpdatePhoto(int id, PhotoUpdateRequest photo, PhotoTypes type);
     }
 }

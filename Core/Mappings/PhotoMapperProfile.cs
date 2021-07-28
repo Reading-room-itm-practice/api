@@ -10,7 +10,14 @@ namespace Core.Mappings
     {
         public PhotoMapperProfile()
         {
-            //CreateMap<AuthorPhoto, BookPhoto>().ReverseMap();
+            //CreateMap<AuthorPhoto, BookPhoto>().AfterMap((src, dest) =>
+            //{
+            //    dest.BookId = src.AuthorId;
+            //    src.AuthorId = 0;
+            //    //dest.AuthorId = int.Parse(src.TypeId);
+            //});
+
+            CreateMap<AuthorPhoto, BookPhoto>().ReverseMap();
             CreateMap<Photo, BookPhoto>().ReverseMap();
             CreateMap<AuthorPhoto, Photo>().ReverseMap();
 

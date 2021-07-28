@@ -50,14 +50,6 @@ namespace Core.Services
             File.Delete(photoToDelete.Content.Path);
             return ServiceResponse.Success();
         }
-        public async Task<ServiceResponse> UpdatePhoto(int id, PhotoUpdateRequest photo, PhotoTypes type)
-        {
-            if ((await _crud.GetById<PhotoDto>(id)).Content == null)
-                return ServiceResponse.Error("Photo doesn't exist.");
-
-            await _photoRepository.UpdatePhoto(id, photo, type);
-            return ServiceResponse.Success("Photo updated.");
-        }
 
         public async Task<ServiceResponse> UploadPhoto(IFormFile image, string id, PhotoTypes type)
         {

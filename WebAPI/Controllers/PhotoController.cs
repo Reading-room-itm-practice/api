@@ -65,21 +65,6 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<ServiceResponse> Edit(int id, PhotoUpdateRequest photo, PhotoTypes type)
-        {
-            try
-            {
-                return await _photoService.UpdatePhoto(id, photo, type);
-                //await _crud.Update(photo_bookId, id);
-                //return ServiceResponse.Success("Image updated");
-            }
-            catch (DbUpdateException e)
-            {
-                return ServiceResponse.Error(e.InnerException.Message, HttpStatusCode.BadRequest);
-            }
-        }
-
         [HttpDelete("{id:int}")]
         public async Task<ServiceResponse> Delete(int id)
         {
