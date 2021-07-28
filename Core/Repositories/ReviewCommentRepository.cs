@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Core.DTOs;
+﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
 using Microsoft.EntityFrameworkCore;
@@ -17,14 +16,12 @@ namespace Core.Repositories
     public class ReviewCommentRepository : BaseRepository<ReviewComment>, IReviewCommentRepository
     {
         private readonly IConfiguration configuration;
-        private readonly IMapper _mapper;
         public int MaxCommentPerReview { get; }
         public int MaxCommentPerHourPerReview { get; }
         
-        public ReviewCommentRepository(IConfiguration configuration, IMapper mapper, ApiDbContext context) : base(context)
+        public ReviewCommentRepository(IConfiguration configuration, ApiDbContext context) : base(context)
         {
             this.configuration = configuration;
-            _mapper = mapper;
             MaxCommentPerReview = int.Parse(configuration["MaxCommentPerReview"]);
             MaxCommentPerHourPerReview = int.Parse(configuration["MaxCommentPerHourPerReview"]);
         }
@@ -42,34 +39,32 @@ namespace Core.Repositories
                 (DateTime.Now.Subtract(c.CreatedAt)).Hours < 1).Count() >= MaxCommentPerHourPerReview;
         }
 
-        public async Task<ReviewCommentDto> CreateReviewComment(ReviewCommentRequest _newComment)
+        public async Task<ReviewComment> CreateReviewComment(ReviewComment commentRequest)
         {
-            var newComment = _mapper.Map<ReviewComment>(_newComment);
-            return await GetComment((await Create(newComment)).Id);
+            return await GetComment((await Create(commentRequest)).Id);
         }
 
-        public IEnumerable<ReviewCommentDto> GetComments()
+        public IEnumerable<ReviewComment> GetComments()
         {
-            return _mapper.Map<IEnumerable<ReviewCommentDto>>(_context.ReviewComments.Include(c => c.Creator));
+            return _context.ReviewComments.Include(c => c.Creator);
         }
 
-        public IEnumerable<ReviewCommentDto> GetComments(int? reviewId, Guid? userId)
+        public IEnumerable<ReviewComment> GetComments(int? reviewId, Guid? userId)
         {
             if (reviewId == null && userId == null) return GetComments();
             var comments = _context.ReviewComments.Include(c => c.Creator).AsEnumerable();
 
             if (reviewId == null && userId != null)
-                return _mapper.Map<IEnumerable<ReviewCommentDto>>(comments.Where(c => c.CreatorId == userId));
+                return comments.Where(c => c.CreatorId == userId);
 
             comments = comments.Where(c => c.ReviewId == reviewId);
             comments = (userId == null) ? comments : comments.Where(c => c.CreatorId == userId);
-            return _mapper.Map<IEnumerable<ReviewCommentDto>>(comments);
+            return comments;
         }
 
-        public async Task<ReviewCommentDto> GetComment(int reviewCommentId)
+        public async Task<ReviewComment> GetComment(int reviewCommentId)
         {
-            return _mapper.Map<ReviewCommentDto>(await _context.ReviewComments.Include(c => c.Creator)
-                .FirstOrDefaultAsync(c => c.Id == reviewCommentId));
+            return await _context.ReviewComments.Include(c => c.Creator).FirstOrDefaultAsync(c => c.Id == reviewCommentId);
         }
 
         public async Task<bool> ReviewExists(int reviewId)

@@ -9,9 +9,9 @@ namespace Core.Interfaces
 {
     public interface IReviewRepository : IBaseRepository<Review>
     {
-        public Task<IEnumerable<ReviewDto>> GetReviews(int? bookId);
+        public Task<IEnumerable<Review>> GetReviews(int? bookId);
         public Task<bool> ReviewByUserExists(Guid userId, int bookId);
-        public Task<ReviewDto> CreateReview(ReviewRequest review);
-        public Task<ReviewDto> GetReview(int reviewId);
+        public Task<Review> CreateReview(Review review);
+        public Task<Review> GetReview(int reviewId);
     }
 }

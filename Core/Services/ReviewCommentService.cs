@@ -1,4 +1,5 @@
-﻿using Core.DTOs;
+﻿using AutoMapper;
+using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
@@ -19,13 +20,15 @@ namespace Core.Services
         private readonly ILoggedUserProvider _loggedUserProvider;
         private readonly IReviewRepository _reviewRepository;
         private readonly IGetterService<Book> _bookGetter;
+        private readonly IMapper _mapper;
         public ReviewCommentService(IReviewCommentRepository reviewCommentRepository, ILoggedUserProvider loggedUserProvider,
-            IReviewRepository reviewRepository, IGetterService<Book> bookGetter)
+            IReviewRepository reviewRepository, IGetterService<Book> bookGetter, IMapper mapper)
         {
             _reviewCommentRepository = reviewCommentRepository;
             _loggedUserProvider = loggedUserProvider;
             _reviewRepository = reviewRepository;
             _bookGetter = bookGetter;
+            _mapper = mapper;
         }
         public async Task<ServiceResponse> AddReviewComment(ReviewCommentRequest comment)
         {
@@ -41,15 +44,15 @@ namespace Core.Services
                 return ServiceResponse.Error($"You can post only {_reviewCommentRepository.MaxCommentPerHourPerReview} " +
                     $"comments per hour on a single review. Try again later", HttpStatusCode.BadRequest);
 
-            return ServiceResponse<ReviewCommentDto>.Success(await _reviewCommentRepository.CreateReviewComment(comment),
-                "Comment posted.", HttpStatusCode.Created);
+            return ServiceResponse<ReviewCommentDto>.Success(_mapper.Map<ReviewCommentDto>
+                (await _reviewCommentRepository.CreateReviewComment(_mapper.Map<ReviewComment>(comment))), "Comment posted.", HttpStatusCode.Created);
         }
 
         public async Task<ServiceResponse> GetComment(int reviewCommentId)
         {
             var reviewComment = await _reviewCommentRepository.GetComment(reviewCommentId);
             if (reviewComment != null)
-                return ServiceResponse<ReviewCommentDto>.Success(reviewComment, "Comment retrieved.");
+                return ServiceResponse<ReviewCommentDto>.Success(_mapper.Map<ReviewCommentDto>(reviewComment), "Comment retrieved.");
 
             return ServiceResponse.Error("Comment not found.", HttpStatusCode.NotFound);
         }
@@ -63,7 +66,7 @@ namespace Core.Services
             var message = await CreateMessage(reviewId, userId, currentUser);
             var comments = _reviewCommentRepository.GetComments(reviewId, userId);
 
-            return ServiceResponse<IEnumerable<ReviewCommentDto>>.Success(comments, message);
+            return ServiceResponse<IEnumerable<ReviewCommentDto>>.Success(_mapper.Map<IEnumerable<ReviewCommentDto>>(comments), message);
         }
 
         private async Task<string> CreateMessage(int? reviewId, Guid? userId, bool currentUser)
