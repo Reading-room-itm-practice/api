@@ -7,12 +7,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Storage.Models
 {
     [Table("Friend_requests")]
-    public class FriendRequest : AuditableModel, IDbMasterKey
+    public class FriendRequest : AuditableModel, IDbMasterKey, IApproveable
     {
         [Key]
         public int Id { get; set; }
         public Guid ToId { get; set; }
         public User To { get; set; }
-        public bool IsConfirmed { get; set; }
+        public bool Approved { get; set; }
     }
 }

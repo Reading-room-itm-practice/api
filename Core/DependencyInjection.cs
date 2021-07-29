@@ -24,12 +24,14 @@ namespace Core
             services.AddScoped<IBaseRepository<Category>, BaseRepository<Category>>();
             services.AddScoped<IBaseRepository<Photo>, BaseRepository<Photo>>();
             services.AddScoped<IBaseRepository<Review>, BaseRepository<Review>>();
+            services.AddScoped<IBaseRepository<FriendRequest>, BaseRepository<FriendRequest>>();
 
             services.AddScoped<ICrudService<Author>, CrudService<Author>>();
             services.AddScoped<ICrudService<Book>, CrudService<Book>>();
             services.AddScoped<ICrudService<Category>, CrudService<Category>>();
             services.AddScoped<ICrudService<Photo>, CrudService<Photo>>();
             services.AddScoped<ICrudService<Review>, CrudService<Review>>();
+            services.AddScoped<ICrudService<FriendRequest>, CrudService<FriendRequest>>();
 
             services.AddScoped<ICreatorService<Author>, CreatorService<Author>>();
             services.AddScoped<IGetterService<Author>, GetterService<Author>>();
@@ -56,6 +58,11 @@ namespace Core
             services.AddScoped<IUpdaterService<Review>, UpdaterService<Review>>();
             services.AddScoped<IDeleterService<Review>, DeleterService<Review>>();
 
+            services.AddScoped<ICreatorService<FriendRequest>, CreatorService<FriendRequest>>();
+            services.AddScoped<IGetterService<FriendRequest>, GetterService<FriendRequest>>();
+            services.AddScoped<IUpdaterService<FriendRequest>, UpdaterService<FriendRequest>>();
+            services.AddScoped<IDeleterService<FriendRequest>, DeleterService<FriendRequest>>();
+
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
 
@@ -76,6 +83,9 @@ namespace Core
             services.AddScoped<IUserCrudService<Author>, UserCrudService<Author>>();
             services.AddScoped<IUserCrudService<Book>, UserCrudService<Book>>();
             services.AddScoped<IUserCrudService<Category>, UserCrudService<Category>>();
+
+            services.AddScoped<IFriendService, FriendService>();
+            services.AddScoped<IFriendRepository, FriendRepository>();
 
             return services;
         }
