@@ -2,7 +2,11 @@
 
 namespace Core.DTOs
 {
-    public class DataDto<T>
+    public class DataDto
+    {
+
+    }
+    public class DataDto<T> : DataDto
     {
         public IEnumerable<T> data { get; set; }
         public T singleData { get; set; }

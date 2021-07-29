@@ -16,18 +16,21 @@ namespace Core.Repositories.Search
         private readonly ISearchUserRepository _userRepository;
         private readonly ISearchCategoryRepository _categoryReposotory;
         private readonly ISearchBookRepository _bookRepository;
-        public SearchRepository(ISearchAllRepository allRepository, ISearchAuthorRepository authorRepository, ISearchUserRepository userRepository, ISearchCategoryRepository categoryReposotory, ISearchBookRepository bookRepository)
+        private readonly IGenericSearchRepository _genericRepository;
+        public SearchRepository(ISearchAllRepository allRepository, ISearchAuthorRepository authorRepository, ISearchUserRepository userRepository,
+            ISearchCategoryRepository categoryReposotory, ISearchBookRepository bookRepository, IGenericSearchRepository genericRepository)
         {
             _allRepository = allRepository;
             _authorReposotory = authorRepository;
             _userRepository = userRepository;
             _categoryReposotory = categoryReposotory;
             _bookRepository = bookRepository;
+            _genericRepository = genericRepository;
         }
 
-        public DataDto<SearchAll> SearchAll(PaginationFilter filter, string route, string searchString, SortType? sort)
+        public DataDto<SearchAll> SearchAll(PaginationFilter filter, string searchString, SortType? sort)
         {
-            return _allRepository.SearchAll(filter, route, searchString, sort);
+            return _allRepository.SearchAll(filter, searchString, sort);
         }
 
         public DataDto<Author> GetAuthors(PaginationFilter filter, string searchString, SortType? sort)
@@ -49,6 +52,20 @@ namespace Core.Repositories.Search
         public DataDto<User> GetUsers(PaginationFilter filter, string searchString, SortType? sort)
         {
             return _userRepository.GetUsers(filter, searchString, sort);
+        }
+
+        public DataDto GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort)
+        {
+            if(typeof(T) == typeof(UserSearchDto))
+                return _userRepository.GetUsers(filter, searchString, sort);
+            if (typeof(T) == typeof(CategoryDto))
+                return _categoryReposotory.GetCategories(filter, searchString, sort);
+            if (typeof(T) == typeof(AuthorDto))
+                return _authorReposotory.GetAuthors(filter, searchString, sort);
+            if (typeof(T) == typeof(SearchAllDto))
+                return _allRepository.SearchAll(filter, searchString, sort);
+
+            return new DataDto<T>();
         }
     }
 }

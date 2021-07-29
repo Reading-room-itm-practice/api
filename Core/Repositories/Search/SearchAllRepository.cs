@@ -25,7 +25,7 @@ namespace Core.Repositories.Search
             _context = context;
         }
 
-        public DataDto<SearchAll> SearchAll(PaginationFilter filter, string route, string searchString, SortType? sort)
+        public DataDto<SearchAll> SearchAll(PaginationFilter filter, string searchString, SortType? sort)
         {
             var searchQueries = AdditionalSearchMethods.ProcessSearchString(searchString);
             SortQueries(sort);

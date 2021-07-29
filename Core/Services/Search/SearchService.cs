@@ -23,7 +23,7 @@ namespace Core.Services.Search
 
         public ServiceResponse SearchAll(PaginationFilter filter, string route, string searchString, SortType? sort)
         {
-            var searchResults = _mapper.Map<DataDto<SearchAllDto>>(_searchRepository.SearchAll(filter, route, searchString, sort));
+            var searchResults = _mapper.Map<DataDto<SearchAllDto>>(_searchRepository.SearchAll(filter, searchString, sort));
             var pagedReponse = PaginationHelper.CreatePagedReponse(searchResults.singleData, filter, searchResults.count, _uriService, route);
             var message = searchResults.count == 0 ? "No search results found" : "Search results retrieved.";
 
@@ -64,6 +64,15 @@ namespace Core.Services.Search
             var message = users.count == 0 ? "No user search results found." : "User search results retrieved.";
 
             return ServiceResponse<PagedResponse<IEnumerable<UserSearchDto>>>.Success(pagedReponse, message);
+        }
+
+        public ServiceResponse SearchEntity<T>(PaginationFilter filter, string route, string searchString, SortType? sort)
+        {
+            var entities = _mapper.Map<DataDto<T>>(_searchRepository.GetEntities<T>(filter, searchString, sort));
+            var pagedReponse = PaginationHelper.CreatePagedReponse(entities.data, filter, entities.count, _uriService, route);
+            var message = entities.count == 0 ? $"No {nameof(T)} search results found." : $"{nameof(T)} search results retrieved.";
+
+            return ServiceResponse<PagedResponse<IEnumerable<T>>>.Success(pagedReponse, message);
         }
     }
 }

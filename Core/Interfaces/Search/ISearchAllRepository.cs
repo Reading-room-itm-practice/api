@@ -7,6 +7,6 @@ namespace Core.Interfaces.Search
 {
     interface ISearchAllRepository
     {
-        DataDto<SearchAll> SearchAll(PaginationFilter filter, string route, string searchString, SortType? sort);
+        DataDto<SearchAll> SearchAll(PaginationFilter filter, string searchString, SortType? sort);
     }
 }
