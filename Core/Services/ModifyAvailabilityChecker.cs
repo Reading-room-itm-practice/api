@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class ModifyAvilabilityChecker : IModifyAvalibilityChecker
+    public class ModifyAvailabilityChecker : IModifyAvalibilityChecker
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly ILoggedUserProvider _loggedUserProvider;
 
-        public ModifyAvilabilityChecker(IAuthorizationService authorizationService, ILoggedUserProvider loggedUserProvider)
+        public ModifyAvailabilityChecker(IAuthorizationService authorizationService, ILoggedUserProvider loggedUserProvider)
         {
             _authorizationService = authorizationService;
             _loggedUserProvider = loggedUserProvider;

@@ -93,7 +93,7 @@ namespace Core
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<ISearchRepository, SearchRepository>();
 
-            services.AddScoped<IModifyAvalibilityChecker, ModifyAvilabilityChecker>();
+            services.AddScoped<IModifyAvalibilityChecker, ModifyAvailabilityChecker>();
             
             services.AddSingleton<IAuthorizationHandler, AuditableModelAuthorizationHandler>();
 

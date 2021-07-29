@@ -12,16 +12,20 @@ namespace Core.Mappings.Follows
             CreateMap<AuthorFollow, FollowDto>()
                 .ForMember(dest => dest.Id, opt
                 => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.FollowableId, opt
+                    => opt.MapFrom(src => src.AuthorId))
                 .ForMember(dest => dest.FollowableType, opt
                 => opt.MapFrom(src => src.FollowableType.ToStringValue()))
                 .ForMember(dest => dest.Name, opt
                 => opt.MapFrom(src => src.Author.Name))
                 .ForMember(dest => dest.PhotoUrl, opt
                 => opt.MapFrom(src => src.Author.MainPhoto.Path));
-
+            
             CreateMap<CategoryFollow, FollowDto>()
                 .ForMember(dest => dest.Id, opt
                 => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.FollowableId, opt
+                    => opt.MapFrom(src => src.CategoryId))
                 .ForMember(dest => dest.FollowableType, opt
                 => opt.MapFrom(src => src.FollowableType.ToStringValue()))
                 .ForMember(dest => dest.Name, opt
@@ -30,6 +34,8 @@ namespace Core.Mappings.Follows
             CreateMap<UserFollow, UserFollowDto>()
                 .ForMember(dest => dest.Id, opt
                 => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.FollowableId, opt
+                    => opt.MapFrom(src => src.FollowingId))
                 .ForMember(dest => dest.FollowableType, opt
                 => opt.MapFrom(src => src.FollowableType.ToStringValue()))
                 .ForMember(dest => dest.Name, opt

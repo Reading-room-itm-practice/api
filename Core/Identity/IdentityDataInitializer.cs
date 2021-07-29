@@ -10,10 +10,10 @@ namespace Core.Identity
     public static class IdentityDataInitializer
     {
         public static void SeedRolesAndAdmin
-        (UserManager<User> userMenager, RoleManager<IdentityRole<Guid>> roleMenager, IConfiguration configuration)
+        (UserManager<User> userManager, RoleManager<IdentityRole<Guid>> roleManager, IConfiguration configuration)
         {
-            SeedRoles(roleMenager);
-            SeedAdmin(userMenager, configuration);
+            SeedRoles(roleManager);
+            SeedAdmin(userManager, configuration);
         }
 
         public static void SeedAdmin(UserManager<User> userManager, IConfiguration configuration)
@@ -36,6 +36,7 @@ namespace Core.Identity
                 }
             }
         }
+
         public static void SeedRoles(RoleManager<IdentityRole<Guid>> roleMenager)
         {
             var type = typeof(UserRoles);

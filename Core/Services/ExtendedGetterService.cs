@@ -20,7 +20,7 @@ namespace Core.Services
             var models = await _repository.FindByConditions(x => x.CreatorId == userId);
             var responseModels = _mapper.Map<IEnumerable<IDto>>(models);
 
-            return ServiceResponse<IEnumerable<IDto>>.Success(responseModels, "Retrived list with resorces by creator id");
+            return ServiceResponse<IEnumerable<IDto>>.Success(responseModels, "Retrieved list with resources by creator id");
         }
     }
 }

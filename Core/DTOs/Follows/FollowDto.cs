@@ -8,7 +8,6 @@ namespace Core.DTOs.Follows
         public int FollowableId { get; set; }
         public string FollowableType { get; set; }
         public string Name { get; set; }
-#nullable enable
-        public string? PhotoUrl { get; set; }
+        public string PhotoUrl { get; set; }
     }
 }

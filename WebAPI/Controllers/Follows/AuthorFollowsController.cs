@@ -29,9 +29,9 @@ namespace WebAPI.Controllers.Follows
         [SwaggerOperation(Description = "Retrieves all authors follows")]
         [Route("api/users/{id:guid}/author-follows")]
         [HttpGet]
-        public async Task<ServiceResponse> Index(Guid userId)
+        public async Task<ServiceResponse> Index(Guid id)
         {
-            return await _getterService.GetAllByCreator<FollowDto>(userId);
+            return await _getterService.GetAllByCreator<FollowDto>(id);
         }
 
         [SwaggerOperation(Description  = "Create author follow for logged user")]
