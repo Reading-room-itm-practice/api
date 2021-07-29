@@ -1,5 +1,6 @@
 ﻿using Core.DTOs;
 using Core.Requests;
+using Core.Services;
 using Storage.Models;
 using System;
 using System.Collections.Generic;
@@ -9,8 +10,8 @@ namespace Core.Interfaces
 {
     public interface IReviewRepository : IBaseRepository<Review>
     {
-        public Task<IEnumerable<ReviewDto>> GetReviews(int? bookId);
+        public Task<DataDto<Review>> GetReviews(PaginationFilter filter);
         public Task<bool> ReviewByUserExists(Guid userId, int bookId);
-        public Task<ReviewDto> CreateReview(ReviewRequest review);
+        public Task<Review> CreateReview(Review review);
     }
 }

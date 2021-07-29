@@ -3,7 +3,7 @@ using Core.Interfaces;
 
 namespace Core.DTOs
 {
-    public class AuthorDto : IDto, INameSortable
+    public class AuthorDto : IDto
     {
         public string Id { get; set; }
         public string Name { get; set; }

@@ -2,6 +2,7 @@
 using Core.Interfaces;
 using Core.Requests;
 using Core.Response;
+using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
 using System.Threading.Tasks;
@@ -26,18 +27,15 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> GetReview(int id)
         {
             var result = await _crud.GetById<ReviewDto>(id);
-            if (result == null)
-            { 
-                ServiceResponse.Error("Review not found.");
-            }
 
             return result;
         }
 
         [HttpGet]
-        public async Task<ServiceResponse> GetReviews(int? bookId)
+        public async Task<ServiceResponse> GetReviews([FromQuery] PaginationFilter filter)
         {
-            return await _reviewService.GetReviews(bookId);
+            var route = Request.Path.Value;
+            return await _reviewService.GetReviews(filter, route);
         }
 
         [HttpPost]

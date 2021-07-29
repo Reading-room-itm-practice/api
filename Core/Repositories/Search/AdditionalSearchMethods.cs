@@ -1,13 +1,12 @@
 ﻿using Core.DTOs;
 using Core.Enums;
-using Core.Interfaces;
 using Core.Services;
-using System;
+using Storage.Identity;
+using Storage.Interfaces;
+using Storage.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Core.Repositories.Search
 {
@@ -26,7 +25,7 @@ namespace Core.Repositories.Search
             return searchString.Split(" ");
         }
 
-        public static IEnumerable<T> SortGeneric<T>(IEnumerable<T> sorted, SortType? sort) where T : INameSortable
+        public static IQueryable<T> SortGeneric<T>(IQueryable<T> sorted, SortType? sort) where T : INameSortable
         {
             switch (sort)
             {
@@ -41,7 +40,7 @@ namespace Core.Repositories.Search
             return sorted;
         }
 
-        public static IEnumerable<BookDto> SortBooks(IEnumerable<BookDto> books, SortType? sort)
+        public static IQueryable<Book> SortBooks(IQueryable<Book> books, SortType? sort)
         {
             switch (sort)
             {
@@ -53,16 +52,16 @@ namespace Core.Repositories.Search
                     books = books.OrderByDescending(b => b.Title);
                     break;
                 case SortType.ByRelaseYear:
-                    books = books.OrderBy(b => b.ReleaseYear);
+                    books = books.OrderBy(b => b.RelaseDate.Value.Year);
                     break;
                 case SortType.ByRelaseYearDescending:
-                    books = books.OrderByDescending(b => b.ReleaseYear);
+                    books = books.OrderByDescending(b => b.RelaseDate.Value.Year);
                     break;
             }
             return books;
         }
 
-        public static IEnumerable<UserSearchDto> SortUsers(IEnumerable<UserSearchDto> users, SortType? sort)
+        public static IQueryable<User> SortUsers(IQueryable<User> users, SortType? sort)
         {
             switch (sort)
             {

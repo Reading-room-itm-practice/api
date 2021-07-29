@@ -1,4 +1,5 @@
-﻿using Storage.Iterfaces;
+﻿using Storage.Interfaces;
+using Storage.Iterfaces;
 using Storage.Models.Follows;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Storage.Models
 {
     [Table("Categories")]
-    public class Category : AuditableModel, IDbMasterKey, IFollowable
+    public class Category : AuditableModel, IDbMasterKey, IFollowable, INameSortable
     {
         [Key]
         public int Id { get; set; }

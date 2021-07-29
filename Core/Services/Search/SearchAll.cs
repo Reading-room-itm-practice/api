@@ -1,4 +1,5 @@
-﻿using Core.DTOs;
+﻿using Storage.Identity;
+using Storage.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,10 +7,10 @@ namespace Core.Services.Search
 {
     public class SearchAll
     {
-        public IEnumerable<AuthorDto> Authors { get; set; }
-        public IEnumerable<UserSearchDto> Users { get; set; }
-        public IEnumerable<CategoryDto> Categories { get; set; }
-        public IEnumerable<BookDto> Books { get; set; }
+        public IEnumerable<Author> Authors { get; set; }
+        public IEnumerable<User> Users { get; set; }
+        public IEnumerable<Category> Categories { get; set; }
+        public IEnumerable<Book> Books { get; set; }
 
         public int Count()
         {

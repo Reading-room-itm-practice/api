@@ -1,4 +1,6 @@
-﻿using Core.DTOs;
+﻿using AutoMapper;
+using Core.Common;
+using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
 using Core.Response;
@@ -14,13 +16,16 @@ namespace Core.Services
 {
     class ReviewService : IReviewService
     {
+        private readonly IMapper _mapper;
+        private readonly IUriService _uriService;
         private readonly IReviewRepository _reviewRepository;
         private readonly IGetterService<Book> _bookGetter;
         private readonly ILoggedUserProvider _loggedUserProvider;
 
-        public ReviewService(IReviewRepository reviewRepository, IGetterService<Book> bookGetter, 
-            ILoggedUserProvider loggedUserProvider, UserManager<User> userManager)
+        public ReviewService(IMapper mapper, IUriService uriService, IReviewRepository reviewRepository, IGetterService<Book> bookGetter, ILoggedUserProvider loggedUserProvider)
         {
+            _mapper = mapper;
+            _uriService = uriService;
             _loggedUserProvider = loggedUserProvider;
             _reviewRepository = reviewRepository;
             _bookGetter = bookGetter;
@@ -40,24 +45,18 @@ namespace Core.Services
                 return ServiceResponse.Error($"You have already posted a review for book Id: {review.BookId}", HttpStatusCode.BadRequest);
             }
 
-            var newReview = await _reviewRepository.CreateReview(review);
+            var reviewRequest = _mapper.Map<Review>(review);
+            var newReview = _mapper.Map<ReviewDto>(await _reviewRepository.CreateReview(reviewRequest));
 
             return ServiceResponse<ReviewDto>.Success(newReview, "Review created.", HttpStatusCode.Created);
         }
 
-        public async Task<ServiceResponse> GetReviews(int? bookId)
+        public async Task<ServiceResponse> GetReviews(PaginationFilter filter, string route)
         {
-            if (bookId == null)
-            {
-                return ServiceResponse<IEnumerable<ReviewDto>>.Success(await _reviewRepository.GetReviews(bookId), $"All reviews retrieved.");
-            }    
+            var reviews = _mapper.Map<DataDto<ReviewDto>>(await _reviewRepository.GetReviews(filter));
+            var pagedResponse = PaginationHelper.CreatePagedReponse(reviews.data, filter, reviews.count, _uriService, route);
 
-            if (await _bookGetter.GetById<BookDto>((int)bookId) == null)
-            {
-                return ServiceResponse.Error($"Book with Id: {bookId} doesn't exist", HttpStatusCode.BadRequest);
-            }
-
-            return ServiceResponse<IEnumerable<ReviewDto>>.Success(await _reviewRepository.GetReviews(bookId), $"Reviews for Book with ID = {bookId} retrieved.");
+            return ServiceResponse<PagedResponse<IEnumerable<ReviewDto>>>.Success(pagedResponse, $"All reviews retrieved.");
         }
     }
 }
