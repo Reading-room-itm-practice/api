@@ -80,6 +80,7 @@ namespace Core
             services.AddScoped<ISearchUserRepository, SearchUserRepository>();
             services.AddScoped<ISearchCategoryRepository, SearchCategoryRepository>();
             services.AddScoped<ISearchAllRepository, SearchAllRepository>();
+            services.AddScoped<IGenericSearchRepository, GenericSearchRepository>();
 
             return services;
         }

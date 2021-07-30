@@ -3,6 +3,7 @@ using Core.Enums;
 using Core.Services;
 using Core.Services.Search;
 using Storage.Identity;
+using Storage.Interfaces;
 using Storage.Models;
 
 namespace Core.Interfaces
@@ -15,6 +16,6 @@ namespace Core.Interfaces
         public DataDto<Book> GetBooks(PaginationFilter filter, string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
             int? categoryId = null, int? authorId = null);
         public DataDto<User> GetUsers(PaginationFilter filter, string searchString, SortType? sort);
-        public DataDto GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort);
+        public DataDto GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort) where T : class;
     }
 }

@@ -48,18 +48,18 @@ namespace Core.Repositories
             {
                 return new DataDto<T>()
                 {
-                    data = await _context.Set<T>()
+                    Data = await _context.Set<T>()
                     .Skip((filter.PageNumber - 1) * filter.PageSize)
                     .Take(filter.PageSize)
                     .ToListAsync(),
-                    count = totalRecords
+                    Quantity = totalRecords
                 };
             }
 
             return new DataDto<T>()
             {
-                data = await _context.Set<T>().ToListAsync(),
-                count = totalRecords
+                Data = await _context.Set<T>().ToListAsync(),
+                Quantity = totalRecords
             };
         }
 

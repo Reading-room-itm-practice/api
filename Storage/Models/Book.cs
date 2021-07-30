@@ -20,7 +20,7 @@ namespace Storage.Models
         public BookPhoto MainPhoto { get; set; }
         public ICollection<BookPhoto> Photos { get; set; }
         public string Title { get; set; }
-        public DateTime? RelaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; }
         public string Description { get; set; }
         public ICollection<ReadStatus> ReadStatuses { get; set; }
         public ICollection<Review> Reviews { get; set; }

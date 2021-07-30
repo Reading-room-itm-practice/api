@@ -8,8 +8,8 @@ namespace Core.DTOs
     }
     public class DataDto<T> : DataDto
     {
-        public IEnumerable<T> data { get; set; }
-        public T singleData { get; set; }
-        public int count { get; set; }
+        public IEnumerable<T> Data { get; set; }
+        public T SingleData { get; set; }
+        public int Quantity { get; set; }
     }
 }

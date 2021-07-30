@@ -26,13 +26,13 @@ namespace Core.Repositories.Search
             foreach (string query in searchQueries)
                 if (int.TryParse(query, out int year))
                 {
-                    books = books.AsEnumerable().Where(b => b.RelaseDate.Value.Year == year).AsQueryable();
+                    books = books.AsEnumerable().Where(b => b.ReleaseDate.Value.Year == year).AsQueryable();
                 }
 
             if (categoryId != null) books = books.Where(b => b.CategoryId == categoryId);
             if (authorId != null) books = books.Where(b => b.AuthorId == authorId);
-            if (minYear != null) books = books.Where(b => b.RelaseDate.Value.Year >= minYear);
-            if (maxYear != null) books = books.Where(b => b.RelaseDate.Value.Year <= maxYear);
+            if (minYear != null) books = books.Where(b => b.ReleaseDate.Value.Year >= minYear);
+            if (maxYear != null) books = books.Where(b => b.ReleaseDate.Value.Year <= maxYear);
 
             books = AdditionalSearchMethods.SortBooks(books, sort);
             return AdditionalSearchMethods.Pagination(filter, books.ToList().AsEnumerable());

@@ -25,16 +25,43 @@ namespace Core.Repositories.Search
             return searchString.Split(" ");
         }
 
-        public static IQueryable<T> SortGeneric<T>(IQueryable<T> sorted, SortType? sort) where T : INameSortable
+        public static IQueryable<T> SortGeneric<T>(IQueryable<T> sorted, SortType? sort) where T : class
         {
             switch (sort)
             {
-                default:
                 case SortType.ByName:
-                    sorted = sorted.OrderBy(a => a.Name);
+                    if (typeof(T) == typeof(Category))
+                    {
+                        var categories = sorted as IQueryable<Category>;
+                        sorted = (IQueryable<T>)categories.OrderBy(a => a.Name);
+                    }  
+                    else if(typeof(T) == typeof(Author))
+                    {
+                        var authors = sorted as IQueryable<Author>;
+                        sorted = (IQueryable<T>)authors.OrderBy(a => a.Name);
+                    }
+                    else if (typeof(T) == typeof(User))
+                    {
+                        var users = sorted as IQueryable<User>;
+                        sorted = (IQueryable<T>)users.OrderBy(u => u.UserName);
+                    }
                     break;
                 case SortType.ByNameDescending:
-                    sorted = sorted.OrderByDescending(a => a.Name);
+                    if (typeof(T) == typeof(Category))
+                    {
+                        var categories = sorted as IQueryable<Category>;
+                        sorted = (IQueryable<T>)categories.OrderByDescending(a => a.Name);
+                    }
+                    else if (typeof(T) == typeof(Author))
+                    {
+                        var authors = sorted as IQueryable<Author>;
+                        sorted = (IQueryable<T>)authors.OrderByDescending(a => a.Name);
+                    }
+                    else if (typeof(T) == typeof(User))
+                    {
+                        var users = sorted as IQueryable<User>;
+                        sorted = (IQueryable<T>)users.OrderByDescending(u => u.UserName);
+                    }
                     break;
             }
             return sorted;
@@ -52,10 +79,10 @@ namespace Core.Repositories.Search
                     books = books.OrderByDescending(b => b.Title);
                     break;
                 case SortType.ByRelaseYear:
-                    books = books.OrderBy(b => b.RelaseDate.Value.Year);
+                    books = books.OrderBy(b => b.ReleaseDate.Value.Year);
                     break;
                 case SortType.ByRelaseYearDescending:
-                    books = books.OrderByDescending(b => b.RelaseDate.Value.Year);
+                    books = books.OrderByDescending(b => b.ReleaseDate.Value.Year);
                     break;
             }
             return books;
@@ -84,14 +111,14 @@ namespace Core.Repositories.Search
             {
                 return new DataDto<T>()
                 {
-                    data = data
+                    Data = data
                     .Skip((filter.PageNumber - 1) * filter.PageSize)
                     .Take(filter.PageSize),
-                    count = count
+                    Quantity = count
                 };
             }
 
-            return new DataDto<T>() { data = data, count = count };
+            return new DataDto<T>() { Data = data, Quantity = count };
         }
 
     }

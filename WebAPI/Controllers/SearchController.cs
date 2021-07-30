@@ -3,6 +3,7 @@ using Core.Interfaces.Search;
 using Core.Response;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
+using Storage.Identity;
 
 namespace WebAPI.Controllers
 {
@@ -51,6 +52,13 @@ namespace WebAPI.Controllers
         {
             var route = Request.Path.Value;
             return searchService.SearchUser(filter, route, searchString, sort);
+        }
+
+        [HttpGet("Generic")]
+        public ServiceResponse Generic([FromQuery] PaginationFilter filter, SortType? sort, string searchString = "")
+        {
+            var route = Request.Path.Value;
+            return searchService.SearchEntity<User>(filter, route, searchString, sort);
         }
     }
 }

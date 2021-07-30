@@ -1,6 +1,7 @@
 ﻿using Core.Enums;
 using Core.Response;
 using Core.Services;
+using Storage.Interfaces;
 
 namespace Core.Interfaces.Search
 {
@@ -12,6 +13,6 @@ namespace Core.Interfaces.Search
         public ServiceResponse SearchAuthor(PaginationFilter filter, string route, string searchString, SortType? sort);
         public ServiceResponse SearchUser(PaginationFilter filter, string route, string searchString, SortType? sort);
         public ServiceResponse SearchAll(PaginationFilter filter, string route, string searchString, SortType? sort);
-        public ServiceResponse SearchEntity<T>(PaginationFilter filter, string route, string searchString, SortType? sort);
+        public ServiceResponse SearchEntity<T>(PaginationFilter filter, string route, string searchString, SortType? sort) where T : class;
     }
 }

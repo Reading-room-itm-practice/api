@@ -5,6 +5,7 @@ using Core.Interfaces.Search;
 using Core.Services;
 using Core.Services.Search;
 using Storage.Identity;
+using Storage.Interfaces;
 using Storage.Models;
 
 namespace Core.Repositories.Search
@@ -54,18 +55,14 @@ namespace Core.Repositories.Search
             return _userRepository.GetUsers(filter, searchString, sort);
         }
 
-        public DataDto GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort)
+        public DataDto GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort) where T : class
         {
-            if(typeof(T) == typeof(UserSearchDto))
-                return _userRepository.GetUsers(filter, searchString, sort);
-            if (typeof(T) == typeof(CategoryDto))
-                return _categoryReposotory.GetCategories(filter, searchString, sort);
-            if (typeof(T) == typeof(AuthorDto))
-                return _authorReposotory.GetAuthors(filter, searchString, sort);
+            if (typeof(T) == typeof(BookDto))
+                return _bookRepository.GetBooks(filter, searchString, sort);
             if (typeof(T) == typeof(SearchAllDto))
                 return _allRepository.SearchAll(filter, searchString, sort);
-
-            return new DataDto<T>();
+            //user,category,author
+            return _genericRepository.GetEntities<T>(filter, searchString, sort);
         }
     }
 }

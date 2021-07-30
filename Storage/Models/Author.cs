@@ -2,6 +2,7 @@
 using Storage.Iterfaces;
 using Storage.Models.Follows;
 using Storage.Models.Photos;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,7 +10,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Storage.Models
 {
     [Table("Authors")]
-    public class Author : AuditableModel, IDbMasterKey, IFollowable, INameSortable
+    public class Author : AuditableModel, IDbMasterKey, IFollowable
     {
         [Key]
         public int Id { get; set; }

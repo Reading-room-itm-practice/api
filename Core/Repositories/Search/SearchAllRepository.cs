@@ -60,7 +60,7 @@ namespace Core.Repositories.Search
 
             var quantity = entities.Count();
 
-            return new DataDto<SearchAll>() { singleData = entities, count = quantity };
+            return new DataDto<SearchAll>() { SingleData = entities, Quantity = quantity };
         }
 
         private void SortQueries(SortType? sort)
