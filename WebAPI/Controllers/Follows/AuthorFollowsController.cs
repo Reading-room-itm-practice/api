@@ -2,7 +2,6 @@
 using Core.Interfaces;
 using Core.Requests.Follows;
 using Core.ServiceResponses;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models.Follows;
 using Swashbuckle.AspNetCore.Annotations;
