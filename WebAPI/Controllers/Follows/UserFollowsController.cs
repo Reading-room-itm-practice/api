@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers.Follows
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class UserFollowsController : ControllerBase
     {
@@ -26,6 +25,7 @@ namespace WebAPI.Controllers.Follows
         }
 
         [SwaggerOperation(Summary = "Retrieves all categories follows")]
+        [Route("api/users/{id:guid}/user-follows")]
         [HttpGet]
         public async Task<ServiceResponse> Index(Guid userId)
         {
@@ -33,6 +33,7 @@ namespace WebAPI.Controllers.Follows
         }
 
         [SwaggerOperation(Summary = "Create category follow for logged user")]
+        [Route("api/users/{id:guid}/follows")]
         [HttpPost]
         public async Task<ServiceResponse> Create(Guid userId)
         {
@@ -40,7 +41,8 @@ namespace WebAPI.Controllers.Follows
         }
 
         [SwaggerOperation(Summary = "Delete a category follow by unique id")]
-        [HttpDelete("{id:int}")]
+        [Route("api/user-follows/{id:int}")]
+        [HttpDelete]
         public async Task<ServiceResponse> Delete(int id)
         {
             await _deleterService.Delete(id);

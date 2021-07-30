@@ -44,7 +44,7 @@ namespace WebAPI.Controllers.Follows
         }
 
         [SwaggerOperation(Description = "Delete a follow by unique id")]
-        [Route("api/authors/follows/{id:int}")]
+        [Route("api/author-follows/{id:int}")]
         [HttpDelete]
         public async Task<ServiceResponse> Delete(int id)
         {
