@@ -9,7 +9,8 @@ namespace Core.Interfaces
 {
     public interface IFriendRepository : IBaseRepository<FriendRequest>
     {
-        public Task<IEnumerable<FriendRequest>> GetApprovedSentAndReceivedFriendRequests(Guid userId);
-        public Task<FriendRequest> GetApprovedSentAndReceivedFriendRequest(Guid userId);
+        public Task<IEnumerable<FriendRequest>> GetSentAndReceivedFriendRequests(Guid userId);
+        public Task<IEnumerable<FriendRequest>> GetSentFriendRequests(Guid userId);
+        public Task<IEnumerable<FriendRequest>> GetReceivedFriendRequests(Guid userId);
     }
 }

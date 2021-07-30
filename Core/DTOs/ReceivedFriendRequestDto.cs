@@ -4,11 +4,10 @@ using System;
 
 namespace Core.DTOs
 {
-    public class FriendRequestDto : IDto//, IApproveable
+    public class ReceivedFriendRequestDto : IDto
     {
         public int Id { get; set; }
         public Guid CreatorId { get; set; }
-        //public Guid ToId { get; set; }
-        //public bool Approved { get; set; }
+        public string UserName { get; set; }
     }
 }

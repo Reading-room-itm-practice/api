@@ -20,23 +20,29 @@ namespace WebAPI.Controllers
             _friendService = friendService;
         }
 
-        [HttpGet("FriendRequest/{id}")]
-        public async Task<ServiceResponse> ReceivedFriendRequest(int id)
-        {
-            return await _friendService.GetReceivedFriendRequest<FriendRequestDto>(id);
-        }
-
-        // retrieves received friend requests
-        [HttpGet("FriendRequests")]
+        // TESTING
+        [HttpGet("ReceivedFriendRequests")]
         public async Task<ServiceResponse> ReceivedFriendRequests()
         {
-            return await _friendService.GetReceivedFriendRequests<FriendRequestDto>();
+            return await _friendService.GetFriendRequests<FriendDto>(false, true, false);
+        }
+
+        [HttpGet("SentFriendRequests")]
+        public async Task<ServiceResponse> SentFriendRequests()
+        {
+            return await _friendService.GetFriendRequests<FriendDto>(true, false, false);
         }
 
         [HttpGet]
         public async Task<ServiceResponse> Friends()
         {
-            return await _friendService.GetFriends();
+            return await _friendService.GetFriendRequests<FriendDto>(true, true, true);
+        }
+
+        [HttpGet("FriendRequests/{id}")]
+        public async Task<ServiceResponse> ReceivedFriendRequest(int id)
+        {
+            return await _friendService.GetReceivedFriendRequest<ReceivedFriendRequestDto>(id);
         }
 
         [HttpGet("{id}")]
@@ -52,9 +58,16 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("FriendRequests/Accept/{id}")]
-        public async Task<ServiceResponse> Accept(int id)
+        public async Task<ServiceResponse> Accept(ApproveFriendRequest friendRequest, int id)
         {
-            return await _friendService.AcceptFriendRequest(id);
+            return await _friendService.AcceptOrDeclineFriendRequest(friendRequest, id);
         }
+
+        [HttpDelete("FriendRequests/Remove/{id}")]
+        public async Task<ServiceResponse> DeleteFriendRequest(int id)
+        {
+            return await _friendService.RemoveFriendRequest(id);
+        }
+
     }
 }

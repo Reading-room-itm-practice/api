@@ -18,6 +18,8 @@ namespace Core.Interfaces
         public Task<ServiceResponse> SendFriendRequest(SendFriendRequest request);
         public Task<ServiceResponse<List<FriendDto>>> GetFriends();
         public Task<ServiceResponse<FriendDto>> GetFriend(Guid id);
-        public Task<ServiceResponse> AcceptFriendRequest(int friendRequestId);
+        public Task<ServiceResponse> AcceptOrDeclineFriendRequest(ApproveFriendRequest friendRequest, int friendRequestId);
+        public Task<ServiceResponse> RemoveFriendRequest(int id);
+        public Task<ServiceResponse<IEnumerable<FriendDto>>> GetFriendRequests<FriendRequestDto>(bool sent, bool received, bool approved);
     }
 }
