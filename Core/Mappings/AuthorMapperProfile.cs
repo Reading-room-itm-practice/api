@@ -11,6 +11,8 @@ namespace Core.Mappings
         {
             CreateMap<Author, AuthorDto>().ReverseMap();
             CreateMap<AuthorRequest, Author>().ReverseMap();
+            CreateMap<Author, ApprovedAuthorDto>().ReverseMap();
+            CreateMap<ApproveAuthorRequest, Author>().ReverseMap();
         }
     }
 }

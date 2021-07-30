@@ -13,9 +13,9 @@ namespace WebAPI.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly ICrudService<Book> _crud;
+        private readonly IUserCrudService<Book> _crud;
 
-        public BooksController(ICrudService<Book> crud)
+        public BooksController(IUserCrudService<Book> crud)
         {
             _crud = crud;
         }
@@ -39,24 +39,6 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> Create(BookRequest model)
         {
             return await _crud.Create<BookDto>(model);
-        }
-
-        [SwaggerOperation(Summary = "Updates a book by unique id")]
-        [HttpPut("{id:int}")]
-        public async Task<ServiceResponse> Update(int id, BookRequest updateModel)
-        {
-            await _crud.Update(updateModel, id);
-
-            return ServiceResponse.Success("Resource updated");
-        }
-
-        [SwaggerOperation(Summary = "Deletes a book by unique id")]
-        [HttpDelete("{id:int}")]
-        public async Task<ServiceResponse> Delete(int id)
-        {
-            await _crud.Delete(id);
-
-            return ServiceResponse.Success("Resource deleted");
         }
     }
 }

@@ -96,6 +96,9 @@ namespace Core
             services.AddScoped<IModifyAvalibilityChecker, ModifyAvailabilityChecker>();
             
             services.AddSingleton<IAuthorizationHandler, AuditableModelAuthorizationHandler>();
+            services.AddScoped<IUserCrudService<Author>, UserCrudService<Author>>();
+            services.AddScoped<IUserCrudService<Book>, UserCrudService<Book>>();
+            services.AddScoped<IUserCrudService<Category>, UserCrudService<Category>>();
 
             return services;
         }

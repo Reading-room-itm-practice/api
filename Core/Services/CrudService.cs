@@ -1,13 +1,13 @@
 ﻿using Core.Common;
 using Core.Interfaces;
 using Core.ServiceResponses;
-using Storage.Iterfaces;
+using Storage.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class CrudService<T> : ICrudService<T> where T : class, IDbModel, IDbMasterKey
+    public class CrudService<T> : ICrudService<T> where T : class, IDbMasterKey
     {
         private readonly ICreatorService<T> _creator;
         private readonly IGetterService<T> _getter;

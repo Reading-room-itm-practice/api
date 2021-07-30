@@ -1,5 +1,5 @@
 ﻿using Core.Interfaces;
-using Storage.Iterfaces;
+using Storage.Interfaces;
 using Storage.Models;
 using System.Linq;
 using System.Threading.Tasks;
