@@ -1,5 +1,4 @@
 ﻿using System;
-using Core.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +26,14 @@ namespace WebAPI.HostBuilderExtensions
                 ApiDbContextSeeder.SeedUsers(manager);
                 ApiDbContextSeeder.SeedAuthors(context);
                 ApiDbContextSeeder.SeedCategories(context);
-                ApiDbContextSeeder.SeedFollows(context);
+                ApiDbContextSeeder.SeedAuthorFollows(context);
+                ApiDbContextSeeder.SeedCategoriesFollows(context);
+                ApiDbContextSeeder.SeedUsersFollows(context);
+                ApiDbContextSeeder.SeedBooks(context);
+                ApiDbContextSeeder.SeedReviews(context);
+                ApiDbContextSeeder.SeedComments(context);
+                ApiDbContextSeeder.SeedReviewLikes(context);
+                ApiDbContextSeeder.SeedCommentsLikes(context);
             }
             catch (Exception ex)
             {

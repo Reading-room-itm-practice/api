@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Core.Identity
+namespace Storage.Identity
 {
     public static class IdentityDataInitializer
     {
