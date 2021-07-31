@@ -18,5 +18,6 @@ namespace Core.Services.Search
 
             return count;
         }
+
     }
 }

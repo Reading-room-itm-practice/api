@@ -5,6 +5,7 @@ using Core.Interfaces.Search;
 using Core.Services;
 using Storage.DataAccessLayer;
 using Storage.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Core.Repositories.Search
@@ -16,7 +17,7 @@ namespace Core.Repositories.Search
         {
             _context = context;
         }
-        public DataDto<Book> GetBooks(PaginationFilter filter, string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
+        public DataDto<IEnumerable<Book>> GetBooks(PaginationFilter filter, string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
             int? categoryId = null, int? authorId = null)
         {
             var searchQueries = AdditionalSearchMethods.ProcessSearchString(searchString);

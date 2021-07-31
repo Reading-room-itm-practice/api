@@ -3,7 +3,6 @@ using Core.Enums;
 using Core.Services;
 using Storage.DataAccessLayer;
 using Storage.Identity;
-using Storage.Interfaces;
 using Storage.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +11,7 @@ namespace Core.Repositories.Search
 {
     internal interface IGenericSearchRepository
     {
-        public DataDto<T> GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort) where T : class;
+        public DataDto<IEnumerable<T>> GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort) where T : class;
     }
     class GenericSearchRepository : IGenericSearchRepository
     {
@@ -22,8 +21,8 @@ namespace Core.Repositories.Search
         {
             _context = context;
         }
-        //noDto
-        public DataDto<T> GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort) where T : class
+
+        public DataDto<IEnumerable<T>> GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort) where T : class
         {
 
             var searchQueries = AdditionalSearchMethods.ProcessSearchString(searchString);
@@ -52,6 +51,5 @@ namespace Core.Repositories.Search
 
             return AdditionalSearchMethods.Pagination(filter, entities.ToList().AsEnumerable());
         }
-        //noDto
     }
 }

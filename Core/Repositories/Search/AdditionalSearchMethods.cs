@@ -88,28 +88,13 @@ namespace Core.Repositories.Search
             return books;
         }
 
-        public static IQueryable<User> SortUsers(IQueryable<User> users, SortType? sort)
-        {
-            switch (sort)
-            {
-                default:
-                case SortType.ByName:
-                    users = users.OrderBy(u => u.UserName);
-                    break;
-                case SortType.ByNameDescending:
-                    users = users.OrderByDescending(u => u.UserName);
-                    break;
-            }
-            return users;
-        }
-
-        public static DataDto<T> Pagination<T>(PaginationFilter filter, IEnumerable<T> data) where T : class
+        public static DataDto<IEnumerable<T>> Pagination<T>(PaginationFilter filter, IEnumerable<T> data) where T : class
         {
             filter.Valid();
             var count = data.Count();
             if (filter.PageSize != 0)
             {
-                return new DataDto<T>()
+                return new DataDto<IEnumerable<T>>()
                 {
                     Data = data
                     .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -118,7 +103,7 @@ namespace Core.Repositories.Search
                 };
             }
 
-            return new DataDto<T>() { Data = data, Quantity = count };
+            return new DataDto<IEnumerable<T>>() { Data = data, Quantity = count };
         }
 
     }

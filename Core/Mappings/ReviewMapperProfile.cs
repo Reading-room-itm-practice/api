@@ -2,6 +2,7 @@
 using Core.DTOs;
 using Core.Requests;
 using Storage.Models;
+using System.Collections.Generic;
 
 namespace Core.Mappings
 {
@@ -10,8 +11,9 @@ namespace Core.Mappings
         public ReviewMapperProfile()
         {
             CreateMap<Review, ReviewDto>().ReverseMap();
+            CreateMap<DataDto<IEnumerable<Review>>, DataDto<IEnumerable<ReviewDto>>>().ReverseMap();
+
             CreateMap<ReviewRequest, Review>().ReverseMap();
-            CreateMap<DataDto<ReviewDto>, DataDto<Review>>().ReverseMap();
         }
     }
 }

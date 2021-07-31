@@ -1,9 +1,12 @@
-﻿using Core.Enums;
+﻿using Core.DTOs;
+using Core.Enums;
 using Core.Interfaces.Search;
 using Core.Response;
 using Core.Services;
+using Core.Services.Search;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Identity;
+using Storage.Models;
 
 namespace WebAPI.Controllers
 {
@@ -22,14 +25,14 @@ namespace WebAPI.Controllers
         public ServiceResponse All([FromQuery] PaginationFilter filter, SortType? sort, string searchString = "")
         {
             var route = Request.Path.Value;
-            return searchService.SearchAll(filter, route, searchString, sort);
+            return searchService.SearchEntity<SearchAll, SearchAllDto>(filter, route, searchString, sort);
         }
 
         [HttpGet("Author")]
         public ServiceResponse Authors([FromQuery] PaginationFilter filter, SortType? sort, string searchString = "")
         {
             var route = Request.Path.Value;
-            return searchService.SearchAuthor(filter, route, searchString, sort);
+            return searchService.SearchEntity<Author, AuthorDto>(filter, route, searchString, sort);
         }
 
         [HttpGet("Books")]
@@ -37,28 +40,21 @@ namespace WebAPI.Controllers
             string searchString = "")
         {
             var route = Request.Path.Value;
-            return searchService.SearchBook(filter, route, searchString, sort, minYear, maxYear, categoryId, authorId);
+            return searchService.SearchEntity<Book, BookDto>(filter, route, searchString, sort, minYear, maxYear, categoryId, authorId);
         }
 
         [HttpGet("Categories")]
         public ServiceResponse Categories([FromQuery] PaginationFilter filter, SortType? sort, string searchString = "")
         {
             var route = Request.Path.Value;
-            return searchService.SearchCategory(filter, route, searchString, sort);
+            return searchService.SearchEntity<Category, CategoryDto>(filter, route, searchString, sort);
         }
 
         [HttpGet("User")]
         public ServiceResponse Users([FromQuery] PaginationFilter filter, SortType? sort, string searchString = "")
         {
             var route = Request.Path.Value;
-            return searchService.SearchUser(filter, route, searchString, sort);
-        }
-
-        [HttpGet("Generic")]
-        public ServiceResponse Generic([FromQuery] PaginationFilter filter, SortType? sort, string searchString = "")
-        {
-            var route = Request.Path.Value;
-            return searchService.SearchEntity<User>(filter, route, searchString, sort);
+            return searchService.SearchEntity<User, UserSearchDto>(filter, route, searchString, sort);
         }
     }
 }

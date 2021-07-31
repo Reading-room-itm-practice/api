@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Storage.DataAccessLayer;
 using Storage.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,13 +15,9 @@ namespace Core.Repositories
 {
     class ReviewRepository : BaseRepository<Review>, IReviewRepository
     {
-        private readonly IMapper _mapper;
-        public ReviewRepository(IMapper mapper, ApiDbContext context) : base(context)
-        {
-            _mapper = mapper;
-        }
+        public ReviewRepository(ApiDbContext context) : base(context) {}
 
-        public async Task<DataDto<Review>> GetReviews(PaginationFilter filter)
+        public async Task<DataDto<IEnumerable<Review>>> GetReviews(PaginationFilter filter)
         {
             var revievs = await FindAll(filter);
             return revievs;

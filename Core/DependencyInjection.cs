@@ -76,9 +76,6 @@ namespace Core
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<ISearchRepository, SearchRepository>();
             services.AddScoped<ISearchBookRepository, SearchBookRepository>();
-            services.AddScoped<ISearchAuthorRepository, SearchAuthorRepository>();
-            services.AddScoped<ISearchUserRepository, SearchUserRepository>();
-            services.AddScoped<ISearchCategoryRepository, SearchCategoryRepository>();
             services.AddScoped<ISearchAllRepository, SearchAllRepository>();
             services.AddScoped<IGenericSearchRepository, GenericSearchRepository>();
 

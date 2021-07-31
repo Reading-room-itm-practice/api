@@ -1,10 +1,11 @@
-﻿using Core.DTOs;
+﻿using Core.Common;
+using Core.DTOs;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Core.Services.Search
 {
-    public class SearchAllDto
+    public class SearchAllDto : IDto
     {
         public IEnumerable<AuthorDto> Authors { get; set; }
         public IEnumerable<UserSearchDto> Users { get; set; }

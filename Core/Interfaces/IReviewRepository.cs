@@ -10,7 +10,7 @@ namespace Core.Interfaces
 {
     public interface IReviewRepository : IBaseRepository<Review>
     {
-        public Task<DataDto<Review>> GetReviews(PaginationFilter filter);
+        public Task<DataDto<IEnumerable<Review>>> GetReviews(PaginationFilter filter);
         public Task<bool> ReviewByUserExists(Guid userId, int bookId);
         public Task<Review> CreateReview(Review review);
     }
