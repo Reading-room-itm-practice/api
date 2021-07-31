@@ -58,7 +58,7 @@ namespace Storage.DataAccessLayer
                         Name = Faker.Lorem.Sentence(1)
                     });
                 }
-                var result =context.SaveChanges();
+                context.SaveChanges();
             }
         }
 
@@ -201,7 +201,7 @@ namespace Storage.DataAccessLayer
             if (!context.ReviewComments.Any() && context.Reviews.Any() && context.Users.Any())
             {
                 var users = context.Users.ToListAsync().Result;
-                var reviews = context.Books.ToListAsync().Result;
+                var reviews = context.Reviews.ToListAsync().Result;
 
                 var maxUsersElement = context.Users.Count() - 1;
                 var maxReviewsElement = context.Reviews.Count() - 1;
@@ -221,7 +221,7 @@ namespace Storage.DataAccessLayer
 
         public static void SeedReviewLikes(ApiDbContext context)
         {
-            if (!context.Follows.Any() && context.Reviews.Any() && context.Users.Any())
+            if (!context.ReviewLikes.Any() && context.Reviews.Any() && context.Users.Any())
             {
                 var users = context.Users.ToListAsync().Result;
                 var reviews = context.Reviews.ToListAsync().Result;
@@ -243,7 +243,7 @@ namespace Storage.DataAccessLayer
 
         public static void SeedCommentsLikes(ApiDbContext context)
         {
-            if (!context.Follows.Any() && context.ReviewComments.Any() && context.Users.Any())
+            if (!context.CommentLikes.Any() && context.ReviewComments.Any() && context.Users.Any())
             {
                 var users = context.Users.ToListAsync().Result;
                 var comments = context.ReviewComments.ToListAsync().Result;
