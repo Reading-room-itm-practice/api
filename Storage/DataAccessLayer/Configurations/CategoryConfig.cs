@@ -15,6 +15,9 @@ namespace Storage.DataAccessLayer.Configurations
             builder.HasOne(c => c.Creator)
                 .WithMany(a => a.Categories)
                 .HasForeignKey(f => f.CreatorId);
+
+            builder.Property(a => a.Approved)
+                .HasDefaultValue(false);
         }
     }
 }

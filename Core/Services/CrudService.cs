@@ -1,13 +1,13 @@
-﻿using Core.Common;
+using Core.Common;
 using Core.Interfaces;
 using Core.Response;
-using Storage.Iterfaces;
+using Storage.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class CrudService<T> : ICrudService<T> where T : class, IDbModel, IDbMasterKey
+    public class CrudService<T> : ICrudService<T> where T : class, IDbMasterKey
     {
         private readonly ICreatorService<T> _creator;
         private readonly IGetterService<T> _getter;
@@ -22,7 +22,7 @@ namespace Core.Services
             _deleter = deleter;
         }
 
-        public async Task<ServiceResponse<IDto>> Create<IDto>(IRequest requestDto)
+        public virtual async Task<ServiceResponse<IDto>> Create<IDto>(IRequest requestDto)
         {
             return await _creator.Create<IDto>(requestDto);
         }
@@ -32,17 +32,17 @@ namespace Core.Services
             return await _getter.GetAll<IDto>(filter, route);
         }
 
-        public async Task<ServiceResponse<IDto>> GetById<IDto>(int id)
+        public virtual async Task<ServiceResponse<IDto>> GetById<IDto>(int id)
         {
             return await _getter.GetById<IDto>(id);
         }
 
-        public async Task Update(IRequest requestDto, int id)
+        public virtual async Task Update(IRequest requestDto, int id)
         {
             await _updater.Update(requestDto, id);
         }
 
-        public async Task Delete(int id)
+        public virtual async Task Delete(int id)
         {
             await _deleter.Delete(id);
         }

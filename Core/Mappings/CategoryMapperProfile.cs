@@ -11,6 +11,8 @@ namespace Core.Mappings
         {
             CreateMap<Category, CategoryDto>().ReverseMap();
             CreateMap<CategoryRequest, Category>().ReverseMap();
+            CreateMap<Category, ApprovedCategoryDto>().ReverseMap();
+            CreateMap<ApproveCategoryRequest, Category>().ReverseMap();
         }
     }
 }

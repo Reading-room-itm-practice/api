@@ -1,8 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Core.Common;
 using Core.Interfaces;
 using Core.Response;
-using Storage.Iterfaces;
+using Storage.Interfaces;
 using System.Net;
 using System.Threading.Tasks;
 
