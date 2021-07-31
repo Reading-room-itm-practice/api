@@ -1,5 +1,5 @@
 ﻿using Core.Common;
-using Storage.Iterfaces;
+using Storage.Interfaces;
 using System.Threading.Tasks;
 
 namespace Core.Interfaces

@@ -1,12 +1,12 @@
 ﻿using Core.Exceptions;
 using Core.Interfaces;
-using Storage.Iterfaces;
+using Storage.Interfaces;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class DeleterService<T> : IDeleterService<T> where T : class, IDbModel, IDbMasterKey
+    public class DeleterService<T> : IDeleterService<T> where T : class, IDbMasterKey
     {
         private readonly IBaseRepository<T> _repository;
 

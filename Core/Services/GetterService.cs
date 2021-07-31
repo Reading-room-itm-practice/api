@@ -1,15 +1,15 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Core.Common;
 using Core.Interfaces;
 using Core.Response;
-using Storage.Iterfaces;
+using Storage.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class GetterService<T> : IGetterService<T> where T : class, IDbModel, IDbMasterKey
+    public class GetterService<T> : IGetterService<T> where T : class, IDbMasterKey
     {
         private readonly IBaseRepository<T> _repository;
         private readonly IMapper _mapper;
