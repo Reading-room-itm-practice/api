@@ -12,25 +12,17 @@ using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class UserCrudService<T> : CrudService<T>, IUserCrudService<T> where T : class, IApproveable, IDbMasterKey
+    public class ApprovedGetterService<T> : IApprovedGetterService<T> where T : class, IApproveable, IDbMasterKey
     {
         private readonly IBaseRepository<T> _repository;
         private readonly IMapper _mapper;
-
-        public UserCrudService(
-            IBaseRepository<T> repository,
-            IMapper mapper,
-            ICreatorService<T> creator,
-            IGetterService<T> getter,
-            IUpdaterService<T> updater,
-            IDeleterService<T> deleter)
-            : base(creator, getter, updater, deleter)
+        public ApprovedGetterService(IBaseRepository<T> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        public override async Task<ServiceResponse<IEnumerable<IDto>>> GetAll<IDto>()
+        public async Task<ServiceResponse<IEnumerable<IDto>>> GetAllApproved<IDto>()
         {
             var models = await _repository.FindByConditions(x => x.Approved);
             var responseModels = _mapper.Map<IEnumerable<IDto>>(models);
@@ -38,7 +30,7 @@ namespace Core.Services
             return ServiceResponse<IEnumerable<IDto>>.Success(responseModels, "Retrieved list with resorces");
         }
 
-        public override async Task<ServiceResponse<IDto>> GetById<IDto>(int id)
+        public async Task<ServiceResponse<IDto>> GetApprovedById<IDto>(int id)
         {
             var model = await _repository.FindByConditions(x => x.Approved && x.Id == id);
             var responseModel = _mapper.Map<IDto>(model.FirstOrDefault());
