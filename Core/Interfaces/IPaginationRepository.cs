@@ -1,7 +1,5 @@
-﻿using Core.Common;
-using Core.DTOs;
-using Core.Services;
-using Storage.Interfaces;
+﻿using Core.Services;
+using Core.Services.Search;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

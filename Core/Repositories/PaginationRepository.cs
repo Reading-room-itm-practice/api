@@ -2,6 +2,7 @@
 using Core.DTOs;
 using Core.Interfaces;
 using Core.Services;
+using Core.Services.Search;
 using Microsoft.EntityFrameworkCore;
 using Storage.DataAccessLayer;
 using Storage.Interfaces;

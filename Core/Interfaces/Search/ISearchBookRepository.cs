@@ -1,6 +1,7 @@
 ﻿using Core.DTOs;
 using Core.Enums;
 using Core.Services;
+using Core.Services.Search;
 using Storage.Models;
 using System.Collections.Generic;
 

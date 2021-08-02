@@ -3,6 +3,7 @@ using Core.DTOs;
 using Core.Enums;
 using Core.Interfaces.Search;
 using Core.Services;
+using Core.Services.Search;
 using Storage.DataAccessLayer;
 using Storage.Models;
 using System.Collections.Generic;

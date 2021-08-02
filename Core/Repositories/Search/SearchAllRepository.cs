@@ -35,19 +35,21 @@ namespace Core.Repositories.Search
             var toSkip = (filter.PageNumber - 1) * filter.PageSize;
             var toTake = filter.PageSize;
 
+            var quantity = _authors.Count() + _users.Count() + _categories.Count() + _books.Count();
+
             if (filter.PageSize != 0)
             {
                 _authors = _authors.Skip(toSkip).Take(toTake);
                 toSkip = Math.Clamp(toSkip -  _authors.Count(), 0, toSkip);
                 toTake -= _authors.Count();
 
-                _categories = _categories.Skip(toSkip).Take(toTake);
-                toSkip = Math.Clamp(toSkip - _categories.Count(), 0, toSkip);
-                toTake -= _categories.Count();
-
                 _users = _users.Skip(toSkip).Take(toTake);
                 toSkip = Math.Clamp(toSkip - _users.Count(), 0, toSkip);
                 toTake -= _users.Count();
+
+                _categories = _categories.Skip(toSkip).Take(toTake);
+                toSkip = Math.Clamp(toSkip - _categories.Count(), 0, toSkip);
+                toTake -= _categories.Count();
 
                 _books = _books.Skip(toSkip).Take(toTake);
 
@@ -57,8 +59,6 @@ namespace Core.Repositories.Search
             entities.Categories = _categories.ToList();
             entities.Users = _users.ToList();
             entities.Books = _books.ToList();
-
-            var quantity = entities.Count();
 
             return new ExtendedData<AllData>() { Data = entities, Quantity = quantity };
         }

@@ -1,6 +1,6 @@
 ﻿using Core.Common;
 
-namespace Core.DTOs
+namespace Core. Services.Search
 {
     public class ExtendedData : IDto
     {

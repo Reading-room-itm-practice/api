@@ -1,6 +1,7 @@
 ﻿using Core.DTOs;
 using Core.Enums;
 using Core.Services;
+using Core.Services.Search;
 using Storage.Identity;
 using Storage.Interfaces;
 using Storage.Models;

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.DTOs;
 using Core.Requests;
+using Core.Services.Search;
 using Storage.Models;
 using System.Collections.Generic;
 
