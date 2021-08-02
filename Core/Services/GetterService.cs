@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class GetterService<T> : IGetterService<T> where T : class, IDbMasterKey
+    public class GetterService<T> : IGetterService<T> where T : class, IDbMasterKey<int>
     {
         protected readonly IBaseRepository<T> _repository;
         protected readonly IMapper _mapper;
@@ -19,7 +19,7 @@ namespace Core.Services
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<IEnumerable<IDto>>> GetAll<IDto>()
+        public virtual async Task<ServiceResponse<IEnumerable<IDto>>> GetAll<IDto>()
         {
             var models = await _repository.FindAll();
             var responseModels =  _mapper.Map<IEnumerable<IDto>>(models);
@@ -27,7 +27,7 @@ namespace Core.Services
             return ServiceResponse<IEnumerable<IDto>>.Success(responseModels, "Retrived list with resorces");
         }
 
-        public async Task<ServiceResponse<IDto>> GetById<IDto>(int id)
+        public virtual async Task<ServiceResponse<IDto>> GetById<IDto>(int id)
         {
             var model = await _repository.FindByConditions(x => x.Id == id);
             var responseModel = _mapper.Map<IDto>(model.FirstOrDefault());

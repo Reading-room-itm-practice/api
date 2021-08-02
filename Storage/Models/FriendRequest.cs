@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Storage.Models
 {
     [Table("Friend_requests")]
-    public class FriendRequest : AuditableModel, IDbMasterKey
+    public class FriendRequest : AuditableModel, IDbMasterKey<int>
     {
         [Key]
         public int Id { get; set; }

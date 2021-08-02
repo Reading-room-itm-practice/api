@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Storage.Models
 {
     [Table("Read_statuses")]
-    public class ReadStatus : AuditableModel, IDbMasterKey
+    public class ReadStatus : AuditableModel, IDbMasterKey<int>
     {
         [Key]
         public int Id { get; set; }

@@ -10,22 +10,22 @@ namespace Core.Services
 {
     public class CreatorService<T> : ICreatorService<T> where T : class, IDbModel
     {
-        private readonly IBaseRepository<T> _repository;
-        private readonly IMapper _mapper;
+        protected readonly IBaseRepository<T> Repository;
+        protected readonly IMapper Mapper;
 
         public CreatorService(IBaseRepository<T> repository, IMapper mapper)
         {
-            _repository = repository;
-            _mapper = mapper;
+            Repository = repository;
+            Mapper = mapper;
         }
 
-        public async Task<ServiceResponse<IDto>> Create<IDto>(IRequest requestDto)
+        public virtual async Task<ServiceResponse<IDto>> Create<IDto>(IRequest requestDto)
         {
-            var model = _mapper.Map<T>(requestDto);
-            await _repository.Create(model);
-            var responseModel = _mapper.Map<IDto>(model);
+            var model = Mapper.Map<T>(requestDto);
+            await Repository.Create(model);
+            var responseModel = Mapper.Map<IDto>(model);
 
-            return ServiceResponse<IDto>.Success(responseModel, "Resorce has been created.", HttpStatusCode.Created);
+            return ServiceResponse<IDto>.Success(responseModel, "Resource has been created.", HttpStatusCode.Created);
         }
     }
 }

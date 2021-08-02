@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class UpdaterService<T> :  IUpdaterService<T> where T : AuditableModel, IDbMasterKey
+    public class UpdaterService<T> :  IUpdaterService<T> where T : AuditableModel, IDbMasterKey<int>
     {
         private readonly IBaseRepository<T> _repository;
         private readonly IModifyAvalibilityChecker _modifyAvalibilityChecker;

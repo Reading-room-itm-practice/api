@@ -6,6 +6,8 @@ using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Core.DTOs.Follows;
+using Core.Requests;
 
 namespace WebAPI.Controllers.Likes
 {
@@ -38,7 +40,7 @@ namespace WebAPI.Controllers.Likes
         public async Task<ServiceResponse> Create(int id)
         {
             return await _creatorService.Create<FollowDto>(
-                new LikeRequest { FollowableId = id, CreatorId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)) });
+                new LikeRequest {  = id, CreatorId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)) });
         }
 
         [SwaggerOperation(Description = "Delete a follow by unique id")]

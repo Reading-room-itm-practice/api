@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class UserCrudService<T> : CrudService<T>, IUserCrudService<T> where T : class, IApproveable, IDbMasterKey
+    public class UserCrudService<T> : CrudService<T>, IUserCrudService<T> where T : class, IApproveable, IDbMasterKey<int>
     {
         private readonly IBaseRepository<T> _repository;
         private readonly IMapper _mapper;

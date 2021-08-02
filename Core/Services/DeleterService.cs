@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class DeleterService<T> : IDeleterService<T> where T : AuditableModel, IDbMasterKey
+    public class DeleterService<T> : IDeleterService<T> where T : AuditableModel, IDbMasterKey<int>
     {
         private readonly IBaseRepository<T> _repository;
         private readonly IModifyAvalibilityChecker _modifyAvalibilityChecker;
