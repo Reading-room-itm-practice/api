@@ -1,5 +1,5 @@
-﻿using Core;
-using Core.Authorization.Requirements;
+﻿using Core.Authorization.Requirements;
+using Core.DependencyInjections;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Storage.Interfaces;
