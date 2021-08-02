@@ -11,6 +11,11 @@ namespace Core.Interfaces
 {
     public interface IPhotoRepository
     {
-        public Task<PhotoDto> UploadPhoto(PhotoUploadRequest photo, PhotoTypes type);
+        public Task<Photo> UploadPhoto(Photo photo);
+        public Task<Photo> GetPhoto(int photoId);
+        public IEnumerable<AuthorPhoto> GetAuthorPhotos(int authorId);
+        public IEnumerable<BookPhoto> GetBookPhotos(int bookId);
+        public Task<ProfilePhoto> GetUserPhotos(Guid userId);
+        public Task<bool> DeletePhoto(int photoId);
     }
 }

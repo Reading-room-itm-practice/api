@@ -29,27 +29,15 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<ServiceResponse> GetPhotos(string typeId, PhotoTypes? type)
+        public async Task<ServiceResponse> GetPhotos(string typeId, PhotoTypes type)
         {
-            if (typeId != null && type != null)
-            {
-                return ServiceResponse<IEnumerable<PhotoDto>>.Success(_crud.GetAll<PhotoDto>().Result.Content
-                    .Where(p => p.TypeId == typeId && p.PhotoType == type));
-            }
-
-            return await _crud.GetAll<PhotoDto>();
+            return await _photoService.GetPhotos(typeId, type);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ServiceResponse> GetPhoto(int id)
+        [HttpGet("{photoId:int}")]
+        public async Task<ServiceResponse> GetPhoto(int photoId)
         {
-            var result = await _crud.GetById<PhotoDto>(id);
-            if (result.Content == null)
-            {
-                return ServiceResponse.Error("Photo not found.", HttpStatusCode.NotFound);
-            } 
-
-            return result;
+            return await _photoService.GetPhoto(photoId);
         }
 
         [HttpPost()]
@@ -66,32 +54,10 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpDelete("{id:int}")]
-        public async Task<ServiceResponse> Delete(int id)
+        [HttpDelete("{photoId:int}")]
+        public async Task<ServiceResponse> Delete(int photoId)
         {
-            try
-            {
-                var result = await _photoService.DeletePhoto(id);
-
-                return ServiceResponse.Success("Image deleted.");
-            }
-            catch (NotFoundException e)
-            {
-                return ServiceResponse.Error(e.Message, HttpStatusCode.BadRequest);
-            }
-            catch (DbUpdateException e)
-            {
-                return ServiceResponse.Error(e.InnerException.Message, HttpStatusCode.BadRequest);
-            }
-            catch (Exception e)
-            {
-                if (e.InnerException.GetType() == typeof(NotFoundException))
-                {
-                    return ServiceResponse.Error("Image not found", HttpStatusCode.NotFound);
-                }
-
-                return ServiceResponse.Error(e.Message);
-            }
+            return await _photoService.DeletePhoto(photoId);
         }
     }
 }

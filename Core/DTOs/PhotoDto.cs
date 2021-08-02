@@ -1,5 +1,6 @@
 ﻿using Core.Common;
 using Storage.Models.Photos;
+using System.Net.Http;
 
 namespace Core.DTOs
 {
@@ -8,6 +9,7 @@ namespace Core.DTOs
         public int Id { get; set; }
         public string TypeId { get; set; }
         public PhotoTypes PhotoType { get; set; }
-        public string Path { get; set; }
+        //public string Path { get; set; }
+        public StreamContent Photo { get; set; }
     }
 }

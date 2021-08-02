@@ -7,6 +7,7 @@ using Storage.DataAccessLayer;
 using Storage.Models.Photos;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,30 +16,41 @@ namespace Core.Repositories
 {
     public class PhotoRepository : BaseRepository<Photo>, IPhotoRepository
     {
-        private readonly IMapper _mapper;
-        public PhotoRepository(IMapper mapper, ApiDbContext context) : base(context)
+        public PhotoRepository(ApiDbContext context) : base(context) { }
+
+        public async Task<Photo> UploadPhoto(Photo photoRequest)
         {
-            _mapper = mapper;
+            return await Create(photoRequest);
         }
 
-
-
-        public async Task<PhotoDto> UploadPhoto(PhotoUploadRequest photo, PhotoTypes type)
+        public async Task<Photo> GetPhoto(int photoId)
         {
-            switch (type)
-            {
-                case (PhotoTypes.AuthorPhoto):
-                    var authorPhoto = _mapper.Map<AuthorPhoto>(photo);
-                    return _mapper.Map<PhotoDto>(await Create(authorPhoto));
-                case (PhotoTypes.BookPhoto):
-                    var bookPhoto = _mapper.Map<BookPhoto>(photo);
-                    return _mapper.Map<PhotoDto>(await Create(bookPhoto));
-                case (PhotoTypes.ProfilePhoto):
-                    var profilePhoto = _mapper.Map<ProfilePhoto>(photo);
-                    return _mapper.Map<PhotoDto>(await Create(profilePhoto));
-                default:
-                    return null;
-            }
+            return (await FindByConditions(p => p.Id == photoId)).FirstOrDefault();
+        }
+
+        public IEnumerable<AuthorPhoto> GetAuthorPhotos(int authorId)
+        {
+            return  _context.AuthorPhotos.Where(p => p.AuthorId == authorId);
+        }
+
+        public IEnumerable<BookPhoto> GetBookPhotos(int bookId)
+        {
+            return _context.BookPhotos.Where(p => p.BookId == bookId);
+        }
+
+        public async Task<ProfilePhoto> GetUserPhotos(Guid userId)
+        {
+            var user = _context.Users.Include(u => u.ProfilePhoto).FirstOrDefault(u => u.Id == userId);
+            return await _context.ProfilePhotos.FirstOrDefaultAsync(p => p.UserId == userId);
+        }
+
+        public async Task<bool> DeletePhoto(int photoId)
+        {
+            var photoToDelete = GetPhoto(photoId).Result;
+            if (photoToDelete == null) return false;
+            await Delete(photoToDelete);
+            File.Delete(photoToDelete.Path);
+            return true;
         }
     }
 }
