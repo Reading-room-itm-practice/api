@@ -24,7 +24,7 @@ namespace Core.Services.Search
         public ServiceResponse SearchEntity<InData, OutData>(PaginationFilter filter, string route, string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
             int? categoryId = null, int? authorId = null) where InData : class where OutData : class , IDto
         {
-            
+            filter.Valid();
             var entities = _searchRepository.GetEntities<InData>(filter, searchString, sort);
             var entitiesDto = _mapper.Map<DataDto<IEnumerable<OutData>>>(entities);
             var pagedReponse = PaginationHelper.CreatePagedReponse(entitiesDto.Data, filter, entitiesDto.Quantity, _uriService, route);

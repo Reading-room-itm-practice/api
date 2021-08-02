@@ -10,7 +10,7 @@ namespace Core.Common
     {
         public static PagedResponse<IEnumerable<T>> CreatePagedReponse<T>(IEnumerable<T> pagedData, PaginationFilter validFilter, int totalRecords, IUriService uriService, string route)
         {
-            validFilter.Valid();
+
             var respose = new PagedResponse<IEnumerable<T>>(pagedData, validFilter.PageNumber, validFilter.PageSize);
             var totalPages = validFilter.PageSize == 0 ? 1 : ((double)totalRecords / (double)validFilter.PageSize);
             int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));

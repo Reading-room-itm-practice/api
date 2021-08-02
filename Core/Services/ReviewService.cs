@@ -53,6 +53,7 @@ namespace Core.Services
 
         public async Task<ServiceResponse> GetReviews(PaginationFilter filter, string route)
         {
+            filter.Valid();
             var reviews = _mapper.Map<DataDto<IEnumerable<ReviewDto>>>(await _reviewRepository.GetReviews(filter));
             var pagedResponse = PaginationHelper.CreatePagedReponse(reviews.Data, filter, reviews.Quantity, _uriService, route);
 

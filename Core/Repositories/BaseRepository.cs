@@ -42,7 +42,7 @@ namespace Core.Repositories
 
         public async Task<DataDto<IEnumerable<T>>> FindAll(PaginationFilter filter)
         {
-            filter.Valid();
+            
             var totalRecords = await _context.Set<T>().CountAsync();
             if (filter.PageSize != 0)
             {

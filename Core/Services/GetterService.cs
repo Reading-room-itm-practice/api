@@ -24,6 +24,7 @@ namespace Core.Services
 
         async Task<ServiceResponse<PagedResponse<IEnumerable<IDto>>>> IGetterService<T>.GetAll<IDto>(PaginationFilter filter, string route)
         {
+
             var models = await _repository.FindAll(filter);
             var data = _mapper.Map<IEnumerable<IDto>>(models.Data);
             var pagedReponse = PaginationHelper.CreatePagedReponse(data, filter, models.Quantity, _uriService, route);

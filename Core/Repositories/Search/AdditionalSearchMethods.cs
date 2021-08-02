@@ -90,7 +90,7 @@ namespace Core.Repositories.Search
 
         public static DataDto<IEnumerable<T>> Pagination<T>(PaginationFilter filter, IEnumerable<T> data) where T : class
         {
-            filter.Valid();
+            
             var count = data.Count();
             if (filter.PageSize != 0)
             {

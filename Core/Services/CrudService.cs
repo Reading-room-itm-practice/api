@@ -29,6 +29,7 @@ namespace Core.Services
 
         public virtual async Task<ServiceResponse<PagedResponse<IEnumerable<IDto>>>> GetAll<IDto>(PaginationFilter filter, string route)
         {
+            filter.Valid();
             return await _getter.GetAll<IDto>(filter, route);
         }
 
