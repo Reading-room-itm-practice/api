@@ -7,44 +7,44 @@ using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class CrudService<T> : ICrudService<T> where T : class, IDbMasterKey
+    public class CrudService<T> : ICrudService<T> where T : class, IDbMasterKey<int>
     {
-        private readonly ICreatorService<T> _creator;
-        private readonly IGetterService<T> _getter;
-        private readonly IUpdaterService<T> _updater;
-        private readonly IDeleterService<T> _deleter;
+        protected readonly ICreatorService<T> Creator;
+        protected readonly IGetterService<T> Getter;
+        protected readonly IUpdaterService<T> Updater;
+        protected readonly IDeleterService<T> Deleter;
 
         public CrudService(ICreatorService<T> creator, IGetterService<T> getter, IUpdaterService<T> updater, IDeleterService<T> deleter)
         {
-            _creator = creator;
-            _getter = getter;
-            _updater = updater;
-            _deleter = deleter;
+            Creator = creator;
+            Getter = getter;
+            Updater = updater;
+            Deleter = deleter;
         }
 
         public virtual async Task<ServiceResponse<IDto>> Create<IDto>(IRequest requestDto)
         {
-            return await _creator.Create<IDto>(requestDto);
+            return await Creator.Create<IDto>(requestDto);
         }
 
         public virtual async Task<ServiceResponse<IEnumerable<IDto>>> GetAll<IDto>()
         {
-            return await _getter.GetAll<IDto>();
+            return await Getter.GetAll<IDto>();
         }
 
         public virtual async Task<ServiceResponse<IDto>> GetById<IDto>(int id)
         {
-            return await _getter.GetById<IDto>(id);
+            return await Getter.GetById<IDto>(id);
         }
 
         public virtual async Task Update(IRequest requestDto, int id)
         {
-            await _updater.Update(requestDto, id);
+            await Updater.Update(requestDto, id);
         }
 
         public virtual async Task Delete(int id)
         {
-            await _deleter.Delete(id);
+            await Deleter.Delete(id);
         }
     }
 }

@@ -4,7 +4,7 @@ using WebAPI.Helpers;
 
 namespace WebAPI.Installers
 {
-    public class HelpersInstaller : Installer
+    public class HelpersInstaller : IInstaller
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {

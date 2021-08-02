@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NLog.Web;
 using Storage.DataAccessLayer;
 using WebAPI.HosBuilderExtensions;
+using WebAPI.HostBuilderExtensions;
 
 namespace WebAPI
 {

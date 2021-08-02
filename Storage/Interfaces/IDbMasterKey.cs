@@ -2,9 +2,9 @@
 
 namespace Storage.Interfaces
 {
-    public interface IDbMasterKey : IDbModel
+    public interface IDbMasterKey<T> : IDbModel where T : notnull
     {
         [Key]
-        public int Id { get; set; }
+        public T Id { get; set; }
     }
 }

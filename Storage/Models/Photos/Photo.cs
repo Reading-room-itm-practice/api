@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Storage.Models.Photos
 {
     [Table("Photos")]
-    public abstract class Photo : AuditableModel, IDbMasterKey
+    public abstract class Photo : AuditableModel, IDbMasterKey<int>
     {
         [Key]
         public int Id { get; set; }

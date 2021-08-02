@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Net;
 using WebAPI.Installers;
 using WebAPI.Middleware;
@@ -44,17 +45,22 @@ namespace WebAPI
                 var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
                 if (exception is NotFoundException)
                 {
-                    context.Response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
+                    context.Response.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
                     await context.Response.WriteAsJsonAsync(ServiceResponse.Error(exception.Message, ApiException.ResponseCode));
                 }
                 else if (exception is ApiException)
                 {
-                    context.Response.StatusCode = (int)ApiException.ResponseCode;
+                    context.Response.StatusCode = (int) ApiException.ResponseCode;
                     await context.Response.WriteAsJsonAsync(ServiceResponse.Error(exception.Message, ApiException.ResponseCode));
+                }
+                else if (exception is UnauthorizedAccessException)
+                {
+                    context.Response.StatusCode = (int) HttpStatusCode.Forbidden;
+                    await context.Response.WriteAsJsonAsync(ServiceResponse.Error(exception.Message, HttpStatusCode.Forbidden));
                 }
                 else
                 {
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
                     await context.Response.WriteAsJsonAsync(ServiceResponse.Error(exception.Message, HttpStatusCode.InternalServerError));
                 }
             }));

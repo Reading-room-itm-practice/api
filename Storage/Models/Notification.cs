@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Storage.Models
 {
     [Table("Notifications")]
-    public class Notification : IDbMasterKey
+    public class Notification : IDbMasterKey<int>
     {
         [Key]
         public int Id { get; set; }

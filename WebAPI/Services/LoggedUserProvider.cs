@@ -20,5 +20,12 @@ namespace WebAPI.Services
 
             return loggedUserId != null ? new Guid(loggedUserId) : throw new UnauthorizedAccessException();
         }
+
+        public ClaimsPrincipal GetUserClaimsPrincipal()
+        {
+            var loggedUserId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            return loggedUserId != null ? _httpContextAccessor.HttpContext.User : throw new UnauthorizedAccessException();
+        }
     }
 }
