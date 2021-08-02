@@ -20,35 +20,40 @@ namespace WebAPI.Controllers
             _friendService = friendService;
         }
 
-        // TESTING
+        [HttpGet]
+        public async Task<ServiceResponse> Friends()
+        {
+            return await _friendService.GetApprovedFriendRequests(null);
+        }
+
         [HttpGet("ReceivedFriendRequests")]
         public async Task<ServiceResponse> ReceivedFriendRequests()
         {
-            return await _friendService.GetFriendRequests<FriendDto>(false, true, false);
+            return await _friendService.GetReceivedFriendRequests(null);
         }
 
         [HttpGet("SentFriendRequests")]
         public async Task<ServiceResponse> SentFriendRequests()
         {
-            return await _friendService.GetFriendRequests<FriendDto>(true, false, false);
-        }
-
-        [HttpGet]
-        public async Task<ServiceResponse> Friends()
-        {
-            return await _friendService.GetFriendRequests<FriendDto>(true, true, true);
-        }
-
-        [HttpGet("FriendRequests/{id}")]
-        public async Task<ServiceResponse> ReceivedFriendRequest(int id)
-        {
-            return await _friendService.GetReceivedFriendRequest<ReceivedFriendRequestDto>(id);
+            return await _friendService.GetSentFriendRequests(null);
         }
 
         [HttpGet("{id}")]
-        public async Task<ServiceResponse> Friend(Guid id)
+        public async Task<ServiceResponse> Friend(int id)
         {
-            return await _friendService.GetFriend(id);
+            return await _friendService.GetApprovedFriendRequests(id);
+        }
+
+        [HttpGet("ReceivedFriendRequests/{id}")]
+        public async Task<ServiceResponse> ReceivedFriendRequest(int id)
+        {
+            return await _friendService.GetReceivedFriendRequests(id);
+        }
+
+        [HttpGet("SentFriendRequests/{id}")]
+        public async Task<ServiceResponse> SentFriendRequests(int id)
+        {
+            return await _friendService.GetSentFriendRequests(id);
         }
 
         [HttpPost("SendFriendRequest")]
