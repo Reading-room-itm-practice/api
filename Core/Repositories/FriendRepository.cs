@@ -42,15 +42,5 @@ namespace Core.Repositories
                 .Where(fr => !fr.Approved)
                 .ToListAsync();
         }
-
-        //public async Task<FriendRequest> GetApprovedSentAndReceivedFriendRequest(Guid userId)
-        //{
-        //    return await _context.FriendRequests
-        //        .Include(fr => fr.Creator)
-        //        .Include(fr => fr.To)
-        //        .Where(fr => fr.CreatorId == userId || fr.ToId == userId)
-        //        .FirstOrDefaultAsync();
-        //}
-
     }
 }
