@@ -19,10 +19,12 @@ namespace WebAPI.Controllers
     public class AuthorsController : ControllerBase
     {
         private readonly IUserCrudService<Author> _crud;
+        private readonly IGettterPaginationService _getPaged;
 
-        public AuthorsController(IUserCrudService<Author> crud)
+        public AuthorsController(IUserCrudService<Author> crud, IGettterPaginationService getPaged)
         {
             _crud = crud;
+            _getPaged = getPaged;
         }
 
         [SwaggerOperation(Summary = "Retrieves all book authors")]
@@ -30,7 +32,7 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
             var route = Request.Path.Value;
-            var authors = await _crud.GetAll<AuthorDto>(filter, route);
+            var authors = await _getPaged.GetAll<Author, AuthorDto>(filter, route);
 
             return authors;
         }

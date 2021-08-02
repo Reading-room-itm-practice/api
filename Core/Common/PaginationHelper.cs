@@ -8,10 +8,11 @@ namespace Core.Common
 {
     public class PaginationHelper
     {
-        public static PagedResponse<IEnumerable<T>> CreatePagedReponse<T>(IEnumerable<T> pagedData, PaginationFilter validFilter, int totalRecords, IUriService uriService, string route)
+
+        public static PagedResponse<T> CreatePagedReponse<T>(T pagedData, PaginationFilter validFilter, int totalRecords, IUriService uriService, string route)
         {
 
-            var respose = new PagedResponse<IEnumerable<T>>(pagedData, validFilter.PageNumber, validFilter.PageSize);
+            var respose = new PagedResponse<T>(pagedData, validFilter.PageNumber, validFilter.PageSize);
             var totalPages = validFilter.PageSize == 0 ? 1 : ((double)totalRecords / (double)validFilter.PageSize);
             int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
             respose.NextPage =

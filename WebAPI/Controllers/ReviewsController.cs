@@ -15,12 +15,14 @@ namespace WebAPI.Controllers
     {
         private readonly ICrudService<Review> _crud;
         private readonly IReviewService _reviewService;
-        
+        private readonly IGettterPaginationService _getPaged;
 
-        public ReviewsController(ICrudService<Review> crud, IReviewService reviewService)
+
+        public ReviewsController(ICrudService<Review> crud, IReviewService reviewService, IGettterPaginationService getPaged)
         {
             _crud = crud;
             _reviewService = reviewService;
+            _getPaged = getPaged;
         }
 
         [HttpGet("{id:int}")]
@@ -35,7 +37,7 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> GetReviews([FromQuery] PaginationFilter filter)
         {
             var route = Request.Path.Value;
-            return await _reviewService.GetReviews(filter, route);
+            return await _getPaged.GetAll<Review, ReviewDto>(filter, route);
         }
 
         [HttpPost]

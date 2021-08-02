@@ -12,7 +12,7 @@ namespace Core.Mappings
     {
         public SearchMapperProfile()
         {
-            
+
             CreateMap<SearchAll, SearchAllDto>().ReverseMap();
             CreateMap<DataDto<SearchAll>, DataDto<SearchAllDto>>().ReverseMap();
 

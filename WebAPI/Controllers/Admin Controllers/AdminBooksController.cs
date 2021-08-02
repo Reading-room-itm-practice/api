@@ -1,15 +1,13 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
-using Core.ServiceResponses;
+using Core.Response;
+using Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Identity;
 using Storage.Models;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers.Admin_Controllers
@@ -20,17 +18,20 @@ namespace WebAPI.Controllers.Admin_Controllers
     public class AdminBooksController : ControllerBase
     {
         private readonly ICrudService<Book> _crud;
+        private readonly IGettterPaginationService _getPaged;
 
-        public AdminBooksController(ICrudService<Book> crud)
+        public AdminBooksController(ICrudService<Book> crud, IGettterPaginationService getPaged)
         {
             _crud = crud;
+            _getPaged = getPaged;
         }
 
         [SwaggerOperation(Summary = "Retrieves all books")]
         [HttpGet]
-        public async Task<ServiceResponse> Index()
+        public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
-            return await _crud.GetAll<ApprovedBookDto>();
+            var route = Request.Path.Value;
+            return await _getPaged.GetAll<Book, ApprovedBookDto>(filter, route);
         }
 
         [SwaggerOperation(Summary = "Retrieves a specific book by unique id")]

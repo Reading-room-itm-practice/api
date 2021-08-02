@@ -21,17 +21,30 @@ namespace Core.Services.Search
             _mapper = mapper;
         }
 
-        public ServiceResponse SearchEntity<InData, OutData>(PaginationFilter filter, string route, string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
-            int? categoryId = null, int? authorId = null) where InData : class where OutData : class , IDto
+        public ServiceResponse SearchEntity<Data, Dto>(PaginationFilter filter, string route, string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
+            int? categoryId = null, int? authorId = null) where Data : class where Dto : class , IDto
         {
             filter.Valid();
-            var entities = _searchRepository.GetEntities<InData>(filter, searchString, sort);
-            var entitiesDto = _mapper.Map<DataDto<IEnumerable<OutData>>>(entities);
-            var pagedReponse = PaginationHelper.CreatePagedReponse(entitiesDto.Data, filter, entitiesDto.Quantity, _uriService, route);
-            var message = entitiesDto.Quantity == 0 ? $"No {typeof(InData).Name} search results found." : $"{typeof(InData).Name} search results retrieved.";
-
-            return ServiceResponse<PagedResponse<IEnumerable<OutData>>>.Success(pagedReponse, message);
+            var entities = _searchRepository.GetEntities<Data>(filter, searchString, sort);
+            return typeof(SearchAll) != typeof(Data) ? EnumerableResponse<Data, Dto>(entities, filter, route) : Response<Data, Dto>(entities, filter, route);
         }
-        
+
+        private ServiceResponse Response<Data, Dto>(DataDto entities, PaginationFilter filter, string route)
+        {
+            var entitiesDto = _mapper.Map<DataDto<Dto>>(entities);
+            var pagedReponse = PaginationHelper.CreatePagedReponse(entitiesDto.Data, filter, entitiesDto.Quantity, _uriService, route);
+            var message = entitiesDto.Quantity == 0 ? $"No {typeof(Data).Name} search results found." : $"{typeof(Data).Name} search results retrieved.";
+
+            return ServiceResponse<PagedResponse<Dto>>.Success(pagedReponse, message);
+        }
+
+        private ServiceResponse EnumerableResponse<Data, Dto>(DataDto entities, PaginationFilter filter, string route)
+        {
+            var entitiesDto = _mapper.Map<DataDto<IEnumerable<Dto>>>(entities);
+            var pagedReponse = PaginationHelper.CreatePagedReponse(entitiesDto.Data, filter, entitiesDto.Quantity, _uriService, route);
+            var message = entitiesDto.Quantity == 0 ? $"No {typeof(Data).Name} search results found." : $"{typeof(Data).Name} search results retrieved.";
+
+            return ServiceResponse<PagedResponse<IEnumerable<Dto>>>.Success(pagedReponse, message);
+        }
     }
 }

@@ -17,15 +17,13 @@ namespace Core.Services
     class ReviewService : IReviewService
     {
         private readonly IMapper _mapper;
-        private readonly IUriService _uriService;
         private readonly IReviewRepository _reviewRepository;
         private readonly IGetterService<Book> _bookGetter;
         private readonly ILoggedUserProvider _loggedUserProvider;
 
-        public ReviewService(IMapper mapper, IUriService uriService, IReviewRepository reviewRepository, IGetterService<Book> bookGetter, ILoggedUserProvider loggedUserProvider)
+        public ReviewService(IMapper mapper, IReviewRepository reviewRepository, IGetterService<Book> bookGetter, ILoggedUserProvider loggedUserProvider)
         {
             _mapper = mapper;
-            _uriService = uriService;
             _loggedUserProvider = loggedUserProvider;
             _reviewRepository = reviewRepository;
             _bookGetter = bookGetter;
@@ -49,15 +47,6 @@ namespace Core.Services
             var newReview = _mapper.Map<ReviewDto>(await _reviewRepository.CreateReview(reviewRequest));
 
             return ServiceResponse<ReviewDto>.Success(newReview, "Review created.", HttpStatusCode.Created);
-        }
-
-        public async Task<ServiceResponse> GetReviews(PaginationFilter filter, string route)
-        {
-            filter.Valid();
-            var reviews = _mapper.Map<DataDto<IEnumerable<ReviewDto>>>(await _reviewRepository.GetReviews(filter));
-            var pagedResponse = PaginationHelper.CreatePagedReponse(reviews.Data, filter, reviews.Quantity, _uriService, route);
-
-            return ServiceResponse<PagedResponse<IEnumerable<ReviewDto>>>.Success(pagedResponse, $"All reviews retrieved.");
         }
     }
 }

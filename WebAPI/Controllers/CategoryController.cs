@@ -15,10 +15,12 @@ namespace WebAPI.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly IUserCrudService<Category> _crud;
+        private readonly IGettterPaginationService _getPaged;
 
-        public CategoryController(IUserCrudService<Category> crud)
+        public CategoryController(IUserCrudService<Category> crud, IGettterPaginationService getPaged)
         {
             _crud = crud;
+            _getPaged = getPaged;
         }
 
         [HttpGet("{id:int}")]
@@ -34,7 +36,7 @@ namespace WebAPI.Controllers
         {
             var route = Request.Path.Value;
 
-            return await _crud.GetAll<CategoryDto>(filter, route);        
+            return await _getPaged.GetAll<Category, CategoryDto>(filter, route);        
         }
 
         [HttpPost]

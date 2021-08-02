@@ -22,11 +22,13 @@ namespace WebAPI.Controllers
     {
         private readonly ICrudService<Photo> _crud;
         private readonly IPhotoService _photoService;
+        private readonly IGettterPaginationService _getPaged;
 
-        public PhotoController(ICrudService<Photo> crud, IPhotoService photoService)
+        public PhotoController(ICrudService<Photo> crud, IPhotoService photoService, IGettterPaginationService getPaged)
         {
             _crud = crud;
             _photoService = photoService;
+            _getPaged = getPaged;
         }
 
         [HttpGet("All")]
@@ -35,10 +37,10 @@ namespace WebAPI.Controllers
             var route = Request.Path.Value;
             if (book_id != null)
             {
-                return ServiceResponse<IEnumerable<PhotoDto>>.Success(_crud.GetAll<PhotoDto>(filter, route).Result.Content.Data.Where(p => p.BookId == book_id));
+                return ServiceResponse<IEnumerable<PhotoDto>>.Success(_getPaged.GetAll<Photo, PhotoDto>(filter, route).Result.Content.Data.Where(p => p.BookId == book_id));
             }
 
-            return await _crud.GetAll<PhotoDto>(filter, route);
+            return await _getPaged.GetAll<Photo, PhotoDto>(filter, route);
         }
 
         [HttpGet("{id:int}")]

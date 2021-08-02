@@ -1,14 +1,12 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
-using Core.ServiceResponses;
+using Core.Response;
+using Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Identity;
 using Storage.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -20,10 +18,12 @@ namespace WebAPI.Controllers.Admin_Controllers
     public class AdminCategoryController : ControllerBase
     {
         private readonly ICrudService<Category> _crud;
+        private readonly IGettterPaginationService _getPaged;
 
-        public AdminCategoryController(ICrudService<Category> crud)
+        public AdminCategoryController(ICrudService<Category> crud, IGettterPaginationService getPaged)
         {
             _crud = crud;
+            _getPaged = getPaged;
         }
 
         [HttpGet("{id:int}")]
@@ -35,9 +35,10 @@ namespace WebAPI.Controllers.Admin_Controllers
         }
 
         [HttpGet]
-        public async Task<ServiceResponse> GetCategories()
+        public async Task<ServiceResponse> GetCategories([FromQuery] PaginationFilter filter)
         {
-            return await _crud.GetAll<ApprovedCategoryDto>();
+            var route = Request.Path.Value;
+            return await _getPaged.GetAll<Category, ApprovedCategoryDto>(filter, route);
         }
 
         [HttpPost]

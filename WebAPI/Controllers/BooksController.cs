@@ -6,8 +6,6 @@ using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -17,10 +15,12 @@ namespace WebAPI.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IUserCrudService<Book> _crud;
+        private readonly IGettterPaginationService _getPaged;
 
-        public BooksController(IUserCrudService<Book> crud)
+        public BooksController(IUserCrudService<Book> crud, IGettterPaginationService getPaged)
         {
             _crud = crud;
+            _getPaged = getPaged;
         }
 
         [SwaggerOperation(Summary = "Retrieves all books")]
@@ -28,7 +28,7 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
             var route = Request.Path.Value;
-            var books = await _crud.GetAll<BookDto>(filter, route);
+            var books = await _getPaged.GetAll<Book, BookDto>(filter, route);
 
             return books;
         }

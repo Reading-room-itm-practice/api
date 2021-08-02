@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
 using Core.Common;
-using Core.DTOs;
 using Core.Interfaces;
-using Core.ServiceResponses;
+using Core.Response;
 using Storage.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Core.Services
@@ -16,10 +13,12 @@ namespace Core.Services
     {
         private readonly IBaseRepository<T> _repository;
         private readonly IMapper _mapper;
+        private readonly IUriService _uriService;
 
         public UserCrudService(
             IBaseRepository<T> repository,
             IMapper mapper,
+            IUriService uriService,
             ICreatorService<T> creator,
             IGetterService<T> getter,
             IUpdaterService<T> updater,
@@ -28,6 +27,7 @@ namespace Core.Services
         {
             _repository = repository;
             _mapper = mapper;
+            _uriService = uriService;
         }
 
         public override async Task<ServiceResponse<IEnumerable<IDto>>> GetAll<IDto>()

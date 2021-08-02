@@ -13,23 +13,20 @@ namespace Core.Services
     {
         private readonly IBaseRepository<T> _repository;
         private readonly IMapper _mapper;
-        private readonly IUriService _uriService;
 
-        public GetterService(IBaseRepository<T> postRepository, IMapper mapper, IUriService uriService)
+        public GetterService(IBaseRepository<T> postRepository, IMapper mapper)
         {
             _repository = postRepository;
             _mapper = mapper;
-            _uriService = uriService;
         }
 
-        async Task<ServiceResponse<PagedResponse<IEnumerable<IDto>>>> IGetterService<T>.GetAll<IDto>(PaginationFilter filter, string route)
+        async Task<ServiceResponse<IEnumerable<IDto>>> IGetterService<T>.GetAll<IDto>()
         {
 
-            var models = await _repository.FindAll(filter);
-            var data = _mapper.Map<IEnumerable<IDto>>(models.Data);
-            var pagedReponse = PaginationHelper.CreatePagedReponse(data, filter, models.Quantity, _uriService, route);
+            var models = await _repository.FindAll();
+            var data = _mapper.Map<IEnumerable<IDto>>(models);
 
-            return ServiceResponse<PagedResponse<IEnumerable<IDto>>>.Success(pagedReponse, "Retrived resource");
+            return ServiceResponse<IEnumerable<IDto>>.Success(data, "Retrived resource");
         }
 
         public async Task<ServiceResponse<IDto>> GetById<IDto>(int id)

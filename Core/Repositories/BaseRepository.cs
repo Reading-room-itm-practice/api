@@ -1,6 +1,4 @@
-﻿using Core.DTOs;
-using Core.Interfaces;
-using Core.Services;
+﻿using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Storage.DataAccessLayer;
 using Storage.Interfaces;
@@ -40,27 +38,9 @@ namespace Core.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<DataDto<IEnumerable<T>>> FindAll(PaginationFilter filter)
+        public async Task<IEnumerable<T>> FindAll()
         {
-            
-            var totalRecords = await _context.Set<T>().CountAsync();
-            if (filter.PageSize != 0)
-            {
-                return new DataDto<IEnumerable<T>>()
-                {
-                    Data = await _context.Set<T>()
-                    .Skip((filter.PageNumber - 1) * filter.PageSize)
-                    .Take(filter.PageSize)
-                    .ToListAsync(),
-                    Quantity = totalRecords
-                };
-            }
-
-            return new DataDto<IEnumerable<T>>()
-            {
-                Data = await _context.Set<T>().ToListAsync(),
-                Quantity = totalRecords
-            };
+            return await _context.Set<T>().ToListAsync();
         }
 
         public async Task<IEnumerable<T>> FindByConditions(Expression<Func<T, bool>> expresion)
