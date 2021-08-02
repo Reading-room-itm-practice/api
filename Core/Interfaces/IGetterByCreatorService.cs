@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Interfaces
 {
-    public interface IExtendedGetterService<T> : IGetterService<T> where T : AuditableModel, IDbModel
+    public interface IGetterByCreatorService<T> : IGetterService<T> where T : AuditableModel, IDbModel
     {
         public Task<ServiceResponse<IEnumerable<IDto>>> GetAllByCreator<IDto>(Guid userId);
     }

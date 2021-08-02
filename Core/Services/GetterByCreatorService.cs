@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class ExtendedGetterService<T> : GetterService<T>, IExtendedGetterService<T> where T : AuditableModel, IDbMasterKey
+    public class GetterByCreatorService<T> : GetterService<T>, IGetterByCreatorService<T> where T : AuditableModel, IDbMasterKey
     {
-        public ExtendedGetterService(IBaseRepository<T> repository, IMapper mapper) : base(repository, mapper)
+        public GetterByCreatorService(IBaseRepository<T> repository, IMapper mapper) : base(repository, mapper)
         {
         }
 

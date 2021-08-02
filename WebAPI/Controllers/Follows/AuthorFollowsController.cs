@@ -15,10 +15,10 @@ namespace WebAPI.Controllers.Follows
     public class AuthorFollowsController : ControllerBase
     {
         private readonly IDeleterService<AuthorFollow> _deleterService;
-        private readonly IExtendedGetterService<AuthorFollow> _getterService;
+        private readonly IGetterByCreatorService<AuthorFollow> _getterService;
         private readonly ICreatorService<AuthorFollow> _creatorService;
 
-        public AuthorFollowsController(IDeleterService<AuthorFollow> deleter, IExtendedGetterService<AuthorFollow> getter, ICreatorService<AuthorFollow> creator)
+        public AuthorFollowsController(IDeleterService<AuthorFollow> deleter, IGetterByCreatorService<AuthorFollow> getter, ICreatorService<AuthorFollow> creator)
         {
             _deleterService = deleter;
             _getterService = getter;

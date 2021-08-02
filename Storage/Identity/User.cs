@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Storage.Interfaces;
 using Storage.Models;
 using Storage.Models.Follows;
 using Storage.Models.Likes;
@@ -7,11 +6,12 @@ using Storage.Models.Photos;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using Storage.Interfaces;
 
 namespace Storage.Identity
 {
     [Table("Users")]
-    public class User : IdentityUser<Guid>, IFollowable
+    public class User : IdentityUser<Guid>, IFollowable<UserFollow>
     {
         public int? ProfilePhotoId { get; set; }
         public ProfilePhoto ProfilePhoto { get; set; }

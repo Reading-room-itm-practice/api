@@ -14,10 +14,10 @@ namespace WebAPI.Controllers.Likes
     public class CommentLikesController : ControllerBase
     {
         private readonly IDeleterService<ReviewCommentLike> _deleterService;
-        private readonly IExtendedGetterService<ReviewCommentLike> _getterService;
+        private readonly IGetterByCreatorService<ReviewCommentLike> _getterService;
         private readonly ICreatorService<ReviewCommentLike> _creatorService;
 
-        public CommentLikesController(IDeleterService<ReviewCommentLike> deleter, IExtendedGetterService<ReviewCommentLike> getter, ICreatorService<ReviewCommentLike> creator)
+        public CommentLikesController(IDeleterService<ReviewCommentLike> deleter, IGetterByCreatorService<ReviewCommentLike> getter, ICreatorService<ReviewCommentLike> creator)
         {
             _deleterService = deleter;
             _getterService = getter;

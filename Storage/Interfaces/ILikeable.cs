@@ -1,12 +1,10 @@
 ﻿using Storage.Models.Likes;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Storage.Interfaces
-{ 
-    public interface ILikeable
+{
+    public interface ILikeable<T> where T : Like
     {
+        public ICollection<T> Likes { get; set; }      
     }
 }

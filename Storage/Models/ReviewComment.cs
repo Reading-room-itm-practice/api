@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Storage.Models
 {
     [Table("Review_comments")]
-    public class ReviewComment : AuditableModel, ILikeable
+    public class ReviewComment : AuditableModel, ILikeable<ReviewCommentLike>
     {
         [Key]
         public int Id { get; set; }

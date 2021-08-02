@@ -17,12 +17,12 @@ namespace Core.ServiceResponses
 
         public static ServiceResponse Error(string message = "", HttpStatusCode statusCode = HttpStatusCode.UnprocessableEntity)
         {
-            return new ServiceResponse(false, statusCode, message);
+            return new(false, statusCode, message);
         }
 
         public static ServiceResponse Success(string message = "", HttpStatusCode statusCode = HttpStatusCode.OK)
         {
-            return new ServiceResponse(true, statusCode, message);
+            return new(true, statusCode, message);
         }
     }
 
@@ -37,12 +37,12 @@ namespace Core.ServiceResponses
 
         public static ServiceResponse<T> Error(T content, string message = "", HttpStatusCode statusCode = HttpStatusCode.UnprocessableEntity)
         {
-            return new ServiceResponse<T>(false, statusCode, message, content);
+            return new(false, statusCode, message, content);
         }
 
         public static ServiceResponse<T> Success(T content, string message = "", HttpStatusCode statusCode = HttpStatusCode.OK)
         {
-            return new ServiceResponse<T>(true, statusCode, message, content);
+            return new(true, statusCode, message, content);
         }
     }
 }

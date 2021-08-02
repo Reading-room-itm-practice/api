@@ -14,10 +14,10 @@ namespace WebAPI.Controllers.Follows
     public class UserFollowsController : ControllerBase
     {
         private readonly IDeleterService<UserFollow> _deleterService;
-        private readonly IExtendedGetterService<UserFollow> _getterService;
+        private readonly IGetterByCreatorService<UserFollow> _getterService;
         private readonly ICreatorService<UserFollow> _creatorService;
 
-        public UserFollowsController(IDeleterService<UserFollow> deleter, IExtendedGetterService<UserFollow> getter, ICreatorService<UserFollow> creator)
+        public UserFollowsController(IDeleterService<UserFollow> deleter, IGetterByCreatorService<UserFollow> getter, ICreatorService<UserFollow> creator)
         {
             _deleterService = deleter;
             _getterService = getter;
