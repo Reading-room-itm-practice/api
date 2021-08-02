@@ -130,9 +130,9 @@ namespace Core.Services
         public async Task<ServiceResponse> SendFriendRequest(SendFriendRequest request)
         {
             Guid userId = _user.GetUserId();
-            var sentFriendRequests = await _repository.FindByConditions(x => !x.Approved && x.CreatorId == userId);
-            var receivedFriendRequests = await _repository.FindByConditions(x => !x.Approved && x.ToId == userId);
-            var friends = await _repository.FindByConditions(x => x.Approved && (x.ToId == request.ToId || x.CreatorId == request.ToId));
+            var sentFriendRequests = await _repository.GetSentFriendRequests(userId);
+            var receivedFriendRequests = await _repository.GetReceivedFriendRequests(userId);
+            var friends = await _repository.FindByConditions(x => x.Approved && ((x.ToId == request.ToId && x.CreatorId == userId) || (x.CreatorId == request.ToId && x.ToId == userId)));
             if(friends.Any())
             {
                 return ServiceResponse.Error("Friend has already been added.");
