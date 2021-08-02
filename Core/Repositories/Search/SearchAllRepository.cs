@@ -25,13 +25,13 @@ namespace Core.Repositories.Search
             _context = context;
         }
 
-        public DataDto<SearchAll> SearchAll(PaginationFilter filter, string searchString, SortType? sort)
+        public ExtendedData<AllData> SearchAll(PaginationFilter filter, string searchString, SortType? sort)
         {
             var searchQueries = AdditionalSearchMethods.ProcessSearchString(searchString);
             SortQueries(sort);
             FilterQueries(searchQueries);
 
-            var entities = new SearchAll();
+            var entities = new AllData();
             var toSkip = (filter.PageNumber - 1) * filter.PageSize;
             var toTake = filter.PageSize;
 
@@ -60,7 +60,7 @@ namespace Core.Repositories.Search
 
             var quantity = entities.Count();
 
-            return new DataDto<SearchAll>() { Data = entities, Quantity = quantity };
+            return new ExtendedData<AllData>() { Data = entities, Quantity = quantity };
         }
 
         private void SortQueries(SortType? sort)

@@ -20,13 +20,12 @@ namespace Core.Repositories.Search
             _genericRepository = genericRepository;
         }
 
-        public DataDto GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
+        public ExtendedData GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
             int? categoryId = null, int? authorId = null) where T : class
         {
             if (typeof(T) == typeof(Book))
-                return _bookRepository.GetBooks(filter, searchString, sort, minYear, maxYear,
-            categoryId, authorId);
-            if (typeof(T) == typeof(SearchAll))
+                return _bookRepository.GetBooks(filter, searchString, sort, minYear, maxYear, categoryId, authorId);
+            if (typeof(T) == typeof(AllData))
                 return _allRepository.SearchAll(filter, searchString, sort);
             
             return _genericRepository.GetEntities<T>(filter, searchString, sort);

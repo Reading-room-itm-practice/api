@@ -19,12 +19,12 @@ namespace Core.Repositories
         {
             _context = context;
         }
-        public async Task<DataDto<IEnumerable<T>>> FindAll<T>(PaginationFilter filter) where T : class
+        public async Task<ExtendedData<IEnumerable<T>>> FindAll<T>(PaginationFilter filter) where T : class
         {
             var totalRecords = await _context.Set<T>().CountAsync();
             if (filter.PageSize != 0)
             {
-                return new DataDto<IEnumerable<T>>()
+                return new ExtendedData<IEnumerable<T>>()
                 {
                     Data = await _context.Set<T>()
                     .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -34,7 +34,7 @@ namespace Core.Repositories
                 };
             }
 
-            return new DataDto<IEnumerable<T>>()
+            return new ExtendedData<IEnumerable<T>>()
             {
                 Data = await _context.Set<T>().ToListAsync(),
                 Quantity = totalRecords

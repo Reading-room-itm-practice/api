@@ -25,7 +25,7 @@ namespace WebAPI.Controllers
         public ServiceResponse All([FromQuery] PaginationFilter filter, SortType? sort, string searchString = "")
         {
             var route = Request.Path.Value;
-            return searchService.SearchEntity<SearchAll, SearchAllDto>(filter, route, searchString, sort);
+            return searchService.SearchEntity<AllData, SearchAllDto>(filter, route, searchString, sort);
         }
 
         [HttpGet("Author")]

@@ -13,21 +13,21 @@ namespace Core.Mappings
         public SearchMapperProfile()
         {
 
-            CreateMap<SearchAll, SearchAllDto>().ReverseMap();
-            CreateMap<DataDto<SearchAll>, DataDto<SearchAllDto>>().ReverseMap();
+            CreateMap<AllData, SearchAllDto>().ReverseMap();
+            CreateMap<ExtendedData<AllData>, ExtendedData<SearchAllDto>>().ReverseMap();
 
             CreateMap<IEnumerable<Author>, AuthorDto>().ReverseMap();
-            CreateMap<DataDto<IEnumerable<Author>>, DataDto<IEnumerable<AuthorDto>>>().ReverseMap();
+            CreateMap<ExtendedData<IEnumerable<Author>>, ExtendedData<IEnumerable<AuthorDto>>>().ReverseMap();
 
             CreateMap<IEnumerable<Book>, BookDto>().ReverseMap();
-            CreateMap<DataDto<IEnumerable<Book>>, DataDto<IEnumerable<BookDto>>>().ReverseMap();
+            CreateMap<ExtendedData<IEnumerable<Book>>, ExtendedData<IEnumerable<BookDto>>>().ReverseMap();
 
             CreateMap<IEnumerable<Category>, CategoryDto>().ReverseMap();
-            CreateMap<DataDto<IEnumerable<Category>>, DataDto<IEnumerable<CategoryDto>>>().ReverseMap();
+            CreateMap<ExtendedData<IEnumerable<Category>>, ExtendedData<IEnumerable<CategoryDto>>>().ReverseMap();
 
             CreateMap<User, UserSearchDto>().ReverseMap();
             CreateMap<IEnumerable<User>, UserSearchDto>().ReverseMap();
-            CreateMap<DataDto<IEnumerable<User>>, DataDto<IEnumerable<UserSearchDto>>>().ReverseMap();
+            CreateMap<ExtendedData<IEnumerable<User>>, ExtendedData<IEnumerable<UserSearchDto>>>().ReverseMap();
         }
     }
 }

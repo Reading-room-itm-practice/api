@@ -11,7 +11,7 @@ namespace Core.Repositories.Search
 {
     internal interface IGenericSearchRepository
     {
-        public DataDto<IEnumerable<T>> GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort) where T : class;
+        public ExtendedData<IEnumerable<T>> GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort) where T : class;
     }
     class GenericSearchRepository : IGenericSearchRepository
     {
@@ -22,7 +22,7 @@ namespace Core.Repositories.Search
             _context = context;
         }
 
-        public DataDto<IEnumerable<T>> GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort) where T : class
+        public ExtendedData<IEnumerable<T>> GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort) where T : class
         {
 
             var searchQueries = AdditionalSearchMethods.ProcessSearchString(searchString);

@@ -10,7 +10,7 @@ namespace Core.Interfaces
 {
     public interface ISearchRepository
     {
-        public DataDto GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
+        public ExtendedData GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
             int? categoryId = null, int? authorId = null) where T : class;
     }
 }

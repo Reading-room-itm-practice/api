@@ -17,7 +17,7 @@ namespace Core.Repositories.Search
         {
             _context = context;
         }
-        public DataDto<IEnumerable<Book>> GetBooks(PaginationFilter filter, string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
+        public ExtendedData<IEnumerable<Book>> GetBooks(PaginationFilter filter, string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
             int? categoryId = null, int? authorId = null)
         {
             var searchQueries = AdditionalSearchMethods.ProcessSearchString(searchString);

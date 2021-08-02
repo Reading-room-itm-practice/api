@@ -9,6 +9,6 @@ namespace Core.Interfaces
 {
     public interface IPaginationRepository
     {
-        public Task<DataDto<IEnumerable<T>>> FindAll<T>(PaginationFilter filter) where T : class;
+        public Task<ExtendedData<IEnumerable<T>>> FindAll<T>(PaginationFilter filter) where T : class;
     }
 }

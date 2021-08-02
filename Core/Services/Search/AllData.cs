@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Core.Services.Search
 {
-    public class SearchAll
+    public class AllData
     {
         public IEnumerable<Author> Authors { get; set; }
         public IEnumerable<User> Users { get; set; }

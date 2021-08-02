@@ -88,13 +88,13 @@ namespace Core.Repositories.Search
             return books;
         }
 
-        public static DataDto<IEnumerable<T>> Pagination<T>(PaginationFilter filter, IEnumerable<T> data) where T : class
+        public static ExtendedData<IEnumerable<T>> Pagination<T>(PaginationFilter filter, IEnumerable<T> data) where T : class
         {
             
             var count = data.Count();
             if (filter.PageSize != 0)
             {
-                return new DataDto<IEnumerable<T>>()
+                return new ExtendedData<IEnumerable<T>>()
                 {
                     Data = data
                     .Skip((filter.PageNumber - 1) * filter.PageSize)
@@ -103,7 +103,7 @@ namespace Core.Repositories.Search
                 };
             }
 
-            return new DataDto<IEnumerable<T>>() { Data = data, Quantity = count };
+            return new ExtendedData<IEnumerable<T>>() { Data = data, Quantity = count };
         }
 
     }

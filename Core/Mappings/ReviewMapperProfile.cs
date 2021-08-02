@@ -11,7 +11,7 @@ namespace Core.Mappings
         public ReviewMapperProfile()
         {
             CreateMap<Review, ReviewDto>().ReverseMap();
-            CreateMap<DataDto<IEnumerable<Review>>, DataDto<IEnumerable<ReviewDto>>>().ReverseMap();
+            CreateMap<ExtendedData<IEnumerable<Review>>, ExtendedData<IEnumerable<ReviewDto>>>().ReverseMap();
 
             CreateMap<ReviewRequest, Review>().ReverseMap();
         }
