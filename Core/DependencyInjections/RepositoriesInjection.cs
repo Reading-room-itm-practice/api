@@ -12,9 +12,12 @@ namespace Core.DependencyInjections
     {
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IBaseRepository<AuthorFollow>, FollowedRepository<AuthorFollow>>();
-            services.AddScoped<IBaseRepository<CategoryFollow>, FollowedRepository<CategoryFollow>>();
-            services.AddScoped<IBaseRepository<UserFollow>, FollowedRepository<UserFollow>>();
+            services.AddScoped<IExtendedBaseRepository<AuthorFollow>, ExtendedBaseRepository<AuthorFollow>>();
+            services.AddScoped<IExtendedBaseRepository<CategoryFollow>, ExtendedBaseRepository<CategoryFollow>>();
+            services.AddScoped<IExtendedBaseRepository<UserFollow>, ExtendedBaseRepository<UserFollow>>();
+            services.AddScoped<IBaseRepository<AuthorFollow>, FollowsRepository<AuthorFollow>>();
+            services.AddScoped<IBaseRepository<CategoryFollow>, FollowsRepository<CategoryFollow>>();
+            services.AddScoped<IBaseRepository<UserFollow>, FollowsRepository<UserFollow>>();
             services.AddScoped<IBaseRepository<Author>, BaseRepository<Author>>();
             services.AddScoped<IBaseRepository<Book>, BaseRepository<Book>>();
             services.AddScoped<IBaseRepository<Category>, BaseRepository<Category>>();

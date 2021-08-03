@@ -2,6 +2,7 @@
 using Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Storage.Models;
+using Storage.Models.Likes;
 using Storage.Models.Photos;
 
 namespace Core.DependencyInjections
@@ -18,6 +19,8 @@ namespace Core.DependencyInjections
             services.AddScoped<IUserCrudService<Author>, UserCrudService<Author>>();
             services.AddScoped<IUserCrudService<Book>, UserCrudService<Book>>();
             services.AddScoped<IUserCrudService<Category>, UserCrudService<Category>>();
+            services.AddScoped<ICrudService<ReviewLike>, CrudService<ReviewLike>>();
+            services.AddScoped<ICrudService<ReviewCommentLike>, CrudService<ReviewCommentLike>>();
 
             return services;
         }

@@ -1,50 +1,42 @@
-﻿using Core.Interfaces;
+﻿using System;
+using Core.Interfaces;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models.Likes;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using Core.DTOs.Follows;
+using Core.DTOs;
 using Core.Requests;
 
 namespace WebAPI.Controllers.Likes
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api")]
     public class CommentLikesController : ControllerBase
     {
         private readonly IDeleterService<ReviewCommentLike> _deleterService;
-        private readonly IGetterByCreatorService<ReviewCommentLike> _getterService;
+        private readonly IGetterService<ReviewCommentLike> _getterService;
         private readonly ICreatorService<ReviewCommentLike> _creatorService;
 
-        public CommentLikesController(IDeleterService<ReviewCommentLike> deleter, IGetterByCreatorService<ReviewCommentLike> getter, ICreatorService<ReviewCommentLike> creator)
+        public CommentLikesController(IDeleterService<ReviewCommentLike> deleter, IGetterService<ReviewCommentLike> getter, ICreatorService<ReviewCommentLike> creator)
         {
             _deleterService = deleter;
             _getterService = getter;
             _creatorService = creator;
         }
 
-        [SwaggerOperation(Description = "Retrieves all authors follows")]
-        [Route("api/users/{id:guid}/author-follows")]
-        [HttpGet]
-        public async Task<ServiceResponse> Index(Guid id)
-        {
-            return await _getterService.GetAllByCreator<FollowDto>(id);
-        }
 
-        [SwaggerOperation(Description = "Create author follow for logged user")]
-        [Route("api/authors/{id:int}/follows")]
+        [SwaggerOperation(Summary = "Create category follow for logged user")]
+        [Route("comments/{id:int}/likes")]
         [HttpPost]
         public async Task<ServiceResponse> Create(int id)
         {
-            return await _creatorService.Create<FollowDto>(
-                new LikeRequest {  = id, CreatorId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)) });
+            return await _creatorService.Create<LikeDto>(new LikeRequest());
         }
 
+
         [SwaggerOperation(Description = "Delete a follow by unique id")]
-        [Route("api/author-follows/{id:int}")]
+        [Route("comments/likes/{id:int}")]
         [HttpDelete]
         public async Task<ServiceResponse> Delete(int id)
         {

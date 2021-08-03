@@ -10,23 +10,23 @@ namespace Core.Services
 {
     public class UpdaterService<T> :  IUpdaterService<T> where T : AuditableModel, IDbMasterKey<int>
     {
-        private readonly IBaseRepository<T> _repository;
-        private readonly IModifyAvalibilityChecker _modifyAvalibilityChecker;
-        private readonly IMapper _mapper;
+        protected readonly IBaseRepository<T> Repository;
+        protected readonly IModifyAvalibilityChecker ModifyAvalibilityChecker;
+        protected readonly IMapper Mapper;
 
         public UpdaterService(IBaseRepository<T> repository, IModifyAvalibilityChecker modifyAvalibilityChecker, IMapper mapper)
         {
-            _repository = repository;
-            _modifyAvalibilityChecker = modifyAvalibilityChecker;
-            _mapper = mapper;
+            Repository = repository;
+            ModifyAvalibilityChecker = modifyAvalibilityChecker;
+            Mapper = mapper;
         }
 
-        public async Task Update(IRequest requestDto, int id)
+        public virtual async Task Update(IRequest requestDto, int id)
         {
-            var model = await _repository.FindByConditions(x => x.Id == id);
-            await _modifyAvalibilityChecker.CheckCanBeModify(model.FirstOrDefault());
-            var updatedModel = _mapper.Map(requestDto, model.FirstOrDefault());
-            await _repository.Edit(updatedModel);
+            var model = await Repository.FindByConditions(x => x.Id == id);
+            await ModifyAvalibilityChecker.CheckCanBeModify(model.FirstOrDefault());
+            var updatedModel = Mapper.Map(requestDto, model.FirstOrDefault());
+            await Repository.Edit(updatedModel);
         }
     }
 }

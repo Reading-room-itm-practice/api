@@ -722,12 +722,12 @@ namespace Storage.Migrations
                 {
                     b.HasBaseType("Storage.Models.Follows.Follow");
 
-                    b.Property<Guid>("FollowingId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasIndex("CreatorId");
 
-                    b.HasIndex("FollowingId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Follows");
 
@@ -1131,13 +1131,13 @@ namespace Storage.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Storage.Identity.User", "Following")
+                    b.HasOne("Storage.Identity.User", "User")
                         .WithMany("Followers")
-                        .HasForeignKey("FollowingId");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Creator");
 
-                    b.Navigation("Following");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Storage.Models.Likes.ReviewCommentLike", b =>

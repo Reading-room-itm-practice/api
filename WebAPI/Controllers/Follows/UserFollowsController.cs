@@ -7,6 +7,7 @@ using Storage.Models.Follows;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
+using Core.Interfaces.Follows;
 
 namespace WebAPI.Controllers.Follows
 {
@@ -15,22 +16,35 @@ namespace WebAPI.Controllers.Follows
     public class UserFollowsController : ControllerBase
     {
         private readonly IDeleterService<UserFollow> _deleterService;
-        private readonly IGetterByCreatorService<UserFollow> _getterService;
+        private readonly IFollowedGetter<UserFollow> _followedGetter;
         private readonly ICreatorService<UserFollow> _creatorService;
+        private readonly IFollowersGetter _followersGetter; 
 
-        public UserFollowsController(IDeleterService<UserFollow> deleter, IGetterByCreatorService<UserFollow> getter, ICreatorService<UserFollow> creator)
+        public UserFollowsController(IDeleterService<UserFollow> deleter,
+            IFollowedGetter<UserFollow> followedGetter,
+            ICreatorService<UserFollow> creator,
+            IFollowersGetter followersGetter)
         {
             _deleterService = deleter;
-            _getterService = getter;
+            _followedGetter = followedGetter;
             _creatorService = creator;
+            _followersGetter = followersGetter;
         }
 
         [SwaggerOperation(Summary = "Retrieves all categories follows")]
         [Route("users/{userId:guid}/user-follows")]
         [HttpGet]
-        public async Task<ServiceResponse> Index(Guid userId)
+        public async Task<ServiceResponse> FollowedIndex(Guid userId)
         {
-            return await _getterService.GetAllByCreator<UserFollowDto>(userId);
+            return await _followedGetter.GetFollowed<UserFollowDto>(userId);
+        }
+
+        [SwaggerOperation(Description = "Retrieves all authors follows")]
+        [Route("users/{id:guid}/followers")]
+        [HttpGet]
+        public async Task<ServiceResponse> FollowersIndex(Guid id)
+        {
+            return await _followersGetter.GetUserFollowers<FollowDto>(id);
         }
 
         [SwaggerOperation(Summary = "Create category follow for logged user")]

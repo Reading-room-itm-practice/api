@@ -10,27 +10,27 @@ namespace Core.Services
 {
     public class GetterService<T> : IGetterService<T> where T : class, IDbMasterKey<int>
     {
-        protected readonly IBaseRepository<T> _repository;
-        protected readonly IMapper _mapper;
+        protected readonly IBaseRepository<T> Repository;
+        protected readonly IMapper Mapper;
 
         public GetterService(IBaseRepository<T> repository, IMapper mapper)
         {
-            _repository = repository;
-            _mapper = mapper;
+            Repository = repository;
+            Mapper = mapper;
         }
 
         public virtual async Task<ServiceResponse<IEnumerable<IDto>>> GetAll<IDto>()
         {
-            var models = await _repository.FindAll();
-            var responseModels =  _mapper.Map<IEnumerable<IDto>>(models);
+            var models = await Repository.FindAll();
+            var responseModels =  Mapper.Map<IEnumerable<IDto>>(models);
 
             return ServiceResponse<IEnumerable<IDto>>.Success(responseModels, "Retrived list with resorces");
         }
 
         public virtual async Task<ServiceResponse<IDto>> GetById<IDto>(int id)
         {
-            var model = await _repository.FindByConditions(x => x.Id == id);
-            var responseModel = _mapper.Map<IDto>(model.FirstOrDefault());
+            var model = await Repository.FindByConditions(x => x.Id == id);
+            var responseModel = Mapper.Map<IDto>(model.FirstOrDefault());
 
             return ServiceResponse<IDto>.Success(responseModel, "Retrived resource");
         }

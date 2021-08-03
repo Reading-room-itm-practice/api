@@ -8,20 +8,20 @@ namespace Core.Services
 {
     public class DeleterService<T> : IDeleterService<T> where T : AuditableModel, IDbMasterKey<int>
     {
-        private readonly IBaseRepository<T> _repository;
-        private readonly IModifyAvalibilityChecker _modifyAvalibilityChecker;
+        protected readonly IBaseRepository<T> Repository;
+        protected readonly IModifyAvalibilityChecker ModifyAvalibilityChecker;
 
         public DeleterService(IBaseRepository<T> repository, IModifyAvalibilityChecker modifyAvalibilityChecker)
         {
-            _repository = repository;
-            _modifyAvalibilityChecker = modifyAvalibilityChecker;
+            Repository = repository;
+            ModifyAvalibilityChecker = modifyAvalibilityChecker;
         }
 
-        public async Task Delete(int id)
+        public virtual async Task Delete(int id)
         {
-            var model = await _repository.FindByConditions(x => x.Id == id);
-            await _modifyAvalibilityChecker.CheckCanBeModify(model.FirstOrDefault());
-            await _repository.Delete(model.FirstOrDefault());
+            var model = await Repository.FindByConditions(x => x.Id == id);
+            await ModifyAvalibilityChecker.CheckCanBeModify(model.FirstOrDefault());
+            await Repository.Delete(model.FirstOrDefault());
         }
     }
 }

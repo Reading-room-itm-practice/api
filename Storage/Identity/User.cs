@@ -11,7 +11,7 @@ using Storage.Interfaces;
 namespace Storage.Identity
 {
     [Table("Users")]
-    public class User : IdentityUser<Guid>, IFollowable<UserFollow>, IGuidMasterKey
+    public class User : IdentityUser<Guid>, IFollowable<UserFollow>, IDbMasterKey<Guid>
     {
         public int? ProfilePhotoId { get; set; }
         public ProfilePhoto ProfilePhoto { get; set; }

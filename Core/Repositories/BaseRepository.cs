@@ -44,9 +44,9 @@ namespace Core.Repositories
             return await _context.Set<T>().ToListAsync();
         }
 
-        public virtual async Task<IEnumerable<T>> FindByConditions(Expression<Func<T, bool>> expresion)
+        public virtual async Task<IEnumerable<T>> FindByConditions(Expression<Func<T, bool>> expression)
         {
-            return await _context.Set<T>().Where(expresion).ToListAsync();
+            return await _context.Set<T>().Where(expression).ToListAsync();
         }
     }
 }

@@ -584,7 +584,7 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Follows_FollowingId",
                 table: "Follows",
-                column: "FollowingId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Follows_UpdaterId",
@@ -819,7 +819,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_Follows_AspNetUsers_FollowingId",
                 table: "Follows",
-                column: "FollowingId",
+                column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);

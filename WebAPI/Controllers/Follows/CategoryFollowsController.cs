@@ -7,6 +7,7 @@ using Storage.Models.Follows;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
+using Core.Interfaces.Follows;
 
 namespace WebAPI.Controllers.Follows
 {
@@ -14,22 +15,35 @@ namespace WebAPI.Controllers.Follows
     public class CategoryFollowsController : ControllerBase
     {
         private readonly IDeleterService<CategoryFollow> _deleterService;
-        private readonly IGetterByCreatorService<CategoryFollow> _getterService;
+        private readonly IFollowedGetter<CategoryFollow> _followedGetter;
         private readonly ICreatorService<CategoryFollow> _creatorService;
+        private readonly IFollowersGetter _followersGetter;
 
-        public CategoryFollowsController(IDeleterService<CategoryFollow> deleter, IGetterByCreatorService<CategoryFollow> getter, ICreatorService<CategoryFollow> creator)
+        public CategoryFollowsController(IDeleterService<CategoryFollow> deleter, 
+            IFollowedGetter<CategoryFollow> followedGetter,
+            ICreatorService<CategoryFollow> creator,
+            IFollowersGetter followersGetter)
         {
             _deleterService = deleter;
-            _getterService = getter;
+            _followedGetter = followedGetter;
             _creatorService = creator;
+            _followersGetter = followersGetter;
         }
 
         [SwaggerOperation(Summary = "Retrieves all categories follows")]
         [Route("api/users/{id:guid}/category-follows")]
         [HttpGet]
-        public async Task<ServiceResponse> Index(Guid userId)
+        public async Task<ServiceResponse> FollowedIndex(Guid userId)
         {
-            return await _getterService.GetAllByCreator<FollowDto>(userId);
+            return await _followedGetter.GetFollowed<FollowDto>(userId);
+        }
+
+        [SwaggerOperation(Description = "Retrieves all authors follows")]
+        [Route("categories/{id:int}/followers")]
+        [HttpGet]
+        public async Task<ServiceResponse> FollowersIndex(int id)
+        {
+            return await _followersGetter.GetCategoryFollowers<FollowDto>(id);
         }
 
         [SwaggerOperation(Summary = "Create category follow for logged user")]

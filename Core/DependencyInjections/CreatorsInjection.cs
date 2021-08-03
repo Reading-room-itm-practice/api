@@ -3,6 +3,7 @@ using Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Storage.Models;
 using Storage.Models.Follows;
+using Storage.Models.Likes;
 using Storage.Models.Photos;
 
 namespace Core.DependencyInjections
@@ -19,6 +20,8 @@ namespace Core.DependencyInjections
             services.AddScoped<ICreatorService<Category>, CreatorService<Category>>();
             services.AddScoped<ICreatorService<Photo>, CreatorService<Photo>>();
             services.AddScoped<ICreatorService<Review>, CreatorService<Review>>();
+            services.AddScoped<ICreatorService<ReviewLike>, CreatorService<ReviewLike>>();
+            services.AddScoped<ICreatorService<ReviewCommentLike>, CreatorService<ReviewCommentLike>>();
 
             return services;
         }
