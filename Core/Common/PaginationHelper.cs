@@ -2,7 +2,6 @@
 using Core.Response;
 using Core.Services;
 using System;
-using System.Collections.Generic;
 
 namespace Core.Common
 {
@@ -13,8 +12,7 @@ namespace Core.Common
         {
 
             var respose = new PagedResponse<T>(pagedData, validFilter.PageNumber, validFilter.PageSize);
-            var totalPages = validFilter.PageSize == 0 ? 1 : ((double)totalRecords / (double)validFilter.PageSize);
-            int roundedTotalPages = Convert.ToInt32(Math.Ceiling(totalPages));
+            int roundedTotalPages = Convert.ToInt32(Math.Ceiling(validFilter.PageSize == 0 ? 1 : (totalRecords / (double)validFilter.PageSize)));
             respose.NextPage =
                 validFilter.PageNumber >= 1 && validFilter.PageNumber < roundedTotalPages
                 ? uriService.GetPageUri(new PaginationFilter(validFilter.PageNumber + 1, validFilter.PageSize), route)

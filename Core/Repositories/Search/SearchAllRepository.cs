@@ -39,16 +39,19 @@ namespace Core.Repositories.Search
 
             if (filter.PageSize != 0)
             {
+                var quant = _authors.Count();
                 _authors = _authors.Skip(toSkip).Take(toTake);
-                toSkip = Math.Clamp(toSkip -  _authors.Count(), 0, toSkip);
+                toSkip = Math.Clamp(toSkip -  quant, 0, toSkip);
                 toTake -= _authors.Count();
 
+                quant = _users.Count();
                 _users = _users.Skip(toSkip).Take(toTake);
-                toSkip = Math.Clamp(toSkip - _users.Count(), 0, toSkip);
+                toSkip = Math.Clamp(toSkip - quant, 0, toSkip);
                 toTake -= _users.Count();
 
+                quant = _categories.Count();
                 _categories = _categories.Skip(toSkip).Take(toTake);
-                toSkip = Math.Clamp(toSkip - _categories.Count(), 0, toSkip);
+                toSkip = Math.Clamp(toSkip - quant, 0, toSkip);
                 toTake -= _categories.Count();
 
                 _books = _books.Skip(toSkip).Take(toTake);

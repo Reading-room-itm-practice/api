@@ -23,21 +23,18 @@ namespace Core.Repositories
         public async Task<ExtendedData<IEnumerable<T>>> FindAll<T>(PaginationFilter filter) where T : class
         {
             var totalRecords = await _context.Set<T>().CountAsync();
+            var data = _context.Set<T>().AsQueryable();
             if (filter.PageSize != 0)
             {
-                return new ExtendedData<IEnumerable<T>>()
-                {
-                    Data = await _context.Set<T>()
-                    .Skip((filter.PageNumber - 1) * filter.PageSize)
-                    .Take(filter.PageSize)
-                    .ToListAsync(),
-                    Quantity = totalRecords
-                };
+                data = data
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize);
+                
             }
 
             return new ExtendedData<IEnumerable<T>>()
             {
-                Data = await _context.Set<T>().ToListAsync(),
+                Data = await data.ToListAsync(),
                 Quantity = totalRecords
             };
         }
