@@ -13,11 +13,12 @@ namespace Core.Interfaces
 {
     public interface IFriendService : ICrudService<FriendRequest>
     {
-        public Task<ServiceResponse<IEnumerable<FriendDto>>> GetApprovedFriendRequests(int? id);
-        public Task<ServiceResponse<IEnumerable<SentFriendRequestDto>>> GetSentFriendRequests(int? id);
-        public Task<ServiceResponse<IEnumerable<ReceivedFriendRequestDto>>> GetReceivedFriendRequests(int? id);
+        public Task<ServiceResponse<IEnumerable<FriendDto>>> GetApprovedFriendRequests(Guid? userId);
+        public Task<ServiceResponse<IEnumerable<SentFriendRequestDto>>> GetSentFriendRequests(int? friendRequestId);
+        public Task<ServiceResponse<IEnumerable<ReceivedFriendRequestDto>>> GetReceivedFriendRequests(int? friendRequestId);
         public Task<ServiceResponse> SendFriendRequest(SendFriendRequest request);
-        public Task<ServiceResponse> RemoveFriendRequest(int id);
+        public Task<ServiceResponse> RemoveFriendRequest(Guid userId);
         public Task<ServiceResponse> AcceptOrDeclineFriendRequest(ApproveFriendRequest friendRequest, int friendRequestId);
+        public Task<ServiceResponse<bool>> IsFriend(Guid userId);
     }
 }

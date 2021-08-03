@@ -20,11 +20,11 @@ namespace Core.Services
     {
         private readonly IFriendRepository _repository;
 
-        private readonly ILoggedUserProvider _user;
+        private readonly ILoggedUserProvider _loggedUser;
         private readonly IMapper _mapper;
         public FriendService(
             IFriendRepository repository,
-            ILoggedUserProvider user,
+            ILoggedUserProvider loggedUser,
             IMapper mapper,
             ICreatorService<FriendRequest> creator,
             IGetterService<FriendRequest> getter,
@@ -34,50 +34,35 @@ namespace Core.Services
         {
             _repository = repository;
             _mapper = mapper;
-            _user = user;
+            _loggedUser = loggedUser;
         }
 
-        public async Task<ServiceResponse<IEnumerable<FriendDto>>> GetApprovedFriendRequests(int? id)
+        public async Task<ServiceResponse<IEnumerable<FriendDto>>> GetApprovedFriendRequests(Guid? userId)
         {
-            Guid userId = _user.GetUserId();
-            var friendRequests = await _repository.GetSentAndReceivedFriendRequests(userId);
+            var searchedUserId = userId ?? _loggedUser.GetUserId();
+            var friendRequests = await _repository.GetSentAndReceivedFriendRequests(searchedUserId);
             var friendList = new List<FriendDto>();
 
-            if (friendRequests.Any())
+            foreach (var friendRequest in friendRequests)
             {
-                if (id != null)
-                {
-                    var friendRequest = _mapper.Map<FriendRequest>(friendRequests.Where(fr => fr.Id == id).FirstOrDefault());
-                    if (friendRequest != null)
-                    {
-                        var user = friendRequest.ToId == userId ? friendRequest.Creator : friendRequest.To;
-                        friendList.Add(new FriendDto { Id = user.Id, UserName = user.UserName });
-                    }
-                }
-                else
-                {
-                    foreach (var friendRequest in friendRequests)
-                    {
-                        var user = friendRequest.ToId == userId ? friendRequest.Creator : friendRequest.To;
-                        friendList.Add(new FriendDto { Id = user.Id, UserName = user.UserName });
-                    }
-                }
+                var user = friendRequest.ToId == userId ? friendRequest.Creator : friendRequest.To;
+                friendList.Add(new FriendDto { Id = user.Id, UserName = user.UserName });
             }
             
             return ServiceResponse<IEnumerable<FriendDto>>.Success(friendList, "Retrieved list with resources.");
         }
 
-        public async Task<ServiceResponse<IEnumerable<SentFriendRequestDto>>> GetSentFriendRequests(int? id)
+        public async Task<ServiceResponse<IEnumerable<SentFriendRequestDto>>> GetSentFriendRequests(int? friendRequestId)
         {
-            Guid userId = _user.GetUserId();
+            Guid userId = _loggedUser.GetUserId();
             var friendRequests = await _repository.GetSentFriendRequests(userId);
             var friendList = new List<SentFriendRequestDto>();
 
             if (friendRequests.Any())
             {
-                if (id != null)
+                if (friendRequestId != null)
                 {
-                    var friendRequest = _mapper.Map<FriendRequest>(friendRequests.Where(fr => fr.Id == id).FirstOrDefault());
+                    var friendRequest = _mapper.Map<FriendRequest>(friendRequests.Where(fr => fr.Id == friendRequestId).FirstOrDefault());
                     if (friendRequest != null)
                     {
                         var user = friendRequest.To;
@@ -97,17 +82,17 @@ namespace Core.Services
             return ServiceResponse<IEnumerable<SentFriendRequestDto>>.Success(friendList, "Retrieved list with resources.");
         }
 
-        public async Task<ServiceResponse<IEnumerable<ReceivedFriendRequestDto>>> GetReceivedFriendRequests(int? id)
+        public async Task<ServiceResponse<IEnumerable<ReceivedFriendRequestDto>>> GetReceivedFriendRequests(int? friendRequestId)
         {
-            Guid userId = _user.GetUserId();
+            Guid userId = _loggedUser.GetUserId();
             var friendRequests = await _repository.GetReceivedFriendRequests(userId);
             var friendList = new List<ReceivedFriendRequestDto>();
 
             if (friendRequests.Any())
             {
-                if (id != null)
+                if (friendRequestId != null)
                 {
-                    var friendRequest = _mapper.Map<FriendRequest>(friendRequests.Where(fr => fr.Id == id).FirstOrDefault());
+                    var friendRequest = _mapper.Map<FriendRequest>(friendRequests.Where(fr => fr.Id == friendRequestId).FirstOrDefault());
                     if (friendRequest != null)
                     {
                         var user = friendRequest.Creator;
@@ -129,7 +114,7 @@ namespace Core.Services
 
         public async Task<ServiceResponse> SendFriendRequest(SendFriendRequest request)
         {
-            Guid userId = _user.GetUserId();
+            Guid userId = _loggedUser.GetUserId();
             var sentFriendRequests = await _repository.GetSentFriendRequests(userId);
             var receivedFriendRequests = await _repository.GetReceivedFriendRequests(userId);
             var friends = await _repository.FindByConditions(x => x.Approved && ((x.ToId == request.ToId && x.CreatorId == userId) || (x.CreatorId == request.ToId && x.ToId == userId)));
@@ -167,10 +152,10 @@ namespace Core.Services
             return ServiceResponse.Success("Friend Request has been created.");
         }
 
-        public async Task<ServiceResponse> RemoveFriendRequest(int id)
+        public async Task<ServiceResponse> RemoveFriendRequest(Guid userId)
         {
-            Guid userId = _user.GetUserId();
-            var model = await _repository.FindByConditions(fr => fr.Id == id && (fr.CreatorId == userId || fr.ToId == userId));
+            Guid LoggedUserId = _loggedUser.GetUserId();
+            var model = await _repository.FindByConditions(fr => (fr.CreatorId == LoggedUserId && fr.ToId == userId) || (fr.CreatorId == userId && fr.ToId == LoggedUserId));
 
             if (model.FirstOrDefault() == null)
             {
@@ -182,7 +167,7 @@ namespace Core.Services
 
         public async Task<ServiceResponse> AcceptOrDeclineFriendRequest(ApproveFriendRequest friendRequest, int friendRequestId)
         {
-            Guid userId = _user.GetUserId();
+            Guid userId = _loggedUser.GetUserId();
             var model = await _repository.FindByConditions(fr => fr.Id == friendRequestId && !fr.Approved && fr.ToId == userId);
             if (!model.Any())
             {
@@ -198,6 +183,19 @@ namespace Core.Services
             }
             await _repository.Delete(retrievedRequest);
             return ServiceResponse.Success("Rejected Friend Request.");
+        }
+
+        public async Task<ServiceResponse<bool>> IsFriend(Guid userId)
+        {
+            Guid LoggedUserId = _loggedUser.GetUserId();
+            var friendRequests = await _repository.GetSentAndReceivedFriendRequests(LoggedUserId);
+
+            var result = friendRequests.Where(fr => fr.Approved && ((fr.CreatorId == userId && fr.ToId == LoggedUserId) || (fr.CreatorId == LoggedUserId && fr.ToId == userId)));
+            if (result.Any())
+            {
+                return ServiceResponse<bool>.Success(true);
+            }
+            return ServiceResponse<bool>.Success(false);
         }
     }
 }
