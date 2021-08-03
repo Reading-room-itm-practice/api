@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Core.DTOs;
 using Core.Interfaces;
-using Core.Requests;
 using Core.ServiceResponses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +13,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Core.Services
@@ -25,17 +23,15 @@ namespace Core.Services
         public readonly long PhotoSizeLimit;
         public readonly string uploadsFolder;
 
-        private readonly ICrudService<Photo> _crud;
         private readonly IPhotoRepository _photoRepository;
         private readonly IGetterService<Author> _authorGetter;
         private readonly IGetterService<Book> _bookGetter;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
 
-        public PhotoService(IConfiguration configuration, IPhotoRepository photoRepository, ICrudService<Photo> crud, 
-            IGetterService<Author> authorGetter, IGetterService<Book> bookGetter, UserManager<User> userManager, IMapper mapper)
+        public PhotoService(IConfiguration configuration, IPhotoRepository photoRepository, IGetterService<Author> authorGetter, 
+            IGetterService<Book> bookGetter, UserManager<User> userManager, IMapper mapper)
         {
-            _crud = crud;
             _photoRepository = photoRepository;
             _authorGetter = authorGetter;
             _bookGetter = bookGetter;
@@ -49,29 +45,23 @@ namespace Core.Services
 
         public async Task<ServiceResponse> GetPhotos(string typeId, PhotoTypes type)
         {
-            if (int.TryParse(typeId, out int idInt))
-            {
-                if (type == PhotoTypes.AuthorPhoto)
-                    return ServiceResponse<IEnumerable<PhotoDto>>.Success(_mapper.Map<IEnumerable<PhotoDto>>
-                        (_photoRepository.GetAuthorPhotos(idInt)), "Author photos retrieved.");
-                if (type == PhotoTypes.BookPhoto)
-                    return ServiceResponse<IEnumerable<PhotoDto>>.Success(_mapper.Map<IEnumerable<PhotoDto>>
-                        (_photoRepository.GetBookPhotos(idInt)), "Book photos retrieved.");
-                return ServiceResponse.Error("Photos not found.", HttpStatusCode.NotFound);
-            }
+            if (!ValidateId(typeId, type)) return ServiceResponse.Error("Invalid Id.", HttpStatusCode.BadRequest);
 
-            if(Guid.TryParse(typeId, out Guid idGuid))
-            {
-                return ServiceResponse<PhotoDto>.Success(_mapper.Map<PhotoDto>
-                        (await _photoRepository.GetUserPhotos(idGuid)), "User photo retrieved.");
-            }
+            if (type == PhotoTypes.AuthorPhoto)return ServiceResponse<IEnumerable<PhotoDto>>.Success(_mapper.Map<IEnumerable<PhotoDto>>
+                (await _photoRepository.GetAuthorPhotos(int.Parse(typeId))), "Author photos retrieved.");
 
-            return ServiceResponse.Error("Invalid Id.", HttpStatusCode.BadRequest);
+            if (type == PhotoTypes.BookPhoto) return ServiceResponse<IEnumerable<PhotoDto>>.Success(_mapper.Map<IEnumerable<PhotoDto>>
+                (await _photoRepository.GetBookPhotos(int.Parse(typeId))), "Book photos retrieved.");
+
+            if (type == PhotoTypes.ProfilePhoto) return ServiceResponse<PhotoDto>.Success(_mapper.Map<PhotoDto>
+                (await _photoRepository.GetUserPhotos(Guid.Parse(typeId))), "User photo retrieved.");
+
+            return ServiceResponse.Error("Photos not found.", HttpStatusCode.NotFound);
         }
 
         public async Task<ServiceResponse> GetPhoto(int id)
         {
-            var photo = (await _crud.GetById<PhotoDto>(id)).Content;
+            var photo = _mapper.Map<PhotoDto>(await _photoRepository.GetPhoto(id));
             if (photo != null && photo.Photo != null)
             {
                 return ServiceResponse<PhotoDto>.Success(photo, "Photo retrieved.");
@@ -89,8 +79,9 @@ namespace Core.Services
         {
             ServiceResponse validationResult = ValidatePhoto(image);
             if (!validationResult.SuccessStatus) return validationResult;
+            if(!ValidateId(id, type)) return ServiceResponse.Error("Invalid Id.", HttpStatusCode.BadRequest);
             if (!(await ItemExists(id, type))) 
-                return ServiceResponse.Error("The item you're trying to upload an image for, doesn't exist.");
+                return ServiceResponse.Error("The item you're trying to upload an image for, doesn't exist.", HttpStatusCode.NotFound);
 
             string photoPath = await ProcessPhoto(image);
             if (photoPath == null) return ServiceResponse.Error("An error ocurred while uploading the image.");
@@ -102,16 +93,22 @@ namespace Core.Services
                 photoRequest = new BookPhoto() { BookId = int.Parse(id), Path = photoPath, PhotoType = type };
             else if (type == PhotoTypes.ProfilePhoto)
             {
-                if ((await _photoRepository.GetUserPhotos(Guid.Parse(id))) != null)
+                var idGuid = Guid.Parse(id);
+                if ((await _photoRepository.GetUserPhotos(idGuid) != null))
                     return ServiceResponse.Error("User already has a profile photo.", HttpStatusCode.BadRequest);
-                photoRequest = new ProfilePhoto() { UserId = Guid.Parse(id), Path = photoPath, PhotoType = type };
+                photoRequest = new ProfilePhoto() { UserId = idGuid, Path = photoPath, PhotoType = type };
             }
                 
             var newPhoto = _mapper.Map<PhotoDto>(await _photoRepository.UploadPhoto(photoRequest));
-
             return ServiceResponse<PhotoDto>.Success(newPhoto, "Photo uploaded.", HttpStatusCode.Created);
         }
                
+        private bool ValidateId(string id, PhotoTypes type)
+        {
+            return (type == PhotoTypes.AuthorPhoto || type == PhotoTypes.BookPhoto) ? 
+                int.TryParse(id, out int idInt) : (Guid.TryParse(id, out Guid idGuid));
+        }
+
         private async Task<bool> ItemExists(string id, PhotoTypes type)
         {
             switch(type)
@@ -131,11 +128,11 @@ namespace Core.Services
         {
             if (image == null) return ServiceResponse.Error("No image.", HttpStatusCode.BadRequest);
             if (image.Length > PhotoSizeLimit) return ServiceResponse.Error("File is too large.", HttpStatusCode.BadRequest);
-            var extension = "." + image.FileName.Split('.')[image.FileName.Split('.').Length - 1];
+            var extension = image.FileName.Substring(image.FileName.LastIndexOf('.'));
             if (AllowedFileExtensions.All(ex => extension != ex)) return ServiceResponse.Error("Invalid file extension", 
                 HttpStatusCode.BadRequest);
 
-            return  ServiceResponse.Success();
+            return ServiceResponse.Success();
         }
 
         private async Task<string> ProcessPhoto(IFormFile image)

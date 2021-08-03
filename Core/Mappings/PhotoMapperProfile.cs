@@ -5,6 +5,7 @@ using Storage.Models.Photos;
 using System;
 using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Core.Mappings
 {
@@ -16,6 +17,7 @@ namespace Core.Mappings
             {
                 dest.TypeId = src.AuthorId.ToString();
                 dest.Photo = new StreamContent(new FileStream(src.Path, FileMode.Open));
+                dest.Photo.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
             });
             CreateMap<PhotoUploadRequest, AuthorPhoto>().AfterMap((src, dest) =>
             {
@@ -26,6 +28,7 @@ namespace Core.Mappings
             {
                 dest.TypeId = src.BookId.ToString();
                 dest.Photo = new StreamContent(new FileStream(src.Path, FileMode.Open));
+                dest.Photo.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
             });
             CreateMap<PhotoUploadRequest, BookPhoto>().AfterMap((src, dest) =>
             {
@@ -36,6 +39,7 @@ namespace Core.Mappings
             {
                 dest.TypeId = src.UserId.ToString();
                 dest.Photo = new StreamContent(new FileStream(src.Path, FileMode.Open));
+                dest.Photo.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
             });
             CreateMap<PhotoUploadRequest, ProfilePhoto>().AfterMap((src, dest) =>
             {

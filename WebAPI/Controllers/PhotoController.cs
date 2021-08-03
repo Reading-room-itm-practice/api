@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Storage.Models.Photos;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<ServiceResponse> GetPhotos(string typeId, PhotoTypes type)
+        public async Task<ServiceResponse> GetPhotos([Required] string typeId, [Required] PhotoTypes type)
         {
             return await _photoService.GetPhotos(typeId, type);
         }

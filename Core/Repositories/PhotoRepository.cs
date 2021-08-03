@@ -28,19 +28,18 @@ namespace Core.Repositories
             return (await FindByConditions(p => p.Id == photoId)).FirstOrDefault();
         }
 
-        public IEnumerable<AuthorPhoto> GetAuthorPhotos(int authorId)
+        public async Task<IEnumerable<AuthorPhoto>> GetAuthorPhotos(int authorId)
         {
-            return  _context.AuthorPhotos.Where(p => p.AuthorId == authorId);
+            return (await _context.Authors.Include(a => a.Photos).FirstOrDefaultAsync(a => a.Id == authorId)).Photos;
         }
 
-        public IEnumerable<BookPhoto> GetBookPhotos(int bookId)
+        public async Task<IEnumerable<BookPhoto>> GetBookPhotos(int bookId)
         {
-            return _context.BookPhotos.Where(p => p.BookId == bookId);
+            return (await _context.Books.Include(b => b.Photos).FirstOrDefaultAsync(b => b.Id == bookId)).Photos;
         }
 
         public async Task<ProfilePhoto> GetUserPhotos(Guid userId)
         {
-            var user = _context.Users.Include(u => u.ProfilePhoto).FirstOrDefault(u => u.Id == userId);
             return await _context.ProfilePhotos.FirstOrDefaultAsync(p => p.UserId == userId);
         }
 
