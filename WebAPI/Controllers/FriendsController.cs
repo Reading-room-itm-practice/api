@@ -20,32 +20,20 @@ namespace WebAPI.Controllers
             _friendService = friendService;
         }
 
-        [HttpGet("ReceivedFriendRequests")]
-        public async Task<ServiceResponse> ReceivedFriendRequests()
-        {
-            return await _friendService.GetReceivedFriendRequests(null);
-        }
-
-        [HttpGet("SentFriendRequests")]
-        public async Task<ServiceResponse> SentFriendRequests()
-        {
-            return await _friendService.GetSentFriendRequests(null);
-        }
-
         [HttpGet("{userId?}")]
         public async Task<ServiceResponse> Friends(Guid? userId)
         {
             return await _friendService.GetApprovedFriendRequests(userId);
         }
 
-        [HttpGet("ReceivedFriendRequests/{id}")]
-        public async Task<ServiceResponse> ReceivedFriendRequest(int friendRequestId)
+        [HttpGet("ReceivedFriendRequests/{friendRequestId?}")]
+        public async Task<ServiceResponse> ReceivedFriendRequest(int? friendRequestId)
         {
             return await _friendService.GetReceivedFriendRequests(friendRequestId);
         }
 
-        [HttpGet("SentFriendRequests/{id}")]
-        public async Task<ServiceResponse> SentFriendRequests(int friendRequestId)
+        [HttpGet("SentFriendRequests/{friendRequestId?}")]
+        public async Task<ServiceResponse> SentFriendRequests(int? friendRequestId)
         {
             return await _friendService.GetSentFriendRequests(friendRequestId);
         }

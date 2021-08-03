@@ -190,7 +190,7 @@ namespace Core.Services
             Guid LoggedUserId = _loggedUser.GetUserId();
             var friendRequests = await _repository.GetSentAndReceivedFriendRequests(LoggedUserId);
 
-            var result = friendRequests.Where(fr => fr.Approved && ((fr.CreatorId == userId && fr.ToId == LoggedUserId) || (fr.CreatorId == LoggedUserId && fr.ToId == userId)));
+            var result = friendRequests.Where(fr => (fr.CreatorId == userId && fr.ToId == LoggedUserId) || (fr.CreatorId == LoggedUserId && fr.ToId == userId));
             if (result.Any())
             {
                 return ServiceResponse<bool>.Success(true);
