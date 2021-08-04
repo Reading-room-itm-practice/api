@@ -9,7 +9,6 @@ namespace Core.DTOs
         public int Id { get; set; }
         public string TypeId { get; set; }
         public PhotoTypes PhotoType { get; set; }
-        //public string Path { get; set; }
-        public StreamContent Photo { get; set; }
+        public StreamContent Content { get; set; }
     }
 }

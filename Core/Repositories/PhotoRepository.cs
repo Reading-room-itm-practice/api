@@ -38,7 +38,7 @@ namespace Core.Repositories
             return (await _context.Books.Include(b => b.Photos).FirstOrDefaultAsync(b => b.Id == bookId)).Photos;
         }
 
-        public async Task<ProfilePhoto> GetUserPhotos(Guid userId)
+        public async Task<ProfilePhoto> GetUserPhoto(Guid userId)
         {
             return await _context.ProfilePhotos.FirstOrDefaultAsync(p => p.UserId == userId);
         }

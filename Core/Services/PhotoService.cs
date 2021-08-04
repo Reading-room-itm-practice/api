@@ -19,9 +19,9 @@ namespace Core.Services
 {
     public class PhotoService : IPhotoService
     {
-        public readonly List<string> AllowedFileExtensions;
-        public readonly long PhotoSizeLimit;
-        public readonly string uploadsFolder;
+        private readonly List<string> _allowedFileExtensions;
+        private readonly long _photoSizeLimit;
+        private readonly string _uploadsFolder;
 
         private readonly IPhotoRepository _photoRepository;
         private readonly IGetterService<Author> _authorGetter;
@@ -38,9 +38,9 @@ namespace Core.Services
             _userManager = userManager;
             _mapper = mapper;
 
-            PhotoSizeLimit = long.Parse(configuration["FileSizeLimit"]);
-            AllowedFileExtensions = configuration["AllowedPhotoExtensions"].Split(", ").ToList();
-            uploadsFolder = configuration["PhotoUploadsFolder"];
+            _photoSizeLimit = long.Parse(configuration["FileSizeLimit"]);
+            _allowedFileExtensions = configuration["AllowedPhotoExtensions"].Split(", ").ToList();
+            _uploadsFolder = configuration["PhotoUploadsFolder"];
         }
 
         public async Task<ServiceResponse> GetPhotos(string typeId, PhotoTypes type)
@@ -54,7 +54,7 @@ namespace Core.Services
                 (await _photoRepository.GetBookPhotos(int.Parse(typeId))), "Book photos retrieved.");
 
             if (type == PhotoTypes.ProfilePhoto) return ServiceResponse<PhotoDto>.Success(_mapper.Map<PhotoDto>
-                (await _photoRepository.GetUserPhotos(Guid.Parse(typeId))), "User photo retrieved.");
+                (await _photoRepository.GetUserPhoto(Guid.Parse(typeId))), "User photo retrieved.");
 
             return ServiceResponse.Error("Photos not found.", HttpStatusCode.NotFound);
         }
@@ -62,7 +62,7 @@ namespace Core.Services
         public async Task<ServiceResponse> GetPhoto(int id)
         {
             var photo = _mapper.Map<PhotoDto>(await _photoRepository.GetPhoto(id));
-            if (photo != null && photo.Photo != null)
+            if (photo != null && photo.Content != null)
             {
                 return ServiceResponse<PhotoDto>.Success(photo, "Photo retrieved.");
             }
@@ -94,7 +94,7 @@ namespace Core.Services
             else if (type == PhotoTypes.ProfilePhoto)
             {
                 var idGuid = Guid.Parse(id);
-                if ((await _photoRepository.GetUserPhotos(idGuid) != null))
+                if ((await _photoRepository.GetUserPhoto(idGuid) != null))
                     return ServiceResponse.Error("User already has a profile photo.", HttpStatusCode.BadRequest);
                 photoRequest = new ProfilePhoto() { UserId = idGuid, Path = photoPath, PhotoType = type };
             }
@@ -106,7 +106,7 @@ namespace Core.Services
         private bool ValidateId(string id, PhotoTypes type)
         {
             return (type == PhotoTypes.AuthorPhoto || type == PhotoTypes.BookPhoto) ? 
-                int.TryParse(id, out int idInt) : (Guid.TryParse(id, out Guid idGuid));
+                int.TryParse(id, out int idInt) : Guid.TryParse(id, out Guid guid);
         }
 
         private async Task<bool> ItemExists(string id, PhotoTypes type)
@@ -127,9 +127,9 @@ namespace Core.Services
         private ServiceResponse ValidatePhoto(IFormFile image)
         {
             if (image == null) return ServiceResponse.Error("No image.", HttpStatusCode.BadRequest);
-            if (image.Length > PhotoSizeLimit) return ServiceResponse.Error("File is too large.", HttpStatusCode.BadRequest);
+            if (image.Length > _photoSizeLimit) return ServiceResponse.Error("File is too large.", HttpStatusCode.BadRequest);
             var extension = image.FileName.Substring(image.FileName.LastIndexOf('.'));
-            if (AllowedFileExtensions.All(ex => extension != ex)) return ServiceResponse.Error("Invalid file extension", 
+            if (_allowedFileExtensions.All(ex => extension != ex)) return ServiceResponse.Error("Invalid file extension", 
                 HttpStatusCode.BadRequest);
 
             return ServiceResponse.Success();
@@ -138,7 +138,7 @@ namespace Core.Services
         private async Task<string> ProcessPhoto(IFormFile image)
         {
             string uniqueFileName = Guid.NewGuid().ToString() + ".jpeg";
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            string filePath = Path.Combine(_uploadsFolder, uniqueFileName);
             using (var stream = File.Create(filePath))
             {
                 await image.CopyToAsync(stream);

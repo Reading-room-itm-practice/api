@@ -15,7 +15,7 @@ namespace Core.Interfaces
         public Task<Photo> GetPhoto(int photoId);
         public Task<IEnumerable<AuthorPhoto>> GetAuthorPhotos(int authorId);
         public Task<IEnumerable<BookPhoto>> GetBookPhotos(int bookId);
-        public Task<ProfilePhoto> GetUserPhotos(Guid userId);
+        public Task<ProfilePhoto> GetUserPhoto(Guid userId);
         public Task<bool> DeletePhoto(int photoId);
     }
 }

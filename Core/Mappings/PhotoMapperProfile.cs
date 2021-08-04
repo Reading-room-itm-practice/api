@@ -16,8 +16,8 @@ namespace Core.Mappings
             CreateMap<AuthorPhoto, PhotoDto>().AfterMap((src, dest) =>
             {
                 dest.TypeId = src.AuthorId.ToString();
-                dest.Photo = new StreamContent(new FileStream(src.Path, FileMode.Open));
-                dest.Photo.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+                dest.Content = new StreamContent(new FileStream(src.Path, FileMode.Open));
+                dest.Content.Headers.ContentType = new MediaTypeHeaderValue($"image/{src.Path.Substring(src.Path.LastIndexOf('.')+1)}");
             });
             CreateMap<PhotoUploadRequest, AuthorPhoto>().AfterMap((src, dest) =>
             {
@@ -27,8 +27,8 @@ namespace Core.Mappings
             CreateMap<BookPhoto, PhotoDto>().AfterMap((src, dest) =>
             {
                 dest.TypeId = src.BookId.ToString();
-                dest.Photo = new StreamContent(new FileStream(src.Path, FileMode.Open));
-                dest.Photo.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+                dest.Content = new StreamContent(new FileStream(src.Path, FileMode.Open));
+                dest.Content.Headers.ContentType = new MediaTypeHeaderValue($"image/{src.Path.Substring(src.Path.LastIndexOf('.')+1)}");
             });
             CreateMap<PhotoUploadRequest, BookPhoto>().AfterMap((src, dest) =>
             {
@@ -38,8 +38,8 @@ namespace Core.Mappings
             CreateMap<ProfilePhoto, PhotoDto>().AfterMap((src, dest) =>
             {
                 dest.TypeId = src.UserId.ToString();
-                dest.Photo = new StreamContent(new FileStream(src.Path, FileMode.Open));
-                dest.Photo.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+                dest.Content = new StreamContent(new FileStream(src.Path, FileMode.Open));
+                dest.Content.Headers.ContentType = new MediaTypeHeaderValue($"image/{src.Path.Substring(src.Path.LastIndexOf('.')+1)}");
             });
             CreateMap<PhotoUploadRequest, ProfilePhoto>().AfterMap((src, dest) =>
             {
