@@ -25,6 +25,7 @@ namespace Core
             services.AddScoped<IBaseRepository<Photo>, BaseRepository<Photo>>();
             services.AddScoped<IBaseRepository<Review>, BaseRepository<Review>>();
             services.AddScoped<IBaseRepository<FriendRequest>, BaseRepository<FriendRequest>>();
+            services.AddScoped<IBaseRepository<ReadStatus>, BaseRepository<ReadStatus>>();
 
             services.AddScoped<ICrudService<Author>, CrudService<Author>>();
             services.AddScoped<ICrudService<Book>, CrudService<Book>>();
@@ -86,6 +87,8 @@ namespace Core
 
             services.AddScoped<IFriendService, FriendService>();
             services.AddScoped<IFriendRepository, FriendRepository>();
+
+            services.AddScoped<IReadStatusService, ReadStatusService>();
 
             return services;
         }
