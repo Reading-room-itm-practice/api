@@ -185,7 +185,7 @@ namespace Core.Services
             return ServiceResponse.Success("Rejected Friend Request.");
         }
 
-        public async Task<ServiceResponse<bool>> IsFriend(Guid userId)
+        public async Task<bool> IsFriend(Guid? userId)
         {
             Guid LoggedUserId = _loggedUser.GetUserId();
             var friendRequests = await _repository.GetSentAndReceivedFriendRequests(LoggedUserId);
@@ -193,9 +193,9 @@ namespace Core.Services
             var result = friendRequests.Where(fr => (fr.CreatorId == userId && fr.ToId == LoggedUserId) || (fr.CreatorId == LoggedUserId && fr.ToId == userId));
             if (result.Any())
             {
-                return ServiceResponse<bool>.Success(true);
+                return true;
             }
-            return ServiceResponse<bool>.Success(false);
+            return false;
         }
     }
 }

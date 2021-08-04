@@ -2,11 +2,14 @@
 using Core.Interfaces;
 using Core.Interfaces.Auth;
 using Core.Interfaces.Email;
+using Core.Interfaces.Profile;
 using Core.Repositories;
 using Core.Services;
 using Core.Services.Auth;
 using Core.Services.Email;
+using Core.Services.Profile;
 using Microsoft.Extensions.DependencyInjection;
+using Storage.Interfaces;
 using Storage.Models;
 using Storage.Models.Photos;
 using System;
@@ -89,6 +92,10 @@ namespace Core
             services.AddScoped<IFriendRepository, FriendRepository>();
 
             services.AddScoped<IReadStatusService, ReadStatusService>();
+
+            services.AddScoped<IProfileHelper, ProfileHelper>();
+            services.AddScoped<IProfileService, ProfileService>();
+            services.AddScoped<IProfileRepository, ProfileRepository>();
 
             return services;
         }

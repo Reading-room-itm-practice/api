@@ -19,6 +19,6 @@ namespace Core.Interfaces
         public Task<ServiceResponse> SendFriendRequest(SendFriendRequest request);
         public Task<ServiceResponse> RemoveFriendRequest(Guid userId);
         public Task<ServiceResponse> AcceptOrDeclineFriendRequest(ApproveFriendRequest friendRequest, int friendRequestId);
-        public Task<ServiceResponse<bool>> IsFriend(Guid userId);
+        public Task<bool> IsFriend(Guid? userId);
     }
 }
