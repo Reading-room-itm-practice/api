@@ -77,9 +77,9 @@ namespace Core.Services
 
         public async Task<ServiceResponse> UploadPhoto(IFormFile image, string id, PhotoTypes type)
         {
+            if (!ValidateId(id, type)) return ServiceResponse.Error("Invalid Id.", HttpStatusCode.BadRequest);
             ServiceResponse validationResult = ValidatePhoto(image);
             if (!validationResult.SuccessStatus) return validationResult;
-            if(!ValidateId(id, type)) return ServiceResponse.Error("Invalid Id.", HttpStatusCode.BadRequest);
             if (!(await ItemExists(id, type))) 
                 return ServiceResponse.Error("The item you're trying to upload an image for, doesn't exist.", HttpStatusCode.NotFound);
 
@@ -111,17 +111,10 @@ namespace Core.Services
 
         private async Task<bool> ItemExists(string id, PhotoTypes type)
         {
-            switch(type)
-            {
-                case (PhotoTypes.AuthorPhoto):
-                    return (await _authorGetter.GetById<AuthorDto>(int.Parse(id))).Content != null;
-                case (PhotoTypes.BookPhoto):
-                    return (await _bookGetter.GetById<BookDto>(int.Parse(id))).Content != null;
-                case (PhotoTypes.ProfilePhoto):
-                    return (await _userManager.FindByIdAsync(id)) != null;
-                default:
-                    return false;
-            }
+            if(type == PhotoTypes.AuthorPhoto) return (await _authorGetter.GetById<AuthorDto>(int.Parse(id))).Content != null;
+            if(type == PhotoTypes.BookPhoto) return (await _bookGetter.GetById<BookDto>(int.Parse(id))).Content != null;
+            if(type == PhotoTypes.ProfilePhoto) return (await _userManager.FindByIdAsync(id)) != null;
+            return false;
         }
 
         private ServiceResponse ValidatePhoto(IFormFile image)

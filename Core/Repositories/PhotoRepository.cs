@@ -30,12 +30,14 @@ namespace Core.Repositories
 
         public async Task<IEnumerable<AuthorPhoto>> GetAuthorPhotos(int authorId)
         {
-            return (await _context.Authors.Include(a => a.Photos).FirstOrDefaultAsync(a => a.Id == authorId)).Photos;
+            var author = await _context.Authors.Include(a => a.Photos).FirstOrDefaultAsync(a => a.Id == authorId);
+            return (author == null) ? null : author.Photos;
         }
 
         public async Task<IEnumerable<BookPhoto>> GetBookPhotos(int bookId)
         {
-            return (await _context.Books.Include(b => b.Photos).FirstOrDefaultAsync(b => b.Id == bookId)).Photos;
+            var book = (await _context.Books.Include(b => b.Photos).FirstOrDefaultAsync(b => b.Id == bookId));
+            return (book == null) ? null : book.Photos;
         }
 
         public async Task<ProfilePhoto> GetUserPhoto(Guid userId)
@@ -45,7 +47,7 @@ namespace Core.Repositories
 
         public async Task<bool> DeletePhoto(int photoId)
         {
-            var photoToDelete = GetPhoto(photoId).Result;
+            var photoToDelete = await GetPhoto(photoId);
             if (photoToDelete == null) return false;
             await Delete(photoToDelete);
             File.Delete(photoToDelete.Path);
