@@ -21,11 +21,20 @@ namespace Core.Services.Profile
 
         public async Task<ServiceResponse> GetProfile(Guid? id)
         {
-
+            
             var profile = await _helper.GetUserProfile(id);
-            var profileDto = _mapper.Map<UserProfileDto>(profile);
+            return profile.User == null ? ReturnErrorResponse() : (id == null ? ReturnProfileResponse<UserProfileDto>(profile) : ReturnProfileResponse<ForeignUserProfileDto>(profile));
+        }
 
-            return ServiceResponse<UserProfileDto>.Success(profileDto, "User profile retrieved" );
+        private ServiceResponse ReturnProfileResponse<T>(UserProfile profile)
+        {
+            var profileDto = _mapper.Map<T>(profile);
+
+            return ServiceResponse<T>.Success(profileDto, "User profile retrieved");
+        }
+        private ServiceResponse ReturnErrorResponse()
+        {
+            return ServiceResponse.Error("User profile not found");
         }
     }
 }

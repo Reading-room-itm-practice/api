@@ -29,8 +29,11 @@ namespace Core.Interfaces.Profile
                 id = _loggedUserProvider.GetUserId();
             bool isFriend = await _friendService.IsFriend(id) ;
             var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+                return new UserProfile();
 
             var profile = _profileRepository.GetProfile(user, isFriend);
+            profile.FriendList = _friendService.GetApprovedFriendRequests(null).Result.Content;
 
             return profile;
         }

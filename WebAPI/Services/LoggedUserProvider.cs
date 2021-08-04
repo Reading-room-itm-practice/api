@@ -16,7 +16,7 @@ namespace WebAPI.Services
 
         public Guid GetUserId()
         {
-            var loggedUserId = "5ac2cfbf-b8a6-43d9-c1c8-08d9564ae8f1";// _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var loggedUserId = "16be9311-0452-4609-20c7-08d95713c0b4";// _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
             return loggedUserId != null ? new Guid(loggedUserId) : throw new UnauthorizedAccessException();
         }

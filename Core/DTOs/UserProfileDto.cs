@@ -7,28 +7,51 @@ namespace Core.DTOs
     public class UserProfileDto
     {
 
-        public UserSearchDto User;
-        public int FollowersCount;
-        public int FollowingsCount;
-        public PhotoDto Photo;
-        public IEnumerable<BookDto> FavouriteBooks;
-        public IEnumerable<BookDto> ToReadBooks;
-        public IEnumerable<BookDto> AreReadBooks;
-        public IEnumerable<UserSearchDto> FriendList;
-        public bool IsFriend;
+        public UserSearchDto User { get; set; }
+        public int FollowersCount { get; set; }
+        public int FollowingsCount { get; set; }
+        public PhotoDto Photo { get; set; }
+        public IEnumerable<BookDto> FavouriteBooks { get; set; }
+        public IEnumerable<BookDto> ToReadBooks { get; set; }
+        public IEnumerable<BookDto> AreReadBooks { get; set; }
+        public IEnumerable<FriendDto> FriendList { get; set; }
+
     }
 
     public class UserProfile
     {
 
-        public User User;
-        public int FollowersCount;
-        public int FollowingsCount;
-        public PhotoDto Photo;
-        public IEnumerable<Book> FavouriteBooks;
-        public IEnumerable<Book> ToReadBooks;
-        public IEnumerable<Book> AreReadBooks;
-        public IEnumerable<User> FriendList;
-        public bool IsFriend;
+        public User User { get; set; }
+        public int FollowersCount { get; set; }
+        public int FollowingsCount { get; set; }
+        public PhotoDto Photo { get; set; }
+        public IEnumerable<Book> FavouriteBooks { get; set; }
+        public IEnumerable<Book> ToReadBooks { get; set; }
+        public IEnumerable<Book> AreReadBooks { get; set; }
+        public IEnumerable<FriendDto> FriendList { get; set; }
+
+    }
+
+    public class ForeignUserProfile : UserProfile
+    {
+        public bool IsFriend { get; set; }
+        public bool IsFollowing { get; set; }
+
+        public ForeignUserProfile(UserProfile profile)
+        {
+            User = profile.User;
+            FollowersCount = profile.FollowersCount;
+            FollowingsCount = profile.FollowingsCount;
+            Photo = profile.Photo;
+            ToReadBooks = profile.ToReadBooks;
+            AreReadBooks = profile.AreReadBooks;
+            FriendList = profile.FriendList;
+        }
+    }
+
+    public class ForeignUserProfileDto : UserProfileDto
+    {
+        public bool IsFriend { get; set; }
+        public bool IsFollowing { get; set; }
     }
 }
