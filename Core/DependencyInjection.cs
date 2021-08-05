@@ -70,6 +70,7 @@ namespace Core
             services.AddScoped<IReviewCommentRepository, ReviewCommentRepository>();
 
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
 
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IRegisterService, RegisterService>();

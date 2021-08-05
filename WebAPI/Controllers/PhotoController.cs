@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Storage.Models.Photos;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -19,44 +20,31 @@ namespace WebAPI.Controllers
     [ApiController]
     public class PhotoController : ControllerBase
     {
-        private readonly ICrudService<Photo> _crud;
         private readonly IPhotoService _photoService;
 
-        public PhotoController(ICrudService<Photo> crud, IPhotoService photoService)
+        public PhotoController(IPhotoService photoService)
         {
-            _crud = crud;
             _photoService = photoService;
         }
 
         [HttpGet("All")]
-        public async Task<ServiceResponse> GetPhotos(int? book_id)
+        public async Task<ServiceResponse> GetPhotos([Required] string typeId, [Required] PhotoTypes type)
         {
-            if (book_id != null)
-            {
-                return ServiceResponse<IEnumerable<PhotoDto>>.Success(_crud.GetAll<PhotoDto>().Result.Content.Where(p => p.BookId == book_id));
-            }
-
-            return await _crud.GetAll<PhotoDto>();
+            return await _photoService.GetPhotos(typeId, type);
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ServiceResponse> GetPhoto(int id)
+        [HttpGet("{photoId:int}")]
+        public async Task<ServiceResponse> GetPhoto(int photoId)
         {
-            var result = await _crud.GetById<PhotoDto>(id);
-            if (result.Content == null)
-            {
-                return ServiceResponse.Error("Photo not found.", HttpStatusCode.NotFound);
-            } 
-
-            return result;
+            return await _photoService.GetPhoto(photoId);
         }
 
         [HttpPost()]
-        public async Task<ServiceResponse> Upload(IFormFile image, int bookId)
+        public async Task<ServiceResponse> Upload(IFormFile image, string id, PhotoTypes type)
         {
             try
             {
-                var result = await _photoService.UploadPhoto(image, bookId);
+                var result = await _photoService.UploadPhoto(image, id, type);
                 return result;
             }
             catch (DbUpdateException e)
@@ -65,46 +53,10 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<ServiceResponse> Edit(int id, PhotoUpdateRequest photo_bookId)
+        [HttpDelete("{photoId:int}")]
+        public async Task<ServiceResponse> Delete(int photoId)
         {
-            try
-            {
-                await _crud.Update(photo_bookId, id);
-                return ServiceResponse.Success("Image updated");
-            }
-            catch (DbUpdateException e)
-            {
-                return ServiceResponse.Error(e.InnerException.Message, HttpStatusCode.BadRequest);
-            }
-        }
-
-        [HttpDelete("{id:int}")]
-        public async Task<ServiceResponse> Delete(int id)
-        {
-            try
-            {
-                var result = await _photoService.DeletePhoto(id);
-
-                return ServiceResponse.Success("Image deleted.");
-            }
-            catch (NotFoundException e)
-            {
-                return ServiceResponse.Error(e.Message, HttpStatusCode.BadRequest);
-            }
-            catch (DbUpdateException e)
-            {
-                return ServiceResponse.Error(e.InnerException.Message, HttpStatusCode.BadRequest);
-            }
-            catch (Exception e)
-            {
-                if (e.InnerException.GetType() == typeof(NotFoundException))
-                {
-                    return ServiceResponse.Error("Image not found", HttpStatusCode.NotFound);
-                }
-
-                return ServiceResponse.Error(e.Message);
-            }
+            return await _photoService.DeletePhoto(photoId);
         }
     }
 }
