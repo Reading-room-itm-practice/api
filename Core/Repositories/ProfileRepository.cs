@@ -24,15 +24,15 @@ namespace Core.Repositories
         {
             var currentUserId = _loggedUserProvider.GetUserId();
 
-            var toReadBooksIdList = _context.ReadStatuses != null ? _context.ReadStatuses.Where(rs => rs.IsWantRead && rs.CreatorId == user.Id).ToList() : new List<ReadStatus>();
-            var favouriteBooksIdList = _context.ReadStatuses != null ? _context.ReadStatuses.Where(rs => rs.IsFavorite && rs.CreatorId == user.Id).ToList() : new List<ReadStatus>();
-            var areReadBooksIdList = _context.ReadStatuses != null ? _context.ReadStatuses.Where(rs => rs.IsRead && rs.CreatorId == user.Id).ToList() : new List<ReadStatus>();
+            var toReadBooksIdList = _context.ReadStatuses.Where(rs => rs.IsWantRead && rs.CreatorId == user.Id).ToList() ;
+            var favouriteBooksIdList = _context.ReadStatuses.Where(rs => rs.IsFavorite && rs.CreatorId == user.Id).ToList();
+            var areReadBooksIdList = _context.ReadStatuses.Where(rs => rs.IsRead && rs.CreatorId == user.Id).ToList();
 
             var favouriteBooks = _context.Books.AsEnumerable().Where(b => favouriteBooksIdList.Any(idlist => idlist.BookId == b.Id));
             var toReadBooks = _context.Books.AsEnumerable().Where(b => toReadBooksIdList.Any(idlist => idlist.BookId == b.Id));
-            var readingBooks = _context.Books.AsEnumerable().Where(b => areReadBooksIdList.Any(idlist => idlist.BookId == b.Id));
+            var readBooks = _context.Books.AsEnumerable().Where(b => areReadBooksIdList.Any(idlist => idlist.BookId == b.Id));
 
-            UserProfile profile = BaseProfile(user, toReadBooks, readingBooks);
+            UserProfile profile = BaseProfile(user, toReadBooks, readBooks);
 
             return user.Id == currentUserId 
                 ? CreateMyProfile(profile, favouriteBooks)

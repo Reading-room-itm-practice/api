@@ -44,7 +44,7 @@ namespace WebAPI.Controllers
             return await _friendService.SendFriendRequest(request);
         }
 
-        [HttpPut("FriendRequests/Accept/{id}")]
+        [HttpPut("FriendRequests/Accept/{friendRequestId}")]
         public async Task<ServiceResponse> Accept(ApproveFriendRequest friendRequest, int friendRequestId)
         {
             return await _friendService.AcceptOrDeclineFriendRequest(friendRequest, friendRequestId);
