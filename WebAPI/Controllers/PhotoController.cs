@@ -20,12 +20,10 @@ namespace WebAPI.Controllers
     [ApiController]
     public class PhotoController : ControllerBase
     {
-        private readonly ICrudService<Photo> _crud;
         private readonly IPhotoService _photoService;
 
-        public PhotoController(ICrudService<Photo> crud, IPhotoService photoService)
+        public PhotoController(IPhotoService photoService)
         {
-            _crud = crud;
             _photoService = photoService;
         }
 

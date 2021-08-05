@@ -31,13 +31,13 @@ namespace Core.Repositories
         public async Task<IEnumerable<AuthorPhoto>> GetAuthorPhotos(int authorId)
         {
             var author = await _context.Authors.Include(a => a.Photos).FirstOrDefaultAsync(a => a.Id == authorId);
-            return (author == null) ? null : author.Photos;
+            return author?.Photos;
         }
 
         public async Task<IEnumerable<BookPhoto>> GetBookPhotos(int bookId)
         {
             var book = (await _context.Books.Include(b => b.Photos).FirstOrDefaultAsync(b => b.Id == bookId));
-            return (book == null) ? null : book.Photos;
+            return book?.Photos;
         }
 
         public async Task<ProfilePhoto> GetUserPhoto(Guid userId)
