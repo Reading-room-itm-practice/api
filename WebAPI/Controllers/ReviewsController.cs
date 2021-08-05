@@ -22,16 +22,10 @@ namespace WebAPI.Controllers
             _reviewService = reviewService;
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ServiceResponse> GetReview(int id)
+        [HttpGet("{reviewId:int}")]
+        public async Task<ServiceResponse> GetReview(int reviewId)
         {
-            var result = await _crud.GetById<ReviewDto>(id);
-            if (result == null)
-            { 
-                ServiceResponse.Error("Review not found.");
-            }
-
-            return result;
+            return await _reviewService.GetReview(reviewId);
         }
 
         [HttpGet]
@@ -50,7 +44,6 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> Edit(int id, ReviewRequest review)
         {
             await _crud.Update(review, id);
-
             return ServiceResponse.Success("Review updated.");
         }
 
@@ -58,7 +51,6 @@ namespace WebAPI.Controllers
         public async Task<ServiceResponse> Delete(int id)
         {
             await _crud.Delete(id);
-
             return ServiceResponse.Success("Review deleted.");
         }
     }

@@ -41,7 +41,7 @@ namespace Core.Repositories
             return categories;
         }
 
-        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear = null, int? maxYear = null, 
+        public IEnumerable<BookDto> GetBooks(string searchString, SortType? sort, int? minYear = null, int? maxYear = null,
             int? categoryId = null, int? authorId = null)
         {
             var searchQueries = ProcessSearchString(searchString);

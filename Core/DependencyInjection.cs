@@ -24,12 +24,14 @@ namespace Core
             services.AddScoped<IBaseRepository<Category>, BaseRepository<Category>>();
             services.AddScoped<IBaseRepository<Photo>, BaseRepository<Photo>>();
             services.AddScoped<IBaseRepository<Review>, BaseRepository<Review>>();
+            services.AddScoped<IBaseRepository<ReviewComment>, BaseRepository<ReviewComment>>();
 
             services.AddScoped<ICrudService<Author>, CrudService<Author>>();
             services.AddScoped<ICrudService<Book>, CrudService<Book>>();
             services.AddScoped<ICrudService<Category>, CrudService<Category>>();
             services.AddScoped<ICrudService<Photo>, CrudService<Photo>>();
             services.AddScoped<ICrudService<Review>, CrudService<Review>>();
+            services.AddScoped<ICrudService<ReviewComment>, CrudService<ReviewComment>>();
 
             services.AddScoped<ICreatorService<Author>, CreatorService<Author>>();
             services.AddScoped<IGetterService<Author>, GetterService<Author>>();
@@ -56,8 +58,16 @@ namespace Core
             services.AddScoped<IUpdaterService<Review>, UpdaterService<Review>>();
             services.AddScoped<IDeleterService<Review>, DeleterService<Review>>();
 
+            services.AddScoped<ICreatorService<ReviewComment>, CreatorService<ReviewComment>>();
+            services.AddScoped<IGetterService<ReviewComment>, GetterService<ReviewComment>>();
+            services.AddScoped<IUpdaterService<ReviewComment>, UpdaterService<ReviewComment>>();
+            services.AddScoped<IDeleterService<ReviewComment>, DeleterService<ReviewComment>>();
+
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
+
+            services.AddScoped<IReviewCommentService, ReviewCommentService>();
+            services.AddScoped<IReviewCommentRepository, ReviewCommentRepository>();
 
             services.AddScoped<IPhotoService, PhotoService>();
 
