@@ -26,22 +26,22 @@ namespace Core.Repositories
             MaxCommentPerHourPerReview = int.Parse(configuration["MaxCommentPerHourPerReview"]);
         }
 
-        public async Task<bool> CheckCommentCount(int reviewId, Guid userId)
+        public async Task<bool> HitCommentCapCount(int reviewId, Guid userId)
         {
             var review = await _context.Reviews.Include(r => r.Comments).FirstOrDefaultAsync(r => r.Id == reviewId);
             return review.Comments.Where(c => c.CreatorId == userId).Count() >= MaxCommentPerReview;
         }
 
-        public async Task<bool> CheckCommentsDate(int reviewId, Guid userId)
+        public async Task<bool> HitCommentCapDate(int reviewId, Guid userId)
         {
             var review = (await _context.Reviews.Include(r => r.Comments).FirstOrDefaultAsync(r => r.Id == reviewId));
             return review.Comments.Where(c => c.CreatorId == userId && 
                 (DateTime.Now.Subtract(c.CreatedAt)).Hours < 1).Count() >= MaxCommentPerHourPerReview;
         }
 
-        public async Task<ReviewComment> CreateReviewComment(ReviewComment commentRequest)
+        public override async Task<ReviewComment> Create(ReviewComment commentModel)
         {
-            return await GetComment((await Create(commentRequest)).Id);
+            return await GetComment((await Create(commentModel)).Id);
         }
 
         public IEnumerable<ReviewComment> GetComments()

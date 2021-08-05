@@ -14,10 +14,9 @@ namespace Core.Interfaces
         public IEnumerable<ReviewComment> GetComments(int? reviewId, Guid? userId);
         public IEnumerable<ReviewComment> GetComments();
         public Task<ReviewComment> GetComment(int reviewCommentId);
-        public Task<bool> CheckCommentCount(int reviewId, Guid userId);
-        public Task<bool> CheckCommentsDate(int reviewId, Guid userId);
+        public Task<bool> HitCommentCapCount(int reviewId, Guid userId);
+        public Task<bool> HitCommentCapDate(int reviewId, Guid userId);
         public Task<bool> ReviewExists(int reviewId);
-        public Task<ReviewComment> CreateReviewComment(ReviewComment newComment);
         public int MaxCommentPerReview { get; }
         public int MaxCommentPerHourPerReview { get; }
     }

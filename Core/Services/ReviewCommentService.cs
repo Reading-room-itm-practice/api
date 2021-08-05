@@ -21,6 +21,7 @@ namespace Core.Services
         private readonly IReviewRepository _reviewRepository;
         private readonly IGetterService<Book> _bookGetter;
         private readonly IMapper _mapper;
+
         public ReviewCommentService(IReviewCommentRepository reviewCommentRepository, ILoggedUserProvider loggedUserProvider,
             IReviewRepository reviewRepository, IGetterService<Book> bookGetter, IMapper mapper)
         {
@@ -30,22 +31,23 @@ namespace Core.Services
             _bookGetter = bookGetter;
             _mapper = mapper;
         }
+
         public async Task<ServiceResponse> AddReviewComment(ReviewCommentRequest comment)
         {
             if (!(await _reviewCommentRepository.ReviewExists(comment.ReviewId)))
                 return ServiceResponse.Error($"Review you're trying to post a comment for doesn't exist.", HttpStatusCode.BadRequest);
 
             var userId = _loggedUserProvider.GetUserId();
-            if (await _reviewCommentRepository.CheckCommentCount(comment.ReviewId, userId))
+            if (await _reviewCommentRepository.HitCommentCapCount(comment.ReviewId, userId))
                 return ServiceResponse.Error($"You can post only {_reviewCommentRepository.MaxCommentPerReview} " +
                     $"comments per single review", HttpStatusCode.BadRequest);
 
-            if (await _reviewCommentRepository.CheckCommentsDate(comment.ReviewId, userId))
+            if (await _reviewCommentRepository.HitCommentCapDate(comment.ReviewId, userId))
                 return ServiceResponse.Error($"You can post only {_reviewCommentRepository.MaxCommentPerHourPerReview} " +
                     $"comments per hour on a single review. Try again later", HttpStatusCode.BadRequest);
 
             return ServiceResponse<ReviewCommentDto>.Success(_mapper.Map<ReviewCommentDto>
-                (await _reviewCommentRepository.CreateReviewComment(_mapper.Map<ReviewComment>(comment))), "Comment posted.", HttpStatusCode.Created);
+                (await _reviewCommentRepository.Create(_mapper.Map<ReviewComment>(comment))), "Comment posted.", HttpStatusCode.Created);
         }
 
         public async Task<ServiceResponse> GetComment(int reviewCommentId)
