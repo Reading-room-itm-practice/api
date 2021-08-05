@@ -13,7 +13,7 @@ namespace Core.DTOs
         public PhotoDto Photo { get; set; }
         public IEnumerable<BookDto> FavouriteBooks { get; set; }
         public IEnumerable<BookDto> ToReadBooks { get; set; }
-        public IEnumerable<BookDto> AreReadBooks { get; set; }
+        public IEnumerable<BookDto> ReadBooks { get; set; }
         public IEnumerable<FriendDto> FriendList { get; set; }
 
     }
@@ -27,7 +27,7 @@ namespace Core.DTOs
         public PhotoDto Photo { get; set; }
         public IEnumerable<Book> FavouriteBooks { get; set; }
         public IEnumerable<Book> ToReadBooks { get; set; }
-        public IEnumerable<Book> AreReadBooks { get; set; }
+        public IEnumerable<Book> ReadBooks { get; set; }
         public IEnumerable<FriendDto> FriendList { get; set; }
 
     }
@@ -44,7 +44,7 @@ namespace Core.DTOs
             FollowingsCount = profile.FollowingsCount;
             Photo = profile.Photo;
             ToReadBooks = profile.ToReadBooks;
-            AreReadBooks = profile.AreReadBooks;
+            ReadBooks = profile.ReadBooks;
             FriendList = profile.FriendList;
         }
     }

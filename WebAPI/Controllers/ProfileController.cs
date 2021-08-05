@@ -1,5 +1,6 @@
 ﻿using Core.Interfaces.Profile;
 using Core.ServiceResponses;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
@@ -19,10 +20,17 @@ namespace WebAPI.Controllers
         }
 
         [SwaggerOperation(Summary = "Retrieves profile")]
-        [HttpGet]
-        public async Task<ServiceResponse> Profile(Guid? id )
+        [HttpGet("{id?}")]
+        public async Task<ServiceResponse> Index(Guid? id )
         {
             return await _profileService.GetProfile(id);
+        }
+
+        [SwaggerOperation(Summary = "Edit photo")]
+        [HttpPut("Photo/{id?}")]
+        public Task<ServiceResponse> EditPhoto(Guid? id, [FromForm] IFormFile photo)
+        {
+            throw new NotImplementedException();
         }
     }
 }

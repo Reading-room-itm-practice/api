@@ -10,12 +10,12 @@ namespace Core.Mappings
             CreateMap<UserProfile, UserProfileDto>().ReverseMap()
                 .ForMember(d => d.FavouriteBooks, opt => opt.MapFrom(src => src.FavouriteBooks))
                 .ForMember(d => d.ToReadBooks, opt => opt.MapFrom(src => src.ToReadBooks))
-                .ForMember(d => d.AreReadBooks, opt => opt.MapFrom(src => src.AreReadBooks));
+                .ForMember(d => d.ReadBooks, opt => opt.MapFrom(src => src.ReadBooks));
 
             CreateMap<ForeignUserProfile, ForeignUserProfileDto>().ReverseMap()
                 .ForMember(d => d.FavouriteBooks, opt => opt.MapFrom(src => src.FavouriteBooks))
                 .ForMember(d => d.ToReadBooks, opt => opt.MapFrom(src => src.ToReadBooks))
-                .ForMember(d => d.AreReadBooks, opt => opt.MapFrom(src => src.AreReadBooks));
+                .ForMember(d => d.ReadBooks, opt => opt.MapFrom(src => src.ReadBooks));
         }
     }
 }
