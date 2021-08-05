@@ -77,14 +77,9 @@ namespace Core.Services
 
         public async Task<ServiceResponse> UploadPhoto(IFormFile image, string id, PhotoTypes type)
         {
-            if (!ValidateId(id, type)) return ServiceResponse.Error("Invalid Id.", HttpStatusCode.BadRequest);
-            ServiceResponse validationResult = ValidatePhoto(image);
-            if (!validationResult.SuccessStatus) return validationResult;
-            if (!(await ItemExists(id, type))) 
-                return ServiceResponse.Error("The item you're trying to upload an image for, doesn't exist.", HttpStatusCode.NotFound);
-
-            string photoPath = await ProcessPhoto(image);
-            if (photoPath == null) return ServiceResponse.Error("An error ocurred while uploading the image.");
+            var savePhotoResult = await SavePhotoToFile(image, id, type);
+            if (!savePhotoResult.SuccessStatus) return savePhotoResult;
+            string photoPath = savePhotoResult.Message;
 
             Photo photoRequest = null;
             if (type == PhotoTypes.AuthorPhoto)
@@ -102,7 +97,20 @@ namespace Core.Services
             var newPhoto = _mapper.Map<PhotoDto>(await _photoRepository.UploadPhoto(photoRequest));
             return ServiceResponse<PhotoDto>.Success(newPhoto, "Photo uploaded.", HttpStatusCode.Created);
         }
-               
+              
+        private async Task<ServiceResponse> SavePhotoToFile(IFormFile image, string id, PhotoTypes type)
+        {
+            if (!ValidateId(id, type)) return ServiceResponse.Error("Invalid Id.", HttpStatusCode.BadRequest);
+            ServiceResponse validationResult = ValidatePhoto(image);
+            if (!validationResult.SuccessStatus) return validationResult;
+            if (!(await ItemExists(id, type)))
+                return ServiceResponse.Error("The item you're trying to upload an image for, doesn't exist.", HttpStatusCode.NotFound);
+
+            string photoPath = await ProcessPhoto(image);
+            if (photoPath == null) return ServiceResponse.Error("An error ocurred while uploading the image.");
+            return ServiceResponse<string>.Success(null, photoPath);
+        }
+
         private bool ValidateId(string id, PhotoTypes type)
         {
             return (type == PhotoTypes.AuthorPhoto || type == PhotoTypes.BookPhoto) ? 
