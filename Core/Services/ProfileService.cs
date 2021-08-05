@@ -21,7 +21,6 @@ namespace Core.Services.Profile
 
         public async Task<ServiceResponse> GetProfile(Guid? id)
         {
-            
             var profile = await _helper.GetUserProfile(id);
             return profile.User == null ? ReturnErrorResponse() : (id == null ? ReturnProfileResponse<UserProfileDto>(profile) : ReturnProfileResponse<ForeignUserProfileDto>(profile));
         }

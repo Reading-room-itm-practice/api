@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
         }
 
         [SwaggerOperation(Summary = "Retrieves profile")]
-        [HttpGet("{id?}")]
+        [HttpGet]
         public async Task<ServiceResponse> Index(Guid? id )
         {
             return await _profileService.GetProfile(id);
