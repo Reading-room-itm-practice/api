@@ -228,6 +228,11 @@ namespace Storage.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Approved")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("Biography")
                         .IsRequired()
                         .HasMaxLength(2147483647)
@@ -276,6 +281,11 @@ namespace Storage.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Approved")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<int?>("AuthorId")
                         .HasColumnType("int");
@@ -336,6 +346,11 @@ namespace Storage.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Approved")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -669,51 +684,6 @@ namespace Storage.Migrations
                     b.HasIndex("UpdaterId");
 
                     b.ToTable("Review_comments");
-                });
-
-            modelBuilder.Entity("Storage.Models.Suggestion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Author")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Comment")
-                        .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CreatorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<Guid?>("UpdaterId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatorId");
-
-                    b.HasIndex("UpdaterId");
-
-                    b.ToTable("Suggestions");
                 });
 
             modelBuilder.Entity("Storage.Models.Follows.AuthorFollow", b =>
@@ -1119,23 +1089,6 @@ namespace Storage.Migrations
                     b.Navigation("Updater");
                 });
 
-            modelBuilder.Entity("Storage.Models.Suggestion", b =>
-                {
-                    b.HasOne("Storage.Identity.User", "Creator")
-                        .WithMany("Suggestions")
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Storage.Identity.User", "Updater")
-                        .WithMany()
-                        .HasForeignKey("UpdaterId");
-
-                    b.Navigation("Creator");
-
-                    b.Navigation("Updater");
-                });
-
             modelBuilder.Entity("Storage.Models.Follows.AuthorFollow", b =>
                 {
                     b.HasOne("Storage.Models.Author", "Author")
@@ -1272,8 +1225,6 @@ namespace Storage.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("SentRequests");
-
-                    b.Navigation("Suggestions");
                 });
 
             modelBuilder.Entity("Storage.Models.Author", b =>
