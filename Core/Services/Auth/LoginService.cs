@@ -19,9 +19,10 @@ namespace Core.Services.Auth
             var user = await _userManager.FindByNameAsync(model.Username);
             if (await _userManager.CheckPasswordAsync(user, model.Password))
             {
+                #if !DEBUG
                 if (!await _userManager.IsEmailConfirmedAsync(user))
                     return ServiceResponse.Error("Invalid username or password!");
-
+                #endif
                 var roles = await _userManager.GetRolesAsync(user);
                 var tokenResponse = _jwtGenerator.GenerateJWTToken(_config, user, roles);
 

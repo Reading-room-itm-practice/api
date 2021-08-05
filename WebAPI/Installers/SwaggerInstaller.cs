@@ -1,37 +1,40 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using System.Collections.Generic;
 
 namespace WebAPI.Installers
 {
-    public class SwaggerInstaller : IInstaller
+    public class SwaggerInstaller : Installer
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+
+                OpenApiSecurityScheme securityDefinition = new OpenApiSecurityScheme()
                 {
+                    Name = "Bearer",
+                    BearerFormat = "JWT",
+                    Scheme = "bearer",
+                    Description = "Specify the authorization token.",
                     In = ParameterLocation.Header,
-                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                    Type = SecuritySchemeType.Http,
+                };
+                c.AddSecurityDefinition("jwt_auth", securityDefinition);
+                OpenApiSecurityScheme securityScheme = new OpenApiSecurityScheme()
                 {
-                    new OpenApiSecurityScheme
+                    Reference = new OpenApiReference()
                     {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                             Id = "Bearer"
-                        }
-                      },
-                      System.Array.Empty<string>()
+                        Id = "jwt_auth",
+                        Type = ReferenceType.SecurityScheme
                     }
-                });
+                };
+                OpenApiSecurityRequirement securityRequirements = new OpenApiSecurityRequirement()
+                {
+                    {securityScheme, new string[] { }},
+                };
+                c.AddSecurityRequirement(securityRequirements);
             });
         }
     }
