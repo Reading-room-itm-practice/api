@@ -377,7 +377,7 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_follows_UserId",
                 table: "follows",
-                column: "FollowingId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_follows_UserId1",
@@ -397,7 +397,7 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_likes_UserId",
                 table: "likes",
-                column: "FollowingId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Photo_BookId",
@@ -407,7 +407,7 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_read_statuses_UserId",
                 table: "read_statuses",
-                column: "FollowingId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_review_comments_ReviewId",
@@ -417,7 +417,7 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_review_comments_UserId",
                 table: "review_comments",
-                column: "FollowingId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_reviews_BookId",
@@ -427,12 +427,12 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_reviews_UserId",
                 table: "reviews",
-                column: "FollowingId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_users_UserId",
                 table: "users",
-                column: "FollowingId");
+                column: "UserId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_books_Photo_MainPhotoId1",

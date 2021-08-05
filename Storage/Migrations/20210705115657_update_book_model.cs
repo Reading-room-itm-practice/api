@@ -277,7 +277,7 @@ namespace Storage.Migrations
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Read_statuses",
                 table: "Read_statuses",
-                columns: new[] { "BookId", "FollowingId" });
+                columns: new[] { "BookId", "UserId" });
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Notifications",
@@ -346,7 +346,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_Follows_AspNetUsers_UserId",
                 table: "Follows",
-                column: "FollowingId",
+                column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -378,7 +378,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_Likes_AspNetUsers_UserId",
                 table: "Likes",
-                column: "FollowingId",
+                column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -410,7 +410,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_Read_statuses_AspNetUsers_UserId",
                 table: "Read_statuses",
-                column: "FollowingId",
+                column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -426,7 +426,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_Review_comments_AspNetUsers_UserId",
                 table: "Review_comments",
-                column: "FollowingId",
+                column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -442,7 +442,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_Reviews_AspNetUsers_UserId",
                 table: "Reviews",
-                column: "FollowingId",
+                column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -724,7 +724,7 @@ namespace Storage.Migrations
             migrationBuilder.AddPrimaryKey(
                 name: "PK_read_statuses",
                 table: "read_statuses",
-                columns: new[] { "BookId", "FollowingId" });
+                columns: new[] { "BookId", "UserId" });
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_notifications",
@@ -793,7 +793,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_follows_AspNetUsers_UserId",
                 table: "follows",
-                column: "FollowingId",
+                column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -825,7 +825,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_likes_AspNetUsers_UserId",
                 table: "likes",
-                column: "FollowingId",
+                column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -857,7 +857,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_read_statuses_AspNetUsers_UserId",
                 table: "read_statuses",
-                column: "FollowingId",
+                column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -873,7 +873,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_review_comments_AspNetUsers_UserId",
                 table: "review_comments",
-                column: "FollowingId",
+                column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -889,7 +889,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_reviews_AspNetUsers_UserId",
                 table: "reviews",
-                column: "FollowingId",
+                column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
