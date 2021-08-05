@@ -24,11 +24,11 @@ namespace Core.Repositories
         {
             var currentUserId = _loggedUserProvider.GetUserId();
 
-            var toReadBooksIdList = user.ReadStatuses != null ? user.ReadStatuses.Where(rs => rs.IsWantRead == true).ToList() : new List<ReadStatus>();
-            var favouriteBooksIdList = user.ReadStatuses != null ? user.ReadStatuses.Where(rs => rs.IsFavorite == true).ToList() : new List<ReadStatus>();
-            var areReadBooksIdList = user.ReadStatuses != null ? user.ReadStatuses.Where(rs => rs.IsRead == true).ToList() : new List<ReadStatus>();
+            var toReadBooksIdList = _context.ReadStatuses != null ? _context.ReadStatuses.Where(rs => rs.IsWantRead && rs.CreatorId == user.Id).ToList() : new List<ReadStatus>();
+            var favouriteBooksIdList = _context.ReadStatuses != null ? _context.ReadStatuses.Where(rs => rs.IsFavorite && rs.CreatorId == user.Id).ToList() : new List<ReadStatus>();
+            var areReadBooksIdList = _context.ReadStatuses != null ? _context.ReadStatuses.Where(rs => rs.IsRead && rs.CreatorId == user.Id).ToList() : new List<ReadStatus>();
 
-            var favouriteBooks = _context.Books.AsEnumerable().Where(b => toReadBooksIdList.Any(idlist => idlist.BookId == b.Id));
+            var favouriteBooks = _context.Books.AsEnumerable().Where(b => favouriteBooksIdList.Any(idlist => idlist.BookId == b.Id));
             var toReadBooks = _context.Books.AsEnumerable().Where(b => toReadBooksIdList.Any(idlist => idlist.BookId == b.Id));
             var readingBooks = _context.Books.AsEnumerable().Where(b => areReadBooksIdList.Any(idlist => idlist.BookId == b.Id));
 
@@ -48,7 +48,7 @@ namespace Core.Repositories
                 (user.FollowedAuthors != null ? user.FollowedUsers.Count : 0) + (user.FollowedAuthors != null ? user.FollowedAuthors.Count : 0);
 
             profile.ToReadBooks = toReadBooks.Any() ? toReadBooks.ToList() : null;
-            profile.AreReadBooks = readingBooks.Any() ? readingBooks.ToList() : null;
+            profile.ReadBooks = readingBooks.Any() ? readingBooks.ToList() : null;
             //profile.Photo = NOT IMPLEMENTED
 
             return profile;
