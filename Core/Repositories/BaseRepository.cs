@@ -19,31 +19,31 @@ namespace Core.Repositories
             _context = context;
         }
 
-        public async Task<T> Create(T model)
+        public virtual async Task<T> Create(T model)
         {
             _context.Add(model);
             await _context.SaveChangesAsync();
 
             return model;
         }
-        public async Task Delete(T model)
+        public virtual async Task Delete(T model)
         {
             _context.Remove(model);
             await _context.SaveChangesAsync();
         }
 
-        public async Task Edit(T model)
+        public virtual async Task Edit(T model)
         {
             _context.Update(model);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<T>> FindAll()
+        public virtual async Task<IEnumerable<T>> FindAll()
         {
             return await _context.Set<T>().ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> FindByConditions(Expression<Func<T, bool>> expresion)
+        public virtual async Task<IEnumerable<T>> FindByConditions(Expression<Func<T, bool>> expresion)
         {
             return await _context.Set<T>().Where(expresion).ToListAsync();
         }

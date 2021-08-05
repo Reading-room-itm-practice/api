@@ -15,6 +15,7 @@ namespace Core.Mappings
             CreateMap<ExtendedData<IEnumerable<Review>>, ExtendedData<IEnumerable<ReviewDto>>>().ReverseMap();
 
             CreateMap<ReviewRequest, Review>().ReverseMap();
+            CreateMap<ReviewDto, Review>().ReverseMap();
         }
     }
 }

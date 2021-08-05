@@ -21,7 +21,8 @@ namespace Core.Services
         private readonly IGetterService<Book> _bookGetter;
         private readonly ILoggedUserProvider _loggedUserProvider;
 
-        public ReviewService(IMapper mapper, IReviewRepository reviewRepository, IGetterService<Book> bookGetter, ILoggedUserProvider loggedUserProvider)
+        public ReviewService(IReviewRepository reviewRepository, IGetterService<Book> bookGetter, 
+            ILoggedUserProvider loggedUserProvider, IMapper mapper)
         {
             _mapper = mapper;
             _loggedUserProvider = loggedUserProvider;
@@ -31,23 +32,42 @@ namespace Core.Services
 
         public async Task<ServiceResponse> AddReview(ReviewRequest review)
         {
-            if (await _bookGetter.GetById<BookDto>(review.BookId) == null)
-            {
-                return ServiceResponse.Error($"Book with Id: {review.BookId} doesn't exist", HttpStatusCode.BadRequest);
-            }
+            if ((await _bookGetter.GetById<BookDto>(review.BookId)).Content == null)
+                return ServiceResponse.Error($"The book you are trying to post a review for doesn't exist", HttpStatusCode.BadRequest);
 
             var userId = _loggedUserProvider.GetUserId();
+            if (await _reviewRepository.ReviewByUserExists(userId, review.BookId)) return ServiceResponse.Error
+                    ($"You have already posted a review for {await GetBookTitle(review.BookId)}", HttpStatusCode.BadRequest);
 
-            if (await _reviewRepository.ReviewByUserExists(userId, review.BookId))
-            {
-                return ServiceResponse.Error($"You have already posted a review for book Id: {review.BookId}", HttpStatusCode.BadRequest);
-            }
-
-            var reviewRequest = _mapper.Map<Review>(review);
-            var newReview = _mapper.Map<ReviewDto>(await _reviewRepository.CreateReview(reviewRequest));
-
-            return ServiceResponse<ReviewDto>.Success(newReview, "Review created.", HttpStatusCode.Created);
+            var newReview = await _reviewRepository.CreateReview(_mapper.Map<Review>(review));
+            return ServiceResponse<ReviewDto>.Success(_mapper.Map<ReviewDto>(newReview), "Review created.", HttpStatusCode.Created);
         }
+
+        public async Task<ServiceResponse> GetReviews(int? bookId)
+        {
+            if (bookId == null) return ServiceResponse<IEnumerable<ReviewDto>>.Success
+                    (_mapper.Map<IEnumerable<ReviewDto>>(await _reviewRepository.GetReviews(bookId)), $"All reviews retrieved.");
+
+            if ((await _bookGetter.GetById<BookDto>((int)bookId)).Content == null)
+                return ServiceResponse.Error($"The book you are trying to find a review for doesn't exist", HttpStatusCode.NotFound);
+
+            return ServiceResponse<IEnumerable<ReviewDto>>.Success
+                    (_mapper.Map<IEnumerable<ReviewDto>>(await _reviewRepository.GetReviews(bookId)), 
+                        $"Reviews for {await GetBookTitle((int)bookId)} retrieved.");
+        }
+
+        public async Task<ServiceResponse> GetReview(int reviewId)
+        {
+            var review = await _reviewRepository.GetReview(reviewId);
+            if (review != null) return ServiceResponse<ReviewDto>.Success (_mapper.Map<ReviewDto>(review), $"Review retrieved.");
+            return ServiceResponse.Error("Review not found.", HttpStatusCode.NotFound);
+        }
+
+        private async Task<string> GetBookTitle(int bookId)
+        {
+            return (await _bookGetter.GetById<BookDto>(bookId)).Content.Title;
+        }
+        
     }
 }
 

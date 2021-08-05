@@ -11,15 +11,31 @@ namespace WebAPI.Installers
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
-                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                {
-                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
-                    In = ParameterLocation.Header,
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                });
-            });
 
+                OpenApiSecurityScheme securityDefinition = new OpenApiSecurityScheme()
+                {
+                    Name = "Bearer",
+                    BearerFormat = "JWT",
+                    Scheme = "bearer",
+                    Description = "Specify the authorization token.",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                };
+                c.AddSecurityDefinition("jwt_auth", securityDefinition);
+                OpenApiSecurityScheme securityScheme = new OpenApiSecurityScheme()
+                {
+                    Reference = new OpenApiReference()
+                    {
+                        Id = "jwt_auth",
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+                OpenApiSecurityRequirement securityRequirements = new OpenApiSecurityRequirement()
+                {
+                    {securityScheme, new string[] { }},
+                };
+                c.AddSecurityRequirement(securityRequirements);
+            });
         }
     }
 }
