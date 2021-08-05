@@ -85,12 +85,12 @@ namespace Storage.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("FollowingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FollowingId");
 
                     b.ToTable("AspNetUserClaims");
                 });
@@ -106,25 +106,25 @@ namespace Storage.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("FollowingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FollowingId");
 
                     b.ToTable("AspNetUserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("FollowingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.HasKey("FollowingId", "RoleId");
 
                     b.HasIndex("RoleId");
 
@@ -133,7 +133,7 @@ namespace Storage.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("FollowingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LoginProvider")
@@ -145,7 +145,7 @@ namespace Storage.Migrations
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                    b.HasKey("FollowingId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
                 });
@@ -493,12 +493,12 @@ namespace Storage.Migrations
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("FollowingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FollowingId");
 
                     b.ToTable("Notifications");
                 });
@@ -754,12 +754,12 @@ namespace Storage.Migrations
                 {
                     b.HasBaseType("Storage.Models.Follows.Follow");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("FollowingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasIndex("CreatorId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FollowingId");
 
                     b.ToTable("Follows");
 
@@ -830,7 +830,7 @@ namespace Storage.Migrations
                 {
                     b.HasBaseType("Storage.Models.Photos.Photo");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("FollowingId")
                         .HasColumnType("uniqueidentifier");
 
                     b.ToTable("Photos");
@@ -851,7 +851,7 @@ namespace Storage.Migrations
                 {
                     b.HasOne("Storage.Identity.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -860,7 +860,7 @@ namespace Storage.Migrations
                 {
                     b.HasOne("Storage.Identity.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -875,7 +875,7 @@ namespace Storage.Migrations
 
                     b.HasOne("Storage.Identity.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -884,7 +884,7 @@ namespace Storage.Migrations
                 {
                     b.HasOne("Storage.Identity.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1022,7 +1022,7 @@ namespace Storage.Migrations
                 {
                     b.HasOne("Storage.Identity.User", "User")
                         .WithMany("Notifications")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1182,7 +1182,7 @@ namespace Storage.Migrations
 
                     b.HasOne("Storage.Identity.User", "User")
                         .WithMany("Followers")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("FollowingId");
 
                     b.Navigation("Creator");
 

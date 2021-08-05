@@ -528,12 +528,12 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
                 table: "AspNetUserClaims",
-                column: "UserId");
+                column: "FollowingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
                 table: "AspNetUserLogins",
-                column: "UserId");
+                column: "FollowingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
@@ -548,7 +548,7 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_UserId",
                 table: "AspNetUsers",
-                column: "UserId");
+                column: "FollowingId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -585,7 +585,7 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Follows_UserId",
                 table: "Follows",
-                column: "UserId");
+                column: "FollowingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Follows_UserId1",
@@ -605,7 +605,7 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Likes_UserId",
                 table: "Likes",
-                column: "UserId");
+                column: "FollowingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Photos_BookId",
@@ -615,7 +615,7 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Read_statuses_UserId",
                 table: "Read_statuses",
-                column: "UserId");
+                column: "FollowingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Review_comments_ReviewId",
@@ -625,7 +625,7 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Review_comments_UserId",
                 table: "Review_comments",
-                column: "UserId");
+                column: "FollowingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_BookId",
@@ -635,7 +635,7 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_UserId",
                 table: "Reviews",
-                column: "UserId");
+                column: "FollowingId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Likes_Review_comments_ReviewCommentId",

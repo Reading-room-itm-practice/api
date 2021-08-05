@@ -31,7 +31,7 @@ namespace Core.Services.Follows
         public async Task<ServiceResponse<IEnumerable<IDto>>> GetUserFollowers<IDto>(Guid followableId)
         {
             var models = await _userFollowRepo.FindByConditionsWithIncludes(
-                x => x.UserId == followableId, nameof(Author), nameof(Author.MainPhoto));
+                x => x.FollowingId == followableId, nameof(Author), nameof(Author.MainPhoto));
             var responseModels = _mapper.Map<IEnumerable<IDto>>(models);
 
             return ServiceResponse<IEnumerable<IDto>>.Success(responseModels, "Retrieved list with user followers");

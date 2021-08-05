@@ -86,12 +86,12 @@ namespace Storage.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("FollowingId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FollowingId");
 
                     b.ToTable("AspNetUserClaims");
                 });
@@ -107,25 +107,25 @@ namespace Storage.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("FollowingId")
                         .HasColumnType("int");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FollowingId");
 
                     b.ToTable("AspNetUserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("FollowingId")
                         .HasColumnType("int");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.HasKey("FollowingId", "RoleId");
 
                     b.HasIndex("RoleId");
 
@@ -134,7 +134,7 @@ namespace Storage.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("FollowingId")
                         .HasColumnType("int");
 
                     b.Property<string>("LoginProvider")
@@ -146,7 +146,7 @@ namespace Storage.Migrations
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                    b.HasKey("FollowingId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
                 });
@@ -201,7 +201,7 @@ namespace Storage.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int?>("FollowingId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserName")
@@ -218,7 +218,7 @@ namespace Storage.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FollowingId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -364,7 +364,7 @@ namespace Storage.Migrations
                     b.Property<int>("LastModifiedBy")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int?>("FollowingId")
                         .HasColumnType("int");
 
                     b.Property<int?>("UserId1")
@@ -376,7 +376,7 @@ namespace Storage.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FollowingId");
 
                     b.HasIndex("UserId1");
 
@@ -422,7 +422,7 @@ namespace Storage.Migrations
                     b.Property<int?>("ReviewId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int?>("FollowingId")
                         .HasColumnType("int");
 
                     b.HasKey("LikeableId", "LikeableType");
@@ -431,7 +431,7 @@ namespace Storage.Migrations
 
                     b.HasIndex("ReviewId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FollowingId");
 
                     b.ToTable("likes");
                 });
@@ -448,7 +448,7 @@ namespace Storage.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("FollowingId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -494,7 +494,7 @@ namespace Storage.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("FollowingId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsFavorite")
@@ -506,9 +506,9 @@ namespace Storage.Migrations
                     b.Property<bool>("IsWantRead")
                         .HasColumnType("bit");
 
-                    b.HasKey("BookId", "UserId");
+                    b.HasKey("BookId", "FollowingId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FollowingId");
 
                     b.ToTable("read_statuses");
                 });
@@ -543,14 +543,14 @@ namespace Storage.Migrations
                     b.Property<int>("Stars")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int?>("FollowingId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FollowingId");
 
                     b.ToTable("reviews");
                 });
@@ -582,14 +582,14 @@ namespace Storage.Migrations
                     b.Property<int>("ReviewId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int?>("FollowingId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ReviewId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FollowingId");
 
                     b.ToTable("review_comments");
                 });
@@ -645,7 +645,7 @@ namespace Storage.Migrations
                 {
                     b.HasOne("WebAPI.Identity.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -654,7 +654,7 @@ namespace Storage.Migrations
                 {
                     b.HasOne("WebAPI.Identity.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -669,7 +669,7 @@ namespace Storage.Migrations
 
                     b.HasOne("WebAPI.Identity.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -678,7 +678,7 @@ namespace Storage.Migrations
                 {
                     b.HasOne("WebAPI.Identity.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -687,7 +687,7 @@ namespace Storage.Migrations
                 {
                     b.HasOne("WebAPI.Identity.User", null)
                         .WithMany("Friends")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("FollowingId");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Book", b =>
@@ -727,7 +727,7 @@ namespace Storage.Migrations
 
                     b.HasOne("WebAPI.Identity.User", null)
                         .WithMany("Followers")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("FollowingId");
 
                     b.HasOne("WebAPI.Identity.User", null)
                         .WithMany("Followings")
@@ -746,7 +746,7 @@ namespace Storage.Migrations
 
                     b.HasOne("WebAPI.Identity.User", null)
                         .WithMany("Likes")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("FollowingId");
                 });
 
             modelBuilder.Entity("WebAPI.Models.Photo", b =>
@@ -768,7 +768,7 @@ namespace Storage.Migrations
 
                     b.HasOne("WebAPI.Identity.User", null)
                         .WithMany("ReadStatuses")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -783,7 +783,7 @@ namespace Storage.Migrations
 
                     b.HasOne("WebAPI.Identity.User", null)
                         .WithMany("Reviews")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("FollowingId");
                 });
 
             modelBuilder.Entity("WebAPI.Models.ReviewComment", b =>
@@ -796,7 +796,7 @@ namespace Storage.Migrations
 
                     b.HasOne("WebAPI.Identity.User", null)
                         .WithMany("ReviewComments")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("FollowingId");
 
                     b.Navigation("Review");
                 });

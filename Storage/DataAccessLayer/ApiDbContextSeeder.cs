@@ -116,7 +116,7 @@ namespace Storage.DataAccessLayer
                     context.Add(new UserFollow()
                     {
                         CreatorId = users.ElementAt(Random.Next(maxUsersElement)).Id,
-                        UserId = users.ElementAt(Random.Next(maxUsersElement)).Id
+                        FollowingId = users.ElementAt(Random.Next(maxUsersElement)).Id
                     });
                 }
                 context.SaveChanges();

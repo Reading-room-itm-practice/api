@@ -35,7 +35,7 @@ namespace Core.Mappings.Follows
                 .ForMember(dest => dest.Id, opt
                 => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.FollowableId, opt
-                    => opt.MapFrom(src => src.UserId))
+                    => opt.MapFrom(src => src.FollowingId))
                 .ForMember(dest => dest.FollowableType, opt
                 => opt.MapFrom(src => src.FollowableType.ToStringValue()))
                 .ForMember(dest => dest.Name, opt
@@ -56,7 +56,7 @@ namespace Core.Mappings.Follows
                 => opt.MapFrom(src => src.CreatorId));
 
             CreateMap<UserFollowRequest, UserFollow>()
-                .ForMember(dest => dest.UserId, opt
+                .ForMember(dest => dest.FollowingId, opt
                 => opt.MapFrom(src => src.FollowableId))
                 .ForMember(dest => dest.CreatorId, opt
                 => opt.MapFrom(src => src.CreatorId));

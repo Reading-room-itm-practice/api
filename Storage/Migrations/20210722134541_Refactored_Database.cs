@@ -485,12 +485,12 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
                 table: "AspNetUserClaims",
-                column: "UserId");
+                column: "FollowingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
                 table: "AspNetUserLogins",
-                column: "UserId");
+                column: "FollowingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
@@ -584,7 +584,7 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Follows_FollowingId",
                 table: "Follows",
-                column: "UserId");
+                column: "FollowingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Follows_UpdaterId",
@@ -629,7 +629,7 @@ namespace Storage.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Notifications_UserId",
                 table: "Notifications",
-                column: "UserId");
+                column: "FollowingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Photos_AuthorId",
@@ -709,7 +709,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                 table: "AspNetUserRoles",
-                column: "UserId",
+                column: "FollowingId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -717,7 +717,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                 table: "AspNetUserClaims",
-                column: "UserId",
+                column: "FollowingId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -725,7 +725,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                 table: "AspNetUserLogins",
-                column: "UserId",
+                column: "FollowingId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -733,7 +733,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                 table: "AspNetUserTokens",
-                column: "UserId",
+                column: "FollowingId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -819,7 +819,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_Follows_AspNetUsers_FollowingId",
                 table: "Follows",
-                column: "UserId",
+                column: "FollowingId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -891,7 +891,7 @@ namespace Storage.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_Notifications_AspNetUsers_UserId",
                 table: "Notifications",
-                column: "UserId",
+                column: "FollowingId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);

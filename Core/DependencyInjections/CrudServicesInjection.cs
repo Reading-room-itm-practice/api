@@ -19,8 +19,6 @@ namespace Core.DependencyInjections
             services.AddScoped<IUserCrudService<Author>, UserCrudService<Author>>();
             services.AddScoped<IUserCrudService<Book>, UserCrudService<Book>>();
             services.AddScoped<IUserCrudService<Category>, UserCrudService<Category>>();
-            services.AddScoped<ICrudService<ReviewLike>, CrudService<ReviewLike>>();
-            services.AddScoped<ICrudService<ReviewCommentLike>, CrudService<ReviewCommentLike>>();
 
             return services;
         }

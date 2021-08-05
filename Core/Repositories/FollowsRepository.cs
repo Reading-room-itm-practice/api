@@ -50,7 +50,7 @@ namespace Core.Repositories
         private bool IsUserFollowExists(UserFollow model)
         {
             return _context.UserFollows.Where(c => c.CreatorId == model.CreatorId)
-                .FirstOrDefault(a => a.UserId == model.UserId) != null;
+                .FirstOrDefault(a => a.FollowingId == model.FollowingId) != null;
         }
     }
 }

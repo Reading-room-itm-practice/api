@@ -22,12 +22,12 @@ namespace Core.DependencyInjections
         public static IServiceCollection AddCore(this IServiceCollection services)
         {
             services.AddRepositories();
-            services.AddCrudServices();
             services.AddCreators();
             services.AddGetters();
             services.AddUpdaters();
             services.AddDeleters();
             services.AddOtherServices();
+            services.AddCrudServices();
 
             return services;
         }
