@@ -5,6 +5,8 @@ using AutoMapper;
 using Core.Interfaces;
 using Core.Interfaces.Follows;
 using Core.ServiceResponses;
+using Storage.Identity;
+using Storage.Models;
 using Storage.Models.Follows;
 
 namespace Core.Services.Follows
@@ -32,15 +34,15 @@ namespace Core.Services.Follows
         {
             if (typeof(T) == typeof(AuthorFollow))
             {
-                return new[] { "Author", "Author.MainPhoto" };
+                return new[] { nameof(Author), $"{nameof(Author)}.{nameof(Author.MainPhoto)}" };
             }
             if (typeof(T) == typeof(CategoryFollow))
             {
-                return new[] { "Category" };
+                return new[] {nameof(Category) };
             }
             if (typeof(T) == typeof(UserFollow))
             {
-                return new[] { "User", "User.ProfilePhoto" };
+                return new[] { nameof(User), $"{nameof(User)}.{nameof(User.ProfilePhoto)}" };
             }
 
             return Array.Empty<string>();

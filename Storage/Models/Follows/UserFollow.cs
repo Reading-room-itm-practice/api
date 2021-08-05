@@ -5,7 +5,7 @@ namespace Storage.Models.Follows
 {
     public class UserFollow : Follow
     {
-        public Guid FollowingId { get; set; }
+        public Guid UserId { get; set; }
         public User User { get; set; }
     }
 }

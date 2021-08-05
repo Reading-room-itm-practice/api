@@ -14,7 +14,7 @@ namespace Storage.DataAccessLayer.Configurations.Follows
 
             builder.HasOne(f => f.User)
                 .WithMany(f => f.Followers)
-                .HasForeignKey(f => f.FollowingId)
+                .HasForeignKey(f => f.UserId)
                 .IsRequired(false);
         }
     }

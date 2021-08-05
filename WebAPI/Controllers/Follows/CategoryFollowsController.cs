@@ -43,7 +43,7 @@ namespace WebAPI.Controllers.Follows
         [HttpGet]
         public async Task<ServiceResponse> FollowersIndex(int id)
         {
-            return await _followersGetter.GetCategoryFollowers<FollowDto>(id);
+            return await _followersGetter.GetCategoryFollowers<FollowerDto>(id);
         }
 
         [SwaggerOperation(Summary = "Create category follow for logged user")]

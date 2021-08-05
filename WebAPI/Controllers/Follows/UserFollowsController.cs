@@ -32,11 +32,11 @@ namespace WebAPI.Controllers.Follows
         }
 
         [SwaggerOperation(Summary = "Retrieves all categories follows")]
-        [Route("users/{userId:guid}/user-follows")]
+        [Route("users/{id:guid}/user-follows")]
         [HttpGet]
-        public async Task<ServiceResponse> FollowedIndex(Guid userId)
+        public async Task<ServiceResponse> FollowedIndex(Guid id)
         {
-            return await _followedGetter.GetFollowed<UserFollowDto>(userId);
+            return await _followedGetter.GetFollowed<UserFollowDto>(id);
         }
 
         [SwaggerOperation(Description = "Retrieves all authors follows")]
@@ -44,15 +44,15 @@ namespace WebAPI.Controllers.Follows
         [HttpGet]
         public async Task<ServiceResponse> FollowersIndex(Guid id)
         {
-            return await _followersGetter.GetUserFollowers<FollowDto>(id);
+            return await _followersGetter.GetUserFollowers<FollowerDto>(id);
         }
 
         [SwaggerOperation(Summary = "Create category follow for logged user")]
-        [Route("users/{userId:guid}/follows")]
+        [Route("users/{id:guid}/follows")]
         [HttpPost]
-        public async Task<ServiceResponse> Create(Guid userId)
+        public async Task<ServiceResponse> Create(Guid id)
         {
-            return await _creatorService.Create<UserFollowDto>(new UserFollowRequest { FollowableId = userId });
+            return await _creatorService.Create<UserFollowDto>(new UserFollowRequest { FollowableId = id });
         }
 
         [SwaggerOperation(Summary = "Delete a category follow by unique id")]

@@ -46,7 +46,7 @@ namespace Storage.DataAccessLayer
 
         public static void SeedCategories(ApiDbContext context)
         {
-            if (!context.Categories.Any() && context.Users.Any())
+            if (context.Categories.Count() < UsersCount / 2 && context.Users.Any())
             {
                 var creatorId = context.Users.FirstOrDefaultAsync().Result.Id;
 
@@ -64,7 +64,7 @@ namespace Storage.DataAccessLayer
 
         public static void SeedAuthors(ApiDbContext context)
         {
-            if (!context.Authors.Any() && context.Users.Any())
+            if (context.Authors.Count() < AuthorsCount/2 && context.Users.Any())
             {
                 var creatorId = context.Users.FirstOrDefaultAsync().Result.Id;
 
@@ -83,7 +83,7 @@ namespace Storage.DataAccessLayer
 
         public static void SeedAuthorFollows(ApiDbContext context)
         {
-            if (!context.Follows.Any() && context.Authors.Any() && context.Users.Any())
+            if (context.AuthorFollows.Count() < FollowsCount /2 && context.Authors.Any() && context.Users.Any())
             {
                 var users = context.Users.ToListAsync().Result;
                 var authors = context.Authors.ToListAsync().Result;
@@ -105,7 +105,7 @@ namespace Storage.DataAccessLayer
 
         public static void SeedUsersFollows(ApiDbContext context)
         {
-            if (!context.Follows.Any() && context.Users.Any())
+            if (context.UserFollows.Count() < FollowsCount / 2 && context.Users.Any())
             {
                 var users = context.Users.ToListAsync().Result;
 
@@ -116,7 +116,7 @@ namespace Storage.DataAccessLayer
                     context.Add(new UserFollow()
                     {
                         CreatorId = users.ElementAt(Random.Next(maxUsersElement)).Id,
-                        FollowingId = users.ElementAt(Random.Next(maxUsersElement)).Id
+                        UserId = users.ElementAt(Random.Next(maxUsersElement)).Id
                     });
                 }
                 context.SaveChanges();
@@ -125,7 +125,7 @@ namespace Storage.DataAccessLayer
 
         public static void SeedCategoriesFollows(ApiDbContext context)
         {
-            if (!context.Follows.Any() && context.Categories.Any() && context.Users.Any())
+            if (context.CategoryFollows.Count() < FollowsCount / 2 && context.Categories.Any() && context.Users.Any())
             {
                 var users = context.Users.ToListAsync().Result;
                 var categories = context.Categories.ToListAsync().Result;
@@ -147,7 +147,7 @@ namespace Storage.DataAccessLayer
 
         public static void SeedBooks(ApiDbContext context)
         {
-            if (!context.Books.Any() && context.Categories.Any()
+            if (context.Books.Count() < BooksCount / 2 && context.Categories.Any()
                 && context.Authors.Any() && context.Users.Any())
             {
                 var creatorId = context.Users.FirstOrDefaultAsync().Result.Id;
@@ -175,7 +175,7 @@ namespace Storage.DataAccessLayer
 
         public static void SeedReviews(ApiDbContext context)
         {
-            if (!context.Reviews.Any() && context.Books.Any() && context.Users.Any())
+            if (context.Reviews.Count() < ReviewsCount / 2 && context.Books.Any() && context.Users.Any())
             {
                 var users = context.Users.ToListAsync().Result;
                 var books = context.Books.ToListAsync().Result;
@@ -198,7 +198,7 @@ namespace Storage.DataAccessLayer
 
         public static void SeedComments(ApiDbContext context)
         {
-            if (!context.ReviewComments.Any() && context.Reviews.Any() && context.Users.Any())
+            if (context.ReviewComments.Count() < CommentsCount / 2 && context.Reviews.Any() && context.Users.Any())
             {
                 var users = context.Users.ToListAsync().Result;
                 var reviews = context.Reviews.ToListAsync().Result;
@@ -221,7 +221,7 @@ namespace Storage.DataAccessLayer
 
         public static void SeedReviewLikes(ApiDbContext context)
         {
-            if (!context.ReviewLikes.Any() && context.Reviews.Any() && context.Users.Any())
+            if (context.ReviewLikes.Count() < LikesCount / 2 && context.Reviews.Any() && context.Users.Any())
             {
                 var users = context.Users.ToListAsync().Result;
                 var reviews = context.Reviews.ToListAsync().Result;
@@ -243,7 +243,7 @@ namespace Storage.DataAccessLayer
 
         public static void SeedCommentsLikes(ApiDbContext context)
         {
-            if (!context.CommentLikes.Any() && context.ReviewComments.Any() && context.Users.Any())
+            if (context.CommentLikes.Count() < LikesCount / 2 && context.ReviewComments.Any() && context.Users.Any())
             {
                 var users = context.Users.ToListAsync().Result;
                 var comments = context.ReviewComments.ToListAsync().Result;

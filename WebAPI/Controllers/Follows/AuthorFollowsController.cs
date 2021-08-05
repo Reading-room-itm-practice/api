@@ -45,7 +45,7 @@ namespace WebAPI.Controllers.Follows
         [HttpGet]
         public async Task<ServiceResponse> FollowersIndex(int id)
         {
-            return await _followersGetter.GetAuthorFollowers<FollowDto>(id);
+            return await _followersGetter.GetAuthorFollowers<FollowerDto>(id);
         }
 
         [SwaggerOperation(Description  = "Create author follow for logged user")]

@@ -2,8 +2,6 @@
 using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
-using Microsoft.AspNetCore.Identity;
-using Storage.Identity;
 using Storage.Interfaces;
 using Storage.Models;
 using System.Collections.Generic;

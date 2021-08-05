@@ -31,7 +31,7 @@ namespace Core.Services.Follows
         public async Task<ServiceResponse<IEnumerable<IDto>>> GetUserFollowers<IDto>(Guid followableId)
         {
             var models = await _userFollowRepo.FindByConditionsWithIncludes(
-                x => x.FollowingId == followableId, nameof(Author), nameof(Author.MainPhoto));
+                x => x.UserId == followableId, nameof(UserFollow.Creator), $"{nameof(UserFollow.Creator)}.{nameof(UserFollow.Creator.ProfilePhoto)}");
             var responseModels = _mapper.Map<IEnumerable<IDto>>(models);
 
             return ServiceResponse<IEnumerable<IDto>>.Success(responseModels, "Retrieved list with user followers");
@@ -39,8 +39,9 @@ namespace Core.Services.Follows
 
         public async Task<ServiceResponse<IEnumerable<IDto>>> GetAuthorFollowers<IDto>(int followableId)
         {
+         
             var models = await _authorFollowRepo.FindByConditionsWithIncludes(
-                x => x.AuthorId == followableId, nameof(User), nameof(User.ProfilePhoto));
+                x => x.AuthorId == followableId, nameof(AuthorFollow.Creator), $"{nameof(AuthorFollow.Creator)}.{nameof(AuthorFollow.Creator.ProfilePhoto)}");
             var responseModels = _mapper.Map<IEnumerable<IDto>>(models);
 
             return ServiceResponse<IEnumerable<IDto>>.Success(responseModels, "Retrieved list with author followers");
@@ -49,7 +50,7 @@ namespace Core.Services.Follows
         public async Task<ServiceResponse<IEnumerable<IDto>>> GetCategoryFollowers<IDto>(int followableId)
         {
             var models = await _categoryFollowRepo.FindByConditionsWithIncludes(
-                x => x.CategoryId == followableId, nameof(Category));
+                x => x.CategoryId == followableId, nameof(CategoryFollow.Creator), $"{nameof(CategoryFollow.Creator)}.{nameof(CategoryFollow.Creator.ProfilePhoto)}");
             var responseModels = _mapper.Map<IEnumerable<IDto>>(models);
 
             return ServiceResponse<IEnumerable<IDto>>.Success(responseModels, "Retrieved list with category followers");
