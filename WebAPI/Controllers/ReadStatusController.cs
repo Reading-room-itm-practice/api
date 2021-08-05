@@ -10,27 +10,32 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class ReadStatusController : ControllerBase
     {
-        private readonly IReadStatusService _readStatusService;
+        private readonly IReadStatusUpdaterService _readStatusUpdaterService;
+        private readonly IReadStatusGetterService _readStatusGetterService;
 
-        public ReadStatusController(IReadStatusService readStatusService)
+        public ReadStatusController(IReadStatusUpdaterService readStatusUpdaterService, IReadStatusGetterService readStatusGetterService)
         {
-            _readStatusService = readStatusService;
+            _readStatusUpdaterService = readStatusUpdaterService;
+            _readStatusGetterService = readStatusGetterService;
         }
 
-        [HttpPut("Update/{bookId}")]
+        [HttpPut]
+        [Route("books/{bookId:int}/read-status")]
         public async Task<ServiceResponse> Update(ReadStatusRequest request, int bookId)
         {
-            return await _readStatusService.Update(request, bookId);
+            request.BookId = bookId;
+            return await _readStatusUpdaterService.UpdateReadStatus(request);
         }
 
-        [HttpGet("{bookId}")]
+        [HttpGet]
+        [Route("books/{bookId:int}/read-status")]
         public async Task<ServiceResponse<ReadStatusDto>> Get(int bookId)
         {
-            return await _readStatusService.GetReadStatus(bookId);
+            return await _readStatusGetterService.GetReadStatus(bookId);
         }
     }
 }

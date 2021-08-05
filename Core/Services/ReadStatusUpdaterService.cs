@@ -16,41 +16,40 @@ using System.Threading.Tasks;
 
 namespace Core.Services
 {
-    public class ReadStatusService : IReadStatusService
+    public class ReadStatusUpdaterService : IReadStatusUpdaterService
     {
         private readonly IBaseRepository<ReadStatus> _readStatusRepository;
         private readonly IBaseRepository<Book> _bookRepository;
+        private readonly ICreatorService<ReadStatus> _creatorService;
         private readonly IMapper _mapper;
         private readonly ILoggedUserProvider _loggedUser;
-        public ReadStatusService(IBaseRepository<ReadStatus> readStatusRepository, IMapper mapper, ILoggedUserProvider loggedUser, IBaseRepository<Book> bookRepository)
+        public ReadStatusUpdaterService(
+            IBaseRepository<ReadStatus> readStatusRepository,
+            IMapper mapper,
+            ILoggedUserProvider loggedUser, 
+            IBaseRepository<Book> bookRepository,
+            ICreatorService<ReadStatus> creatorService)
         {
             _readStatusRepository = readStatusRepository;
             _bookRepository = bookRepository;
             _mapper = mapper;
             _loggedUser = loggedUser;
+            _creatorService = creatorService;
         }
 
-        public async Task Create(ReadStatusRequest request, int bookId, IEnumerable<ReadStatus> readStatus)
-        {
-            var createModel = _mapper.Map(request, readStatus.FirstOrDefault());
-
-            createModel.BookId = bookId;
-            await _readStatusRepository.Create(createModel);
-        }
-
-        public async Task<ServiceResponse> Update(ReadStatusRequest request, int bookId)
+        public async Task<ServiceResponse> UpdateReadStatus(ReadStatusRequest request)
         {
             var currentUserId = _loggedUser.GetUserId();
-            var books = await _bookRepository.FindByConditions(b => b.Id == bookId);
+            var books = await _bookRepository.FindByConditions(b => b.Id == request.BookId);
             if (!books.Any())
             {
                 return ServiceResponse.Error("Book with given id does not exist.");
             }
 
-            var readStatus = await _readStatusRepository.FindByConditions(r => r.BookId == bookId && r.CreatorId == currentUserId);
+            var readStatus = await _readStatusRepository.FindByConditions(r => r.BookId == request.BookId && r.CreatorId == currentUserId);
             if (!readStatus.Any())
             {
-                await Create(request, bookId, readStatus);
+                await _creatorService.Create<ReadStatusDto>(request);
                 return ServiceResponse.Success("Resource has been created.", HttpStatusCode.Created);
             }
 
@@ -64,19 +63,6 @@ namespace Core.Services
             await _readStatusRepository.Edit(updateModel);
 
             return ServiceResponse.Success("Resource has been updated.");
-        }
-
-        public async Task<ServiceResponse<ReadStatusDto>> GetReadStatus(int bookId)
-        {
-            var currentUserId = _loggedUser.GetUserId();
-            var model = await _readStatusRepository.FindByConditions(r => r.BookId == bookId && r.CreatorId == currentUserId);
-            if(!model.Any())
-            {
-                return ServiceResponse<ReadStatusDto>.Error(null ,"Read status with given id does not exist.");
-            }
-            var responseModel = _mapper.Map<ReadStatusDto>(model.FirstOrDefault());
-
-            return ServiceResponse<ReadStatusDto>.Success(responseModel, "Retrived resource");
         }
     }
 }

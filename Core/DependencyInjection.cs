@@ -91,7 +91,9 @@ namespace Core
             services.AddScoped<IFriendService, FriendService>();
             services.AddScoped<IFriendRepository, FriendRepository>();
 
-            services.AddScoped<IReadStatusService, ReadStatusService>();
+            services.AddScoped<ICreatorService<ReadStatus>, CreatorService<ReadStatus>>();
+            services.AddScoped<IReadStatusUpdaterService, ReadStatusUpdaterService>();
+            services.AddScoped<IReadStatusGetterService, ReadStatusGetterService>();
 
             services.AddScoped<IProfileHelper, ProfileHelper>();
             services.AddScoped<IProfileService, ProfileService>();
