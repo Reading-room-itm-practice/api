@@ -6,7 +6,6 @@ namespace Core.DTOs
 {
     public class UserProfileDto
     {
-
         public UserSearchDto User { get; set; }
         public int FollowersCount { get; set; }
         public int FollowingsCount { get; set; }
@@ -15,12 +14,10 @@ namespace Core.DTOs
         public IEnumerable<BookDto> ToReadBooks { get; set; }
         public IEnumerable<BookDto> ReadBooks { get; set; }
         public IEnumerable<FriendDto> FriendList { get; set; }
-
     }
 
     public class UserProfile
     {
-
         public User User { get; set; }
         public int FollowersCount { get; set; }
         public int FollowingsCount { get; set; }
@@ -29,7 +26,6 @@ namespace Core.DTOs
         public IEnumerable<Book> ToReadBooks { get; set; }
         public IEnumerable<Book> ReadBooks { get; set; }
         public IEnumerable<FriendDto> FriendList { get; set; }
-
     }
 
     public class ForeignUserProfile : UserProfile
