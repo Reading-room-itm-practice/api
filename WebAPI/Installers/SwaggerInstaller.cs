@@ -4,7 +4,7 @@ using Microsoft.OpenApi.Models;
 
 namespace WebAPI.Installers
 {
-    public class SwaggerInstaller : Installer
+    public class SwaggerInstaller : IInstaller
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
