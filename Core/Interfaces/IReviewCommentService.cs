@@ -1,10 +1,6 @@
 ﻿using Core.Requests;
-using Core.ServiceResponses;
-using Storage.Models;
+using Core.Response;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Core.Interfaces

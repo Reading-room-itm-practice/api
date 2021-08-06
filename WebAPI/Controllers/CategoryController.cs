@@ -1,7 +1,8 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
-using Core.ServiceResponses;
+using Core.Response;
+using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
 using System.Net;
@@ -14,10 +15,12 @@ namespace WebAPI.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly IUserCrudService<Category> _crud;
+        private readonly IGettterPaginationService _getPaged;
 
-        public CategoryController(IUserCrudService<Category> crud)
+        public CategoryController(IUserCrudService<Category> crud, IGettterPaginationService getPaged)
         {
             _crud = crud;
+            _getPaged = getPaged;
         }
 
         [HttpGet("{id:int}")]
@@ -29,9 +32,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ServiceResponse> GetCategories()
+        public async Task<ServiceResponse> GetCategories([FromQuery] PaginationFilter filter)
         {
-            return await _crud.GetAll<CategoryDto>();        
+            var route = Request.Path.Value;
+
+            return await _getPaged.GetAll<Category, CategoryDto>(filter, route);        
         }
 
         [HttpPost]

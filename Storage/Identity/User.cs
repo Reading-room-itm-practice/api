@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Storage.Interfaces;
 using Storage.Models;
 using Storage.Models.Follows;

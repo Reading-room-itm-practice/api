@@ -1,5 +1,5 @@
-﻿using Core.Common;
-using Core.ServiceResponses;
+using Core.Common;
+using Core.Response;
 using Storage.Interfaces;
 using System.Threading.Tasks;
 

@@ -1,13 +1,15 @@
-﻿using Core.DTOs;
+using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
-using Core.ServiceResponses;
+using Core.Response;
 using Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Identity;
 using Storage.Models;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -17,17 +19,22 @@ namespace WebAPI.Controllers
     public class AuthorsController : ControllerBase
     {
         private readonly IUserCrudService<Author> _crud;
+        private readonly IGettterPaginationService _getPaged;
 
-        public AuthorsController(IUserCrudService<Author> crud)
+        public AuthorsController(IUserCrudService<Author> crud, IGettterPaginationService getPaged)
         {
             _crud = crud;
+            _getPaged = getPaged;
         }
 
         [SwaggerOperation(Summary = "Retrieves all book authors")]
         [HttpGet]
-        public async Task<ServiceResponse> Index()
+        public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
-            return await _crud.GetAll<AuthorDto>();
+            var route = Request.Path.Value;
+            var authors = await _getPaged.GetAll<Author, AuthorDto>(filter, route);
+
+            return authors;
         }
 
         [SwaggerOperation(Summary = "Retrieves a specific book author by unique id")]

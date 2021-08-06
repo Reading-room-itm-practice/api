@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using Core.DTOs;
 using Core.Requests;
+using Core.Services.Search;
 using Storage.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Mappings
 {
@@ -14,6 +11,9 @@ namespace Core.Mappings
     {
         public ReviewMapperProfile()
         {
+            CreateMap<Review, ReviewDto>().ReverseMap();
+            CreateMap<ExtendedData<IEnumerable<Review>>, ExtendedData<IEnumerable<ReviewDto>>>().ReverseMap();
+
             CreateMap<ReviewRequest, Review>().ReverseMap();
             CreateMap<ReviewDto, Review>().ReverseMap();
         }
