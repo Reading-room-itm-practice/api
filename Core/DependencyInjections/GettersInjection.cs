@@ -22,6 +22,7 @@ namespace Core.DependencyInjections
             services.AddScoped<IGetterService<Category>, GetterService<Category>>();
             services.AddScoped<IGetterService<Photo>, GetterService<Photo>>();
             services.AddScoped<IGetterService<Review>, GetterService<Review>>();
+            services.AddScoped<IGetterService<ReviewComment>, GetterService<ReviewComment>>();
 
             return services;
         }

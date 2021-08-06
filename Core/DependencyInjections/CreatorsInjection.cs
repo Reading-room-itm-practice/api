@@ -22,6 +22,7 @@ namespace Core.DependencyInjections
             services.AddScoped<ICreatorService<Review>, CreatorService<Review>>();
             services.AddScoped<ICreatorService<ReviewLike>, CreatorService<ReviewLike>>();
             services.AddScoped<ICreatorService<ReviewCommentLike>, CreatorService<ReviewCommentLike>>();
+            services.AddScoped<ICreatorService<ReviewComment>, CreatorService<ReviewComment>>();
 
             return services;
         }

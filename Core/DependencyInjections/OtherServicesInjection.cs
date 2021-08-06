@@ -9,6 +9,7 @@ using Core.Services.Email;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Core.Repositories;
 
 namespace Core.DependencyInjections
 {
@@ -30,6 +31,7 @@ namespace Core.DependencyInjections
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<IModifyAvalibilityChecker, ModifyAvailabilityChecker>();
             services.AddSingleton<IAuthorizationHandler, AuditableModelAuthorizationHandler>();
+            services.AddScoped<IReviewCommentService, ReviewCommentService>();
 
             return services;
         }
