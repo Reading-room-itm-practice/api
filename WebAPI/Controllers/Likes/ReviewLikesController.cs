@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Core.DTOs;
+using Core.DTOs.Follows;
 using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
@@ -30,7 +31,7 @@ namespace WebAPI.Controllers.Likes
         [HttpPost]
         public async Task<ServiceResponse> Create(int id)
         {
-            return await _creatorService.Create<LikeDto>(new LikeRequest());
+            return await _creatorService.Create<FollowDto>(new LikeRequest());
         }
 
 

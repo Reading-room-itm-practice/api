@@ -15,7 +15,9 @@ namespace Core.Mappings
         public ReviewMapperProfile()
         {
             CreateMap<ReviewRequest, Review>().ReverseMap();
-            CreateMap<ReviewDto, Review>().ReverseMap();
+            CreateMap<Review, ReviewDto>()
+                .ForMember(dest => dest.LikesCount, opt
+                    => opt.MapFrom(src => src.Likes.Count)).ReverseMap();
         }
     }
 }

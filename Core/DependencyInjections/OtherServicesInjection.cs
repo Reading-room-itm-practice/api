@@ -9,7 +9,9 @@ using Core.Services.Email;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using Core.Repositories;
+using AutoMapper;
+using Core.Mappings;
+using Storage.Interfaces;
 
 namespace Core.DependencyInjections
 {
@@ -32,7 +34,11 @@ namespace Core.DependencyInjections
             services.AddScoped<IModifyAvalibilityChecker, ModifyAvailabilityChecker>();
             services.AddSingleton<IAuthorizationHandler, AuditableModelAuthorizationHandler>();
             services.AddScoped<IReviewCommentService, ReviewCommentService>();
-
+            services.AddScoped<IHelper, Helper>();
+            services.AddScoped(provider => new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new ReviewCommentMapper(provider.GetService<IHelper>()));
+            }).CreateMapper());
             return services;
         }
     }

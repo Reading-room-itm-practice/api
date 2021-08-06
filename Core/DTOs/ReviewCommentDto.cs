@@ -1,13 +1,9 @@
 ﻿using Core.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.DTOs
 {
-    public class ReviewCommentDto : IDto
+    public class ReviewCommentDto : LikeableDto
     {
         public int Id { get; set; }
         public int ReviewId { get; set; }

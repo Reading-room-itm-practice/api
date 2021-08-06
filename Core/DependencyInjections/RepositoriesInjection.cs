@@ -29,6 +29,7 @@ namespace Core.DependencyInjections
             services.AddScoped<ISearchRepository, SearchRepository>();
             services.AddScoped<IBaseRepository<ReviewComment>, BaseRepository<ReviewComment>>();
             services.AddScoped<IReviewCommentRepository, ReviewCommentRepository>();
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
 
             return services;
         }
