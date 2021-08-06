@@ -25,10 +25,9 @@ namespace Core.Interfaces.Profile
 
         public async Task<UserProfile> GetUserProfile(Guid? id)
         {
-            if (id == null)
-                id = _loggedUserProvider.GetUserId();
-            bool isFriend = await _friendService.IsFriend(id) ;
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var userId = id ?? _loggedUserProvider.GetUserId();
+            bool isFriend = await _friendService.IsFriend(userId);
+            var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
                 return new UserProfile();
 
