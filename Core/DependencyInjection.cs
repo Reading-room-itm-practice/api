@@ -29,6 +29,7 @@ namespace Core
             services.AddScoped<IBaseRepository<Review>, BaseRepository<Review>>();
             services.AddScoped<IBaseRepository<FriendRequest>, BaseRepository<FriendRequest>>();
             services.AddScoped<IBaseRepository<ReadStatus>, BaseRepository<ReadStatus>>();
+            services.AddScoped<IBaseRepository<ReviewComment>, BaseRepository<ReviewComment>>();
 
             services.AddScoped<ICrudService<Author>, CrudService<Author>>();
             services.AddScoped<ICrudService<Book>, CrudService<Book>>();
@@ -36,6 +37,7 @@ namespace Core
             services.AddScoped<ICrudService<Photo>, CrudService<Photo>>();
             services.AddScoped<ICrudService<Review>, CrudService<Review>>();
             services.AddScoped<ICrudService<FriendRequest>, CrudService<FriendRequest>>();
+            services.AddScoped<ICrudService<ReviewComment>, CrudService<ReviewComment>>();
 
             services.AddScoped<ICreatorService<Author>, CreatorService<Author>>();
             services.AddScoped<IGetterService<Author>, GetterService<Author>>();
@@ -66,11 +68,20 @@ namespace Core
             services.AddScoped<IGetterService<FriendRequest>, GetterService<FriendRequest>>();
             services.AddScoped<IUpdaterService<FriendRequest>, UpdaterService<FriendRequest>>();
             services.AddScoped<IDeleterService<FriendRequest>, DeleterService<FriendRequest>>();
+          
+            services.AddScoped<ICreatorService<ReviewComment>, CreatorService<ReviewComment>>();
+            services.AddScoped<IGetterService<ReviewComment>, GetterService<ReviewComment>>();
+            services.AddScoped<IUpdaterService<ReviewComment>, UpdaterService<ReviewComment>>();
+            services.AddScoped<IDeleterService<ReviewComment>, DeleterService<ReviewComment>>();
 
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
 
+            services.AddScoped<IReviewCommentService, ReviewCommentService>();
+            services.AddScoped<IReviewCommentRepository, ReviewCommentRepository>();
+
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IPhotoRepository, PhotoRepository>();
 
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IRegisterService, RegisterService>();
