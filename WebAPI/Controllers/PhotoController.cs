@@ -22,12 +22,10 @@ namespace WebAPI.Controllers
     public class PhotoController : ControllerBase
     {
         private readonly IPhotoService _photoService;
-        private readonly IGettterPaginationService _getPaged;
 
-        public PhotoController(IPhotoService photoService, IGettterPaginationService getPaged)
+        public PhotoController(IPhotoService photoService)
         {
             _photoService = photoService;
-            _getPaged = getPaged;
         }
 
         [HttpGet("All")]
