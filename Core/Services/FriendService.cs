@@ -45,7 +45,7 @@ namespace Core.Services
 
             foreach (var friendRequest in friendRequests)
             {
-                var user = friendRequest.ToId == userId ? friendRequest.To : friendRequest.Creator;
+                var user = friendRequest.ToId == searchedUserId ? friendRequest.Creator : friendRequest.To;
                 friendList.Add(new FriendDto { Id = user.Id, UserName = user.UserName });
             }
 
