@@ -24,50 +24,51 @@ namespace Core.Repositories
         {
             var currentUserId = _loggedUserProvider.GetUserId();
 
-            var toReadBooksIdList = _context.ReadStatuses.Where(rs => rs.IsWantRead && rs.CreatorId == user.Id).ToList() ;
-            var favouriteBooksIdList = _context.ReadStatuses.Where(rs => rs.IsFavorite && rs.CreatorId == user.Id).ToList();
-            var areReadBooksIdList = _context.ReadStatuses.Where(rs => rs.IsRead && rs.CreatorId == user.Id).ToList();
+            var wantReadIds = _context.ReadStatuses.Where(rs => rs.IsWantRead && rs.CreatorId == user.Id).Select(rs => rs.BookId).ToList();
+            var favouriteIds = _context.ReadStatuses.Where(rs => rs.IsFavorite && rs.CreatorId == user.Id).Select(rs => rs.BookId).ToList();
+            var readIds = _context.ReadStatuses.Where(rs => rs.IsRead && rs.CreatorId == user.Id).Select(rs => rs.BookId).ToList();
 
-            var favouriteBooks = _context.Books.AsEnumerable().Where(b => favouriteBooksIdList.Any(idlist => idlist.BookId == b.Id));
-            var toReadBooks = _context.Books.AsEnumerable().Where(b => toReadBooksIdList.Any(idlist => idlist.BookId == b.Id));
-            var readBooks = _context.Books.AsEnumerable().Where(b => areReadBooksIdList.Any(idlist => idlist.BookId == b.Id));
+            var wantReadBooks = _context.Books.Where(b => wantReadIds.Any(id => id == b.Id)).ToList();
+            var favouriteBooks = _context.Books.Where(b => favouriteIds.Any(id => id == b.Id)).ToList();
+            var readBooks = _context.Books.Where(b => readIds.Any(id => id == b.Id)).ToList();
 
-            UserProfile profile = BaseProfile(user, toReadBooks, readBooks);
+            UserProfile profile = BaseProfile(user, wantReadBooks, readBooks);
 
-            return user.Id == currentUserId 
+            return user.Id == currentUserId
                 ? CreateMyProfile(profile, favouriteBooks)
                 : CreateForeignProfile(profile, user, isFriend, currentUserId, favouriteBooks);
         }
 
         public UserProfile BaseProfile(User user, IEnumerable<Book> toReadBooks, IEnumerable<Book> readingBooks)
         {
-            UserProfile profile = new() { };
-            profile.User = user;
-            profile.FollowersCount = user.Followers != null ? user.Followers.Count : 0;
-            profile.FollowingsCount =
-                (user.FollowedAuthors != null ? user.FollowedUsers.Count : 0) + (user.FollowedAuthors != null ? user.FollowedAuthors.Count : 0);
-
-            profile.ToReadBooks = toReadBooks.Any() ? toReadBooks.ToList() : null;
-            profile.ReadBooks = readingBooks.Any() ? readingBooks.ToList() : null;
-            //profile.Photo = NOT IMPLEMENTED
+            UserProfile profile = new()
+            {
+                User = user,
+                FollowersCount = user.Followers?.Count ?? 0,
+                FollowingsCount = (user.FollowedUsers?.Count ?? 0) + (user.FollowedAuthors?.Count ?? 0),
+                ToReadBooks = toReadBooks,
+                ReadBooks = readingBooks
+                //Photo = NOT IMPLEMENTED
+            };
 
             return profile;
         }
 
-        public ForeignUserProfile CreateForeignProfile(UserProfile profile, User user, bool isFriend, Guid currentUserId, IEnumerable<Book> favouriteBooks)
+        public ForeignUserProfile CreateForeignProfile(UserProfile profile, User user, bool isFriend, Guid currentUserId, List<Book> favouriteBooks)
         {
-            ForeignUserProfile foreignProfile = new ForeignUserProfile(profile);
-
-            foreignProfile.IsFriend = isFriend;
-            foreignProfile.IsFollowing = user.Followers != null && user.Followers.Where(f => f.FollowingId == currentUserId).Any() ? true : false;
-            foreignProfile.FavouriteBooks = (isFriend && favouriteBooks.Any()) ? favouriteBooks.ToList() : null;
+            ForeignUserProfile foreignProfile = new(profile)
+            {
+                IsFriend = isFriend,
+                IsFollowing = user.Followers?.Any(f => f.FollowingId == currentUserId) ?? false,
+                FavouriteBooks = isFriend ? favouriteBooks : new(),
+            };
 
             return foreignProfile;
         }
 
         public UserProfile CreateMyProfile(UserProfile profile, IEnumerable<Book> favouriteBooks)
         {
-            profile.FavouriteBooks = favouriteBooks.Any() ? favouriteBooks.ToList() : null;
+            profile.FavouriteBooks = favouriteBooks;
 
             return profile;
         }
