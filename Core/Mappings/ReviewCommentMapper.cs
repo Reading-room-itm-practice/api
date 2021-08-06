@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Core.Mappings
 {
-    class ReviewMapperProfile : Profile
+    class ReviewCommentMapper : Profile
     {
-        public ReviewMapperProfile()
+        public ReviewCommentMapper()
         {
-            CreateMap<ReviewRequest, Review>().ReverseMap();
-            CreateMap<ReviewDto, Review>().ReverseMap();
+            CreateMap<ReviewCommentRequest, ReviewComment>().ReverseMap();
+            CreateMap<ReviewComment, ReviewCommentDto>().ReverseMap();
         }
     }
 }
