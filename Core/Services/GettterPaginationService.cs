@@ -20,7 +20,7 @@ namespace Core.Services
             _uriService = uriService;
         }
 
-        async Task<ServiceResponse<PagedResponse<IEnumerable<T1>>>> IGettterPaginationService.GetAll<T, T1>(PaginationFilter filter, string route) where T : class
+        public async Task<ServiceResponse<PagedResponse<IEnumerable<T1>>>> GetAll<T, T1>(PaginationFilter filter, string route) where T : class where T1 : class, IDto
         {
             filter.Valid();
             var models = await _repository.FindAll<T>(filter);

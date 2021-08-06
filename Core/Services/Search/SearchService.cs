@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Core.Common;
-using Core.DTOs;
 using Core.Enums;
 using Core.Interfaces;
 using Core.Interfaces.Search;
@@ -26,10 +25,10 @@ namespace Core.Services.Search
         {
             filter.Valid();
             var entities = _searchRepository.GetEntities<Data>(filter, searchString, sort);
-            return typeof(AllData) != typeof(Data) ? EnumerableResponse<Data, Dto>(entities, filter, route) : Response<Data, Dto>(entities, filter, route);
+            return typeof(AllData) != typeof(Data) ? GetEnumerableResponse<Data, Dto>(entities, filter, route) : GetResponse<Data, Dto>(entities, filter, route);
         }
 
-        private ServiceResponse Response<Data, Dto>(ExtendedData entities, PaginationFilter filter, string route)
+        private ServiceResponse GetResponse<Data, Dto>(ExtendedData entities, PaginationFilter filter, string route)
         {
             var entitiesDto = _mapper.Map<ExtendedData<Dto>>(entities);
             var pagedReponse = PaginationHelper.CreatePagedReponse(entitiesDto.Data, filter, entitiesDto.Quantity, _uriService, route);
@@ -38,7 +37,7 @@ namespace Core.Services.Search
             return ServiceResponse<PagedResponse<Dto>>.Success(pagedReponse, message);
         }
 
-        private ServiceResponse EnumerableResponse<Data, Dto>(ExtendedData entities, PaginationFilter filter, string route)
+        private ServiceResponse GetEnumerableResponse<Data, Dto>(ExtendedData entities, PaginationFilter filter, string route)
         {
             var entitiesDto = _mapper.Map<ExtendedData<IEnumerable<Dto>>>(entities);
             var pagedReponse = PaginationHelper.CreatePagedReponse(entitiesDto.Data, filter, entitiesDto.Quantity, _uriService, route);

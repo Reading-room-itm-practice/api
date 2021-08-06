@@ -1,8 +1,7 @@
-﻿using Core.Common;
-
+﻿
 namespace Core. Services.Search
 {
-    public class ExtendedData : IDto
+    public class ExtendedData
     {
 
     }
