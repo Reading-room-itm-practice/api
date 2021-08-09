@@ -1,5 +1,5 @@
 ﻿using Core.Interfaces.Auth;
-using Core.ServiceResponses;
+using Core.Response;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

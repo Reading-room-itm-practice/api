@@ -1,6 +1,7 @@
-﻿using AutoMapper;
+using AutoMapper;
+using Core.Common;
 using Core.Interfaces;
-using Core.ServiceResponses;
+using Core.Response;
 using Storage.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,12 +20,13 @@ namespace Core.Services
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<IEnumerable<IDto>>> GetAll<IDto>()
+        async Task<ServiceResponse<IEnumerable<IDto>>> IGetterService<T>.GetAll<IDto>()
         {
-            var models = await _repository.FindAll();
-            var responseModels =  _mapper.Map<IEnumerable<IDto>>(models);
 
-            return ServiceResponse<IEnumerable<IDto>>.Success(responseModels, "Retrived list with resorces");
+            var models = await _repository.FindAll();
+            var data = _mapper.Map<IEnumerable<IDto>>(models);
+
+            return ServiceResponse<IEnumerable<IDto>>.Success(data, "Retrived resource");
         }
 
         public async Task<ServiceResponse<IDto>> GetById<IDto>(int id)
@@ -34,5 +36,6 @@ namespace Core.Services
 
             return ServiceResponse<IDto>.Success(responseModel, "Retrived resource");
         }
+
     }
 }

@@ -1,6 +1,7 @@
-﻿using Storage.Interfaces;
+using Storage.Interfaces;
 using Storage.Models.Follows;
 using Storage.Models.Photos;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

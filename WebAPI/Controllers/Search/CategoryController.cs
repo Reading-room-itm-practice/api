@@ -1,7 +1,7 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
-using Core.ServiceResponses;
+using Core.Response;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
@@ -14,19 +14,13 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICreatorService<Category> _creator;
-        private readonly IApprovedGetterService<Category> _getter;
+        private readonly IUserCrudService<Category> _crud;
+        private readonly IGettterPaginationService _getPaged;
 
-        public CategoryController(ICreatorService<Category> creator, IApprovedGetterService<Category> getter)
+        public CategoryController(IUserCrudService<Category> crud, IGettterPaginationService getPaged)
         {
-            _creator = creator;
-            _getter = getter;
-        }
-
-        [HttpGet]
-        public async Task<ServiceResponse> GetCategories()
-        {
-            return await _getter.GetAllApproved<CategoryDto>();
+            _crud = crud;
+            _getPaged = getPaged;
         }
 
         [HttpGet("{id:int}")]
@@ -35,6 +29,14 @@ namespace WebAPI.Controllers
             var result = await _getter.GetApprovedById<CategoryDto>(id);
 
             return result.Content == null ? ServiceResponse.Error("Category not found.", HttpStatusCode.NotFound) : result;
+        }
+
+        [HttpGet]
+        public async Task<ServiceResponse> GetCategories([FromQuery] PaginationFilter filter)
+        {
+            var route = Request.Path.Value;
+
+            return await _getPaged.GetAll<Category, CategoryDto>(filter, route);        
         }
 
         [HttpPost]

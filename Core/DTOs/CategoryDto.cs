@@ -1,9 +1,8 @@
 ﻿using Core.Common;
-using Core.Interfaces;
 
 namespace Core.DTOs
 {
-    public class CategoryDto : IDto, INameSortable
+    public class CategoryDto : IDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

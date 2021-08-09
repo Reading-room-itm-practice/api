@@ -1,7 +1,7 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
-using Core.ServiceResponses;
+using Core.Response;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
@@ -14,27 +14,32 @@ namespace WebAPI.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly ICreatorService<Book> _creator;
-        private readonly IApprovedGetterService<Book> _getter;
+        private readonly IUserCrudService<Book> _crud;
+        private readonly IGettterPaginationService _getPaged;
 
-        public BooksController(ICreatorService<Book> creator, IApprovedGetterService<Book> getter)
+        public BooksController(IUserCrudService<Book> crud, IGettterPaginationService getPaged)
         {
-            _creator = creator;
-            _getter = getter;
+            _crud = crud;
+            _getPaged = getPaged;
         }
 
         [SwaggerOperation(Summary = "Retrieves all books")]
         [HttpGet]
-        public async Task<ServiceResponse> Index()
+        public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
-           return await _getter.GetAllApproved<BookDto>();
+            var route = Request.Path.Value;
+            var books = await _getPaged.GetAll<Book, BookDto>(filter, route);
+
+            return books;
         }
 
         [SwaggerOperation(Summary = "Retrieves a specific book by unique id")]
         [HttpGet("{id:int}")]
         public async Task<ServiceResponse> Show(int id)
         {
-           return await _getter.GetApprovedById<BookDto>(id);
+            var book = await _crud.GetById<BookDto>(id);
+
+            return book;
         }
 
         [SwaggerOperation(Summary = "Creates a new entry of a book")]

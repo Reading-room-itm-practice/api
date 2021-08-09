@@ -3,12 +3,8 @@ using System;
 using System.Threading.Tasks;
 using Core.Interfaces;
 using Storage.Models;
-using Core.Exceptions;
 using Core.Requests;
-using Core.ServiceResponses;
-using System.Net;
-using System.Collections.Generic;
-using Core.DTOs;
+using Core.Response;
 
 namespace WebAPI.Controllers
 {

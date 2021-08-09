@@ -1,6 +1,4 @@
-﻿using Core.DTOs;
-using Core.Requests;
-using Storage.Models;
+﻿using Storage.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

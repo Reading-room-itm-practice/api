@@ -1,5 +1,5 @@
 ﻿using Core.Requests;
-using Core.ServiceResponses;
+using Core.Response;
 using System.Threading.Tasks;
 
 namespace Core.Interfaces.Auth

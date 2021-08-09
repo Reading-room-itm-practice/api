@@ -12,7 +12,7 @@ namespace Storage.DataAccessLayer.Configurations
                 .HasMaxLength(int.MaxValue)
                 .IsRequired();
             
-            builder.Property(d => d.RelaseDate)
+            builder.Property(d => d.ReleaseDate)
                 .HasColumnType("date");
 
             builder.HasOne(a => a.Author)
