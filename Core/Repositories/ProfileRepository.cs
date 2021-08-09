@@ -4,6 +4,7 @@ using Storage.DataAccessLayer;
 using Storage.Identity;
 using Storage.Interfaces;
 using Storage.Models;
+using Storage.Models.Photos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,8 +48,7 @@ namespace Core.Repositories
                 FollowersCount = user.Followers?.Count ?? 0,
                 FollowingsCount = (user.FollowedUsers?.Count ?? 0) + (user.FollowedAuthors?.Count ?? 0),
                 ToReadBooks = toReadBooks,
-                ReadBooks = readingBooks
-                //Photo = NOT IMPLEMENTED
+                ReadBooks = readingBooks,
             };
 
             return profile;

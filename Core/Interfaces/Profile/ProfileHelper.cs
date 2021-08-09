@@ -13,13 +13,15 @@ namespace Core.Interfaces.Profile
         private readonly IProfileRepository _profileRepository;
         private readonly IFriendService _friendService;
         private readonly ILoggedUserProvider _loggedUserProvider;
+        private readonly IPhotoRepository _photoRepository;
         private readonly UserManager<User> _userManager;
 
-        public ProfileHelper(IProfileRepository profileRepository, IFriendService friendService, ILoggedUserProvider loggedUserProvider, UserManager<User> userManager)
+        public ProfileHelper(IProfileRepository profileRepository, IFriendService friendService, ILoggedUserProvider loggedUserProvider, IPhotoRepository photoRepository, UserManager<User> userManager)
         {
             _profileRepository = profileRepository;
             _friendService = friendService;
             _loggedUserProvider = loggedUserProvider;
+            _photoRepository = photoRepository;
             _userManager = userManager;
         }
 
@@ -32,6 +34,7 @@ namespace Core.Interfaces.Profile
                 return new UserProfile();
 
             var profile = _profileRepository.GetProfile(user, isFriend);
+            profile.Photo = await _photoRepository.GetUserPhoto(user.Id);
             profile.FriendList = _friendService.GetApprovedFriendRequests(null).Result.Content;
 
             return profile;

@@ -131,6 +131,7 @@ namespace Core.Services
         private async Task<string> ProcessPhoto(IFormFile image)
         {
             string uniqueFileName = Guid.NewGuid().ToString() + ".jpeg";
+            Directory.CreateDirectory(_uploadsFolder);
             string filePath = Path.Combine(_uploadsFolder, uniqueFileName);
             using (var stream = File.Create(filePath))
             {
