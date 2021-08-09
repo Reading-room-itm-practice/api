@@ -1,5 +1,5 @@
 ﻿using Core.Interfaces.Profile;
-using Core.ServiceResponses;
+using Core.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

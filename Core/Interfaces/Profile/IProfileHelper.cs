@@ -1,5 +1,5 @@
 ﻿using Core.DTOs;
-using Core.ServiceResponses;
+using Core.Response;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;

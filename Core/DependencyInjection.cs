@@ -103,10 +103,6 @@ namespace Core
             services.AddScoped<IGettterPaginationService, GettterPaginationService>();
             services.AddScoped<IPaginationRepository, PaginationRepository>();
 
-            services.AddScoped<IApprovedGetterService<Author>, ApprovedGetterService<Author>>();
-            services.AddScoped<IApprovedGetterService<Book>, ApprovedGetterService<Book>>();
-            services.AddScoped<IApprovedGetterService<Category>, ApprovedGetterService<Category>>();
-
             services.AddScoped<IFriendService, FriendService>();
             services.AddScoped<IFriendRepository, FriendRepository>();
 

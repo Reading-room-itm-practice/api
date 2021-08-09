@@ -46,7 +46,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<ServiceResponse> Create(BookRequest model)
         {
-            return await _creator.Create<BookDto>(model);
+            return await _crud.Create<BookDto>(model);
         }
     }
 }

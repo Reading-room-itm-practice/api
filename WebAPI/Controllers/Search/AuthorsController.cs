@@ -3,13 +3,9 @@ using Core.Interfaces;
 using Core.Requests;
 using Core.Response;
 using Core.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Storage.Identity;
 using Storage.Models;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -41,13 +37,13 @@ namespace WebAPI.Controllers
         [HttpGet("{id:int}")]
         public async Task<ServiceResponse> Show(int id)
         {
-            return await _getter.GetApprovedById<AuthorDto>(id);
+            return await _crud.GetById<AuthorDto>(id);
         }
 
         [HttpPost]
         public async Task<ServiceResponse> Create(AuthorRequest requestDto)
         {
-            return await _creator.Create<AuthorDto>(requestDto);
+            return await _crud.Create<AuthorDto>(requestDto);
         }
     }
 }

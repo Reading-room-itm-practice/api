@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
         [HttpGet("{id:int}")]
         public async Task<ServiceResponse> GetCategory(int id)
         {
-            var result = await _getter.GetApprovedById<CategoryDto>(id);
+            var result = await _crud.GetById<CategoryDto>(id);
 
             return result.Content == null ? ServiceResponse.Error("Category not found.", HttpStatusCode.NotFound) : result;
         }
@@ -42,7 +42,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<ServiceResponse> Create(CategoryRequest category)
         {
-            return await _creator.Create<CategoryDto>(category);
+            return await _crud.Create<CategoryDto>(category);
         }
     }
 }
