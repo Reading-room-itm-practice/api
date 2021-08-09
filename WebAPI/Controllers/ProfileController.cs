@@ -27,10 +27,10 @@ namespace WebAPI.Controllers
         }
 
         [SwaggerOperation(Summary = "Edit photo")]
-        [HttpPut("Photo/{id?}")]
-        public Task<ServiceResponse> EditPhoto(Guid? id, [FromForm] IFormFile photo)
+        [HttpPut("Photo-edit")]
+        public async Task<ServiceResponse> EditPhoto(IFormFile photo)
         {
-            throw new NotImplementedException();
+            return await _profileService.UpdatePhoto(photo);
         }
     }
 }

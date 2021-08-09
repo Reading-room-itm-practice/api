@@ -2,6 +2,7 @@
 using Core.DTOs;
 using Core.Interfaces.Profile;
 using Core.ServiceResponses;
+using Microsoft.AspNetCore.Http;
 using Storage.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -36,6 +37,11 @@ namespace Core.Services.Profile
         private ServiceResponse ReturnErrorResponse()
         {
             return ServiceResponse.Error("User profile not found");
+        }
+
+        public Task<ServiceResponse> UpdatePhoto(IFormFile image)
+        {
+            return _helper.EditPhoto(image);
         }
     }
 }

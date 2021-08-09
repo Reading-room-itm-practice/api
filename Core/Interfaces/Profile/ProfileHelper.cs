@@ -1,8 +1,11 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
+using Core.ServiceResponses;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Storage.Identity;
 using Storage.Interfaces;
+using Storage.Models.Photos;
 using System;
 using System.Threading.Tasks;
 
@@ -14,14 +17,17 @@ namespace Core.Interfaces.Profile
         private readonly IFriendService _friendService;
         private readonly ILoggedUserProvider _loggedUserProvider;
         private readonly IPhotoRepository _photoRepository;
+        private readonly IPhotoService _photoService;
         private readonly UserManager<User> _userManager;
 
-        public ProfileHelper(IProfileRepository profileRepository, IFriendService friendService, ILoggedUserProvider loggedUserProvider, IPhotoRepository photoRepository, UserManager<User> userManager)
+        public ProfileHelper(IProfileRepository profileRepository, IFriendService friendService,
+            ILoggedUserProvider loggedUserProvider, IPhotoRepository photoRepository, IPhotoService photoService, UserManager<User> userManager)
         {
             _profileRepository = profileRepository;
             _friendService = friendService;
             _loggedUserProvider = loggedUserProvider;
             _photoRepository = photoRepository;
+            _photoService = photoService;
             _userManager = userManager;
         }
 
@@ -38,6 +44,19 @@ namespace Core.Interfaces.Profile
             profile.FriendList = _friendService.GetApprovedFriendRequests(null).Result.Content;
 
             return profile;
+        }
+
+        public async Task<ServiceResponse> EditPhoto(IFormFile image)
+        {
+            var userId = _loggedUserProvider.GetUserId();
+            var oldImage = await _photoRepository.GetUserPhoto(userId);
+            if (oldImage != null)
+            {
+                await _photoService.EditPhoto(oldImage, image);
+                return ServiceResponse.Success("Photo edited");
+            }
+
+            return await _photoService.UploadPhoto(image, userId.ToString(), PhotoTypes.ProfilePhoto);
         }
     }
 }

@@ -139,5 +139,17 @@ namespace Core.Services
             }
             return filePath;
         }
+
+        public async Task EditPhoto(ProfilePhoto oldImage, IFormFile newImage)
+        {
+
+            string filePath = oldImage.Path;
+            File.Delete(oldImage.Path);
+
+            using (var stream = File.Create(filePath))
+            {
+                await newImage.CopyToAsync(stream);
+            }
+        }
     }
 }
