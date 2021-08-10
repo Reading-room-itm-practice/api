@@ -28,7 +28,7 @@ namespace WebAPI.Controllers
         }
 
         [SwaggerOperation(Summary = "Retrieves all book authors")]
-        [HttpGet]
+        [HttpGet("All")]
         public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
             var route = Request.Path.Value;
@@ -44,7 +44,8 @@ namespace WebAPI.Controllers
             return await _crud.GetById<AuthorDto>(id);
         }
 
-        [HttpPost]
+        [SwaggerOperation(Summary = "Create suggestion of book author")]
+        [HttpPost("Create")]
         public async Task<ServiceResponse> Create(AuthorRequest requestDto)
         {
             return await _crud.Create<AuthorDto>(requestDto);

@@ -27,7 +27,7 @@ namespace WebAPI.Controllers.Admin_Controllers
         }
 
         [SwaggerOperation(Summary = "Retrieves all books")]
-        [HttpGet]
+        [HttpGet("All")]
         public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
             var route = Request.Path.Value;
@@ -42,14 +42,14 @@ namespace WebAPI.Controllers.Admin_Controllers
         }
 
         [SwaggerOperation(Summary = "Creates a new entry of a book")]
-        [HttpPost]
+        [HttpPost("Create")]
         public async Task<ServiceResponse> Create(ApproveBookRequest model)
         {
             return await _crud.Create<ApprovedBookDto>(model);
         }
 
         [SwaggerOperation(Summary = "Updates a book by unique id")]
-        [HttpPut("{id:int}")]
+        [HttpPut("Update/{id:int}")]
         public async Task<ServiceResponse> Update(int id, ApproveBookRequest updateModel)
         {
             await _crud.Update(updateModel, id);
@@ -58,7 +58,7 @@ namespace WebAPI.Controllers.Admin_Controllers
         }
 
         [SwaggerOperation(Summary = "Deletes a book by unique id")]
-        [HttpDelete("{id:int}")]
+        [HttpDelete("Delete/{id:int}")]
         public async Task<ServiceResponse> Delete(int id)
         {
             await _crud.Delete(id);

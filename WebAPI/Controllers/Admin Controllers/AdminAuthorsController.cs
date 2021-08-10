@@ -27,7 +27,7 @@ namespace WebAPI.Controllers.Admin_Controllers
         }
 
         [SwaggerOperation(Summary = "Retrieves all book authors")]
-        [HttpGet]
+        [HttpGet("All")]
         public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
             var route = Request.Path.Value;
@@ -41,14 +41,15 @@ namespace WebAPI.Controllers.Admin_Controllers
             return await _crud.GetById<ApprovedAuthorDto>(id);
         }
 
-        [HttpPost]
+        [SwaggerOperation(Summary = "Create new book author")]
+        [HttpPost("Create")]
         public async Task<ServiceResponse> Create(ApproveAuthorRequest requestDto)
         {
             return await _crud.Create<ApprovedAuthorDto>(requestDto);
         }
 
         [SwaggerOperation(Summary = "Update a book author by unique id")]
-        [HttpPut("{id:int}")]
+        [HttpPut("Update/{id:int}")]
         public async Task<ServiceResponse> Update(int id, ApproveAuthorRequest requestDto)
         {
             await _crud.Update(requestDto, id);
@@ -57,7 +58,7 @@ namespace WebAPI.Controllers.Admin_Controllers
         }
 
         [SwaggerOperation(Summary = "Delete a book author by unique id")]
-        [HttpDelete("{id:int}")]
+        [HttpDelete("Delete/{id:int}")]
         public async Task<ServiceResponse> Delete(int id)
         {
             await _crud.Delete(id);

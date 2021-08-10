@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Identity;
 using Storage.Models;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -26,6 +27,15 @@ namespace WebAPI.Controllers.Admin_Controllers
             _getPaged = getPaged;
         }
 
+        [SwaggerOperation(Summary = "Retrieves all categories")]
+        [HttpGet("All")]
+        public async Task<ServiceResponse> GetCategories([FromQuery] PaginationFilter filter)
+        {
+            var route = Request.Path.Value;
+            return await _getPaged.GetAll<Category, ApprovedCategoryDto>(filter, route);
+        }
+
+        [SwaggerOperation(Summary = "Retrieves a specific category by unique id")]
         [HttpGet("{id:int}")]
         public async Task<ServiceResponse> GetCategory(int id)
         {
@@ -34,20 +44,15 @@ namespace WebAPI.Controllers.Admin_Controllers
             return result.Content == null ? ServiceResponse.Error("Category not found.", HttpStatusCode.NotFound) : result;
         }
 
-        [HttpGet]
-        public async Task<ServiceResponse> GetCategories([FromQuery] PaginationFilter filter)
-        {
-            var route = Request.Path.Value;
-            return await _getPaged.GetAll<Category, ApprovedCategoryDto>(filter, route);
-        }
-
-        [HttpPost]
+        [SwaggerOperation(Summary = "Create new category")]
+        [HttpPost("Create")]
         public async Task<ServiceResponse> Create(ApproveCategoryRequest category)
         {
             return await _crud.Create<ApprovedCategoryDto>(category);
         }
 
-        [HttpPut("{id:int}")]
+        [SwaggerOperation(Summary = "Update a category by unique id")]
+        [HttpPut("Update/{id:int}")]
         public async Task<ServiceResponse> Edit(int id, ApproveCategoryRequest category)
         {
             await _crud.Update(category, id);
@@ -55,7 +60,8 @@ namespace WebAPI.Controllers.Admin_Controllers
             return ServiceResponse.Success("Category updated.");
         }
 
-        [HttpDelete("{id:int}")]
+        [SwaggerOperation(Summary = "Delete a category by unique id")]
+        [HttpDelete("Delete/{id:int}")]
         public async Task<ServiceResponse> Delete(int id)
         {
             await _crud.Delete(id);
