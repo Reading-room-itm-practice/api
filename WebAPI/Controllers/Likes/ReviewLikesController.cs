@@ -10,24 +10,22 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Controllers.Likes
 {
-    [Route("api/[controller]")]
+    [Route("api/reviews")]
     [ApiController]
     public class ReviewLikesController : ControllerBase
     {
         private readonly IDeleterService<ReviewLike> _deleterService;
-        private readonly IGetterService<ReviewLike> _getterService;
         private readonly ICreatorService<ReviewLike> _creatorService;
 
-        public ReviewLikesController(IDeleterService<ReviewLike> deleter, IGetterService<ReviewLike> getter, ICreatorService<ReviewLike> creator)
+        public ReviewLikesController(IDeleterService<ReviewLike> deleter, ICreatorService<ReviewLike> creator)
         {
             _deleterService = deleter;
-            _getterService = getter;
             _creatorService = creator;
         }
 
 
-        [SwaggerOperation(Summary = "Create category follow for logged user")]
-        [Route("reviews/{id:int}/likes")]
+        [SwaggerOperation(Summary = "Create category like for logged user")]
+        [Route("{id:int}/likes")]
         [HttpPost]
         public async Task<ServiceResponse> Create(int id)
         {
@@ -35,8 +33,8 @@ namespace WebAPI.Controllers.Likes
         }
 
 
-        [SwaggerOperation(Description = "Delete a follow by unique id")]
-        [Route("reviews/likes/{id:int}")]
+        [SwaggerOperation(Description = "Delete a like by unique id")]
+        [Route("likes/{id:int}")]
         [HttpDelete]
         public async Task<ServiceResponse> Delete(int id)
         {

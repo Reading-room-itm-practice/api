@@ -2,11 +2,6 @@
 using Core.DTOs;
 using Core.Requests;
 using Storage.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Mappings
 {
@@ -15,9 +10,10 @@ namespace Core.Mappings
         public ReviewMapperProfile()
         {
             CreateMap<ReviewRequest, Review>().ReverseMap();
-            CreateMap<Review, ReviewDto>()
-                .ForMember(dest => dest.LikesCount, opt
-                    => opt.MapFrom(src => src.Likes.Count)).ReverseMap();
+            CreateMap<Review, ReviewDto>().ForMember(dest => dest.LikesCount, opt
+                    => opt.MapFrom(src => src.Likes.Count))
+                .ForMember(x => x.IsLoggedUserLike, opt
+                    => opt.Ignore()).ReverseMap();
         }
     }
 }

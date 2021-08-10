@@ -12,6 +12,6 @@ namespace Core.Interfaces
         public new Task<ServiceResponse<IEnumerable<IDto>>> GetAll<IDto>();
         public new Task<ServiceResponse<IDto>> GetById<IDto>(int id);
         public new Task Update(IRequest updateModel, int id);
-        public new Task Delete(int id);
+        public new Task Delete(int Id);
     }
 }

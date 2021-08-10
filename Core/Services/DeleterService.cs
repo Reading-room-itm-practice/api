@@ -17,9 +17,9 @@ namespace Core.Services
             ModifyAvalibilityChecker = modifyAvalibilityChecker;
         }
 
-        public virtual async Task Delete(int id)
+        public virtual async Task Delete(int reviewId)
         {
-            var model = await Repository.FindByConditions(x => x.Id == id);
+            var model = await Repository.FindByConditions(x => x.Id == reviewId);
             await ModifyAvalibilityChecker.CheckCanBeModify(model.FirstOrDefault());
             await Repository.Delete(model.FirstOrDefault());
         }

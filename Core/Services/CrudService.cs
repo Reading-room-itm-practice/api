@@ -42,9 +42,9 @@ namespace Core.Services
             await Updater.Update(requestDto, id);
         }
 
-        public virtual async Task Delete(int id)
+        public virtual async Task Delete(int Id)
         {
-            await Deleter.Delete(id);
+            await Deleter.Delete(Id);
         }
     }
 }

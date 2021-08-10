@@ -21,21 +21,21 @@ namespace Core.Services.Auth
 
         public ChallengeResult Request(string provider)
         {
-            string redirectUri = _config["External:RedirectUrl"];
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUri);
+            string redirectUri = Config["External:RedirectUrl"];
+            var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUri);
 
             return new ChallengeResult(provider, properties) ;
         }
 
         public async Task<ServiceResponse> Login()
         {
-            ExternalLoginInfo info = await _signInManager.GetExternalLoginInfoAsync();
+            ExternalLoginInfo info = await SignInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
                 return ServiceResponse.Error("Error loading external login information", HttpStatusCode.NoContent);
             }
 
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
+            var result = await SignInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
 
             if (result.Succeeded)
             {
@@ -44,12 +44,12 @@ namespace Core.Services.Auth
             }
 
             User user = CreateExternalUser(info);
-            IdentityResult identResult = await _userManager.CreateAsync(user);
+            IdentityResult identResult = await UserManager.CreateAsync(user);
            
             if (identResult.Succeeded)
             {
-                identResult = await _userManager.AddLoginAsync(user, info);
-                await _userManager.AddToRoleAsync(user, UserRoles.User);
+                identResult = await UserManager.AddLoginAsync(user, info);
+                await UserManager.AddToRoleAsync(user, UserRoles.User);
                 if (identResult.Succeeded)
                 {
                     return await _additionalAuthMetods.GetUserTokenResponse(user.UserName);

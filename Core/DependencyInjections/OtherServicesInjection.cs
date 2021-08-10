@@ -10,8 +10,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using AutoMapper;
+using Core.DTOs;
 using Core.Mappings;
-using Storage.Interfaces;
+using Storage.Models;
+using Storage.Models.Likes;
 
 namespace Core.DependencyInjections
 {
@@ -34,11 +36,11 @@ namespace Core.DependencyInjections
             services.AddScoped<IModifyAvalibilityChecker, ModifyAvailabilityChecker>();
             services.AddSingleton<IAuthorizationHandler, AuditableModelAuthorizationHandler>();
             services.AddScoped<IReviewCommentService, ReviewCommentService>();
-            services.AddScoped<IHelper, Helper>();
-            services.AddScoped(provider => new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new ReviewCommentMapper(provider.GetService<IHelper>()));
-            }).CreateMapper());
+            services.AddScoped<ILikeableMapperHelper<ReviewCommentLike, ReviewComment, ReviewCommentDto>,
+                LikeableMapperHelper<ReviewCommentLike, ReviewComment, ReviewCommentDto>>();
+            services.AddScoped<ILikeableMapperHelper<ReviewLike, Review, ReviewDto>,
+                LikeableMapperHelper<ReviewLike, Review, ReviewDto>>();
+
             return services;
         }
     }

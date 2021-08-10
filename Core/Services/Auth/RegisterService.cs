@@ -26,7 +26,7 @@ namespace Core.Services.Auth
         {
             try
             {
-                if (await _userManager.FindByNameAsync(model.Username) != null || await _userManager.FindByEmailAsync(model.Email) != null)
+                if (await UserManager.FindByNameAsync(model.Username) != null || await UserManager.FindByEmailAsync(model.Email) != null)
                     return ServiceResponse.Error("Account already exists!");
 
                 User user = new()
@@ -36,17 +36,17 @@ namespace Core.Services.Auth
                     UserName = model.Username
                 };
 
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var result = await UserManager.CreateAsync(user, model.Password);
                 if (!result.Succeeded)
                     return ServiceResponse.Error(_additionalAuthMetods.CreateValidationErrorMessage(result));
 
-                await _userManager.AddToRoleAsync(user, UserRoles.User);
+                await UserManager.AddToRoleAsync(user, UserRoles.User);
 
-                user = await _userManager.FindByNameAsync(user.UserName);
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var urlString = _additionalAuthMetods.BuildUrl(token, user.UserName, _config["Paths:ConfirmEmail"]);
+                user = await UserManager.FindByNameAsync(user.UserName);
+                var token = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+                var urlString = _additionalAuthMetods.BuildUrl(token, user.UserName, Config["Paths:ConfirmEmail"]);
 
-                await _emailService.SendEmailAsync(user.Email, "Confirm your email address", urlString);
+                await EmailService.SendEmailAsync(user.Email, "Confirm your email address", urlString);
 
                 return ServiceResponse.Success("User created successfully! Confirm your email.", HttpStatusCode.Created);
             }
@@ -60,9 +60,9 @@ namespace Core.Services.Auth
         {
             try
             {
-                var user = await _userManager.FindByNameAsync(model.UserName);
+                var user = await UserManager.FindByNameAsync(model.UserName);
                 var isConfirmed = user.EmailConfirmed;
-                var result = await _userManager.ConfirmEmailAsync(user, model.Token);
+                var result = await UserManager.ConfirmEmailAsync(user, model.Token);
 
                 if (isConfirmed || !result.Succeeded)
                     throw new();

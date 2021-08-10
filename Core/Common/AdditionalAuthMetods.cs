@@ -44,16 +44,16 @@ namespace Core.Common
             User user = new ();
             if (userInfo.Contains('@'))
             {
-                user = await _userManager.FindByEmailAsync(userInfo);
+                user = await UserManager.FindByEmailAsync(userInfo);
             }
             else
             {
-                user = await _userManager.FindByNameAsync(userInfo);
+                user = await UserManager.FindByNameAsync(userInfo);
             }
 
-            var roles = await _userManager.GetRolesAsync(user);
+            var roles = await UserManager.GetRolesAsync(user);
 
-            return ServiceResponse<string>.Success($"{_jwtGenerator.GenerateJWTToken(_config, user, roles)}", "Successful login");
+            return ServiceResponse<string>.Success($"{JwtGenerator.GenerateJWTToken(Config, user, roles)}", "Successful login");
         }
     }
 }

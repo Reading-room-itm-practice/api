@@ -31,7 +31,7 @@ namespace Core.Services
             var models = await _repository.FindByConditions(x => x.Approved);
             var responseModels = _mapper.Map<IEnumerable<IDto>>(models);
 
-            return ServiceResponse<IEnumerable<IDto>>.Success(responseModels, "Retrieved list with resorces");
+            return ServiceResponse<IEnumerable<IDto>>.Success(responseModels, "Retrieved list with resources");
         }
 
         public override async Task<ServiceResponse<IDto>> GetById<IDto>(int id)

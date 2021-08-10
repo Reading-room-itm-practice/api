@@ -5,6 +5,6 @@ namespace Core.Interfaces
 {
     public interface IDeleterService<T> where T : IDbModel
     {
-        public Task Delete(int id);
+        public Task Delete(int Id);
     }
 }

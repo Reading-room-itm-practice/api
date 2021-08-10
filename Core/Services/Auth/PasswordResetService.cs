@@ -25,11 +25,11 @@ namespace Core.Services.Auth
         {
             try
             {
-                var user = await _userManager.FindByEmailAsync(email);
-                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var urlString = _additionalAuthMetods.BuildUrl(token, user.UserName, _config["Paths:ResetPassword"]);
+                var user = await UserManager.FindByEmailAsync(email);
+                var token = await UserManager.GeneratePasswordResetTokenAsync(user);
+                var urlString = _additionalAuthMetods.BuildUrl(token, user.UserName, Config["Paths:ResetPassword"]);
 
-                await _emailService.SendEmailAsync(user.Email, "Reset your password", urlString);
+                await EmailService.SendEmailAsync(user.Email, "Reset your password", urlString);
             }
             catch
             {
@@ -43,8 +43,8 @@ namespace Core.Services.Auth
         {
             try
             {
-                var user = await _userManager.FindByNameAsync(model.UserName);
-                var result = await _userManager.ResetPasswordAsync(user, model.Token, model.newPassword);
+                var user = await UserManager.FindByNameAsync(model.UserName);
+                var result = await UserManager.ResetPasswordAsync(user, model.Token, model.newPassword);
 
                 if (!result.Succeeded)
                     return ServiceResponse.Error(_additionalAuthMetods.CreateValidationErrorMessage(result));

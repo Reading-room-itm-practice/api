@@ -16,15 +16,13 @@ namespace Core.Services.Auth
 
         public async Task<ServiceResponse> Login(LoginRequest model)
         {
-            var user = await _userManager.FindByNameAsync(model.Username);
-            if (await _userManager.CheckPasswordAsync(user, model.Password))
+            var user = await UserManager.FindByNameAsync(model.Username);
+            if (await UserManager.CheckPasswordAsync(user, model.Password))
             {
-                #if !DEBUG
-                if (!await _userManager.IsEmailConfirmedAsync(user))
+                if (!await UserManager.IsEmailConfirmedAsync(user))
                     return ServiceResponse.Error("Invalid username or password!");
-                #endif
-                var roles = await _userManager.GetRolesAsync(user);
-                var tokenResponse = _jwtGenerator.GenerateJWTToken(_config, user, roles);
+                var roles = await UserManager.GetRolesAsync(user);
+                var tokenResponse = JwtGenerator.GenerateJWTToken(Config, user, roles);
 
                 return ServiceResponse<string>.Success($"{tokenResponse}", "Successful login");
             }

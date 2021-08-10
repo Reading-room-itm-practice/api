@@ -8,6 +8,7 @@ using Storage.Models;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Storage.Models.Likes;
 
 namespace Core.Services
 {
@@ -17,14 +18,16 @@ namespace Core.Services
         private readonly IGetterService<Book> _bookGetter;
         private readonly ILoggedUserProvider _loggedUserProvider;
         private readonly IMapper _mapper;
+        private ILikeableMapperHelper<ReviewLike, Review, ReviewDto> _mapperHelper;
 
         public ReviewService(IReviewRepository reviewRepository, IGetterService<Book> bookGetter, 
-            ILoggedUserProvider loggedUserProvider, IMapper mapper)
+            ILoggedUserProvider loggedUserProvider, IMapper mapper, ILikeableMapperHelper<ReviewLike, Review, ReviewDto> mapperHelper)
         {
             _loggedUserProvider = loggedUserProvider;
             _reviewRepository = reviewRepository;
             _bookGetter = bookGetter;
             _mapper = mapper;
+            _mapperHelper = mapperHelper;
         }
 
         public async Task<ServiceResponse> AddReview(ReviewRequest review)
@@ -41,7 +44,7 @@ namespace Core.Services
             }
             var newReview = await _reviewRepository.CreateReview(_mapper.Map<Review>(review));
             
-            return ServiceResponse<ReviewDto>.Success(_mapper.Map<ReviewDto>(newReview), "Review created.", HttpStatusCode.Created);
+            return ServiceResponse<ReviewDto>.Success(_mapperHelper.Map(newReview), "Review created.", HttpStatusCode.Created);
         }
 
         public async Task<ServiceResponse> GetReviews(int? bookId)
@@ -61,7 +64,7 @@ namespace Core.Services
             var bookReviews = await _reviewRepository.GetReviews(bookId);
             var bookTitle = await GetBookTitle((int) bookId);
 
-            return ServiceResponse<IEnumerable<ReviewDto>>.Success(_mapper.Map<IEnumerable<ReviewDto>>(bookReviews), $"Reviews for {bookTitle} retrieved.");
+            return ServiceResponse<IEnumerable<ReviewDto>>.Success(_mapperHelper.Map(bookReviews), $"Reviews for {bookTitle} retrieved.");
         }
 
         public async Task<ServiceResponse> GetReview(int reviewId)
@@ -70,7 +73,7 @@ namespace Core.Services
             
             if (review != null)
             {
-                return ServiceResponse<ReviewDto>.Success (_mapper.Map<ReviewDto>(review), $"Review retrieved.");
+                return ServiceResponse<ReviewDto>.Success (_mapperHelper.Map(review), $"Review retrieved.");
             }
 
             return ServiceResponse.Error("Review not found.", HttpStatusCode.NotFound);

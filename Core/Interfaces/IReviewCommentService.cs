@@ -13,6 +13,6 @@ namespace Core.Interfaces
     {
         public Task<ServiceResponse> GetComments(int? reviewId, Guid? userId, bool currentUser);
         public Task<ServiceResponse> GetComment(int reviewCommentId);
-        public Task<ServiceResponse> AddReviewComment(ReviewCommentRequest comment);
+        public Task<ServiceResponse> AddReviewComment(ReviewCommentRequest request);
     }
 }

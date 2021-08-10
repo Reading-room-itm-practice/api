@@ -1,15 +1,16 @@
-﻿using AutoMapper;
-using Core.DTOs;
+﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
 using Core.ServiceResponses;
 using Storage.Interfaces;
 using Storage.Models;
+using Storage.Models.Likes;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace Core.Services
 {
@@ -20,41 +21,46 @@ namespace Core.Services
         private readonly IReviewRepository _reviewRepository;
         private readonly IGetterService<Book> _bookGetter;
         private readonly IMapper _mapper;
+        private readonly ILikeableMapperHelper<ReviewCommentLike, ReviewComment, ReviewCommentDto> _mapperHelper;
 
-        public ReviewCommentService(IReviewCommentRepository reviewCommentRepository, ILoggedUserProvider loggedUserProvider,
-            IReviewRepository reviewRepository, IGetterService<Book> bookGetter, IMapper mapper)
+        public ReviewCommentService(IReviewCommentRepository reviewCommentRepository,
+            ILoggedUserProvider loggedUserProvider,
+            IReviewRepository reviewRepository, IGetterService<Book> bookGetter,
+            ILikeableMapperHelper<ReviewCommentLike, ReviewComment, ReviewCommentDto> mapperHelper,
+            IMapper mapper)
         {
             _reviewCommentRepository = reviewCommentRepository;
             _loggedUserProvider = loggedUserProvider;
             _reviewRepository = reviewRepository;
             _bookGetter = bookGetter;
+            _mapperHelper = mapperHelper;
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse> AddReviewComment(ReviewCommentRequest comment)
+        public async Task<ServiceResponse> AddReviewComment(ReviewCommentRequest request)
         {
-            if (!(await _reviewCommentRepository.ReviewExists(comment.ReviewId)))
+            if (!(await _reviewCommentRepository.ReviewExists(request.ReviewId)))
             {
-                return ServiceResponse.Error($"Review you're trying to post a comment for doesn't exist.", HttpStatusCode.BadRequest);
+                return ServiceResponse.Error($"Review you're trying to post a request for doesn't exist.", HttpStatusCode.BadRequest);
             }
 
             var userId = _loggedUserProvider.GetUserId();
-            if (await _reviewCommentRepository.HitCommentCapCount(comment.ReviewId, userId))
+            if (await _reviewCommentRepository.HitCommentCapCount(request.ReviewId, userId))
             {
                 return ServiceResponse.Error(
                     $"You can post only {_reviewCommentRepository.MaxCommentPerReview} comments per single review", HttpStatusCode.BadRequest);
             }
        
 
-            if (await _reviewCommentRepository.HitCommentCapDate(comment.ReviewId, userId))
+            if (await _reviewCommentRepository.HitCommentCapDate(request.ReviewId, userId))
             {
                 return ServiceResponse.Error(
                     $"You can post only {_reviewCommentRepository.MaxCommentPerHourPerReview} comments per hour on a single review. Try again later", HttpStatusCode.BadRequest);
 
             }
-            var reviewComment = await _reviewCommentRepository.Create(_mapper.Map<ReviewComment>(comment));
+            var reviewComment = await _reviewCommentRepository.Create(_mapper.Map<ReviewComment>(request));
 
-            return ServiceResponse<ReviewCommentDto>.Success(_mapper.Map<ReviewCommentDto>(reviewComment), "Comment posted.", HttpStatusCode.Created);
+            return ServiceResponse<ReviewCommentDto>.Success(_mapperHelper.Map(reviewComment), "Comment posted.", HttpStatusCode.Created);
 
         }
 
@@ -62,7 +68,7 @@ namespace Core.Services
         {
             var reviewComment = await _reviewCommentRepository.GetComment(reviewCommentId);
 
-            return reviewComment != null ? ServiceResponse<ReviewCommentDto>.Success(_mapper.Map<ReviewCommentDto>(reviewComment), "Comment retrieved.") 
+            return reviewComment != null ? ServiceResponse<ReviewCommentDto>.Success(_mapperHelper.Map(reviewComment), "Comment retrieved.") 
                 : ServiceResponse.Error("Comment not found.", HttpStatusCode.NotFound);
         }
 
@@ -80,9 +86,8 @@ namespace Core.Services
 
             var message = await CreateMessage(reviewId, userId, currentUser);
             var comments = _reviewCommentRepository.GetComments(reviewId, userId);
-            var mappedModels = _mapper.Map<IEnumerable<ReviewCommentDto>>(comments);
-     
-            return ServiceResponse<IEnumerable<ReviewCommentDto>>.Success(mappedModels, message);
+
+            return ServiceResponse<IEnumerable<ReviewCommentDto>>.Success(_mapperHelper.Map(comments), message);
         }
 
         private async Task<string> CreateMessage(int? reviewId, Guid? userId, bool currentUser)
