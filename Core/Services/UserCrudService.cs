@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using Core.Common;
 using Core.Interfaces;
+using Core.Requests;
 using Core.Response;
 using Storage.Interfaces;
+using Storage.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Core.Services
@@ -12,22 +15,28 @@ namespace Core.Services
     public class UserCrudService<T> : CrudService<T>, IUserCrudService<T> where T : class, IApproveable, IDbMasterKey
     {
         private readonly IBaseRepository<T> _repository;
+        private readonly IBaseRepository<Author> _authorRepository;
+        private readonly IBaseRepository<Category> _categoryRepository;
+        private readonly ICreatorService<T> _creator;
         private readonly IMapper _mapper;
-        private readonly IUriService _uriService;
 
         public UserCrudService(
             IBaseRepository<T> repository,
             IMapper mapper,
-            IUriService uriService,
             ICreatorService<T> creator,
             IGetterService<T> getter,
             IUpdaterService<T> updater,
-            IDeleterService<T> deleter)
+            IDeleterService<T> deleter,
+            IBaseRepository<Author> booker,
+            IBaseRepository<Category> categorer
+            )
             : base(creator, getter, updater, deleter)
         {
             _repository = repository;
+            _authorRepository = booker;
+            _categoryRepository = categorer;
             _mapper = mapper;
-            _uriService = uriService;
+            _creator = creator;
         }
 
         public override async Task<ServiceResponse<IEnumerable<IDto>>> GetAll<IDto>()
@@ -44,6 +53,24 @@ namespace Core.Services
             var responseModel = _mapper.Map<IDto>(model.FirstOrDefault());
 
             return ServiceResponse<IDto>.Success(responseModel, "Retrieved resource");
+        }
+
+        public new async Task<ServiceResponse> Create<IDto>(IRequest requestDto)
+        {
+            if(requestDto.GetType() == typeof(BookRequest))
+            {
+                var model = _mapper.Map<Book>(requestDto);
+
+                var author = await _authorRepository.FindByConditions(a => a.Id == model.AuthorId && a.Approved);
+                var category = await _categoryRepository.FindByConditions(c => c.Id == model.CategoryId && c.Approved);
+                if (!author.Any() || !category.Any())
+                {
+                    var responseModel = _mapper.Map<IDto>(model);
+                    return ServiceResponse.Error( "Invalid author or category", HttpStatusCode.UnprocessableEntity);
+                }   
+            }
+                
+            return await _creator.Create<IDto>(requestDto);
         }
     }
 }

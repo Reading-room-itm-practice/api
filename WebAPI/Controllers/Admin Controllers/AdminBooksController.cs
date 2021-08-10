@@ -31,7 +31,7 @@ namespace WebAPI.Controllers.Admin_Controllers
         public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
             var route = Request.Path.Value;
-            return await _getPaged.GetAll<Book, ApprovedBookDto>(filter, route);
+            return await _getPaged.GetAll<Book, ApprovedBookDto>(filter, route, true);
         }
 
         [SwaggerOperation(Summary = "Retrieves a specific book by unique id")]

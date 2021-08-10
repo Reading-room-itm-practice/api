@@ -38,7 +38,7 @@ namespace WebAPI.Controllers.Admin_Controllers
         public async Task<ServiceResponse> GetCategories([FromQuery] PaginationFilter filter)
         {
             var route = Request.Path.Value;
-            return await _getPaged.GetAll<Category, ApprovedCategoryDto>(filter, route);
+            return await _getPaged.GetAll<Category, ApprovedCategoryDto>(filter, route, true);
         }
 
         [HttpPost]
