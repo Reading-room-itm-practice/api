@@ -93,9 +93,9 @@ namespace Core
             services.AddScoped<IGettterPaginationService, GettterPaginationService>();
             services.AddScoped<IPaginationRepository, PaginationRepository>();
 
-            services.AddScoped<IUserCrudService<Author>, UserCrudService<Author>>();
-            services.AddScoped<IUserCrudService<Book>, UserCrudService<Book>>();
-            services.AddScoped<IUserCrudService<Category>, UserCrudService<Category>>();
+            services.AddScoped<IStandardCrudService<Author>, StandardCrudService<Author>>();
+            services.AddScoped<IStandardCrudService<Book>, StandardCrudService<Book>>();
+            services.AddScoped<IStandardCrudService<Category>, StandardCrudService<Category>>();
 
             return services;
         }

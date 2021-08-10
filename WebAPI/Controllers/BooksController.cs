@@ -14,10 +14,10 @@ namespace WebAPI.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly IUserCrudService<Book> _crud;
+        private readonly IStandardCrudService<Book> _crud;
         private readonly IGettterPaginationService _getPaged;
 
-        public BooksController(IUserCrudService<Book> crud, IGettterPaginationService getPaged)
+        public BooksController(IStandardCrudService<Book> crud, IGettterPaginationService getPaged)
         {
             _crud = crud;
             _getPaged = getPaged;

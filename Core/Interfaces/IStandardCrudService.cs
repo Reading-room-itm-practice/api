@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Core.Interfaces
 {
-    public interface IUserCrudService<T> : ICrudService<T> where T : class, IApproveable, IDbMasterKey
+    public interface IStandardCrudService<T> : ICrudService<T> where T : class, IApproveable, IDbMasterKey
     {
         public new Task<ServiceResponse> Create<IDto>(IRequest requestDto);
     }

@@ -14,10 +14,10 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-        private readonly IUserCrudService<Author> _crud;
+        private readonly IStandardCrudService<Author> _crud;
         private readonly IGettterPaginationService _getPaged;
 
-        public AuthorsController(IUserCrudService<Author> crud, IGettterPaginationService getPaged)
+        public AuthorsController(IStandardCrudService<Author> crud, IGettterPaginationService getPaged)
         {
             _crud = crud;
             _getPaged = getPaged;

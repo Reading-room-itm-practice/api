@@ -14,10 +14,10 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly IUserCrudService<Category> _crud;
+        private readonly IStandardCrudService<Category> _crud;
         private readonly IGettterPaginationService _getPaged;
 
-        public CategoryController(IUserCrudService<Category> crud, IGettterPaginationService getPaged)
+        public CategoryController(IStandardCrudService<Category> crud, IGettterPaginationService getPaged)
         {
             _crud = crud;
             _getPaged = getPaged;
