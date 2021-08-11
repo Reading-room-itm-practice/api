@@ -15,13 +15,13 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly IUserCrudService<Category> _crud;
-        private readonly IGettterPaginationService _getPaged;
+        private readonly ICreatorService<Category> _creator;
+        private readonly IApprovedGetterService<Category> _getter;
 
-        public CategoryController(IUserCrudService<Category> crud, IGettterPaginationService getPaged)
+        public CategoryController(ICreatorService<Category> creator, IApprovedGetterService<Category> getter)
         {
-            _crud = crud;
-            _getPaged = getPaged;
+            _creator = creator;
+            _getter = getter;
         }
 
         [SwaggerOperation(Summary = "Retrieves all categories")]
@@ -30,14 +30,14 @@ namespace WebAPI.Controllers
         {
             var route = Request.Path.Value;
 
-            return await _getPaged.GetAll<Category, CategoryDto>(filter, route);
+            return await _getter.GetAllApproved<CategoryDto>();
         }
 
         [SwaggerOperation(Summary = "Retrieves specific category by unique id")]
         [HttpGet("{id:int}")]
         public async Task<ServiceResponse> GetCategory(int id)
         {
-            var result = await _crud.GetById<CategoryDto>(id);
+            var result = await _getter.GetApprovedById<CategoryDto>(id);
 
             return result.Content == null ? ServiceResponse.Error("Category not found.", HttpStatusCode.NotFound) : result;
         }
@@ -46,7 +46,7 @@ namespace WebAPI.Controllers
         [HttpPost("Create")]
         public async Task<ServiceResponse> Create(CategoryRequest category)
         {
-            return await _crud.Create<CategoryDto>(category);
+            return await _creator.Create<CategoryDto>(category);
         }
     }
 }

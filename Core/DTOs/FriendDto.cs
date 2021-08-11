@@ -1,14 +1,15 @@
 ﻿using Core.Common;
-using Storage.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Interfaces
+namespace Core.DTOs
 {
-    public interface IUserCrudService<T> : ICrudService<T> where T : class, IApproveable, IDbMasterKey
+    public class FriendDto : IDto
     {
+        public Guid Id { get; set; }
+        public string UserName { get; set; }
     }
 }
