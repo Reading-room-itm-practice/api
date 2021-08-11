@@ -22,14 +22,14 @@ namespace WebAPI.Controllers
         }
 
         [SwaggerOperation(Summary = "Retrieves profile info of specyfic user")]
-        [HttpGet("Profile")]
+        [HttpGet("{id:Guid?}")]
         public async Task<ServiceResponse> Index(Guid? id)
         {
             return await _profileService.GetProfile(id);
         }
 
         [SwaggerOperation(Summary = "Edits profile photo for current logged user")]
-        [HttpPut("Profile/EditPhoto")]
+        [HttpPut("EditPhoto")]
         public async Task<ServiceResponse> EditPhoto(IFormFile photo)
         {
             return await _profileService.UpdatePhoto(photo);
