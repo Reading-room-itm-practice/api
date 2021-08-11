@@ -35,7 +35,7 @@ namespace Core.Repositories
 
             UserProfile profile = BaseProfile(user, wantReadBooks, readBooks);
 
-            return user.Id == currentUserId
+            return user.Id == currentUserId 
                 ? CreateMyProfile(profile, favouriteBooks)
                 : CreateForeignProfile(profile, user, isFriend, currentUserId, favouriteBooks);
         }
@@ -57,7 +57,7 @@ namespace Core.Repositories
         public ForeignUserProfile CreateForeignProfile(UserProfile profile, User user, bool isFriend, Guid currentUserId, List<Book> favouriteBooks)
         {
             ForeignUserProfile foreignProfile = new(profile)
-            {
+        {
                 IsFriend = isFriend,
                 IsFollowing = user.Followers?.Any(f => f.FollowingId == currentUserId) ?? false,
                 FavouriteBooks = isFriend ? favouriteBooks : new(),
