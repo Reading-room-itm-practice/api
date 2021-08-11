@@ -3,13 +3,9 @@ using Core.Interfaces;
 using Core.Requests;
 using Core.Response;
 using Core.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Storage.Identity;
 using Storage.Models;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers

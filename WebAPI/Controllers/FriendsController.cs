@@ -1,4 +1,5 @@
-﻿using Core.Interfaces;
+﻿using Core.DTOs;
+using Core.Interfaces;
 using Core.Requests;
 using Core.Response;
 using Microsoft.AspNetCore.Mvc;

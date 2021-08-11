@@ -2,6 +2,7 @@
 using Core.DTOs;
 using Core.Interfaces.Profile;
 using Core.Response;
+using Microsoft.AspNetCore.Http;
 using Storage.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -22,7 +23,9 @@ namespace Core.Services.Profile
         public async Task<ServiceResponse> GetProfile(Guid? id)
         {
             var profile = await _helper.GetUserProfile(id);
-            return profile.User == null ? ReturnErrorResponse() : (id == null ? ReturnProfileResponse<UserProfileDto>(profile) : ReturnProfileResponse<ForeignUserProfileDto>(profile));
+            return profile.User == null
+                ? ReturnErrorResponse()
+                : (id == null || id == profile.User.Id ? ReturnProfileResponse<UserProfileDto>(profile) : ReturnProfileResponse<ForeignUserProfileDto>(profile));
         }
 
         private ServiceResponse ReturnProfileResponse<T>(UserProfile profile)
@@ -34,6 +37,11 @@ namespace Core.Services.Profile
         private ServiceResponse ReturnErrorResponse()
         {
             return ServiceResponse.Error("User profile not found");
+        }
+
+        public Task<ServiceResponse> UpdatePhoto(IFormFile image)
+        {
+            return _helper.EditPhoto(image);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Storage.Identity;
 using Storage.Models;
+using Storage.Models.Photos;
 using System.Collections.Generic;
 
 namespace Core.DTOs
@@ -21,7 +22,7 @@ namespace Core.DTOs
         public User User { get; set; }
         public int FollowersCount { get; set; }
         public int FollowingsCount { get; set; }
-        public PhotoDto Photo { get; set; }
+        public ProfilePhoto Photo { get; set; }
         public IEnumerable<Book> FavouriteBooks { get; set; }
         public IEnumerable<Book> ToReadBooks { get; set; }
         public IEnumerable<Book> ReadBooks { get; set; }

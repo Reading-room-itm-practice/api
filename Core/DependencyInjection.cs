@@ -11,6 +11,7 @@ using Core.Services.Auth;
 using Core.Services.Email;
 using Core.Services.Profile;
 using Core.Services.Search;
+using Core.Services.Profile;
 using Microsoft.Extensions.DependencyInjection;
 using Storage.Interfaces;
 using Storage.Models;
