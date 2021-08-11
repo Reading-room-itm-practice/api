@@ -1,8 +1,8 @@
-﻿using Core.DTOs;
-using Core.Interfaces;
+﻿using Core.Interfaces;
 using Core.Requests;
 using Core.Response;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
 
@@ -18,37 +18,43 @@ namespace WebAPI.Controllers
             _friendService = friendService;
         }
 
+        [SwaggerOperation(Summary = "Retrieves all approved friends")]
         [HttpGet("{userId?}")]
         public async Task<ServiceResponse> Friends(Guid? userId)
         {
             return await _friendService.GetApprovedFriendRequests(userId);
         }
 
-        [HttpGet("ReceivedFriendRequests/{friendRequestId?}")]
+        [SwaggerOperation(Summary = "Retrieves all or specyfic friend request")]
+        [HttpGet("Requests/Received/{friendRequestId?}")]
         public async Task<ServiceResponse> ReceivedFriendRequest(int? friendRequestId)
         {
             return await _friendService.GetReceivedFriendRequests(friendRequestId);
         }
 
-        [HttpGet("SentFriendRequests/{friendRequestId?}")]
+        [SwaggerOperation(Summary = "Retrieves all or specyfic sent friend request")]
+        [HttpGet("Requests/Sent/{friendRequestId?}")]
         public async Task<ServiceResponse> SentFriendRequests(int? friendRequestId)
         {
             return await _friendService.GetSentFriendRequests(friendRequestId);
         }
 
-        [HttpPost("SendFriendRequest")]
+        [SwaggerOperation(Summary = "Create friend request for a specyfic user")]
+        [HttpPost("Requests/Create")]
         public async Task<ServiceResponse> Create(SendFriendRequest request)
         {
             return await _friendService.SendFriendRequest(request);
         }
 
-        [HttpPut("FriendRequests/Accept/{friendRequestId}")]
+        [SwaggerOperation(Summary = "Accept friend request")]
+        [HttpPut("Requests/Accept/{friendRequestId}")]
         public async Task<ServiceResponse> Accept(ApproveFriendRequest friendRequest, int friendRequestId)
         {
             return await _friendService.AcceptOrDeclineFriendRequest(friendRequest, friendRequestId);
         }
 
-        [HttpDelete("FriendRequests/Remove/{userId}")]
+        [SwaggerOperation(Summary = "Delete friend request for specific user")]
+        [HttpDelete("Requests/Remove/{userId}")]
         public async Task<ServiceResponse> DeleteFriendRequest(Guid userId)
         {
             return await _friendService.RemoveFriendRequest(userId);

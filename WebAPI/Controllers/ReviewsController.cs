@@ -5,6 +5,7 @@ using Core.Response;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -25,33 +26,38 @@ namespace WebAPI.Controllers
             _getPaged = getPaged;
         }
 
-        [HttpGet("{reviewId:int}")]
-        public async Task<ServiceResponse> GetReview(int reviewId)
-        {
-            return await _reviewService.GetReview(reviewId);
-        }
-
-        [HttpGet]
+        [SwaggerOperation(Summary = "Retrieves all reviews")]
+        [HttpGet("All")]
         public async Task<ServiceResponse> GetReviews([FromQuery] PaginationFilter filter)
         {
             var route = Request.Path.Value;
             return await _getPaged.GetAll<Review, ReviewDto>(filter, route);
         }
 
-        [HttpPost]
+        [SwaggerOperation(Summary = "Retrieves specific review by unique id")]
+        [HttpGet("{reviewId:int}")]
+        public async Task<ServiceResponse> GetReview(int reviewId)
+        {
+            return await _reviewService.GetReview(reviewId);
+        }
+
+        [SwaggerOperation(Summary = "Create new reviwe for a specyfic book")]
+        [HttpPost("Create")]
         public async Task<ServiceResponse> Create(ReviewRequest review)
         {
             return await _reviewService.AddReview(review);
         }
 
-        [HttpPut("{id:int}")]
+        [SwaggerOperation(Summary = "Edit specific review by unique id")]
+        [HttpPut("Edit/{id:int}")]
         public async Task<ServiceResponse> Edit(int id, ReviewRequest review)
         {
             await _crud.Update(review, id);
             return ServiceResponse.Success("Review updated.");
         }
 
-        [HttpDelete("{id:int}")]
+        [SwaggerOperation(Summary = "Delete specific review by unique id")]
+        [HttpDelete("Delete/{id:int}")]
         public async Task<ServiceResponse> Delete(int id)
         {
             await _crud.Delete(id);

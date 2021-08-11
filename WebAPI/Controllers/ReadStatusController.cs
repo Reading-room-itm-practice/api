@@ -3,11 +3,12 @@ using Core.Interfaces;
 using Core.Requests;
 using Core.Response;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    [Route("api")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ReadStatusController : ControllerBase
     {
@@ -20,13 +21,15 @@ namespace WebAPI.Controllers
             _readStatusGetterService = readStatusGetterService;
         }
 
-        [HttpGet("{bookId:int}/readStatus")]
+        [SwaggerOperation(Summary = "Retrieves specific readstatus by unique id")]
+        [HttpGet("{bookId:int}")]
         public async Task<ServiceResponse<ReadStatusDto>> Get(int bookId)
         {
             return await _readStatusGetterService.GetReadStatus(bookId);
         }
 
-        [HttpPut("Update/{bookId:int}/readStatus")]
+        [SwaggerOperation(Summary = "Update specific readstatus by unique id")]
+        [HttpPut("Update/{bookId:int}")]
         public async Task<ServiceResponse> Update(ReadStatusRequest request, int bookId)
         {
             request.BookId = bookId;

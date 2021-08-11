@@ -5,6 +5,7 @@ using Core.Response;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -23,12 +24,16 @@ namespace WebAPI.Controllers
             _getter = getter;
         }
 
-        [HttpGet]
-        public async Task<ServiceResponse> GetCategories()
+        [SwaggerOperation(Summary = "Retrieves all categories")]
+        [HttpGet("All")]
+        public async Task<ServiceResponse> GetCategories([FromQuery] PaginationFilter filter)
         {
+            var route = Request.Path.Value;
+
             return await _getter.GetAllApproved<CategoryDto>();
         }
 
+        [SwaggerOperation(Summary = "Retrieves specific category by unique id")]
         [HttpGet("{id:int}")]
         public async Task<ServiceResponse> GetCategory(int id)
         {
@@ -37,7 +42,8 @@ namespace WebAPI.Controllers
             return result.Content == null ? ServiceResponse.Error("Category not found.", HttpStatusCode.NotFound) : result;
         }
 
-        [HttpPost]
+        [SwaggerOperation(Summary = "Create suggestion of category")]
+        [HttpPost("Create")]
         public async Task<ServiceResponse> Create(CategoryRequest category)
         {
             return await _creator.Create<CategoryDto>(category);

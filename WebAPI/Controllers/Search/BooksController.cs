@@ -24,21 +24,21 @@ namespace WebAPI.Controllers
         }
 
         [SwaggerOperation(Summary = "Retrieves all books")]
-        [HttpGet]
+        [HttpGet("All")]
         public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
            return await _getter.GetAllApproved<BookDto>();
         }
 
-        [SwaggerOperation(Summary = "Retrieves a specific book by unique id")]
+        [SwaggerOperation(Summary = "Retrieves specific book by unique id")]
         [HttpGet("{id:int}")]
         public async Task<ServiceResponse> Show(int id)
         {
            return await _getter.GetApprovedById<BookDto>(id);
         }
 
-        [SwaggerOperation(Summary = "Creates a new entry of a book")]
-        [HttpPost]
+        [SwaggerOperation(Summary = "Create suggestion of book")]
+        [HttpPost("Create")]
         public async Task<ServiceResponse> Create(BookRequest model)
         {
             return await _creator.Create<BookDto>(model);

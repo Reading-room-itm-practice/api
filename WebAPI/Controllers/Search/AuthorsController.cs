@@ -24,20 +24,21 @@ namespace WebAPI.Controllers
         }
 
         [SwaggerOperation(Summary = "Retrieves all book authors")]
-        [HttpGet]
+        [HttpGet("All")]
         public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
             return await _getter.GetAllApproved<AuthorDto>();
         }
 
-        [SwaggerOperation(Summary = "Retrieves a specific book author by unique id")]
+        [SwaggerOperation(Summary = "Retrieves specific book author by unique id")]
         [HttpGet("{id:int}")]
         public async Task<ServiceResponse> Show(int id)
         {
             return await _getter.GetApprovedById<AuthorDto>(id);
         }
 
-        [HttpPost]
+        [SwaggerOperation(Summary = "Create suggestion of book author")]
+        [HttpPost("Create")]
         public async Task<ServiceResponse> Create(AuthorRequest requestDto)
         {
             return await _creator.Create<AuthorDto>(requestDto);
