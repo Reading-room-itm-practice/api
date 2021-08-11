@@ -16,17 +16,20 @@ namespace WebAPI.Controllers
     {
         private readonly ICreatorService<Category> _creator;
         private readonly IApprovedGetterService<Category> _getter;
+        private readonly IGettterPaginationService _pagedGetter;
 
-        public CategoryController(ICreatorService<Category> creator, IApprovedGetterService<Category> getter)
+        public CategoryController(ICreatorService<Category> creator, IApprovedGetterService<Category> getter, IGettterPaginationService pagedGetter)
         {
             _creator = creator;
             _getter = getter;
+            _pagedGetter = pagedGetter;
         }
 
         [HttpGet]
-        public async Task<ServiceResponse> GetCategories()
+        public async Task<ServiceResponse> GetCategories([FromQuery] PaginationFilter filter)
         {
-            return await _getter.GetAllApproved<CategoryDto>();
+            var route = Request.Path.Value;
+            return await _pagedGetter.GetAll<Category, CategoryDto>(filter, route);
         }
 
         [HttpGet("{id:int}")]
