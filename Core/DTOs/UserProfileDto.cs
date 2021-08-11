@@ -23,7 +23,6 @@ namespace Core.DTOs
         public int FollowersCount { get; set; }
         public int FollowingsCount { get; set; }
         public ProfilePhoto Photo { get; set; }
-        public PhotoDto Photo { get; set; }
         public IEnumerable<Book> FavouriteBooks { get; set; }
         public IEnumerable<Book> ToReadBooks { get; set; }
         public IEnumerable<Book> ReadBooks { get; set; }
