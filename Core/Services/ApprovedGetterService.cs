@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Core.Common;
 using Core.Interfaces;
 using Core.Response;
 using Storage.Interfaces;
@@ -17,7 +16,6 @@ namespace Core.Services
         {
             _repository = repository;
             _mapper = mapper;
-            _uriService = uriService;
         }
 
         public async Task<ServiceResponse<IEnumerable<IDto>>> GetAllApproved<IDto>()

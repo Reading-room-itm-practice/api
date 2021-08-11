@@ -1,4 +1,4 @@
-﻿using Core.ServiceResponses;
+﻿using Core.Response;
 using System;
 using System.Threading.Tasks;
 

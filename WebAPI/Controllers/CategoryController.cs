@@ -37,14 +37,6 @@ namespace WebAPI.Controllers
             return result.Content == null ? ServiceResponse.Error("Category not found.", HttpStatusCode.NotFound) : result;
         }
 
-        [HttpGet]
-        public async Task<ServiceResponse> GetCategories([FromQuery] PaginationFilter filter)
-        {
-            var route = Request.Path.Value;
-
-            return await _getPaged.GetAll<Category, CategoryDto>(filter, route);        
-        }
-
         [HttpPost]
         public async Task<ServiceResponse> Create(CategoryRequest category)
         {

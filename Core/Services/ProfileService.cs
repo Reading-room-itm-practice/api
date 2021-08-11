@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.DTOs;
 using Core.Interfaces.Profile;
-using Core.ServiceResponses;
+using Core.Response;
 using Storage.Interfaces;
 using System;
 using System.Threading.Tasks;
