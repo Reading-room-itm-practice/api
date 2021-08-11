@@ -32,10 +32,10 @@ namespace WebAPI.Installers
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:8080", "https://localhost:8080")
+                        builder.WithOrigins("http://localhost:8081", "https://localhost:8081")
                                .AllowAnyHeader()
                                .AllowAnyMethod()
-                               .AllowCredentials();
+                               .AllowAnyOrigin();
                     });
             });
 

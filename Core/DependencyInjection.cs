@@ -3,13 +3,16 @@ using Core.Interfaces;
 using Core.Interfaces.Auth;
 using Core.Interfaces.Email;
 using Core.Interfaces.Search;
+using Core.Interfaces.Profile;
 using Core.Repositories;
 using Core.Repositories.Search;
 using Core.Services;
 using Core.Services.Auth;
 using Core.Services.Email;
+using Core.Services.Profile;
 using Core.Services.Search;
 using Microsoft.Extensions.DependencyInjection;
+using Storage.Interfaces;
 using Storage.Models;
 using Storage.Models.Photos;
 using System;
@@ -27,6 +30,8 @@ namespace Core
             services.AddScoped<IBaseRepository<Category>, BaseRepository<Category>>();
             services.AddScoped<IBaseRepository<Photo>, BaseRepository<Photo>>();
             services.AddScoped<IBaseRepository<Review>, BaseRepository<Review>>();
+            services.AddScoped<IBaseRepository<FriendRequest>, BaseRepository<FriendRequest>>();
+            services.AddScoped<IBaseRepository<ReadStatus>, BaseRepository<ReadStatus>>();
             services.AddScoped<IBaseRepository<ReviewComment>, BaseRepository<ReviewComment>>();
 
             services.AddScoped<ICrudService<Author>, CrudService<Author>>();
@@ -34,6 +39,7 @@ namespace Core
             services.AddScoped<ICrudService<Category>, CrudService<Category>>();
             services.AddScoped<ICrudService<Photo>, CrudService<Photo>>();
             services.AddScoped<ICrudService<Review>, CrudService<Review>>();
+            services.AddScoped<ICrudService<FriendRequest>, CrudService<FriendRequest>>();
             services.AddScoped<ICrudService<ReviewComment>, CrudService<ReviewComment>>();
 
             services.AddScoped<ICreatorService<Author>, CreatorService<Author>>();
@@ -61,6 +67,11 @@ namespace Core
             services.AddScoped<IUpdaterService<Review>, UpdaterService<Review>>();
             services.AddScoped<IDeleterService<Review>, DeleterService<Review>>();
 
+            services.AddScoped<ICreatorService<FriendRequest>, CreatorService<FriendRequest>>();
+            services.AddScoped<IGetterService<FriendRequest>, GetterService<FriendRequest>>();
+            services.AddScoped<IUpdaterService<FriendRequest>, UpdaterService<FriendRequest>>();
+            services.AddScoped<IDeleterService<FriendRequest>, DeleterService<FriendRequest>>();
+          
             services.AddScoped<ICreatorService<ReviewComment>, CreatorService<ReviewComment>>();
             services.AddScoped<IGetterService<ReviewComment>, GetterService<ReviewComment>>();
             services.AddScoped<IUpdaterService<ReviewComment>, UpdaterService<ReviewComment>>();
@@ -93,9 +104,20 @@ namespace Core
             services.AddScoped<IGettterPaginationService, GettterPaginationService>();
             services.AddScoped<IPaginationRepository, PaginationRepository>();
 
-            services.AddScoped<IUserCrudService<Author>, UserCrudService<Author>>();
-            services.AddScoped<IUserCrudService<Book>, UserCrudService<Book>>();
-            services.AddScoped<IUserCrudService<Category>, UserCrudService<Category>>();
+            services.AddScoped<IApprovedGetterService<Author>, ApprovedGetterService<Author>>();
+            services.AddScoped<IApprovedGetterService<Book>, ApprovedGetterService<Book>>();
+            services.AddScoped<IApprovedGetterService<Category>, ApprovedGetterService<Category>>();
+
+            services.AddScoped<IFriendService, FriendService>();
+            services.AddScoped<IFriendRepository, FriendRepository>();
+
+            services.AddScoped<ICreatorService<ReadStatus>, CreatorService<ReadStatus>>();
+            services.AddScoped<IReadStatusUpdaterService, ReadStatusUpdaterService>();
+            services.AddScoped<IReadStatusGetterService, ReadStatusGetterService>();
+
+            services.AddScoped<IProfileHelper, ProfileHelper>();
+            services.AddScoped<IProfileService, ProfileService>();
+            services.AddScoped<IProfileRepository, ProfileRepository>();
 
             return services;
         }

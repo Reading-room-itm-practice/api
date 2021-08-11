@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Storage.Identity
 {
     [Table("Users")]
-    public class User : IdentityUser<Guid>, IFollowable
+    public class User : IdentityUser<Guid>, IFollowable, IDbModel
     {
         public int? ProfilePhotoId { get; set; }
         public ProfilePhoto ProfilePhoto { get; set; }
