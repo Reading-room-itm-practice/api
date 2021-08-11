@@ -1,6 +1,6 @@
-﻿using Core.Common;
+using Core.Common;
 using Core.Interfaces;
-using Core.ServiceResponses;
+using Core.Response;
 using Storage.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;

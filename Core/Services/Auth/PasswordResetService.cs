@@ -2,7 +2,7 @@
 using Core.Interfaces.Auth;
 using Core.Interfaces.Email;
 using Core.Requests;
-using Core.ServiceResponses;
+using Core.Response;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Storage.Identity;

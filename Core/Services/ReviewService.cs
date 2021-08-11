@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
+using Core.Common;
 using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
-using Core.ServiceResponses;
+using Core.Response;
 using Microsoft.AspNetCore.Identity;
 using Storage.Identity;
 using Storage.Interfaces;
@@ -15,18 +16,18 @@ namespace Core.Services
 {
     class ReviewService : IReviewService
     {
+        private readonly IMapper _mapper;
         private readonly IReviewRepository _reviewRepository;
         private readonly IGetterService<Book> _bookGetter;
         private readonly ILoggedUserProvider _loggedUserProvider;
-        private readonly IMapper _mapper;
 
         public ReviewService(IReviewRepository reviewRepository, IGetterService<Book> bookGetter, 
             ILoggedUserProvider loggedUserProvider, IMapper mapper)
         {
+            _mapper = mapper;
             _loggedUserProvider = loggedUserProvider;
             _reviewRepository = reviewRepository;
             _bookGetter = bookGetter;
-            _mapper = mapper;
         }
 
         public async Task<ServiceResponse> AddReview(ReviewRequest review)
@@ -66,6 +67,7 @@ namespace Core.Services
         {
             return (await _bookGetter.GetById<BookDto>(bookId)).Content.Title;
         }
+        
     }
 }
 

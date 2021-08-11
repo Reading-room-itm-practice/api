@@ -1,7 +1,8 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
-using Core.ServiceResponses;
+using Core.Response;
+using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
 using System.Threading.Tasks;
@@ -14,12 +15,14 @@ namespace WebAPI.Controllers
     {
         private readonly ICrudService<Review> _crud;
         private readonly IReviewService _reviewService;
-        
+        private readonly IGettterPaginationService _getPaged;
 
-        public ReviewsController(ICrudService<Review> crud, IReviewService reviewService)
+
+        public ReviewsController(ICrudService<Review> crud, IReviewService reviewService, IGettterPaginationService getPaged)
         {
             _crud = crud;
             _reviewService = reviewService;
+            _getPaged = getPaged;
         }
 
         [HttpGet("{reviewId:int}")]
@@ -29,9 +32,10 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ServiceResponse> GetReviews(int? bookId)
+        public async Task<ServiceResponse> GetReviews([FromQuery] PaginationFilter filter)
         {
-            return await _reviewService.GetReviews(bookId);
+            var route = Request.Path.Value;
+            return await _getPaged.GetAll<Review, ReviewDto>(filter, route);
         }
 
         [HttpPost]

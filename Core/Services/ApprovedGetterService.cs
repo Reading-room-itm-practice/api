@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
 using Core.Common;
-using Core.DTOs;
 using Core.Interfaces;
-using Core.ServiceResponses;
+using Core.Response;
 using Storage.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Core.Services
@@ -20,6 +17,7 @@ namespace Core.Services
         {
             _repository = repository;
             _mapper = mapper;
+            _uriService = uriService;
         }
 
         public async Task<ServiceResponse<IEnumerable<IDto>>> GetAllApproved<IDto>()

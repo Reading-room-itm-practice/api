@@ -1,5 +1,4 @@
-﻿using Core.Requests;
-using Core.ServiceResponses;
+﻿using Core.Response;
 using Microsoft.AspNetCore.Http;
 using Storage.Models.Photos;
 using System.Threading.Tasks;

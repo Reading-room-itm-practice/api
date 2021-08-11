@@ -1,7 +1,7 @@
 ﻿using Core.DTOs;
 using Core.Interfaces;
 using Core.Requests;
-using Core.ServiceResponses;
+using Core.Response;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Storage.Models;
@@ -25,7 +25,7 @@ namespace WebAPI.Controllers
 
         [SwaggerOperation(Summary = "Retrieves all books")]
         [HttpGet]
-        public async Task<ServiceResponse> Index()
+        public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
            return await _getter.GetAllApproved<BookDto>();
         }

@@ -316,7 +316,7 @@ namespace Storage.Migrations
                     b.Property<int?>("MainPhotoId1")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("RelaseDate")
+                    b.Property<DateTime?>("ReleaseDate")
                         .HasColumnType("date");
 
                     b.Property<string>("Title")
