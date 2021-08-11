@@ -3,6 +3,7 @@ using Core.Interfaces.Auth;
 using Core.Requests;
 using Core.Response;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers.Auth
@@ -19,22 +20,22 @@ namespace WebAPI.Controllers.Auth
             _authenticateService = authenticationService;
         }
 
-        [HttpPost]
-        [Route("Login")]
+        [SwaggerOperation(Summary = "Generate jwt token that identify user")]
+        [HttpPost("Login")]
         public async Task<ServiceResponse> Login([FromBody] LoginRequest model)
         {
             return await _authenticateService.Login(model);
         }
 
-        [HttpPost]
-        [Route("Register")]
+        [SwaggerOperation(Summary = "Register new user and send confirmation email")]
+        [HttpPost("Register")]
         public async Task<ServiceResponse> Register([FromBody] RegisterRequest model)
         {
             return await _authenticateService.Register(model);
         }
 
-        [HttpGet]
-        [Route("Confirm-email")]
+        [SwaggerOperation(Summary = "Confirm email for specific user")]
+        [HttpGet("ConfirmEmail")]
         public async Task<ServiceResponse> ConfirmEmail(string token, string username)
         {
             EmailDto model = new() { Token = token, UserName = username };
@@ -42,15 +43,15 @@ namespace WebAPI.Controllers.Auth
             return await _authenticateService.ConfirmEmail(model);
         }
 
-        [HttpPost]
-        [Route("Forgot-password")]
+        [SwaggerOperation(Summary = "Send and email containing link to change password")]
+        [HttpPost("ForgotPassword")]
         public async Task<ServiceResponse> ForgotPassword(string email)
         {
             return await _authenticateService.SendResetPasswordEmail(email);
         }
 
-        [HttpPost]
-        [Route("Reset-password")]
+        [SwaggerOperation(Summary = "Change password for specific user")]
+        [HttpPost("ResetPassword")]
         public async Task<ServiceResponse> ResetPassword([FromBody] ResetPasswordRequest model)
         {
             return await _authenticateService.ResetPassword(model);

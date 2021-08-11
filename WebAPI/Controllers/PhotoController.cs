@@ -1,17 +1,11 @@
-﻿using Core.DTOs;
-using Core.Exceptions;
-using Core.Interfaces;
-using Core.Requests;
+﻿using Core.Interfaces;
 using Core.Response;
-using Core.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Storage.Models.Photos;
-using System;
-using System.Collections.Generic;
+using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -28,19 +22,22 @@ namespace WebAPI.Controllers
             _photoService = photoService;
         }
 
+        [SwaggerOperation(Summary = "Retrieves all photos")]
         [HttpGet("All")]
         public async Task<ServiceResponse> GetPhotos([Required] string typeId, [Required] PhotoTypes type)
         {
             return await _photoService.GetPhotos(typeId, type);
         }
 
+        [SwaggerOperation(Summary = "Retrieves specific photo by unique id")]
         [HttpGet("{photoId:int}")]
         public async Task<ServiceResponse> GetPhoto(int photoId)
         {
             return await _photoService.GetPhoto(photoId);
         }
 
-        [HttpPost()]
+        [SwaggerOperation(Summary = "Uploads new image for specyfic target")]
+        [HttpPost("Upload")]
         public async Task<ServiceResponse> Upload(IFormFile image, string id, PhotoTypes type)
         {
             try
@@ -54,7 +51,8 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpDelete("{photoId:int}")]
+        [SwaggerOperation(Summary = "Delete specific photo by unique id")]
+        [HttpDelete("Delete/{photoId:int}")]
         public async Task<ServiceResponse> Delete(int photoId)
         {
             return await _photoService.DeletePhoto(photoId);

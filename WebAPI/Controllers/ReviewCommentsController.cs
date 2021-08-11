@@ -5,6 +5,7 @@ using Core.Interfaces;
 using Storage.Models;
 using Core.Requests;
 using Core.Response;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebAPI.Controllers
 {
@@ -21,32 +22,37 @@ namespace WebAPI.Controllers
             _reviewCommentService = reviewCommentService;
         }
 
+        [SwaggerOperation(Summary = "Retrieves all comments for a specyfic review")]
+        [HttpGet("All")]
+        public async Task<ServiceResponse> GetComments(int? reviewId, Guid? userId, bool currentUser)
+        {
+            return await _reviewCommentService.GetComments(reviewId, userId, currentUser);
+        }
+
+        [SwaggerOperation(Summary = "Retrieves specific comment by unique id")]
         [HttpGet("{reviewCommentId:int}")]
         public async Task<ServiceResponse> GetComment(int reviewCommentId)
         {
             return await _reviewCommentService.GetComment(reviewCommentId);
         }
 
-        [HttpGet]
-        public async Task<ServiceResponse> GetComments(int? reviewId, Guid? userId, bool currentUser)
-        {
-            return await _reviewCommentService.GetComments(reviewId, userId, currentUser);
-        }
-
-        [HttpPost]
+        [SwaggerOperation(Summary = "Create comment for a specyfic review")]
+        [HttpPost("Create")]
         public async Task<ServiceResponse> Create(ReviewCommentRequest comment)
         {
             return await _reviewCommentService.AddReviewComment(comment);
         }
 
-        [HttpPut("{id:int}")]
+        [SwaggerOperation(Summary = "Edit comment for a specyfic review")]
+        [HttpPut("Edit/{id:int}")]
         public async Task<ServiceResponse> Edit(int id, ReviewCommentRequest comment)
         {
             await _crud.Update(comment, id);
             return ServiceResponse.Success("Comment updated.");
         }
 
-        [HttpDelete("{id:int}")]
+        [SwaggerOperation(Summary = "Delete specyfic comment by unique id")]
+        [HttpDelete("Delete/{id:int}")]
         public async Task<ServiceResponse> Delete(int id)
         {
             await _crud.Delete(id);

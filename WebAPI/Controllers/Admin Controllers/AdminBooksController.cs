@@ -34,21 +34,21 @@ namespace WebAPI.Controllers.Admin_Controllers
             return await _getPaged.GetAll<Book, ApprovedBookDto>(filter, route);
         }
 
-        [SwaggerOperation(Summary = "Retrieves a specific book by unique id")]
+        [SwaggerOperation(Summary = "Retrieves specific book by unique id")]
         [HttpGet("{id:int}")]
         public async Task<ServiceResponse> Show(int id)
         {
             return await _crud.GetById<ApprovedBookDto>(id);
         }
 
-        [SwaggerOperation(Summary = "Creates a new entry of a book")]
+        [SwaggerOperation(Summary = "Creates new entry of a book")]
         [HttpPost("Create")]
         public async Task<ServiceResponse> Create(ApproveBookRequest model)
         {
             return await _crud.Create<ApprovedBookDto>(model);
         }
 
-        [SwaggerOperation(Summary = "Updates a book by unique id")]
+        [SwaggerOperation(Summary = "Updates book by unique id")]
         [HttpPut("Update/{id:int}")]
         public async Task<ServiceResponse> Update(int id, ApproveBookRequest updateModel)
         {
@@ -57,7 +57,7 @@ namespace WebAPI.Controllers.Admin_Controllers
             return ServiceResponse.Success("Resource updated");
         }
 
-        [SwaggerOperation(Summary = "Deletes a book by unique id")]
+        [SwaggerOperation(Summary = "Deletes book by unique id")]
         [HttpDelete("Delete/{id:int}")]
         public async Task<ServiceResponse> Delete(int id)
         {

@@ -35,7 +35,7 @@ namespace WebAPI.Controllers.Admin_Controllers
             return await _getPaged.GetAll<Category, ApprovedCategoryDto>(filter, route);
         }
 
-        [SwaggerOperation(Summary = "Retrieves a specific category by unique id")]
+        [SwaggerOperation(Summary = "Retrieves specific category by unique id")]
         [HttpGet("{id:int}")]
         public async Task<ServiceResponse> GetCategory(int id)
         {
@@ -51,7 +51,7 @@ namespace WebAPI.Controllers.Admin_Controllers
             return await _crud.Create<ApprovedCategoryDto>(category);
         }
 
-        [SwaggerOperation(Summary = "Update a category by unique id")]
+        [SwaggerOperation(Summary = "Update category by unique id")]
         [HttpPut("Update/{id:int}")]
         public async Task<ServiceResponse> Edit(int id, ApproveCategoryRequest category)
         {
@@ -60,7 +60,7 @@ namespace WebAPI.Controllers.Admin_Controllers
             return ServiceResponse.Success("Category updated.");
         }
 
-        [SwaggerOperation(Summary = "Delete a category by unique id")]
+        [SwaggerOperation(Summary = "Delete category by unique id")]
         [HttpDelete("Delete/{id:int}")]
         public async Task<ServiceResponse> Delete(int id)
         {
