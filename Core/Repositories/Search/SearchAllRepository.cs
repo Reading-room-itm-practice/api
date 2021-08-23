@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Core.Repositories.Search
 {
-    class SearchAllRepository : ISearchAllRepository
+    public class SearchAllRepository : ISearchAllRepository
     {
         private readonly ApiDbContext _context;
         private IQueryable<User> _users;

@@ -12,6 +12,8 @@ namespace IntegrationTests
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ISearchRepository, SearchRepository>();
+            services.AddTransient<IUriService, UriService>();
             services.AddTransient<IMapper, Mapper>();
             services.AddTransient<ISearchService, SearchService>();
         }

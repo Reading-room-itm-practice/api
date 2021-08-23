@@ -15,11 +15,7 @@ namespace IntegrationTests
 {
     public class SearchServiceTest
     {
-        private ISearchRepository _searchRepository;
         private ISearchService _searchService;
-        private IUriService _uriService;
-        private IMapper _mapper;
-
         public SearchServiceTest(ISearchService searchService)
         {
             _searchService = searchService;
