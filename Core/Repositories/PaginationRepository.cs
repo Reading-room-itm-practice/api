@@ -20,10 +20,14 @@ namespace Core.Repositories
         {
             _context = context;
         }
-        public async Task<ExtendedData<IEnumerable<T>>> FindAll<T>(PaginationFilter filter) where T : class
+        public async Task<ExtendedData<IEnumerable<T>>> FindAll<T>(PaginationFilter filter, bool isAdmin = false) where T : class, IApproveable
         {
             var totalRecords = await _context.Set<T>().CountAsync();
             var data = _context.Set<T>().AsQueryable();
+
+            if (!isAdmin)
+                data = data.Where(d => d.Approved == true);
+
             if (filter.PageSize != 0)
             {
                 data = data

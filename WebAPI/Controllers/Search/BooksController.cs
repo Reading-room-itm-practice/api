@@ -16,18 +16,21 @@ namespace WebAPI.Controllers
     {
         private readonly ICreatorService<Book> _creator;
         private readonly IApprovedGetterService<Book> _getter;
+        private readonly IGettterPaginationService _pagedGetter;
 
-        public BooksController(ICreatorService<Book> creator, IApprovedGetterService<Book> getter)
+        public BooksController(ICreatorService<Book> creator, IApprovedGetterService<Book> getter, IGettterPaginationService pagedGetter)
         {
             _creator = creator;
             _getter = getter;
+            _pagedGetter = pagedGetter;
         }
 
         [SwaggerOperation(Summary = "Retrieves all books")]
         [HttpGet]
         public async Task<ServiceResponse> Index([FromQuery] PaginationFilter filter)
         {
-           return await _getter.GetAllApproved<BookDto>();
+            var route = Request.Path.Value;
+            return await _pagedGetter.GetAll<Book, BookDto>(filter, route);
         }
 
         [SwaggerOperation(Summary = "Retrieves a specific book by unique id")]

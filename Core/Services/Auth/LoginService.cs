@@ -4,7 +4,6 @@ using Core.Response;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Storage.Identity;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Core.Services.Auth
