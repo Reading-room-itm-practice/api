@@ -5,7 +5,7 @@ using Core.Services.Search;
 
 namespace Core.Interfaces.Search
 {
-    interface ISearchAllRepository
+    public interface ISearchAllRepository
     {
         ExtendedData<AllData> SearchAll(PaginationFilter filter, string searchString, SortType? sort);
     }

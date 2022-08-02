@@ -10,11 +10,11 @@ using System.Linq;
 
 namespace Core.Repositories.Search
 {
-    internal interface IGenericSearchRepository
+    public interface IGenericSearchRepository
     {
         public ExtendedData<IEnumerable<T>> GetEntities<T>(PaginationFilter filter, string searchString, SortType? sort) where T : class;
     }
-    class GenericSearchRepository : IGenericSearchRepository
+    public class GenericSearchRepository : IGenericSearchRepository
     {
         private readonly ApiDbContext _context;
 

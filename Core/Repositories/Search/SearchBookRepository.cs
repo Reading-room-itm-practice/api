@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Core.Repositories.Search
 {
-    class SearchBookRepository : ISearchBookRepository
+    public class SearchBookRepository : ISearchBookRepository
     {
         private readonly ApiDbContext _context;
         public SearchBookRepository(ApiDbContext context)

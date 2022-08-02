@@ -8,7 +8,7 @@ using Storage.Models;
 
 namespace Core.Repositories.Search
 {
-    class SearchRepository : ISearchRepository
+    public class SearchRepository : ISearchRepository
     {
         private readonly ISearchAllRepository _allRepository;
         private readonly ISearchBookRepository _bookRepository;
